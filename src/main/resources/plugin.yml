@@ -11,4 +11,5 @@ commands:
   rift:
     aliases: [ rft, ri ]
     default: op
+    permission: rift.use
 hotload-dependencies: false
