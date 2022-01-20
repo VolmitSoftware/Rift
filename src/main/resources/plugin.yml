@@ -1,0 +1,12 @@
+name: ${name}
+version: ${version}
+main: ${main}
+load: STARTUP
+authors: [ cyberpwn, NextdoorPsycho ]
+website: volmit.com
+api-version: ${apiversion}
+description: The most reliable world manager
+commands:
+  rift:
+    aliases: [ rft, ri ]
+hotload-dependencies: false
