@@ -1,0 +1,101 @@
+plugins {
+    id 'java'
+    id 'io.freefair.lombok' version '5.2.1'
+}
+
+group 'com.volmit.rift'
+version '1.0.0'
+def apiVersion = '1.18'
+def main = 'com.volmit.rift.Rift'
+
+// ADD YOURSELF AS A NEW LINE IF YOU WANT YOUR OWN BUILD TASK GENERATED
+// ======================== WINDOWS =============================
+registerCustomOutputTask('Cyberpwn', 'C://Users/cyberpwn/Documents/development/server/plugins')
+registerCustomOutputTask('Psycho', 'D://Dan/MinecraftDevelopment/server/plugins')
+registerCustomOutputTask('ArcaneArts', 'C://Users/arcane/Documents/development/server/plugins')
+registerCustomOutputTask('Coco', 'C://Users/sjoer/Desktop/MCSM/plugins')
+registerCustomOutputTask('Strange', 'D://Servers/1.17 Test Server/plugins')
+// ========================== UNIX ==============================
+registerCustomOutputTaskUnix('CyberpwnLT', '/Users/danielmills/Documents/development/server/plugins')
+registerCustomOutputTaskUnix('PsychoLT', '/Users/brianfopiano/Desktop/REMOTES/RemoteMinecraft/plugins')
+// ==============================================================
+
+/**
+ * Gradle is weird sometimes, we need to delete the plugin yml from the build folder to actually filter properly.
+ */
+file(jar.archiveFile.get().getAsFile().getParentFile().getParentFile().getParentFile().getAbsolutePath() + '/build/resources/main/plugin.yml').delete()
+
+repositories {
+    maven { url "https://dl.cloudsmith.io/public/arcane/archive/maven/" }
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    implementation 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
+}
+
+processResources {
+    filesMatching('**/plugin.yml') {
+        expand(
+                'name': name.toString(),
+                'version': version.toString(),
+                'main': main.toString(),
+                'apiversion': apiVersion.toString()
+        )
+    }
+}
+
+def registerCustomOutputTask(name, path) {
+    if (!System.properties['os.name'].toLowerCase().contains('windows')) {
+        return;
+    }
+
+    tasks.register('build' + name, Copy) {
+        group('development')
+        outputs.upToDateWhen { false }
+        dependsOn(jar)
+        from(new File(buildDir, "libs/Rift-" + version + ".jar"))
+        into(file(path))
+        rename { String fileName ->
+            fileName.replace("Rift-" + version + ".jar", "Rift.jar")
+        }
+    }
+}
+
+def registerCustomOutputTaskUnix(name, path) {
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        return;
+    }
+
+    tasks.register('build' + name, Copy) {
+        group('development')
+        outputs.upToDateWhen { false }
+        dependsOn(jar)
+        from(new File(buildDir, "libs/Rift-" + version + ".jar"))
+        into(file(path))
+        rename { String fileName ->
+            fileName.replace("Rift-" + version + ".jar", "Rift.jar")
+        }
+    }
+}
+
+if (JavaVersion.current().toString() != "17") {
+    System.err.println()
+    System.err.println("=========================================================================================================")
+    System.err.println("You must run gradle on Java 17. You are using " + JavaVersion.current())
+    System.err.println()
+    System.err.println("=== For IDEs ===")
+    System.err.println("1. Configure the project for Java 17")
+    System.err.println("2. Configure the bundled gradle to use Java 17 in settings")
+    System.err.println()
+    System.err.println("=== For Command Line (gradlew) ===")
+    System.err.println("1. Install JDK 17 from https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html")
+    System.err.println("2. Set JAVA_HOME environment variable to the new jdk installation folder such as C:\\Program Files\\Java\\jdk-17.0.1")
+    System.err.println("3. Open a new command prompt window to get the new environment variables if need be.")
+    System.err.println("=========================================================================================================")
+    System.err.println()
+    System.exit(69);
+}
