@@ -10,8 +10,12 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.units.qual.C;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -47,6 +51,44 @@ public class Rift extends JavaPlugin {
         }
 
         configs.forEach(this::init);
+        checkForBukkitWorlds();
+    }
+
+    private void checkForBukkitWorlds() {
+        FileConfiguration fc = new YamlConfiguration();
+        try {
+            fc.load(new File("bukkit.yml"));
+            searching: for(String i : fc.getKeys(true))
+            {
+                if(i.startsWith("worlds.")) {
+                    String worldName = i.split("\\Q.\\E")[1];
+                    String generator = i.endsWith(".generator") ? fc.getString(i) : null;
+
+                    if(generator != null && generator.startsWith("Iris"))
+                    {
+                        info("Skipping Iris world (hello!), because Iris is managing the bukkit.yml for itself.");
+                        continue;
+                    }
+
+                    for(World j : Bukkit.getWorlds())
+                    {
+                        if(j.getName().equals(worldName))
+                        {
+                            continue searching;
+                        }
+                    }
+
+                    info("Loading bukkit.yml " + worldName + " using generator " + generator);
+                    World world = new WorldCreator(worldName)
+                        .generator(generator)
+                        .type(generator != null ? generator.equalsIgnoreCase("flat") ? WorldType.FLAT : generator.equalsIgnoreCase("amplified") ? WorldType.AMPLIFIED : generator.equalsIgnoreCase("largebiomes") ? WorldType.LARGE_BIOMES : WorldType.NORMAL : WorldType.NORMAL)
+                        .createWorld();
+                    info("Loaded bukkit.yml " + world.getName() + " using generator " + generator);
+                }
+            }
+        } catch(Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     public void onDisable()
@@ -72,7 +114,9 @@ public class Rift extends JavaPlugin {
             return;
         }
 
-        WorldCreator.name(f.getName()).generator(generator).createWorld();
+        WorldCreator.name(f.getName()).generator(generator)
+            .type(generator.equalsIgnoreCase("flat") ? WorldType.FLAT : generator.equalsIgnoreCase("amplified") ? WorldType.AMPLIFIED : generator.equalsIgnoreCase("largebiomes") ? WorldType.LARGE_BIOMES : WorldType.NORMAL)
+            .createWorld();
     }
 
     @Override
@@ -94,6 +138,7 @@ public class Rift extends JavaPlugin {
             sender.sendMessage(ChatColor.LIGHT_PURPLE + "/rift delete"+ ChatColor.GRAY+" <name>");
             sender.sendMessage(ChatColor.LIGHT_PURPLE + "/rift to"+ ChatColor.GRAY+" <world>");
             sender.sendMessage(ChatColor.LIGHT_PURPLE + "/rift list");
+            sender.sendMessage(ChatColor.LIGHT_PURPLE + "/rift generators");
         }
 
         else if(args[0].equalsIgnoreCase("create")&& args.length >= 3)
@@ -107,7 +152,9 @@ public class Rift extends JavaPlugin {
             }
 
             String generator = args[2];
-            WorldCreator w = WorldCreator.name(f.getName()).generator(generator);
+            WorldCreator w = WorldCreator.name(f.getName())
+                .type(generator.equalsIgnoreCase("flat") ? WorldType.FLAT : generator.equalsIgnoreCase("amplified") ? WorldType.AMPLIFIED : generator.equalsIgnoreCase("largebiomes") ? WorldType.LARGE_BIOMES : WorldType.NORMAL)
+                .generator(generator);
 
             if(args.length > 3)
             {
@@ -161,7 +208,9 @@ public class Rift extends JavaPlugin {
                 }
             }
 
-            WorldCreator.name(f.getName()).generator(generator).createWorld();
+            WorldCreator.name(f.getName())
+                .type(generator.equalsIgnoreCase("flat") ? WorldType.FLAT : generator.equalsIgnoreCase("amplified") ? WorldType.AMPLIFIED : generator.equalsIgnoreCase("largebiomes") ? WorldType.LARGE_BIOMES : WorldType.NORMAL)
+                .generator(generator).createWorld();
             sender.sendMessage(tag + "Loaded " + args[1]);
         }else if(args[0].equalsIgnoreCase("import")&& args.length >= 3)
         {
@@ -192,7 +241,9 @@ public class Rift extends JavaPlugin {
                 if(!loaded)
                 {
                     sender.sendMessage(tag + "Loading " + f.getName());
-                    World world = WorldCreator.name(f.getName()).generator(generator).createWorld();
+                    World world = WorldCreator.name(f.getName())
+                        .type(generator.equalsIgnoreCase("flat") ? WorldType.FLAT : generator.equalsIgnoreCase("amplified") ? WorldType.AMPLIFIED : generator.equalsIgnoreCase("largebiomes") ? WorldType.LARGE_BIOMES : WorldType.NORMAL)
+                        .generator(generator).createWorld();
                     RiftWorldConfig c = RiftWorldConfig.from(world, generator);
                     configs.add(c);
                     c.save();
@@ -279,6 +330,7 @@ public class Rift extends JavaPlugin {
             for(World i : Bukkit.getWorlds())
             {
                 boolean rift = false;
+                boolean bukkit = false;
 
                 for(RiftWorldConfig j : configs)
                 {
@@ -288,10 +340,35 @@ public class Rift extends JavaPlugin {
                         break;
                     }
                 }
+                FileConfiguration fc = new YamlConfiguration();
+                try {
+                    fc.load(new File("bukkit.yml"));
+
+                    for(String j : fc.getKeys(true))
+                    {
+                        if(j.startsWith("worlds.")) {
+                            if(j.split("\\Q.\\E")[1].equals(i.getName()))
+                            {
+                                bukkit = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                catch(Throwable e)
+                {
+
+                }
 
                 if(rift)
                 {
                     sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.LIGHT_PURPLE + i.getName() + " " + ChatColor.GRAY + " (Managed)");
+                }
+
+                else if(bukkit)
+                {
+                    sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.AQUA + i.getName() + " " + ChatColor.GRAY + " (bukkit.yml)");
                 }
 
                 else
@@ -315,9 +392,49 @@ public class Rift extends JavaPlugin {
                     sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + i.getName() + " " + ChatColor.GRAY + " (Not Loaded)");
                 }
             }
+        }else if(args[0].equalsIgnoreCase("generators"))
+        {
+            sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + "normal " + ChatColor.GRAY + " by " + ChatColor.WHITE + "Minecraft");
+            sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + "flat " + ChatColor.GRAY + " by " + ChatColor.WHITE + "Minecraft");
+            sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + "amplified " + ChatColor.GRAY + " by " + ChatColor.WHITE + "Minecraft");
+            sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.WHITE + "largebiomes " + ChatColor.GRAY + " by " + ChatColor.WHITE + "Minecraft");
+
+            for(Plugin i : Bukkit.getPluginManager().getPlugins())
+            {
+                if(i.getName().equals("Iris"))
+                {
+                    sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.GREEN + i.getName() + ChatColor.DARK_GREEN + ":[dimension]" + " " + ChatColor.GRAY + " by " + ChatColor.WHITE + printAuthors(i.getDescription().getAuthors()));
+                }
+
+                else if(i.getDefaultWorldGenerator("testworld", null) != null)
+                {
+                    sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.GREEN + i.getName() + " " + ChatColor.GRAY + " by " + ChatColor.WHITE + printAuthors(i.getDescription().getAuthors()));
+                }
+            }
         }
 
         return true;
+    }
+
+    private String printAuthors(List<String> authors) {
+        if(authors == null || authors.isEmpty())
+        {
+            return "Anonymous";
+        }
+
+        if(authors.size() == 1)
+        {
+            return authors.get(0);
+        }
+
+        StringBuilder s = new StringBuilder();
+
+        for(String i : authors)
+        {
+            s.append(", ").append(i);
+        }
+
+        return s.substring(2);
     }
 
     private void deleteWorld(File f) {
