@@ -56,13 +56,22 @@ public class Rift extends JavaPlugin {
 
     private void checkForBukkitWorlds() {
         FileConfiguration fc = new YamlConfiguration();
+        Set<String> hit = new HashSet<>();
         try {
             fc.load(new File("bukkit.yml"));
             searching: for(String i : fc.getKeys(true))
             {
                 if(i.startsWith("worlds.")) {
                     String worldName = i.split("\\Q.\\E")[1];
-                    String generator = i.endsWith(".generator") ? fc.getString(i) : null;
+
+
+                    if(hit.contains(worldName))
+                    {
+                        continue;
+                    }
+
+                    hit.add(worldName);
+                    String generator = i.endsWith(".generator") ? fc.getString(i) : fc.getString("worlds." + worldName + ".generator");
 
                     if(generator != null && generator.startsWith("Iris"))
                     {
