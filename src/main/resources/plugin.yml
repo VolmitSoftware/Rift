@@ -6,6 +6,8 @@ authors: [ cyberpwn, NextdoorPsycho ]
 website: volmit.com
 api-version: ${apiversion}
 description: The most reliable world manager
+libraries:
+  - com.google.code.gson:gson:2.8.9
 commands:
   rift:
     aliases: [ rft, ri ]
