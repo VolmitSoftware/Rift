@@ -1,7 +1,6 @@
 name: ${name}
 version: ${version}
 main: ${main}
-load: STARTUP
 authors: [ cyberpwn, NextdoorPsycho ]
 website: volmit.com
 api-version: ${apiversion}
