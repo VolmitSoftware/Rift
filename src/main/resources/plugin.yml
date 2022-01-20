@@ -10,4 +10,5 @@ libraries:
 commands:
   rift:
     aliases: [ rft, ri ]
+    default: op
 hotload-dependencies: false
