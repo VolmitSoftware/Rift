@@ -1,15 +1,11 @@
 name: ${name}
 version: ${version}
 main: ${main}
-authors: [ cyberpwn, NextdoorPsycho ]
+authors: [ cyberpwn, NextdoorPsycho, Vatuu ]
 website: volmit.com
 api-version: ${apiversion}
 description: The most reliable world manager
 libraries:
-  - com.google.code.gson:gson:2.8.9
-commands:
-  rift:
-    aliases: [ rft, ri ]
-    default: op
-    permission: rift.use
+  - com.google.code.gson:gson:2.9.0
+
 hotload-dependencies: false
