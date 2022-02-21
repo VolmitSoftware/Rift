@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.volmit.rift'
-version '1.0.1'
+version '2.0.0'
 def apiVersion = '1.18'
 def main = 'com.volmit.rift.Rift'
 def name = 'Rift'
@@ -16,6 +16,7 @@ registerCustomOutputTask('Psycho', 'D://Dan/MinecraftDevelopment/server/plugins'
 registerCustomOutputTask('ArcaneArts', 'C://Users/arcane/Documents/development/server/plugins')
 registerCustomOutputTask('Coco', 'C://Users/sjoer/Desktop/MCSM/plugins')
 registerCustomOutputTask('Strange', 'D://Servers/1.17 Test Server/plugins')
+registerCustomOutputTask('Vatuu', 'D://Minecraft/Servers/1.18.1/plugins')
 // ========================== UNIX ==============================
 registerCustomOutputTaskUnix('CyberpwnLT', '/Users/danielmills/Documents/development/server/plugins')
 registerCustomOutputTaskUnix('PsychoLT', '/Users/brianfopiano/Desktop/REMOTES/RemoteMinecraft/plugins')
@@ -35,7 +36,7 @@ repositories {
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
-    implementation 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
+    implementation 'org.spigotmc:spigot:1.18.1-R0.1-SNAPSHOT'
     implementation 'com.google.code.gson:gson:2.8.9'
 }
 
