@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.volmit.rift'
-version '2.0.1'
+version '2.0.2'
 def apiVersion = '1.18'
 def main = 'com.volmit.rift.Rift'
 def name = 'Rift'
