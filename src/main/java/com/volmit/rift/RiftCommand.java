@@ -229,7 +229,7 @@ public class RiftCommand {
         CommandSender sender = ctx.getSource().getBukkitSender();
         for(World w : Bukkit.getWorlds()) {
             if(Rift.INSTANCE.getConfigs().stream().anyMatch(c -> c.getName().equals(w.getName()))) {
-                sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.LIGHT_PURPLE + w.getName() + " | " + ChatColor.GREEN + "Managed");
+                sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.LIGHT_PURPLE + w.getName() + ChatColor.GRAY + " | " + ChatColor.GREEN + "Managed");
                 continue;
             }
 
@@ -238,18 +238,18 @@ public class RiftCommand {
                 fc.load(new File("bukkit.yml"));
                 if(fc.isConfigurationSection("worlds")) {
                     if(fc.getConfigurationSection("worlds").getKeys(false).contains(w.getName())) {
-                        sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.LIGHT_PURPLE + w.getName() + " | " + ChatColor.GREEN + "bukkit.yml");
+                        sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.LIGHT_PURPLE + w.getName() + ChatColor.GRAY + " | " + ChatColor.GREEN + "bukkit.yml");
                         continue;
                     }
                 }
             } catch(Throwable ignored) { }
 
-            sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.LIGHT_PURPLE + w.getName() + " | " + ChatColor.GREEN + "Loaded");
+            sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.LIGHT_PURPLE + w.getName() + ChatColor.GRAY + " | " + ChatColor.GREEN + "Loaded");
         }
 
         for(File i : new File(".").listFiles())
             if(i.isDirectory() && new File(i, "level.dat").exists() && Bukkit.getWorlds().stream().noneMatch(w -> w.getWorldFolder().equals(i)))
-                sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.LIGHT_PURPLE + i.getName() + " | " + ChatColor.RED + "Not Loaded");
+                sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.LIGHT_PURPLE + i.getName() + ChatColor.GRAY + " | " + ChatColor.RED + "Not Loaded");
 
         return 1;
     }
