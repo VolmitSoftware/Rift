@@ -1,0 +1,270 @@
+# קובץ השפה של Rift (עברית - ישראל).
+# הקובץ יורד רק אם הוא חסר; יש לערוך ישירות את languages/he_IL.toml.
+# שינויים מקומיים לעולם אינם מוחלפים אוטומטית; ערכים חסרים משתמשים באנגלית.
+# אפשר לערוך את ההודעות שלמטה; שינויים שנשמרו מזוהים ומוחלים באופן אוטומטי.
+# יש להשאיר כל מציין מקום בדיוק כפי שנכתב, כולל הסוגריים המסולסלים.
+# יש להשתמש במציין מקום רק בהודעות שתבנית ברירת המחדל שלהן מגדירה אותו; מציינים שאינם נתמכים לא יוחלפו.
+# קידומת: {prefix}=הערך הגלובלי runtime.prefix. הסירו את {prefix} מהודעה מסוימת כדי להסתיר אותה רק שם.
+# מצייני מקום זמינים:
+#
+# {argument} - ארגומנט פקודה
+# {category} - קטגוריית פקודה
+# {command} - טקסט או שם הפקודה
+# {count} - מספר פריטים או תוצאות
+# {detail} - פרט תיאורי
+# {id} - מזהה
+# {key} - מפתח הגדרה או הודעה
+# {label} - תווית תצוגה
+# {locale} - אזור השפה
+#   {personal}      אזור השפה האישי
+# {name} - שם רשומה או שם תצוגה
+# {operation} - שם הפעולה
+# {parameter} - שם הפרמטר
+# {permission} - צומת הרשאה
+# {player} - שם השחקן
+# {reason} - סיבה או פרטי שגיאה
+# {seconds} - משך בשניות
+# {setting} - שם ההגדרה
+# {before} - הערך הקודם
+# {after} - הערך החדש
+# {title} - טקסט הכותרת
+# {type} - סוג הערך או הנתון
+# {usage} - טקסט השימוש בפקודה
+# {value} - הערך הנוכחי או החדש
+# {version} - גרסה
+# {world} - שם העולם
+#
+
+[runtime]
+prefix = "&5&lRIFT&r &8›&r "
+
+[rift.command]
+root = "לנהל את עולמות השרתים בבטחה"
+create = "ליצור ולנהל עולם חדש"
+import = "יבוא מנהל עולם קיים"
+load = "לטעון עולם מנוהל או גילה"
+unload = "להעריך שחקנים ולטעום עולם"
+delete = "הזיז עולם מנוהל לתוך quarantine"
+restore = "להחזיר עולם מקומט"
+teleport = "טלפורט לעולם טעון"
+send = "טלפורט שחקן אחר לעולם טעון"
+list = "רשימה עמוסה, מנוהלת, התגלתה ועולמות מקובעים"
+info = "מדינה מפורטת עבור עולם אחד"
+generators = "הצג גנרטור מזהה כבר בשימוש על ידי עולמות מנוהלים"
+config = "פתח את המשחק Rift עורך תצורה"
+language = "בחירת שפת Rift זמינה"
+status = "יכולות פלטפורמה ו Rift מדינה"
+debug = "כלי האבחון של Rift"
+debug_dump = "יצירת דוח אבחון מקיף של Rift"
+autoload = "שינוי אם העולם מנוהל נטען במהלך ההפעלה"
+protect = "להגן או לא להגן על עולם מנוהל"
+
+[rift.parameter]
+name = "שם עולמי"
+environment = "NORMAL, NETHER, THE_ENDאו CUSTOM"
+generator = "vanilla, voidאו PluginName[:generator-id]"
+seed = "random זרע 64 סיביות חתום"
+type = "Bukkit סוג עולמי"
+save = "להציל לפני העלאה"
+id = "הכניסה Quarantine"
+player = "שם שחקן מקוון"
+enabled = "true או או false"
+page = "עמוד רשימת פורטלים שמספרו מתחיל באחד"
+upload = "העלאת הדוח כאשר העלאות ציבוריות מופעלות"
+sender = "שולח פיקוד"
+
+[rift.message]
+permission_denied = "{prefix}&cאתה צריך &f{permission}&c."
+unknown_command = "{prefix}&cפקודה לא ידועה &f/rift help&c."
+player_only = "{prefix}&cהפיקוד הזה דורש שחקן."
+operation_queued = "{prefix}&7Queued &f{operation}&7 עבור &d{world}&7."
+operation_failed = "{prefix}&c{operation} נכשלת &f{world}&c: {reason}"
+created = "{prefix}&aנוצר ולנהל &f{world}&a."
+imported = "{prefix}&aייבוא ונוהל &f{world}&a."
+loaded = "{prefix}&aטעון &f{world}&a."
+unloaded = "{prefix}&aהמונחים: &f{world}&a."
+teleported = "{prefix}&aטלפורט &f{player}&a to to &f{world}&a."
+delete_confirm = "{prefix}&eRun Run &f/rift delete {world}&e שוב בפנים &f{seconds}s&e להעביר את זה לתוך quarantine."
+quarantined = "{prefix}&aהזיז &f{world}&a המונחים: asrantine &f{id}&a."
+restored = "{prefix}&aשחזור &f{world}&a מתוך &f{id}&a."
+profile_updated = "{prefix}&aעדכון &f{setting}&a עבור &f{world}&a to to &f{value}&a."
+folia_limit = "{prefix}&e{operation} לא זמין Folia כי העולם שלו עומס/unload API לא ייושם."
+config_saved = "{prefix}&aהקונפדרציה הצילה."
+config_opened = "{prefix}&aעורך התצורה המלא בתוך המשחק נפתח.&r"
+config_save_failed = "{prefix}&cאי אפשר להציל את הקונפדרציה. בדוק את הקונסולה."
+empty_list = "{prefix}&7לא נמצאו עולמות מתאימים."
+player_offline = "{prefix}&cשחקן אינו מקוון: &f{player}"
+unknown_world = "{prefix}&cעולם לא ידוע: &f{world}"
+section = "{prefix}&d{title} &8(&f{count}&8)"
+entry = "{prefix}&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&8- &7{label}: &f{value}"
+info_title = "{prefix}&d{world}"
+status_title = "{prefix}&dRift {version} מצב"
+generator_format = "{prefix}&7Custom פורמט: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&eFolia תמיכה Rift\"קריאה, עורך, פרופיל ותכונות טלפורט; מחזור חיי העולם דינמי נחצב על ידי ממשק API."
+
+[rift.label]
+worlds = "עולמות"
+quarantine = "Quarantine"
+loaded = "טעון"
+managed = "ניהול"
+on_disk = "על הדיסק"
+missing = "עולמות אבודים"
+environment = "איכות הסביבה"
+generator = "גנרטור"
+seed = "Seed"
+autoload = "מטען אוטומטי"
+protected = "מוגן"
+operation_active = "מבצע פעיל"
+world_types = "סוגי העולם"
+configured_generators = "גנרטורים מוגדרים"
+available = "זמין זמין"
+unavailable = "לא זמין"
+server = "Server Server Server"
+java_runtime = "Java זמן ריצה"
+plugin_bytecode = "Plugin bytecode"
+platform = "פלטפורמה"
+dynamic_lifecycle = "דינמיקה Worldcycle"
+world_container = "מיכל עולמי"
+writable = "מיכל עולמי"
+locale = "מקומי"
+world_counts = "עולמות"
+quarantine_entries = "רשומות Quarantine"
+
+[rift.explain]
+loaded = "בין אם Bukkit כיום יש את העולם הזה פעיל בזיכרון."
+managed = "בין אם Rift הוא הבעלים של פרופיל עבור העולם הזה והוא יכול לשחזר את הגדרות הגנרטור והסטארט-אפ שלו."
+on_disk = "בין אם העולם טעון או יש מנהל עולמי תקף המכיל level.dat."
+environment = "The The The Bukkit הסביבה העולמית שנרשמה על ידי עולם החי או פרופיל מנוהל."
+generator = "הגנרטור Rift מתפוגגות כאשר העולם מנוהל זה נטען. void הוא Rift\"גנרטור של עולם ריק."
+seed = "הזרעים המתועדים לעולם זה.שטח קיים לעולם אינו מתחדש על ידי שינוי ערך התצוגה הזה."
+autoload = "בין אם Rift לטעון את העולם מנוהל באופן אוטומטי במהלך ההפעלה השרת."
+protected = "עולמות מנוהלים מוגנים לא ניתן להזיז Rift quarantine"
+operation_active = "בין אם ניתוח מחזור חיים כרגע Rift\"נעלמת עולם."
+server = "יישום השרת הפעיל והגרסה שדווחו על ידי Bukkit."
+java_runtime = "The The The Java זמן ריצה כרגע מארח את השרת. Rift\"הקוד נשאר תואם Java 17."
+plugin_bytecode = "המבוגר ביותר Java זמן ריצה מסוגל לטעון Rift\"שיעורים מורכבים."
+platform = "משפחת ה- API וה- API של השרת Rift מזוהה בזמן ריצה."
+dynamic_lifecycle = "בין אם פלטפורמה זו חושפת בבטחה את העולם בריצה ליצור, לטעון, לעומס, ל quarantine, ולשחזר פעולות."
+world_container = "מנהל השרת שבו Bukkit תיקיות עולם מאוחסנות."
+writable = "בין אם מערכת ההפעלה מתירה כיום Rift לכתוב בתוך מיכל העולם."
+locale = "קובץ השפה הפעיל תחת plugins/Rift/languagesערכים חסרים משתמשים כברירת מחדלים באנגלית בת קיימא."
+world_counts = "ספירות חזקות Bukkit עולמות; ספירות מנוהלות Rift פרופילים; פרופילים נעדרים מנוהלים שאינם טעון ואינם נוכחים בדיסק."
+quarantine = "העולמות עברו בצד Rift למחוק וזמין לשחזר על ידי quarantine id."
+world_entry = "טעינה פירושה פעיל עכשיו; אמצעים מנוהלים Rift יש פרופיל; על דיסק פירושו תיקיית עולם לא מועילה קיימת."
+
+[rift.feedback]
+title = "&d&lRIFT"
+world_subtitle = "&a{operation}&8: &f{world}"
+teleport_subtitle = "&aמגיע &f{world}"
+failure_title = "&cהמבצע נכשל"
+failure_subtitle = "&7{operation}&8: &f{world}"
+action_world = "&dRift &8• &a{operation} &f{world}"
+action_teleport = "&dRift &8• &aנשלחה ל &f{world}"
+action_failure = "&dRift &8• &c{operation} נכשלת &f{world}"
+
+[rift.gui]
+current = "&7המונחים: &f{value}"
+autoload = "&dעולמות מנוהלים על ידי Auto-load"
+delete = "&dתנו לעולם quarantine"
+verbose = "&dהמונחים:"
+debug_upload = "&dהעלאה ציבורית"
+bstats = "&dאנונימי אנונימי bStats מדדים"
+confirm_seconds = "&dהפסקת אישור שניות"
+poll = "&dHot-reload אבקת מילימטרים"
+cooldown = "&dHot-reload Cooldown מילימטרים"
+evacuation = "&dעולם הערכה"
+close = "&cסגור"
+splash = "&dמסך הסטארט-אפ מתיז"
+lifecycle_feedback = "&dמחזור החיים העולמי משוב"
+teleport_feedback = "&dמשוב טלפורט"
+failure_feedback = "&dכשלון משוב"
+title_popups = "&dתגית: Popups"
+action_bar_popups = "&dתגית: Action-bar Popups"
+sounds = "&dצלילי Feedback"
+root_title = "Rift קונפדרציה"
+category_title = "Rift: {category}"
+category_open = "&8לחץ לערוך כל הגדרה בסעיף זה"
+back = "&eבחזרה בחזרה"
+toggle = "&8לחץ על toggle"
+exact_number = "&8השמאל/right התאמה: הקש Q כדי להזין ערך מדויק"
+text = "&8לחץ להזין ערך חדש בצ'אט"
+prompt = "{prefix}&7סוג של ערך חדש &f{setting}&7 בצ'אט."
+prompt_cancel = "{prefix}&7סוג &fביטול&7 לחזור מבלי לשנות את זה."
+prompt_cancelled = "{prefix}&7הקלט בוטל."
+prompt_timeout = "{prefix}&7הקלט המפונקציה פסק זמן."
+setting_saved = "{prefix}&d{setting} &8› &aשונה ל־&f{after} &7מ־&f{before}&a."
+setting_failed = "{prefix}&cלא יכול לעדכן &f{setting}&c: {reason}"
+language = "&dשפה מקומית"
+language_select = "&8לחצו כדי לבחור מבין השפות הזמינות"
+lifecycle_sound = "&dתגית: Worldcycle"
+teleport_sound = "&dצליל טלפורט"
+failure_sound = "&dכישלון"
+sound_volume = "&dנפח סאונד"
+sound_pitch = "&dתגית: Sound"
+title_fade_in = "&dהמונחים: noise-in מתקתקs"
+title_stay = "&dשם הסרטון: Stay tags"
+title_fade_out = "&dשם הספר בלועזית: DARK-out tags"
+
+[rift.gui.category]
+general = "&dכללי בטיחות"
+feedback = "&dמשוב וצלילים"
+presentation = "&dמצגת"
+diagnostics = "&dאבחון&r"
+languages = "&dשפות והודעות"
+
+[director.help]
+no_subcommands = "אין פקודות משנה בעמוד זה."
+no_description = "לא סופק תיאור"
+command_group = "קבוצת פקודות. לחצו כדי לפתוח."
+category = "קטגוריית פקודות"
+no_parameters = "אין פרמטרים. לחצו כדי למלא את הפקודה מראש."
+parameters_hover = "רחפו מעל הפרמטרים כדי ללמוד עוד."
+
+[director.help.navigation]
+back = "חזרה"
+page = "עמוד"
+
+[director.help.navigation.parent]
+hover = "חזרה לקבוצת פקודות האב"
+
+[director.help.navigation.previous]
+hover = "העמוד הקודם"
+
+[director.help.navigation.next]
+hover = "העמוד הבא"
+
+[director.help.parameter]
+required = "פרמטר זה הוא חובה."
+optional = "פרמטר זה הוא אופציונלי."
+default = "ברירת המחדל היא \"{value}\" אם לא הוגדר."
+type = "פרמטר זה הוא מסוג {type}."
+
+[director.runtime]
+usage = "שימוש: {usage}"
+
+[director.runtime.error]
+invalid_origin = "לא ניתן להריץ פקודה זו ממקור זה."
+unknown_parameter = "מפתח פרמטר לא ידוע: {key}"
+unexpected_argument = "ארגומנט לא צפוי \"{argument}\". פרמטרים אופציונליים חייבים להינתן עם מפתח, לדוגמה seed=123"
+unclosed_group = "חסר סוגר \"]\" עבור הפרמטר {key}"
+conversion_failed = "לא ניתן להמיר את \"{value}\" ל-{type} עבור {parameter}"
+default_parse_failed = "לא ניתן לנתח את ערך ברירת המחדל של הפרמטר {parameter}"
+missing_argument = "חסר ארגומנט \"{parameter}\" ({type})"
+execution_failed = "הפעלת הפקודה {command} נכשלה: {reason}"
+
+[language.menu]
+your_language = "השפה שלך"
+reset_your_language = "איפוס השפה שלך"
+server_default = "ברירת המחדל של השרת"
+edit_messages = "עריכת הודעות השפה"
+use_server_default = "שימוש בברירת המחדל של השרת"
+current = "נוכחית: {locale}"
+current_with_personal = "נוכחית: {locale} (שלך: {personal})"
+your_description = "שנה רק את ההודעות שאתה רואה."
+reset_description = "השתמש בשפת ברירת המחדל של השרת."
+server_description = "שנה את שפת ברירת המחדל של השרת."
+edit_description = "פתח את עורך ההודעות לכל שפה."
+select_description = "לחץ כדי לבחור בשפה זו."
+remove_personal_description = "הסר את בחירת השפה האישית שלך."
+no_controls = "אין לך גישה להגדרות שפה."

@@ -1,11 +1,88 @@
-name: ${name}
-version: ${version}
+name: Rift
+version: '${version}'
 main: ${main}
-authors: [ cyberpwn, NextdoorPsycho, Vatuu ]
-website: volmit.com
-api-version: ${apiversion}
-description: The most reliable world manager
-libraries:
-  - com.google.code.gson:gson:2.9.0
+authors:
+  - Cyberpwn
+  - NextdoorPsycho
+  - Vatuu
+website: https://volmit.com
+api-version: '${apiVersion}'
+description: Safe, version-flexible world lifecycle management
+load: POSTWORLD
+folia-supported: true
 
-hotload-dependencies: false
+commands:
+  rift:
+    description: Manage server worlds
+    usage: /rift help
+    aliases: [rft]
+
+permissions:
+  rift.command:
+    description: Allows access to the Rift command root
+    default: true
+  rift.admin:
+    description: Grants every Rift administrative capability
+    default: op
+    children:
+      rift.command: true
+      rift.create: true
+      rift.import: true
+      rift.load: true
+      rift.unload: true
+      rift.delete: true
+      rift.restore: true
+      rift.teleport: true
+      rift.teleport.others: true
+      rift.list: true
+      rift.info: true
+      rift.generators: true
+      rift.config: true
+      rift.language.self: true
+      rift.status: true
+      rift.debug: true
+  rift.create:
+    description: Allows creating managed worlds
+    default: op
+  rift.import:
+    description: Allows importing existing worlds
+    default: op
+  rift.load:
+    description: Allows loading worlds
+    default: op
+  rift.unload:
+    description: Allows unloading worlds
+    default: op
+  rift.delete:
+    description: Allows moving managed worlds into quarantine
+    default: op
+  rift.restore:
+    description: Allows restoring quarantined worlds
+    default: op
+  rift.teleport:
+    description: Allows teleporting to a loaded world
+    default: op
+  rift.teleport.others:
+    description: Allows teleporting another player to a loaded world
+    default: op
+  rift.list:
+    description: Allows listing loaded, managed, and discovered worlds
+    default: op
+  rift.info:
+    description: Allows inspecting world state
+    default: op
+  rift.generators:
+    description: Allows listing generator guidance and configured identifiers
+    default: op
+  rift.config:
+    description: Allows opening the in-game configuration editor
+    default: op
+  rift.language.self:
+    description: Allows choosing a personal Rift language
+    default: true
+  rift.status:
+    description: Allows running Rift platform and state diagnostics
+    default: op
+  rift.debug:
+    description: Allows creating local and optionally public Rift diagnostic reports
+    default: op

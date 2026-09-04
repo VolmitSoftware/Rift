@@ -1,0 +1,270 @@
+# Tệp ngôn ngữ Rift (Tiếng Việt - Việt Nam).
+# Tệp này chỉ được tải xuống khi chưa tồn tại; hãy sửa trực tiếp languages/vi_VI.toml.
+# Thay đổi cục bộ không bao giờ bị tự động thay thế; mục còn thiếu dùng tiếng Anh.
+# Chỉnh sửa các thông báo bên dưới; thay đổi đã lưu sẽ được tự động phát hiện và áp dụng.
+# Giữ nguyên từng phần giữ chỗ đúng như cách viết, bao gồm cả dấu ngoặc nhọn.
+# Chỉ dùng phần giữ chỗ trong thông báo có mẫu mặc định khai báo phần đó; phần giữ chỗ không được hỗ trợ sẽ không được thay thế.
+# Tiền tố: {prefix}=giá trị runtime.prefix toàn cục. Xóa {prefix} khỏi từng thông báo nếu không muốn hiện ở thông báo đó.
+# Các phần giữ chỗ có sẵn:
+#
+# {argument} - đối số lệnh
+# {category} - danh mục lệnh
+# {command} - văn bản hoặc tên lệnh
+# {count} - số lượng mục hoặc kết quả
+# {detail} - chi tiết mô tả
+# {id} - mã định danh
+# {key} - khóa cấu hình hoặc thông báo
+# {label} - nhãn hiển thị
+# {locale} - thiết lập vùng ngôn ngữ
+#   {personal}      mã vùng cá nhân
+# {name} - tên mục hoặc tên hiển thị
+# {operation} - tên thao tác
+# {parameter} - tên tham số
+# {permission} - nút quyền hạn
+# {player} - tên người chơi
+# {reason} - lý do hoặc chi tiết lỗi
+# {seconds} - thời lượng tính bằng giây
+# {setting} - tên cài đặt
+# {before} - giá trị trước đó
+# {after} - giá trị mới
+# {title} - văn bản tiêu đề
+# {type} - kiểu giá trị hoặc dữ liệu
+# {usage} - văn bản cách dùng lệnh
+# {value} - giá trị hiện tại hoặc mới
+# {version} - phiên bản
+# {world} - tên thế giới
+#
+
+[runtime]
+prefix = "&5&lRIFT&r &8›&r "
+
+[rift.command]
+root = "Quản lý thế giới máy phục vụ an toàn"
+create = "Tạo ra và quản lý một thế giới mới"
+import = "Nhập thư mục thế giới đã có"
+load = "Tải một thế giới quản lý hoặc khám phá"
+unload = "Những người chơi sơ tán và dỡ dỡ xuống một thế giới"
+delete = "Chuyển cả thế giới vào trạm kiểm dịch."
+restore = "Phục hồi một thế giới bị cách ly"
+teleport = "Name"
+send = "Name"
+list = "Danh sách được nạp, quản lý, phát hiện và cách ly các thế giới"
+info = "Hiện trạng thái chi tiết cho một thế giới"
+generators = "Hiện bộ nhận diện trình tạo đã được sử dụng bởi các thế giới quản lý"
+config = "Mở trò chơi Rift Trình soạn thảo cấu hình"
+language = "Chọn một ngôn ngữ Rift có sẵn"
+status = "Kiểm tra khả năng nền tảng và Rift Tình trạng"
+debug = "Công cụ chẩn đoán Rift"
+debug_dump = "Tạo báo cáo chẩn đoán Rift toàn diện"
+autoload = "Thay đổi cho dù một tải thế giới quản lý trong khi khởi động"
+protect = "Bảo vệ hoặc không bảo vệ một thế giới quản lý"
+
+[rift.parameter]
+name = "Tên thế giới"
+environment = "NORMAL, NETHER, THE_END, hoặc CUSTOM"
+generator = "vanilla, void, hoặc PluginName[:gentor-id]"
+seed = "random hoặc một hạt giống 64 bit đã được ký"
+type = "Bukkit Kiểu thế giới"
+save = "Lưu trước khi gỡ bỏ"
+id = "Số ID mục ra cách ly"
+player = "Tên người chơi trực tuyến"
+enabled = "true hay false"
+page = "Trang danh sách cổng được đánh số từ một"
+upload = "Tải báo cáo lên khi bật tải lên công khai"
+sender = "Bộ gửi lệnh"
+
+[rift.message]
+permission_denied = "{prefix}&cAnh cần &f{permission}&c."
+unknown_command = "{prefix}&cLệnh lạ. Dùng &f/rift help&c."
+player_only = "{prefix}&cLệnh này yêu cầu một người chơi."
+operation_queued = "{prefix}&7Hàng đợi &f{operation}&7 Vì &d{world}&7."
+operation_failed = "{prefix}&c{operation} bị lỗi &f{world}&c: {reason}"
+created = "{prefix}&aTạo ra và quản lý &f{world}&a."
+imported = "{prefix}&aNhập và quản lý &f{world}&a."
+loaded = "{prefix}&aĐã nạp &f{world}&a."
+unloaded = "{prefix}&aChưa tải &f{world}&a."
+teleported = "{prefix}&aChuyển tiếp &f{player}&a phải &f{world}&a."
+delete_confirm = "{prefix}&eChạy &f/rift delete {world}&e bên trong &f{seconds}s&e để đưa nó vào trạm kiểm dịch."
+quarantined = "{prefix}&aChuyển &f{world}&a vào khu cách ly như &f{id}&a."
+restored = "{prefix}&aĐã phục hồi &f{world}&a từ &f{id}&a."
+profile_updated = "{prefix}&aCập nhật &f{setting}&a Vì &f{world}&a phải &f{value}&a."
+folia_limit = "{prefix}&e{operation} không sẵn sàng trên Folia bởi vì thế giới của nó gánh nặng/unload ARI chưa được thực hiện."
+config_saved = "{prefix}&aĐã lưu cấu hình."
+config_opened = "{prefix}&aĐã mở trình chỉnh sửa cấu hình đầy đủ trong trò chơi.&r"
+config_save_failed = "{prefix}&cKhông thể lưu cấu hình. Hãy kiểm tra lại bàn giao diện."
+empty_list = "{prefix}&7Không tìm thấy thế giới nào giống nhau cả."
+player_offline = "{prefix}&cNgười chơi không trực tuyến: &f{player}"
+unknown_world = "{prefix}&cThế giới không rõ: &f{world}"
+section = "{prefix}&d{title} &8(&f{count}&8)"
+entry = "{prefix}&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&8- &7{label}: &f{value}"
+info_title = "{prefix}&d{world}"
+status_title = "{prefix}&dRift {version} Trạng thái"
+generator_format = "{prefix}&7Custom Định dạng: &fPluginName[:gentor-id]"
+folia_status_note = "{prefix}&eFolia Hỗ trợ Rift'đã đọc, biên tập, hồ sơ, và dịch chuyển tức thời; xe đạp thế giới sống động được đóng cửa bởi sân ga ARI."
+
+[rift.label]
+worlds = "Thế giới"
+quarantine = "Cách ly"
+loaded = "Đã nạp"
+managed = "Đã quản lý"
+on_disk = "Trên đĩa"
+missing = "đã mất tích trong việc quản lý thế giới"
+environment = "Môi trường"
+generator = "Chung"
+seed = "Hạt giống"
+autoload = "Nạp tự động"
+protected = "Đã bảo vệ"
+operation_active = "Hoạt động"
+world_types = "Kiểu thế giới"
+configured_generators = "Thiết lập máy phát điện"
+available = "có sẵn"
+unavailable = "không sẵn sàng"
+server = "Máy phục vụ"
+java_runtime = "Java giờ chạy"
+plugin_bytecode = "Bổ sung byte mã hoá"
+platform = "Nền tảng"
+dynamic_lifecycle = "Xe đạp sống động thế giới"
+world_container = "Hộp thế giới"
+writable = "Name"
+locale = "Miền địa phương"
+world_counts = "Thế giới"
+quarantine_entries = "Mục cách ly"
+
+[rift.explain]
+loaded = "Cho dù Bukkit Hiện tại thế giới này đang hoạt động trong trí nhớ."
+managed = "Cho dù Rift sở hữu một hồ sơ cho thế giới này và có thể phục hồi lại máy phát và khởi động thiết lập."
+on_disk = "Thế giới có tải hay có thư mục thế giới hợp lệ chứa level.dat."
+environment = "Hạt Bukkit Môi trường thế giới được ghi nhận bởi thế giới sống hoặc quản lý hồ sơ."
+generator = "Máy phát điện Rift Những người được hưởng ứng khi thế giới này vận hành hàng loạt. void là RiftMáy phát điện thế giới rỗng."
+seed = "Đất đai tồn tại không bao giờ được tái tạo bằng cách thay đổi giá trị hiển thị này."
+autoload = "Cho dù Rift nạp điều này tự động quản lý thế giới trong khi khởi chạy máy phục vụ."
+protected = "Những thế giới được bảo vệ không thể bị chuyển vào Rift Cách ly."
+operation_active = "Cho dù một hoạt động vòng lặp đang giữ RiftKhóa trên toàn thế giới."
+server = "Trình phục vụ hoạt động thực hiện và phiên bản được báo cáo bởi Bukkit."
+java_runtime = "Hạt Java Chạy thời gian đang tổ chức máy phục vụ. RiftTheo mã số của hte code thì vẫn phù hợp với Java 17."
+plugin_bytecode = "Người già nhất Java chạy có khả năng nạp RiftLớp học biên tập."
+platform = "Name Rift Phát hiện lúc chạy."
+dynamic_lifecycle = "Dù nền tảng này có an toàn phơi bày các hoạt động của thế giới thời gian được tạo ra, tải lên, dỡ xuống, cách ly và khôi phục các hoạt động."
+world_container = "Thư mục máy phục vụ nơi Bukkit Các thư mục thế giới được cất giữ."
+writable = "Cho dù hệ điều hành hiện thời cho phép Rift để viết bên trong các container thế giới."
+locale = "Tập tin ngôn ngữ hoạt động dưới plugins/Rift/languages.. thiếu mục sử dụng mặc định tiếng Anh có thể sửa đổi."
+world_counts = "Số đếm đã tải hoạt động Bukkit Thế giới; quản lý đếm Rift hồ sơ: còn thiếu những hồ sơ đã được quản lý còn không tải hay hiện diện trên đĩa."
+quarantine = "Thế giới chuyển sang một bên. Rift xóa và có thể phục hồi bằng cách kiểm dịch."
+world_entry = "Trọng tải có nghĩa là hoạt động ngay bây giờ; quản lý phương tiện Rift có hồ sơ; trên đĩa có nghĩa là một thư mục thế giới bị gỡ bỏ hợp lệ tồn tại."
+
+[rift.feedback]
+title = "&d&lRIFT"
+world_subtitle = "&a{operation}&8: &f{world}"
+teleport_subtitle = "&aĐến &f{world}"
+failure_title = "&cThao tác thất bại"
+failure_subtitle = "&7{operation}&8: &f{world}"
+action_world = "&dRift &8• &a{operation} &f{world}"
+action_teleport = "&dRift &8• &aChuyển tới &f{world}"
+action_failure = "&dRift &8• &c{operation} bị lỗi &f{world}"
+
+[rift.gui]
+current = "&7& Hiện có: &f{value}"
+autoload = "&dTải tự động lên các thế giới"
+delete = "&dCho phép việc cách ly thế giới"
+verbose = "&dĐăng nhập linh tinh"
+debug_upload = "&dViệc gỡ lỗi công cộng tải lên"
+bstats = "&dVô danh bStats mét"
+confirm_seconds = "&dXoá giây xác nhận"
+poll = "&d% 1 phần nghìn giây"
+cooldown = "&dTốc độ làm mát theo mili giây"
+evacuation = "&dThế giới sơ tán"
+close = "&cĐóng"
+splash = "&dKhởi động màn hình giật gân"
+lifecycle_feedback = "&dPhản hồi vòng đời thế giới"
+teleport_feedback = "&dPhản hồi cổng chuyển tiếp"
+failure_feedback = "&dPhản hồi sai"
+title_popups = "&dHiển thị tiêu đề"
+action_bar_popups = "&dComment"
+sounds = "&dÂm thanh trả lời"
+root_title = "Rift Cấu hình"
+category_title = "Rift: {category}"
+category_open = "&8Nhấn vào để sửa đổi mọi thiết lập trong phần này"
+back = "&eLùi"
+toggle = "&8Nhấn vào để bật lên"
+exact_number = "&8Trái/right điều chỉnh; bấm Q để nhập một giá trị chính xác"
+text = "&8Nhấn vào để nhập một giá trị mới vào trò chuyện"
+prompt = "{prefix}&7Gõ một giá trị mới cho &f{setting}&7 Nói chuyện."
+prompt_cancel = "{prefix}&7Kiểu &fhủy bỏ&7 trở về mà không thay đổi nó."
+prompt_cancelled = "{prefix}&7Việc nhập dữ liệu cấu hình bị thôi."
+prompt_timeout = "{prefix}&7Cấu hình nhập đã quá giờ."
+setting_saved = "{prefix}&d{setting} &8› &aĐã đổi thành &f{after} &7từ &f{before}&a."
+setting_failed = "{prefix}&cKhông thể cập nhật &f{setting}&c: {reason}"
+language = "&dMiền ngôn ngữ"
+language_select = "&8Nhấn để chọn từ các ngôn ngữ có sẵn"
+lifecycle_sound = "&dTiếng xe đạp của thế giới"
+teleport_sound = "&dÂm thanh cổng đi"
+failure_sound = "&dÂm thanh Thất bại"
+sound_volume = "&dÂm thanh"
+sound_pitch = "&dNém âm thanh"
+title_fade_in = "&dĐộ mờ dần tiêu đề"
+title_stay = "&dĐánh dấu tiêu đề còn lại"
+title_fade_out = "&dCon bọ chét phai tiêu đề"
+
+[rift.gui.category]
+general = "&dChung"
+feedback = "&dÂm & thanh trả lại"
+presentation = "&dTrình chiếu"
+diagnostics = "&dChẩn đoán&r"
+languages = "&dNgôn ngữ và thông báo"
+
+[director.help]
+no_subcommands = "Không có lệnh con trên trang này."
+no_description = "Không có mô tả"
+command_group = "Nhóm lệnh. Nhấp để mở."
+category = "Danh mục lệnh"
+no_parameters = "Không có tham số. Nhấp để điền sẵn lệnh."
+parameters_hover = "Di chuột qua các tham số để tìm hiểu thêm."
+
+[director.help.navigation]
+back = "Quay lại"
+page = "Trang"
+
+[director.help.navigation.parent]
+hover = "Quay lại nhóm lệnh cha"
+
+[director.help.navigation.previous]
+hover = "Trang trước"
+
+[director.help.navigation.next]
+hover = "Trang sau"
+
+[director.help.parameter]
+required = "Tham số này là bắt buộc."
+optional = "Tham số này là tùy chọn."
+default = "Mặc định là \"{value}\" nếu không được chỉ định."
+type = "Tham số này có kiểu {type}."
+
+[director.runtime]
+usage = "Cách dùng: {usage}"
+
+[director.runtime.error]
+invalid_origin = "Không thể chạy lệnh này từ nguồn này."
+unknown_parameter = "Khóa tham số không xác định: {key}"
+unexpected_argument = "Đối số không mong đợi \"{argument}\". Các tham số tùy chọn phải được chỉ định bằng khóa, ví dụ seed=123"
+unclosed_group = "Thiếu dấu \"]\" đóng cho tham số {key}"
+conversion_failed = "Không thể chuyển \"{value}\" thành {type} cho {parameter}"
+default_parse_failed = "Không thể phân tích giá trị mặc định của tham số {parameter}"
+missing_argument = "Thiếu đối số \"{parameter}\" ({type})"
+execution_failed = "Không thể thực thi lệnh {command}: {reason}"
+
+[language.menu]
+your_language = "Ngôn ngữ của bạn"
+reset_your_language = "Đặt lại ngôn ngữ của bạn"
+server_default = "Ngôn ngữ mặc định của máy chủ"
+edit_messages = "Chỉnh sửa thông báo ngôn ngữ"
+use_server_default = "Dùng ngôn ngữ mặc định của máy chủ"
+current = "Hiện tại: {locale}"
+current_with_personal = "Hiện tại: {locale} (Của bạn: {personal})"
+your_description = "Chỉ thay đổi những thông báo bạn thấy."
+reset_description = "Dùng ngôn ngữ mặc định của máy chủ."
+server_description = "Thay đổi ngôn ngữ mặc định của máy chủ."
+edit_description = "Mở trình chỉnh sửa thông báo cho từng ngôn ngữ."
+select_description = "Nhấp để chọn ngôn ngữ này."
+remove_personal_description = "Xóa lựa chọn ngôn ngữ cá nhân của bạn."
+no_controls = "Bạn không có quyền dùng các tùy chọn ngôn ngữ."

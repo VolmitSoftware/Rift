@@ -1,0 +1,270 @@
+# Rift-kielitiedosto (Suomi - Suomi).
+# Tämä tiedosto ladataan vain, jos se puuttuu; muokkaa tiedostoa languages/fi_FI.toml suoraan.
+# Paikallisia muutoksia ei korvata automaattisesti; puuttuvat kohdat käyttävät englantia.
+# Muokkaa alla olevia viestejä; tallennetut muutokset havaitaan ja otetaan käyttöön automaattisesti.
+# Säilytä jokainen paikkamerkki täsmälleen kirjoitetussa muodossa aaltosulkeineen.
+# Käytä paikkamerkkiä vain viesteissä, joiden oletusmalli määrittää sen; tukemattomia paikkamerkkejä ei korvata.
+# Etuliite: {prefix}=yleinen runtime.prefix-arvo. Poista {prefix} yksittäisestä viestistä piilottaaksesi sen siinä.
+# Käytettävissä olevat paikkamerkit:
+#
+# {argument} - komennon argumentti
+# {category} - komentoluokka
+# {command} - komennon teksti tai nimi
+# {count} - kohteiden tai tulosten määrä
+# {detail} - kuvaava lisätieto
+# {id} - tunniste
+# {key} - asetuksen tai viestin avain
+# {label} - näyttönimike
+# {locale} - kielen alueasetus
+#   {personal}      henkilökohtainen kielitunnus
+# {name} - merkinnän tai näytön nimi
+# {operation} - toiminnon nimi
+# {parameter} - parametrin nimi
+# {permission} - käyttöoikeussolmu
+# {player} - pelaajan nimi
+# {reason} - syy tai virheen lisätieto
+# {seconds} - kesto sekunteina
+# {setting} - asetuksen nimi
+# {before} - edellinen arvo
+# {after} - uusi arvo
+# {title} - otsikkoteksti
+# {type} - arvon tai tiedon tyyppi
+# {usage} - komennon käyttöteksti
+# {value} - nykyinen tai uusi arvo
+# {version} - versio
+# {world} - maailman nimi
+#
+
+[runtime]
+prefix = "&5&lRIFT&r &8›&r "
+
+[rift.command]
+root = "Hallitse palvelinmaailmoja turvallisesti"
+create = "Luo ja hallitse uutta maailmaa"
+import = "Tuo olemassa oleva maailmanhakemisto"
+load = "Lataa hallittu tai löydetty maailma"
+unload = "Evakuoi pelaajat ja pura maailma"
+delete = "Siirrä hallittu maailma karanteeniin"
+restore = "Palauttaa karanteenin maailman"
+teleport = "Teleporttautuminen ladattuun maailmaan"
+send = "Teleportaa toinen pelaaja ladattuun maailmaan"
+list = "Luettelo ladatuista, hallituista, löydetyistä ja karanteenissa olevista maailmoista"
+info = "Näytä yksityiskohtainen tila yhden maailman"
+generators = "Näytä hallinnoitujen maailmojen jo käyttämät generaattoritunnisteet"
+config = "Avaa peli Rift konfiguraatiomuokkain"
+language = "Valitse käytettävissä oleva Rift-kieli"
+status = "Tarkastaa alustan ominaisuudet ja Rift tila"
+debug = "Riftin diagnostiikkatyökalut"
+debug_dump = "Luo kattava Rift-diagnostiikkaraportti"
+autoload = "Muuttaa, onko hallittu maailma kuormia käynnistettäessä"
+protect = "Suojella tai suojella hallittua maailmaa"
+
+[rift.parameter]
+name = "Maailmannimi"
+environment = "NORMAL, NETHER, THE_ENDtai CUSTOM"
+generator = "vanilla, voidtai PluginName[:generaattori-id]"
+seed = "random tai allekirjoitettu 64-bittinen siemen"
+type = "Bukkit maailman tyyppi"
+save = "Tallenna ennen purkamista"
+id = "Karanteeni id"
+player = "Online-soittimen nimi"
+enabled = "true tai false"
+page = "Portaaliluettelon sivu numerosta yksi alkaen"
+upload = "Lähetä raportti, kun julkiset lähetykset ovat käytössä"
+sender = "Komentojen lähettäjä"
+
+[rift.message]
+permission_denied = "{prefix}&cTarvitset &f{permission}&c."
+unknown_command = "{prefix}&cTuntematon komento. &f/rift help&c."
+player_only = "{prefix}&cTämä komento vaatii pelaajan."
+operation_queued = "{prefix}&7Jonotettu &f{operation}&7 B. &d{world}&7."
+operation_failed = "{prefix}&c{operation} epäonnistui &f{world}&c: {reason}"
+created = "{prefix}&aLuotu ja hallinnoitu &f{world}&a."
+imported = "{prefix}&aTuodut ja hallinnoidut &f{world}&a."
+loaded = "{prefix}&aLadattu &f{world}&a."
+unloaded = "{prefix}&aLadattu &f{world}&a."
+teleported = "{prefix}&aTelesiirretty &f{player}&a - &f{world}&a."
+delete_confirm = "{prefix}&eJuokse &f/rift delete {world}&e uudelleen &f{seconds}tilu&e Siirtää se karanteeniin."
+quarantined = "{prefix}&aSiirretty &f{world}&a karanteeniin &f{id}&a."
+restored = "{prefix}&aPalautettu &f{world}&a alkaen &f{id}&a."
+profile_updated = "{prefix}&aPäivitetty &f{setting}&a B. &f{world}&a - &f{value}&a."
+folia_limit = "{prefix}&e{operation} ei ole saatavilla Folia koska sen maailma kuormittaa/unload API ei ole käytössä."
+config_saved = "{prefix}&aAsennus tallennettu."
+config_opened = "{prefix}&aKattava pelinsisäinen asetuseditori avattiin.&r"
+config_save_failed = "{prefix}&cAsetusta ei voitu tallentaa. Tarkista konsoli."
+empty_list = "{prefix}&7Yhteensopivia maailmoja ei löytynyt."
+player_offline = "{prefix}&cPelaaja ei ole online: &f{player}"
+unknown_world = "{prefix}&cTuntematon maailma: &f{world}"
+section = "{prefix}&d{title} &8(&f{count}&8)"
+entry = "{prefix}&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&8- &7{label}: &f{value}"
+info_title = "{prefix}&d{world}"
+status_title = "{prefix}&dRift {version} Tila"
+generator_format = "{prefix}&7Custom muoto: &fPluginName[:generaattori-id]"
+folia_status_note = "{prefix}&eFolia tuet Rift's luku-, editori-, profiili- ja teleporttiominaisuudet; dynaaminen maailman elinkaari on aidattu alustan API."
+
+[rift.label]
+worlds = "Maailmat"
+quarantine = "Karanteeni"
+loaded = "Ladattu"
+managed = "Hoidettu"
+on_disk = "Levyllä"
+missing = "puuttuvat hallinnoidut maailmat"
+environment = "Ympäristö"
+generator = "Generaattori"
+seed = "Siemen"
+autoload = "Automaattinen lataus"
+protected = "Suojattu"
+operation_active = "Toiminto aktiivinen"
+world_types = "Maailmatyypit"
+configured_generators = "Määritellyt generaattorit"
+available = "saatavilla"
+unavailable = "Ei saatavilla"
+server = "Palvelin"
+java_runtime = "Java ajoaika"
+plugin_bytecode = "Liitännäisen tate-koodi"
+platform = "Alusta"
+dynamic_lifecycle = "Dynaaminen maailman elinkaari"
+world_container = "World Container"
+writable = "Maailman kontti kirjoitettava"
+locale = "Paikallinen"
+world_counts = "Maailmat"
+quarantine_entries = "Karanteenimerkinnät"
+
+[rift.explain]
+loaded = "Onko Bukkit Tällä hetkellä tämä maailma on aktiivinen muistissa."
+managed = "Onko Rift Omistaa profiilin tälle maailmalle ja voi palauttaa sen generaattori ja startup-asetukset."
+on_disk = "Onko maailma ladattu tai onko sillä voimassa oleva maailman hakemisto, joka sisältää level.dat."
+environment = "• Bukkit elävän maailman tai hallitun profiilin rekisteröimä maailmanlaajuinen ympäristö."
+generator = "Generaattori Rift Nouto tapahtuu, kun tämä hallittu maailma kuormittaa. void ilu RiftSisäänrakennettu tyhjän maailman generaattori."
+seed = "Nykyistä maastoa ei koskaan regeneroida muuttamalla tätä näyttöarvoa."
+autoload = "Onko Rift lataa tämän hallitun maailman automaattisesti aikana palvelimen käynnistys."
+protected = "Suojeltuja hallittuja maailmoja ei voi siirtää Rift Karanteeni."
+operation_active = "Onko elinkaaritoiminto tällä hetkellä käytössä RiftSe on maailmanlopun lukko."
+server = "Aktiivisen palvelimen käyttöönotto ja versio raportoinut Bukkit."
+java_runtime = "• Java Runtime tällä hetkellä isännöi palvelimen. Rift's tatecode pysyy yhteensopivana Java 17."
+plugin_bytecode = "Vanhin Java ajoaika, joka voidaan lastata RiftHän on koossa."
+platform = "Aikataulu ja palvelin API-perhe Rift Havaittu ajon aikana."
+dynamic_lifecycle = "Paljastaako tämä alusta turvallisesti ajoajan maailman luo, lastaa, purkaa, karanteeni ja palauttaa toiminnot."
+world_container = "Palvelinhakemisto, jossa Bukkit maailman kansiot tallennetaan."
+writable = "Sallitaanko käyttöjärjestelmä tällä hetkellä Rift kirjoittaa maailman sisälle astia."
+locale = "Aktiivisen kielitiedoston alla plugins/Rift/languages. Puuttuvat merkinnät käyttävät muokattavissa Englanti oletuksia."
+world_counts = "Ladatut määrät aktiivisia Bukkit Maailmat; hallitut laskut Rift profiileja; puuttuvia lukuja hallinnoituja profiileja, joita ei ole ladattu tai jotka ovat läsnä levyllä."
+quarantine = "Maailmat siirtyivät syrjään Rift poistetaan ja voidaan palauttaa karanteenin tunnisteella."
+world_entry = "Ladatut välineet käytössä nyt; hallinnoidut keinot Rift on profiili; levyllä tarkoittaa voimassa purettu maailman kansio on olemassa."
+
+[rift.feedback]
+title = "&d&lRIFT"
+world_subtitle = "&a{operation}&8: &f{world}"
+teleport_subtitle = "&aSaapui &f{world}"
+failure_title = "&cToiminta epäonnistui"
+failure_subtitle = "&7{operation}&8: &f{world}"
+action_world = "&dRift &8• &a{operation} &f{world}"
+action_teleport = "&dRift &8• &aTelesiirretty &f{world}"
+action_failure = "&dRift &8• &c{operation} epäonnistui &f{world}"
+
+[rift.gui]
+current = "&7Nykyinen: &f{value}"
+autoload = "&dAutomaattisesti ohjatut maailmat"
+delete = "&dSalli maailmankaranteeni"
+verbose = "&dVerboosien hakkuu"
+debug_upload = "&dJulkiset vianetsintälataukset"
+bstats = "&dNimetön bStats mittarit"
+confirm_seconds = "&dPoista vahvistussekuntit"
+poll = "&dKuuma kierros millisekuntia"
+cooldown = "&dLämmin uudelleenjäähdytys millisekuntia"
+evacuation = "&dEvakuointi maailma"
+close = "&cSulje"
+splash = "&dKäynnistyksen splash-näyttö"
+lifecycle_feedback = "&dMaailman elinkaaripalaute"
+teleport_feedback = "&dTeleport-palaute"
+failure_feedback = "&dEpäonnistuminen palaute"
+title_popups = "&dOtsikko ponnahdusikkunat"
+action_bar_popups = "&dToimintapalkin ponnahdusikkunat"
+sounds = "&dPalauteäänet"
+root_title = "Rift Asetukset"
+category_title = "Rift: {category}"
+category_open = "&8Napsauta muokataksesi jokaista asetusta tässä osiossa"
+back = "&eTakaisin"
+toggle = "&8Napsauta vaihtaaksesi"
+exact_number = "&8Vasen/right asetukset; paina Q antaaksesi tarkan arvon"
+text = "&8Napsauta syöttääksesi uuden arvon chatissa"
+prompt = "{prefix}&7Kirjoita uusi arvo &f{setting}&7 Juttelemassa."
+prompt_cancel = "{prefix}&7Tyyppi &fperuuta&7 Palata ilman muutoksia."
+prompt_cancelled = "{prefix}&7Asetusten syöte peruutettiin."
+prompt_timeout = "{prefix}&7Konfiguraatiosyöte aikakatkaistu."
+setting_saved = "{prefix}&d{setting} &8› &aMuutettu arvoon &f{after} &7arvosta &f{before}&a."
+setting_failed = "{prefix}&cEi voitu päivittää &f{setting}&c: {reason}"
+language = "&dKielilocale"
+language_select = "&8Napsauta valitaksesi käytettävissä olevista kielistä"
+lifecycle_sound = "&dMaailman elinkaariääni"
+teleport_sound = "&dTeleport-ääni"
+failure_sound = "&dEpäonnistuminen ääni"
+sound_volume = "&dÄänimäärä"
+sound_pitch = "&dÄänikenttä"
+title_fade_in = "&dOtsikko haalistuvat punkit"
+title_stay = "&dOtsikko pysyy rastina"
+title_fade_out = "&dTitle fade-out-punkit"
+
+[rift.gui.category]
+general = "&dYleinen & turvallisuus"
+feedback = "&dPalaute ja äänet"
+presentation = "&dEsittely"
+diagnostics = "&dDiagnostiikka&r"
+languages = "&dKielet ja viestit"
+
+[director.help]
+no_subcommands = "Tällä sivulla ei ole alikomentoja."
+no_description = "Kuvausta ei ole annettu"
+command_group = "Komentoryhmä. Avaa napsauttamalla."
+category = "Komentokategoria"
+no_parameters = "Ei parametreja. Esitäytä komento napsauttamalla."
+parameters_hover = "Vie hiiri parametrien päälle saadaksesi lisätietoja."
+
+[director.help.navigation]
+back = "Takaisin"
+page = "Sivu"
+
+[director.help.navigation.parent]
+hover = "Palaa ylempään komentoryhmään"
+
+[director.help.navigation.previous]
+hover = "Edellinen sivu"
+
+[director.help.navigation.next]
+hover = "Seuraava sivu"
+
+[director.help.parameter]
+required = "Tämä parametri on pakollinen."
+optional = "Tämä parametri on valinnainen."
+default = "Oletusarvo on \"{value}\", jos sitä ei määritetä."
+type = "Tämän parametrin tyyppi on {type}."
+
+[director.runtime]
+usage = "Käyttö: {usage}"
+
+[director.runtime.error]
+invalid_origin = "Tätä komentoa ei voi suorittaa tästä lähteestä."
+unknown_parameter = "Tuntematon parametriavain: {key}"
+unexpected_argument = "Odottamaton argumentti \"{argument}\". Valinnaiset parametrit on annettava avaimella, esim. seed=123"
+unclosed_group = "Sulkeva \"]\" puuttuu parametrilta {key}"
+conversion_failed = "Arvoa \"{value}\" ei voi muuntaa tyypiksi {type} parametrille {parameter}"
+default_parse_failed = "Parametrin {parameter} oletusarvoa ei voi jäsentää"
+missing_argument = "Puuttuva argumentti \"{parameter}\" ({type})"
+execution_failed = "Komennon {command} suoritus epäonnistui: {reason}"
+
+[language.menu]
+your_language = "Oma kielesi"
+reset_your_language = "Palauta oma kielesi"
+server_default = "Palvelimen oletuskieli"
+edit_messages = "Muokkaa kieliviestejä"
+use_server_default = "Käytä palvelimen oletuskieltä"
+current = "Nykyinen: {locale}"
+current_with_personal = "Nykyinen: {locale} (Omasi: {personal})"
+your_description = "Vaihda vain näkemäsi viestit."
+reset_description = "Käytä palvelimen oletuskieltä."
+server_description = "Vaihda palvelimen oletuskieli."
+edit_description = "Avaa kielikohtainen viestieditori."
+select_description = "Napsauta valitaksesi tämän kielen."
+remove_personal_description = "Poista henkilökohtainen kielivalintasi."
+no_controls = "Sinulla ei ole käytettävissä kieliasetuksia."

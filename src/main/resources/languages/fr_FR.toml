@@ -1,0 +1,270 @@
+# Fichier de langue de Rift (Français - France).
+# Ce fichier est téléchargé uniquement s’il manque ; modifiez directement languages/fr_FR.toml.
+# Les modifications locales ne sont jamais remplacées automatiquement ; les entrées absentes utilisent l’anglais.
+# Modifiez les messages ci-dessous ; les changements enregistrés sont détectés et appliqués automatiquement.
+# Conservez chaque variable exactement telle qu'elle est écrite, accolades comprises.
+# Utilisez une variable uniquement dans les messages dont le modèle par défaut la déclare ; les variables non prises en charge ne sont pas remplacées.
+# Préfixe : {prefix}=la valeur globale runtime.prefix. Retirez {prefix} d’un message pour le masquer uniquement à cet endroit.
+# Variables disponibles :
+#
+# {argument} - argument de commande
+# {category} - catégorie de commande
+# {command} - texte ou nom de commande
+# {count} - nombre d'éléments ou de résultats
+# {detail} - détail descriptif
+# {id} - identifiant
+# {key} - clé de configuration ou de message
+# {label} - libellé affiché
+# {locale} - paramètre régional de langue
+#   {personal}      code régional personnel
+# {name} - nom d'entrée ou d'affichage
+# {operation} - nom de l'opération
+# {parameter} - nom du paramètre
+# {permission} - nœud de permission
+# {player} - nom du joueur
+# {reason} - raison ou détail de l'erreur
+# {seconds} - durée en secondes
+# {setting} - nom du réglage
+# {before} - valeur précédente
+# {after} - nouvelle valeur
+# {title} - texte du titre
+# {type} - type de valeur ou de donnée
+# {usage} - texte d'utilisation de la commande
+# {value} - valeur actuelle ou nouvelle
+# {version} - version
+# {world} - nom du monde
+#
+
+[runtime]
+prefix = "&5&lRIFT&r &8›&r "
+
+[rift.command]
+root = "Gérer les mondes des serveurs en toute sécurité"
+create = "Créer et gérer un nouveau monde"
+import = "Importer un répertoire mondial existant"
+load = "Charger un monde géré ou découvert"
+unload = "Évacuez les joueurs et déchargez un monde"
+delete = "Déplacer un monde géré en quarantaine"
+restore = "Restaurer un monde en quarantaine"
+teleport = "Téléportation vers un monde chargé"
+send = "Téléportez un autre joueur dans un monde chargé"
+list = "Liste des mondes chargés, gérés, découverts et mis en quarantaine"
+info = "Afficher l'état détaillé pour un monde"
+generators = "Afficher les identifiants de générateurs déjà utilisés par les mondes gérés"
+config = "Ouvre le jeu Rift éditeur de configuration"
+language = "Sélectionner une langue Rift disponible"
+status = "Inspecter les capacités de la plateforme et Rift État"
+debug = "Outils de diagnostic de Rift"
+debug_dump = "Créer un rapport de diagnostic Rift complet"
+autoload = "Changer si un monde géré charge pendant le démarrage"
+protect = "Protéger ou non protéger un monde géré"
+
+[rift.parameter]
+name = "Nom mondial"
+environment = "NORMAL, NETHER, THE_ENDou CUSTOM"
+generator = "vanilla, voidou PluginName[:générateur-id]"
+seed = "random ou une graine de 64 bits signée"
+type = "Bukkit type mondial"
+save = "Enregistrer avant le déchargement"
+id = "Identification de la mise en quarantaine"
+player = "Nom du joueur en ligne"
+enabled = "true ou false"
+page = "Page de la liste des portails, numérotée à partir de un"
+upload = "Téléverser le rapport lorsque les envois publics sont activés"
+sender = "Expéditeur de commandes"
+
+[rift.message]
+permission_denied = "{prefix}&cVous avez besoin &f{permission}&c."
+unknown_command = "{prefix}&cCommande inconnue. Utilisation &f/rift help&c."
+player_only = "{prefix}&cCette commande nécessite un joueur."
+operation_queued = "{prefix}&7Saisie &f{operation}&7 pour &d{world}&7."
+operation_failed = "{prefix}&c{operation} échoué pour &f{world}&c: {reason}"
+created = "{prefix}&aCréation et gestion &f{world}&a."
+imported = "{prefix}&aImportés et gérés &f{world}&a."
+loaded = "{prefix}&aCharges &f{world}&a."
+unloaded = "{prefix}&aDéchargé &f{world}&a."
+teleported = "{prefix}&aTéléporté &f{player}&a à &f{world}&a."
+delete_confirm = "{prefix}&eCourez &f/rift delete {world}&e à nouveau dans &f{seconds}s&e pour la mettre en quarantaine."
+quarantined = "{prefix}&aDéplacé &f{world}&a en quarantaine comme &f{id}&a."
+restored = "{prefix}&aRestauré &f{world}&a de &f{id}&a."
+profile_updated = "{prefix}&aMise à jour &f{setting}&a pour &f{world}&a à &f{value}&a."
+folia_limit = "{prefix}&e{operation} n'est pas disponible sur Folia parce que sa charge mondiale/unload L'API n'est pas implémentée."
+config_saved = "{prefix}&aConfiguration enregistrée."
+config_opened = "{prefix}&aL'éditeur complet de configuration en jeu a été ouvert.&r"
+config_save_failed = "{prefix}&cLa configuration n'a pas pu être enregistrée. Vérifiez la console."
+empty_list = "{prefix}&7Aucun monde correspondant n'a été trouvé."
+player_offline = "{prefix}&cLe joueur n'est pas en ligne : &f{player}"
+unknown_world = "{prefix}&cMonde inconnu: &f{world}"
+section = "{prefix}&d{title} &8(&f{count}&8)"
+entry = "{prefix}&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&8- &7{label}: &f{value}"
+info_title = "{prefix}&d{world}"
+status_title = "{prefix}&dRift {version} État"
+generator_format = "{prefix}&7Custom format: &fPluginName[:générateur-id]"
+folia_status_note = "{prefix}&eFolia soutiens RiftLes fonctionnalités de lecture, d'éditeur, de profil et de téléport ; le cycle de vie dynamique du monde est sécurisé par l'API de la plate-forme."
+
+[rift.label]
+worlds = "Mondes"
+quarantine = "Quarantaine"
+loaded = "Charges"
+managed = "Géré"
+on_disk = "Sur disque"
+missing = "des mondes gérés manquants"
+environment = "Environnement"
+generator = "Groupe électrogène"
+seed = "Semences"
+autoload = "Charger automatiquement"
+protected = "Protégé"
+operation_active = "Opération active"
+world_types = "Types mondiaux"
+configured_generators = "Générateurs configurés"
+available = "disponibles"
+unavailable = "non disponible"
+server = "Serveur"
+java_runtime = "Java durée d'exécution"
+plugin_bytecode = "Bytecode de connexion"
+platform = "Plateforme"
+dynamic_lifecycle = "Cycle de vie dynamique du monde"
+world_container = "Conteneur mondial"
+writable = "Conteneur mondial enregistrable"
+locale = "Locale"
+world_counts = "Mondes"
+quarantine_entries = "Entrées de quarantaine"
+
+[rift.explain]
+loaded = "Indique Bukkit Actuellement, ce monde est actif en mémoire."
+managed = "Indique Rift possède un profil pour ce monde et peut restaurer ses paramètres de générateur et de démarrage."
+on_disk = "Indique si le monde est chargé ou a un répertoire mondial valide contenant level.dat."
+environment = "Les Bukkit environnement mondial enregistré par le monde en direct ou profil géré."
+generator = "Le générateur Rift s'applique quand ce monde géré charge. void est RiftLe générateur du monde vide."
+seed = "La graine enregistrée pour ce monde. Le terrain existant n'est jamais régénéré en modifiant cette valeur d'affichage."
+autoload = "Indique Rift charge ce monde géré automatiquement lors du démarrage du serveur."
+protected = "Les mondes gérés protégés ne peuvent pas être déplacés dans Rift quarantaine."
+operation_active = "Si une opération de cycle de vie détient actuellement RiftLa serrure du monde entier."
+server = "La mise en œuvre et la version active du serveur Bukkit."
+java_runtime = "Les Java runtime héberge actuellement le serveur. Rift's bytecode reste compatible avec Java 17."
+plugin_bytecode = "La plus ancienne Java temps d'exécution capable de charger RiftLes classes compilées."
+platform = "La famille de programmeurs et de serveurs API Rift détecté à l'exécution."
+dynamic_lifecycle = "Que cette plate-forme expose en toute sécurité le monde d'exécution créer, charger, décharger, mettre en quarantaine et restaurer les opérations."
+world_container = "Le répertoire du serveur où Bukkit les dossiers du monde sont stockés."
+writable = "Indique si le système d'exploitation permet actuellement Rift pour écrire dans le conteneur mondial."
+locale = "Le fichier de langue active sous plugins/Rift/languages. Les entrées manquantes utilisent les valeurs par défaut en anglais modifiables."
+world_counts = "Nombres chargés actifs Bukkit mondes; comptes gérés Rift profils; nombres manquants profils gérés qui ne sont ni chargés ni présents sur le disque."
+quarantine = "Les mondes se sont écartés Rift supprimer et être disponible pour restaurer par id de quarantaine."
+world_entry = "Loaded signifie actif maintenant; gestion des moyens Rift a un profil; sur le disque signifie qu'il existe un dossier du monde non chargé valide."
+
+[rift.feedback]
+title = "&d&lRIFT"
+world_subtitle = "&a{operation}&8: &f{world}"
+teleport_subtitle = "&aArrivées &f{world}"
+failure_title = "&cL'opération a échoué"
+failure_subtitle = "&7{operation}&8: &f{world}"
+action_world = "&dRift &8• &a{operation} &f{world}"
+action_teleport = "&dRift &8• &aTéléporté à &f{world}"
+action_failure = "&dRift &8• &c{operation} échoué pour &f{world}"
+
+[rift.gui]
+current = "&7Actuellement & #160;: &f{value}"
+autoload = "&dLes mondes gérés par charge automatique"
+delete = "&dAutoriser la quarantaine mondiale"
+verbose = "&dEnregistrement des verbes"
+debug_upload = "&dTéléchargement public de débogage"
+bstats = "&dAnonyme bStats métriques"
+confirm_seconds = "&dSupprimer les secondes de confirmation"
+poll = "&dmillisecondes de sondage à recharge à chaud"
+cooldown = "&dRefroidissement à chaud en millisecondes"
+evacuation = "&dLe monde de l'évacuation"
+close = "&cFermer"
+splash = "&dEcran de démarrage"
+lifecycle_feedback = "&dRetour sur le cycle de vie mondial"
+teleport_feedback = "&dRétroaction sur les téléportations"
+failure_feedback = "&dRétroaction en cas de défaillance"
+title_popups = "&dTitre popups"
+action_bar_popups = "&dPopups de barre d' action"
+sounds = "&dSons de rétroaction"
+root_title = "Rift Configuration"
+category_title = "Rift: {category}"
+category_open = "&8Cliquez pour modifier chaque paramètre de cette section"
+back = "&ePrécédent"
+toggle = "&8Cliquez pour basculer"
+exact_number = "&8Gauche/right ajuste; appuyez sur Q pour saisir une valeur exacte"
+text = "&8Cliquez pour saisir une nouvelle valeur dans le chat"
+prompt = "{prefix}&7Saisissez une nouvelle valeur pour &f{setting}&7 dans la conversation."
+prompt_cancel = "{prefix}&7Type &fannuler&7 de revenir sans le changer."
+prompt_cancelled = "{prefix}&7Entrée de configuration annulée."
+prompt_timeout = "{prefix}&7Entrée de configuration chronométrée."
+setting_saved = "{prefix}&d{setting} &8› &aModifié en &f{after} &7depuis &f{before}&a."
+setting_failed = "{prefix}&cImpossible de mettre à jour &f{setting}&c: {reason}"
+language = "&dLangue locale"
+language_select = "&8Cliquez pour choisir parmi les langues disponibles"
+lifecycle_sound = "&dSon du cycle de vie mondial"
+teleport_sound = "&dSon de téléportation"
+failure_sound = "&dDéfaut sonore"
+sound_volume = "&dVolume sonore"
+sound_pitch = "&dPitch sonore"
+title_fade_in = "&dTitre des tiques « fade-in »"
+title_stay = "&dTitle stay tics"
+title_fade_out = "&dTitle tics fade-out"
+
+[rift.gui.category]
+general = "&dSécurité générale"
+feedback = "&dCommentaires et sons"
+presentation = "&dPrésentation"
+diagnostics = "&dDiagnostics&r"
+languages = "&dLangues et messages"
+
+[director.help]
+no_subcommands = "Aucune sous-commande sur cette page."
+no_description = "Aucune description fournie"
+command_group = "Groupe de commandes. Cliquez pour ouvrir."
+category = "Catégorie de commandes"
+no_parameters = "Aucun paramètre. Cliquez pour préremplir la commande."
+parameters_hover = "Survolez les paramètres pour en savoir plus."
+
+[director.help.navigation]
+back = "Retour"
+page = "Page"
+
+[director.help.navigation.parent]
+hover = "Revenir au groupe de commandes parent"
+
+[director.help.navigation.previous]
+hover = "Page précédente"
+
+[director.help.navigation.next]
+hover = "Page suivante"
+
+[director.help.parameter]
+required = "Ce paramètre est obligatoire."
+optional = "Ce paramètre est facultatif."
+default = "Vaut \"{value}\" par défaut si non défini."
+type = "Ce paramètre est de type {type}."
+
+[director.runtime]
+usage = "Utilisation: {usage}"
+
+[director.runtime.error]
+invalid_origin = "Cette commande ne peut pas être exécutée depuis cette origine."
+unknown_parameter = "Clé de paramètre inconnue : {key}"
+unexpected_argument = "Argument inattendu \"{argument}\". Les paramètres facultatifs doivent être nommés, par ex. seed=123"
+unclosed_group = "Crochet fermant \"]\" manquant pour le paramètre {key}"
+conversion_failed = "Impossible de convertir \"{value}\" en {type} pour {parameter}"
+default_parse_failed = "Impossible d'analyser la valeur par défaut du paramètre {parameter}"
+missing_argument = "Argument manquant \"{parameter}\" ({type})"
+execution_failed = "Échec de l'exécution de la commande {command} : {reason}"
+
+[language.menu]
+your_language = "Votre langue"
+reset_your_language = "Réinitialiser votre langue"
+server_default = "Langue par défaut du serveur"
+edit_messages = "Modifier les messages de langue"
+use_server_default = "Utiliser la langue par défaut du serveur"
+current = "Langue actuelle : {locale}"
+current_with_personal = "Langue actuelle : {locale} (La vôtre : {personal})"
+your_description = "Modifiez uniquement les messages que vous voyez."
+reset_description = "Utilisez la langue par défaut du serveur."
+server_description = "Modifiez la langue par défaut du serveur."
+edit_description = "Ouvrez l’éditeur de messages pour chaque langue."
+select_description = "Cliquez pour sélectionner cette langue."
+remove_personal_description = "Supprimez votre choix de langue personnel."
+no_controls = "Aucune option de langue ne vous est accessible."

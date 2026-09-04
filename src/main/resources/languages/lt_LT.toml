@@ -1,0 +1,270 @@
+# Rift kalbos failas (Lietuvių - Lietuva).
+# Šis failas atsisiunčiamas tik tada, kai jo nėra; redaguokite languages/lt_LT.toml tiesiogiai.
+# Vietiniai pakeitimai niekada automatiškai nekeičiami; trūkstamos reikšmės naudoja anglų kalbą.
+# Redaguokite toliau esančius pranešimus; įrašyti pakeitimai aptinkami ir pritaikomi automatiškai.
+# Kiekvieną vietos žymeklį palikite tiksliai tokį, koks parašytas, kartu su riestiniais skliaustais.
+# Vietos žymeklį naudokite tik tuose pranešimuose, kurių numatytasis šablonas jį apibrėžia; nepalaikomi žymekliai nepakeičiami.
+# Priešdėlis: {prefix}=visuotinė runtime.prefix reikšmė. Pašalinkite {prefix} iš atskiro pranešimo, kad jame jo nerodytų.
+# Galimi vietos žymekliai:
+#
+# {argument} - komandos argumentas
+# {category} - komandų kategorija
+# {command} - komandos tekstas arba pavadinimas
+# {count} - elementų arba rezultatų skaičius
+# {detail} - aprašomoji informacija
+# {id} - identifikatorius
+# {key} - konfigūracijos arba pranešimo raktas
+# {label} - rodoma etiketė
+# {locale} - kalbos lokalė
+#   {personal}      asmeninė lokalė
+# {name} - įrašo arba rodomas pavadinimas
+# {operation} - operacijos pavadinimas
+# {parameter} - parametro pavadinimas
+# {permission} - leidimo mazgas
+# {player} - žaidėjo vardas
+# {reason} - priežastis arba klaidos informacija
+# {seconds} - trukmė sekundėmis
+# {setting} - nustatymo pavadinimas
+# {before} - ankstesnė reikšmė
+# {after} - nauja reikšmė
+# {title} - antraštės tekstas
+# {type} - reikšmės arba duomenų tipas
+# {usage} - komandos naudojimo tekstas
+# {value} - dabartinė arba nauja reikšmė
+# {version} - versija
+# {world} - pasaulio pavadinimas
+#
+
+[runtime]
+prefix = "&5&lRIFT&r &8›&r "
+
+[rift.command]
+root = "Tvarkyti serverio pasaulius saugiai"
+create = "Sukurti ir valdyti naują pasaulį"
+import = "Importuoti esamą pasaulio katalogą"
+load = "Įkelti valdomą arba atrastą pasaulį"
+unload = "Evakuoti žaidėjus ir iškrauti pasaulį"
+delete = "Perkelti valdomą pasaulį į karantiną"
+restore = "Atstatyti karantininį pasaulį"
+teleport = "Teleportas į pakrautą pasaulį"
+send = "Teleportuoti kitą žaidėją į pakrautą pasaulį"
+list = "Sąrašas pakrautų, tvarkomų, atrastų ir karantine laikomų pasaulių"
+info = "Rodyti išsamią būseną vienam pasauliui"
+generators = "Rodyti generatoriaus identifikatorius, kuriuos jau naudoja valdomi pasauliai"
+config = "Atverti į žaidimą Rift konfigūracijos rengyklė"
+language = "Pasirinkite galimą Rift kalbą"
+status = "Patikrinti platformos galimybes ir Rift Būsena"
+debug = "Rift diagnostikos įrankiai"
+debug_dump = "Sukurti išsamią Rift diagnostikos ataskaitą"
+autoload = "Pakeisti ar paleidžiant valdomą pasaulio apkrovas"
+protect = "Apsaugoti arba neapsaugoti valdomą pasaulį"
+
+[rift.parameter]
+name = "Pasaulinis pavadinimas"
+environment = "NORMAL, NETHER, THE_END, arba CUSTOM"
+generator = "vanilla, void, arba PluginName[: generator- id]"
+seed = "random arba pasirašyta 64bit sėkla"
+type = "Bukkit pasaulinis tipas"
+save = "Įrašyti prieš iškraunant"
+id = "Karantino įrašas id"
+player = "Internetinis žaidėjo vardas"
+enabled = "true arba false"
+page = "Portalo sąrašo puslapis, skaičiuojamas nuo vieno"
+upload = "Įkelti ataskaitą, kai viešas įkėlimas įjungtas"
+sender = "Komandų siuntėjas"
+
+[rift.message]
+permission_denied = "{prefix}&cTau reikia &f{permission}&c."
+unknown_command = "{prefix}&cNežinoma komanda. Naudojimas &f/rift help&c."
+player_only = "{prefix}&cŠiai komandai reikia žaidėjo."
+operation_queued = "{prefix}&7Eilutė &f{operation}&7 yra &d{world}&7."
+operation_failed = "{prefix}&c{operation} nepavyko &f{world}&c: {reason}"
+created = "{prefix}&aSukurta ir valdoma &f{world}&a."
+imported = "{prefix}&aImportuojama ir valdoma &f{world}&a."
+loaded = "{prefix}&aĮkelta &f{world}&a."
+unloaded = "{prefix}&aNeįkelta &f{world}&a."
+teleported = "{prefix}&aTeleportuotas &f{player}&a iki &f{world}&a."
+delete_confirm = "{prefix}&eVykdyti &f/rift delete {world}&e vėl per &f{seconds}uo&e perkelti jį į karantiną."
+quarantined = "{prefix}&aPerkelta &f{world}&a į karantiną, &f{id}&a."
+restored = "{prefix}&aAtstatyta &f{world}&a nuo &f{id}&a."
+profile_updated = "{prefix}&aAtnaujinta &f{setting}&a yra &f{world}&a iki &f{value}&a."
+folia_limit = "{prefix}&e{operation} yra nepasiekiamas Folia nes jos pasaulinė apkrova/unload API nėra įgyvendinama."
+config_saved = "{prefix}&aKonfigūracija išsaugota."
+config_opened = "{prefix}&aAtidarytas visas žaidimo konfigūracijos redaktorius.&r"
+config_save_failed = "{prefix}&cKonfigūracijos nepavyko išsaugoti. Patikrinkite konsolę."
+empty_list = "{prefix}&7Nebuvo rasta tinkamų pasaulių."
+player_offline = "{prefix}&cŽaidėjas nėra internete: &f{player}"
+unknown_world = "{prefix}&cNežinomas pasaulis: &f{world}"
+section = "{prefix}&d{title} &8(&f{count}&8)"
+entry = "{prefix}&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&8- &7{label}: &f{value}"
+info_title = "{prefix}&d{world}"
+status_title = "{prefix}&dRift {version} Būsena"
+generator_format = "{prefix}&7Custom formatas: &fPluginName[: generator- id]"
+folia_status_note = "{prefix}&eFolia Palaiko Riftskaityti, redaktorius, profilis, ir teleporto funkcijos; dinaminis pasaulio gyvavimo ciklas yra sudaryta iš platformos API."
+
+[rift.label]
+worlds = "Pasauliai"
+quarantine = "Karantinas"
+loaded = "Įkelta"
+managed = "Valdoma"
+on_disk = "Diske"
+missing = "trūksta valdomų pasaulių"
+environment = "Aplinka"
+generator = "Generatorius"
+seed = "Sėkla"
+autoload = "Automatinė apkrova"
+protected = "Saugoma"
+operation_active = "Veikia"
+world_types = "Pasaulio rūšys"
+configured_generators = "Kiti elektros laidininkai, skirti aukštesnei kaip 1000 V įtampai"
+available = "prieinama"
+unavailable = "nepasiekiama"
+server = "Serveris"
+java_runtime = "Java @ info: tooltip"
+plugin_bytecode = "Įskiepis bytecode"
+platform = "Platforma"
+dynamic_lifecycle = "Dinaminis pasaulinis gyvavimo ciklas"
+world_container = "Pasaulinis konteineris"
+writable = "Pasaulio konteineris rašomas"
+locale = "Locale"
+world_counts = "Pasauliai"
+quarantine_entries = "Karantino įrašai"
+
+[rift.explain]
+loaded = "Ar Bukkit šiuo metu šis pasaulis yra aktyvus atmintyje."
+managed = "Ar Rift turi šio pasaulio profilį ir gali atkurti savo generatoriaus ir paleidimo nustatymus."
+on_disk = "Ar pasaulis yra įkeltas, ar turi galiojantį pasaulio katalogą level.dat."
+environment = "4. 4 skyrių). Bukkit pasaulio aplinką įrašė gyvas pasaulis arba valdomas profilis."
+generator = "Generatorius Rift iš naujo pritaikyti, kai šis valdomas pasaulyje apkrovas. void yra RiftPastato pasaulyje generatorius."
+seed = "Sėklos užfiksuotos šiam pasauliui. Esamas reljefas niekada nėra regeneruojamas keičiant šią ekrano vertę."
+autoload = "Ar Rift įkelia šį valdomą pasaulį automatiškai paleidžiant serverį."
+protected = "Saugomi valdomi pasauliai negali būti perkelti į Rift karantinas."
+operation_active = "Ar šiuo metu veikia gyvavimo ciklas RiftPasaulinė spyna."
+server = "Aktyvus serverio diegimas ir versija pranešė Bukkit."
+java_runtime = "4. 4 skyrių). Java išvykimo laikas šiuo metu prieglobos serverį. Riftbytecode išlieka suderinama su Java 17."
+plugin_bytecode = "Seniausias Java kilimo ir tūpimo laikas, kurį galima pakrauti Riftkompiliuotos klasės."
+platform = "Programuotojas ir serveris API šeima Rift nustatytas kilimo ir tūpimo tako metu."
+dynamic_lifecycle = "Ar ši platforma saugiai atskleidžia kilimo ir tūpimo laiką pasaulyje sukurti, įkelti, iškrauti, karantinas, ir atkurti operacijas."
+world_container = "Serverio aplankas, kuriame Bukkit pasaulio aplankai yra saugomi."
+writable = "Ar operacinė sistema šiuo metu leidžia Rift rašyti į pasaulio konteinerį."
+locale = "Aktyvios kalbos failas po plugins/Rift/languages. Trūksta įrašų naudoti redaguojamą anglų įsipareigojimų neįvykdymo."
+world_counts = "Įkrautas aktyvusis skaičius Bukkit amount in units (real) Rift profilius; trūksta skaičių valdomas profilius, kurie nėra nei įkelti, nei pateikti diske."
+quarantine = "Pasauliai, perkelti į šalį Rift pašalinti ir galima atkurti karantino ID."
+world_entry = "Įkelta reiškia, kad veikia dabar; valdomas priemones Rift turi profilį; diske reiškia, kad egzistuoja galiojantis neapkrautas pasaulio aplankas."
+
+[rift.feedback]
+title = "&d&lRIFT"
+world_subtitle = "&a{operation}&8: &f{world}"
+teleport_subtitle = "&aAtvyko į &f{world}"
+failure_title = "&cOperacija nepavyko"
+failure_subtitle = "&7{operation}&8: &f{world}"
+action_world = "&dRift &8• &a{operation} &f{world}"
+action_teleport = "&dRift &8• &aTeleportuotas į &f{world}"
+action_failure = "&dRift &8• &c{operation} nepavyko &f{world}"
+
+[rift.gui]
+current = "&7Dabartinis: &f{value}"
+autoload = "&dAutomatiškai įkelti valdomus pasaulius"
+delete = "&dLeisti pasaulio karantinui"
+verbose = "&dVerbose prisijungimas"
+debug_upload = "&dViešas derinimo atsiuntimas"
+bstats = "&dAnoniminis bStats metrikos"
+confirm_seconds = "&dIštrinti patvirtinimo sekundes"
+poll = "&d@ item: inlistbox"
+cooldown = "&dĮkelti aušinimo milisekundes"
+evacuation = "&dEvakuacinis pasaulis"
+close = "&cUžverti"
+splash = "&dPaleisti išskleidžiamąjį ekraną"
+lifecycle_feedback = "&dAtsiliepimai apie pasaulinį gyvavimo ciklą"
+teleport_feedback = "&dTeleport atsiliepimai"
+failure_feedback = "&dNepakankama grįžtamoji informacija"
+title_popups = "&dAntraštės iššokantieji"
+action_bar_popups = "&dOperacijų- juostos iššokantieji"
+sounds = "&dAtsiliepimų garsai"
+root_title = "Rift Konfigūracija"
+category_title = "Rift: {category}"
+category_open = "&8Spustelėkite norėdami redaguoti kiekvieną nustatymą šiame skyriuje"
+back = "&eAtgal"
+toggle = "&8Spustelėkite norėdami perjungti"
+exact_number = "&8Kairė/right koreguoja; paspauskite Q įvesti tikslią reikšmę"
+text = "&8Spustelėkite norėdami įvesti naują reikšmę pokalbyje"
+prompt = "{prefix}&7Įveskite naują reikšmę &f{setting}&7 Pokalbyje."
+prompt_cancel = "{prefix}&7Tipas &fAtšaukti&7 grįžti nekeičiant jo."
+prompt_cancelled = "{prefix}&7Konfigūravimo įvestis atšauktas."
+prompt_timeout = "{prefix}&7Konfigūravimo įvesties laikas baigėsi."
+setting_saved = "{prefix}&d{setting} &8› &aPakeista į &f{after} &7iš &f{before}&a."
+setting_failed = "{prefix}&cNepavyko atnaujinti &f{setting}&c: {reason}"
+language = "&dKalba locale"
+language_select = "&8Spustelėkite norėdami pasirinkti iš galimų kalbų"
+lifecycle_sound = "&dGarso lygis visame pasaulyje"
+teleport_sound = "&dTeleporto garsas"
+failure_sound = "&dGarsas apie gedimą"
+sound_volume = "&dGarso garsas"
+sound_pitch = "&dGarso žingsnis"
+title_fade_in = "&dPavadinimas fade- in erkės"
+title_stay = "&dPavadinimas likti erkių"
+title_fade_out = "&dTitulinis išskrostos erkės"
+
+[rift.gui.category]
+general = "&dBendroji ir sauga"
+feedback = "&dAtsiliepimai ir garsai"
+presentation = "&dPateikimas"
+diagnostics = "&dDiagnostika&r"
+languages = "&dKalbos ir pranešimai"
+
+[director.help]
+no_subcommands = "Šiame puslapyje nėra antrinių komandų."
+no_description = "Aprašymas nepateiktas"
+command_group = "Komandų grupė. Spustelėkite, kad atidarytumėte."
+category = "Komandų kategorija"
+no_parameters = "Parametrų nėra. Spustelėkite, kad iš anksto užpildytumėte komandą."
+parameters_hover = "Užveskite pelės žymeklį ant parametrų, kad sužinotumėte daugiau."
+
+[director.help.navigation]
+back = "Atgal"
+page = "Puslapis"
+
+[director.help.navigation.parent]
+hover = "Grįžti į pirminę komandų grupę"
+
+[director.help.navigation.previous]
+hover = "Ankstesnis puslapis"
+
+[director.help.navigation.next]
+hover = "Kitas puslapis"
+
+[director.help.parameter]
+required = "Šis parametras yra privalomas."
+optional = "Šis parametras yra neprivalomas."
+default = "Jei nenurodyta, numatytoji reikšmė yra \"{value}\"."
+type = "Šio parametro tipas yra {type}."
+
+[director.runtime]
+usage = "Naudojimas: {usage}"
+
+[director.runtime.error]
+invalid_origin = "Šios komandos negalima vykdyti iš šio šaltinio."
+unknown_parameter = "Nežinomas parametro raktas: {key}"
+unexpected_argument = "Netikėtas argumentas \"{argument}\". Pasirenkami parametrai turi būti nurodyti su raktu, pvz. seed=123"
+unclosed_group = "Trūksta uždarančio \"]\" parametrui {key}"
+conversion_failed = "Reikšmės \"{value}\" nepavyko konvertuoti į {type} parametrui {parameter}"
+default_parse_failed = "Nepavyko nuskaityti parametro {parameter} numatytosios reikšmės"
+missing_argument = "Trūksta argumento \"{parameter}\" ({type})"
+execution_failed = "Nepavyko įvykdyti komandos {command}: {reason}"
+
+[language.menu]
+your_language = "Jūsų kalba"
+reset_your_language = "Atkurti jūsų kalbą"
+server_default = "Numatytoji serverio kalba"
+edit_messages = "Redaguoti kalbos pranešimus"
+use_server_default = "Naudoti numatytąją serverio kalbą"
+current = "Dabartinė: {locale}"
+current_with_personal = "Dabartinė: {locale} (Jūsų: {personal})"
+your_description = "Keiskite tik jums rodomus pranešimus."
+reset_description = "Naudokite numatytąją serverio kalbą."
+server_description = "Keiskite numatytąją serverio kalbą."
+edit_description = "Atverkite kiekvienos kalbos pranešimų redaktorių."
+select_description = "Spustelėkite, kad pasirinktumėte šią kalbą."
+remove_personal_description = "Pašalinkite asmeninį kalbos pasirinkimą."
+no_controls = "Jums nepasiekiami kalbos nustatymai."

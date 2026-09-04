@@ -1,0 +1,270 @@
+# Rift 语言文件（简体中文 - 中国）。
+# 此文件仅在缺失时下载；请直接编辑 languages/zh_CN.toml。
+# 本地更改绝不会被自动替换；缺少的项目使用英文。
+# 可编辑下方消息；保存的更改会被自动检测并应用。
+# 请将每个占位符（包括花括号）保持原样。
+# 占位符只能用于默认模板已声明该占位符的消息；不受支持的占位符不会被替换。
+# 前缀：{prefix}=全局 runtime.prefix 值。从某条消息中删除 {prefix}，即可只在该消息中隐藏前缀。
+# 可用占位符：
+#
+# {argument} - 命令参数
+# {category} - 命令类别
+# {command} - 命令文本或名称
+# {count} - 项目或结果数量
+# {detail} - 描述详情
+# {id} - 标识符
+# {key} - 配置键或消息键
+# {label} - 显示标签
+# {locale} - 语言区域
+#   {personal}      个人区域设置
+# {name} - 条目名称或显示名称
+# {operation} - 操作名称
+# {parameter} - 参数名称
+# {permission} - 权限节点
+# {player} - 玩家名称
+# {reason} - 原因或错误详情
+# {seconds} - 持续秒数
+# {setting} - 设置名称
+# {before} - 更改前的值
+# {after} - 更改后的值
+# {title} - 标题文本
+# {type} - 值或数据类型
+# {usage} - 命令用法文本
+# {value} - 当前值或新值
+# {version} - 版本
+# {world} - 世界名称
+#
+
+[runtime]
+prefix = "&5&lRIFT&r &8›&r "
+
+[rift.command]
+root = "安全管理服务器世界"
+create = "创建和管理一个新世界"
+import = "导入现有的世界目录"
+load = "装入已管理或发现的世界"
+unload = "疏散玩家并卸载一个世界"
+delete = "将一个管理的世界移到隔离区"
+restore = "恢复隔离世界"
+teleport = "传送到一个装满的世界上"
+send = "将另一个玩家传送到装入器的世界"
+list = "已装入、管理、发现和隔离世界的清单"
+info = "显示一个世界的详细状态"
+generators = "显示管理世界已经使用的生成器标识符"
+config = "打开游戏 Rift 配置编辑器"
+language = "选择可用的 Rift 语言"
+status = "检查平台的能力和 Rift 状态"
+debug = "Rift诊断工具"
+debug_dump = "创建完整的Rift诊断报告"
+autoload = "启动时是否改变管理的世界负载"
+protect = "保护或不保护受管理的世界"
+
+[rift.parameter]
+name = "世界名称"
+environment = "NORMAL, NETHER, THE_END,或 CUSTOM"
+generator = "vanilla, void,或 PluginName[:生成者-id]."
+seed = "random 或签名的64位种子"
+type = "Bukkit 世界类型"
+save = "卸载前保存"
+id = "检疫条目编号"
+player = "在线玩家名称"
+enabled = "true 或 false"
+page = "从一开始编号的传送门列表页"
+upload = "启用公开上传时上传报告"
+sender = "命令发送者"
+
+[rift.message]
+permission_denied = "{prefix}&c需要吗? &f{permission}&c."
+unknown_command = "{prefix}&c未知的命令。 使用 &f/rift help&c."
+player_only = "{prefix}&c此命令需要玩家 。"
+operation_queued = "{prefix}&7队列 &f{operation}&7 (单位:千美元) &d{world}&7."
+operation_failed = "{prefix}&c{operation} 失败 &f{world}&c: {reason}"
+created = "{prefix}&a创建和管理 &f{world}&a."
+imported = "{prefix}&a进口和管理 &f{world}&a."
+loaded = "{prefix}&a已装入 &f{world}&a."
+unloaded = "{prefix}&a未装入 &f{world}&a."
+teleported = "{prefix}&a电传 &f{player}&a 改为: &f{world}&a."
+delete_confirm = "{prefix}&e运行 &f/rift delete {world}&e 又在内部 &f{seconds}s (韩语).&e 将其移入隔离区。"
+quarantined = "{prefix}&a已移动 &f{world}&a 检疫为: &f{id}&a."
+restored = "{prefix}&a已恢复 &f{world}&a 发件人 &f{id}&a."
+profile_updated = "{prefix}&a更新 &f{setting}&a (单位:千美元) &f{world}&a 改为: &f{value}&a."
+folia_limit = "{prefix}&e{operation} 无法使用 Folia 因为它的世界负荷/unload API没有执行."
+config_saved = "{prefix}&a配置已保存 。"
+config_opened = "{prefix}&a已打开完整的游戏内配置编辑器。&r"
+config_save_failed = "{prefix}&c配置无法保存。 请检查控制台 。"
+empty_list = "{prefix}&7未找到匹配的世界 。"
+player_offline = "{prefix}&c玩家不在线 : &f{player}"
+unknown_world = "{prefix}&c未知的世界 : &f{world}"
+section = "{prefix}&d{title} &8(&f{count}&8)"
+entry = "{prefix}&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&8- &7{label}: &f{value}"
+info_title = "{prefix}&d{world}"
+status_title = "{prefix}&dRift {version} 状态"
+generator_format = "{prefix}&7Custom 格式 : &fPluginName[:生成者-id]."
+folia_status_note = "{prefix}&eFolia 支持 Rift'的读取,编辑,剖面,和电传传送功能;动态世界生命周期由平台API锁定."
+
+[rift.label]
+worlds = "世间"
+quarantine = "检疫"
+loaded = "已装入"
+managed = "管理"
+on_disk = "在磁盘上"
+missing = "缺少管理的世界"
+environment = "环境"
+generator = "发电机"
+seed = "种子"
+autoload = "自动装入"
+protected = "受保护"
+operation_active = "正在运行"
+world_types = "世界类型"
+configured_generators = "配置的发电机"
+available = "备有"
+unavailable = "无"
+server = "服务器"
+java_runtime = "Java 运行时间"
+plugin_bytecode = "插件字节代码"
+platform = "平台"
+dynamic_lifecycle = "动态世界生命周期"
+world_container = "世界集装箱"
+writable = "世界集装箱可写"
+locale = "语言"
+world_counts = "世间"
+quarantine_entries = "检疫条目"
+
+[rift.explain]
+loaded = "是否为 Bukkit 目前这个世界在记忆中非常活跃。"
+managed = "是否为 Rift 拥有此世界的配置文件,并可以恢复其生成器和启动设置."
+on_disk = "是否装入了世界, 或是否有一个有效的世界目录 。 level.dat."
+environment = "那个... Bukkit 活世界记录的世界环境或管理概况。"
+generator = "发电机 Rift 重新应用此管理的世界加载时 。 void 为: Rift'是内置的空世界生成器."
+seed = "记录的种子是这个世界的。 现有的地形永远不会通过改变这个显示值来再生成 。"
+autoload = "是否为 Rift 服务器启动时自动装入此管理的世界 。"
+protected = "受保护的管理世界不能移动到 Rift 隔离。"
+operation_active = "生命周期操作目前是否有效 Rift\"每个世界的锁。\""
+server = "正在运行的服务器执行和版本由 : Bukkit."
+java_runtime = "那个... Java 运行时间当前托管服务器 。 Rift'字节代码仍然兼容 Java 17."
+plugin_bytecode = "最年长的 Java 能够加载的运行时间 Rift'是编成的课。"
+platform = "调度器和服务器 API 家族 Rift 运行时检测到 。"
+dynamic_lifecycle = "这个平台是否安全地暴露了运行时世界的创建,装载,卸载,隔离,以及恢复运行."
+world_container = "服务器目录 : Bukkit 世界文件夹被存储 。"
+writable = "目前操作系统是否允许 Rift 写在世界容器内。"
+locale = "活动语言文件 plugins/Rift/languages。缺失的条目使用可编辑的英语默认值。"
+world_counts = "已装入的计数活动 Bukkit 世界; 管理计数 Rift 配置文件; 缺少既未装入也未在磁盘上显示的计数管理配置文件。"
+quarantine = "世界移动到另一边 Rift 删除并可通过隔离ID恢复。"
+world_entry = "已装入表示已激活; 已管理 。 Rift 拥有配置文件; 在磁盘上表示有效的已卸载的世界文件夹存在 。"
+
+[rift.feedback]
+title = "&d&lRIFT"
+world_subtitle = "&a{operation}&8: &f{world}"
+teleport_subtitle = "&a抵达 &f{world}"
+failure_title = "&c操作失败"
+failure_subtitle = "&7{operation}&8: &f{world}"
+action_world = "&dRift &8• &a{operation} &f{world}"
+action_teleport = "&dRift &8• &a传送到 &f{world}"
+action_failure = "&dRift &8• &c{operation} 失败 &f{world}"
+
+[rift.gui]
+current = "&7当前 : &f{value}"
+autoload = "&d自动装入管理的世界"
+delete = "&d允许世界隔离"
+verbose = "&dVerbose 记录"
+debug_upload = "&d公开调试上传"
+bstats = "&d匿名组织 bStats 计量"
+confirm_seconds = "&d删除确认秒"
+poll = "&d热量重置民意调查( 毫秒)"
+cooldown = "&d热重装冷却毫秒"
+evacuation = "&d疏散世界"
+close = "&c关闭"
+splash = "&d启动飞溅屏幕"
+lifecycle_feedback = "&d世界生命周期反馈"
+teleport_feedback = "&d传送反馈"
+failure_feedback = "&d反馈失败"
+title_popups = "&d标题弹出"
+action_bar_popups = "&d动作栏弹出"
+sounds = "&d反馈声音"
+root_title = "Rift 配置"
+category_title = "Rift: {category}"
+category_open = "&8单击以编辑本节中的每个设置"
+back = "&e回来"
+toggle = "&8点击切换"
+exact_number = "&8左边/right 调整; 按 Q 输入精确值"
+text = "&8单击在聊天中输入新值"
+prompt = "{prefix}&7键入新值 &f{setting}&7 在聊天时。"
+prompt_cancel = "{prefix}&7类型 &f取消( E)&7 返回而不改变它。"
+prompt_cancelled = "{prefix}&7配置输入已取消 。"
+prompt_timeout = "{prefix}&7配置输入超时 。"
+setting_saved = "{prefix}&d{setting} &8› &a新值: &f{after} &7原值: &f{before}&a。"
+setting_failed = "{prefix}&c无法更新 &f{setting}&c: {reason}"
+language = "&d语言语言语言"
+language_select = "&8点击以从可用语言中选择"
+lifecycle_sound = "&d世界生命周期音响"
+teleport_sound = "&d传送声音"
+failure_sound = "&d失败声音"
+sound_volume = "&d声音音量"
+sound_pitch = "&d音响投注"
+title_fade_in = "&d标题已淡出"
+title_stay = "&d标题保留勾选"
+title_fade_out = "&d标题淡出勾选"
+
+[rift.gui.category]
+general = "&d一般安全( S)"
+feedback = "&d反馈声音( Sounds)"
+presentation = "&d列报"
+diagnostics = "&d诊断&r"
+languages = "&d语言和消息"
+
+[director.help]
+no_subcommands = "此页面没有子命令。"
+no_description = "未提供说明"
+command_group = "命令组。点击打开。"
+category = "命令类别"
+no_parameters = "无参数。点击预填命令。"
+parameters_hover = "将鼠标悬停在参数上以了解更多。"
+
+[director.help.navigation]
+back = "返回"
+page = "页"
+
+[director.help.navigation.parent]
+hover = "返回上级命令组"
+
+[director.help.navigation.previous]
+hover = "上一页"
+
+[director.help.navigation.next]
+hover = "下一页"
+
+[director.help.parameter]
+required = "此参数为必填项。"
+optional = "此参数为可选项。"
+default = "未指定时默认为 \"{value}\"。"
+type = "此参数的类型为 {type}。"
+
+[director.runtime]
+usage = "用法: {usage}"
+
+[director.runtime.error]
+invalid_origin = "无法从此来源运行该命令。"
+unknown_parameter = "未知参数键: {key}"
+unexpected_argument = "意外参数 \"{argument}\"。可选参数必须使用键指定，例如 seed=123"
+unclosed_group = "参数 {key} 缺少闭合的 \"]\""
+conversion_failed = "无法将 \"{value}\" 转换为 {parameter} 所需的 {type}"
+default_parse_failed = "无法解析参数 {parameter} 的默认值"
+missing_argument = "缺少参数 \"{parameter}\" ({type})"
+execution_failed = "执行命令 {command} 失败: {reason}"
+
+[language.menu]
+your_language = "你的语言"
+reset_your_language = "重置你的语言"
+server_default = "服务器默认语言"
+edit_messages = "编辑语言消息"
+use_server_default = "使用服务器默认语言"
+current = "当前：{locale}"
+current_with_personal = "当前：{locale}（你的：{personal}）"
+your_description = "仅更改你看到的消息。"
+reset_description = "使用服务器默认语言。"
+server_description = "更改服务器默认语言。"
+edit_description = "打开各语言的消息编辑器。"
+select_description = "点击以选择此语言。"
+remove_personal_description = "移除你的个人语言选择。"
+no_controls = "你无权使用语言设置。"

@@ -1,0 +1,270 @@
+# Rift dil dosyası (Türkçe - Türkiye).
+# Bu dosya yalnızca eksikse indirilir; languages/tr_TR.toml dosyasını doğrudan düzenleyin.
+# Yerel değişiklikler otomatik olarak değiştirilmez; eksik değerler İngilizceyi kullanır.
+# Aşağıdaki mesajları düzenleyin; kaydedilen değişiklikler otomatik olarak algılanır ve uygulanır.
+# Her yer tutucuyu süslü parantezleriyle birlikte tam olarak yazıldığı biçimde koruyun.
+# Bir yer tutucuyu yalnızca varsayılan şablonunda tanımlandığı mesajlarda kullanın; desteklenmeyen yer tutucular değiştirilmez.
+# Önek: {prefix}=genel runtime.prefix değeri. Yalnızca belirli bir iletide gizlemek için o iletiden {prefix} öğesini kaldırın.
+# Kullanılabilir yer tutucular:
+#
+# {argument} - komut argümanı
+# {category} - komut kategorisi
+# {command} - komut metni veya adı
+# {count} - öğe veya sonuç sayısı
+# {detail} - açıklayıcı ayrıntı
+# {id} - tanımlayıcı
+# {key} - yapılandırma veya mesaj anahtarı
+# {label} - görüntü etiketi
+# {locale} - dil yerel ayarı
+#   {personal}      kişisel yerel ayar
+# {name} - girdi veya görüntü adı
+# {operation} - işlem adı
+# {parameter} - parametre adı
+# {permission} - izin düğümü
+# {player} - oyuncu adı
+# {reason} - neden veya hata ayrıntısı
+# {seconds} - saniye cinsinden süre
+# {setting} - ayar adı
+# {before} - önceki değer
+# {after} - yeni değer
+# {title} - başlık metni
+# {type} - değer veya veri türü
+# {usage} - komut kullanım metni
+# {value} - geçerli veya yeni değer
+# {version} - sürüm
+# {world} - dünya adı
+#
+
+[runtime]
+prefix = "&5&lRIFT&r &8›&r "
+
+[rift.command]
+root = "Sunucu dünyalarını güvenli bir şekilde yönetin"
+create = "Yeni bir dünya kurmak ve yönetmek"
+import = "Mevcut bir dünya rehberi ithal edin"
+load = "Bir yönetilen veya keşfedildi dünya"
+unload = "Evacuate oyuncuları ve bir dünya yükleyemez"
+delete = "yönetilen bir dünyayı karantinaya alın"
+restore = "Bir kurantined dünyasını geri yükleyin"
+teleport = "Teleport to a installed world"
+send = "Teleport another player to a installed world"
+list = "Liste yüklenen, yönetilen, keşfedildi ve karantinalı dünyalar"
+info = "Bir dünya için ayrıntılı bir devlet göster"
+generators = "Show jeneratör tanımlayıcıları zaten yönetilen dünyalar tarafından kullanılıyor"
+config = "In-game Rift yapılandırma editörü editörü"
+language = "Kullanılabilir bir Rift dili seçin"
+status = "Inspect platform yetenekleri ve Rift devlet devleti devlet devleti devlet devleti"
+debug = "Rift tanı araçları"
+debug_dump = "Kapsamlı bir Rift tanı raporu oluştur"
+autoload = "Bir yönetilen dünya yüklerinin başlangıç sırasında değiştirileceğini değiştirin"
+protect = "Yönetilen bir dünyayı korumak veya korumak"
+
+[rift.parameter]
+name = "Dünya adı"
+environment = "NORMAL, NETHER, THE_ENDYa da CUSTOM"
+generator = "vanilla, voidYa da PluginName[:generator-id]"
+seed = "random Ya da 64-bit tohum ya da"
+type = "Bukkit dünya türü"
+save = "Yüklemeden önce tasarruf edin"
+id = "Quarantine girişi id"
+player = "Online oyuncu adı"
+enabled = "true veya veya veya false"
+page = "Birden başlayan portal listesi sayfası"
+upload = "Herkese açık yüklemeler etkinse raporu yükle"
+sender = "Komutan"
+
+[rift.message]
+permission_denied = "{prefix}&cİhtiyacınıza ihtiyacınız var &f{permission}&c."
+unknown_command = "{prefix}&cBilinmeyen komut kullanın. Use &f/rift help&c."
+player_only = "{prefix}&cBu komut bir oyuncu gerektirir."
+operation_queued = "{prefix}&7Queued &f{operation}&7 For for for for for for for for for for for for for for for &d{world}&7."
+operation_failed = "{prefix}&c{operation} Başarısızlık için başarısız oldu &f{world}&c: {reason}"
+created = "{prefix}&aOluşturun ve yönetilen &f{world}&a."
+imported = "{prefix}&aİthalat ve yönetilen &f{world}&a."
+loaded = "{prefix}&aLoaded Load &f{world}&a."
+unloaded = "{prefix}&aUnloaded &f{world}&a."
+teleported = "{prefix}&aTeleported &f{player}&a To to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to &f{world}&a."
+delete_confirm = "{prefix}&eRun Run Run Run &f/rift delete {world}&e Tekrar içeride &f{seconds}s&e Onu kurantine'ye taşımak için."
+quarantined = "{prefix}&aMoved &f{world}&a Kurantine’ye &f{id}&a."
+restored = "{prefix}&aGeri yükleme &f{world}&a From from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from &f{id}&a."
+profile_updated = "{prefix}&aGüncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme &f{setting}&a For for for for for for for for for for for for for for for &f{world}&a To to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to &f{value}&a."
+folia_limit = "{prefix}&e{operation} Mevcut değildir. Folia Çünkü onun dünya yükü/unload API uygulanmaz."
+config_saved = "{prefix}&aKurulum kurtarıldı."
+config_opened = "{prefix}&aEksiksiz oyun içi yapılandırma düzenleyicisi açıldı.&r"
+config_save_failed = "{prefix}&cKurulum kurtarılamaz. Konsolu kontrol edin."
+empty_list = "{prefix}&7Tanık dünyalar bulunamadı."
+player_offline = "{prefix}&cOyuncu online değil: &f{player}"
+unknown_world = "{prefix}&cBilinmeyen dünya: &f{world}"
+section = "{prefix}&d{title} &8(&f{count}&8)"
+entry = "{prefix}&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&8- &7{label}: &f{value}"
+info_title = "{prefix}&d{world}"
+status_title = "{prefix}&dRift {version} Durum"
+generator_format = "{prefix}&7Custom format: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&eFolia destek desteği destek desteği destek desteği Rift“Oku, editör, profil ve teleport özellikleri; dinamik dünya yaşam döngüsü platform API tarafından kontrol ediliyor."
+
+[rift.label]
+worlds = "Dünyalar"
+quarantine = "Quarantine"
+loaded = "Loaded Load"
+managed = "Yönetilen Yönetilen Yönetilen Yönetilen Yöneti"
+on_disk = "disk üzerinde"
+missing = "Kayıp yönetilen dünyalar"
+environment = "Çevre Çevre Çevre Çevre"
+generator = "Jeneratör Jeneratör"
+seed = "Tohum"
+autoload = "Auto-load"
+protected = "Korumayı Korumayı Korumak"
+operation_active = "Aktif Operasyon Operasyon Operasyonları"
+world_types = "Dünya türleri"
+configured_generators = "Configured jeneratörleri"
+available = "mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut mevcut"
+unavailable = "Yok olmayan hiçbir şekilde mevcut olmayan hiçbir şekilde kullanılamaz."
+server = "Server Server Server"
+java_runtime = "Java runtime runtime"
+plugin_bytecode = "Plugin bytecode"
+platform = "Platform Platform Platform"
+dynamic_lifecycle = "Dinamik dünya yaşam döngüsü"
+world_container = "Dünya konteyneri"
+writable = "World container writable"
+locale = "Locale"
+world_counts = "Dünyalar"
+quarantine_entries = "Quarantine girişleri"
+
+[rift.explain]
+loaded = "İster ne olsun? Bukkit Şu anda bu dünya hafızada aktif."
+managed = "İster ne olsun? Rift Bu dünya için bir profili var ve jeneratörünü ve başlangıç ayarlarını restore edebilir."
+on_disk = "Dünya yükleniyor olsun veya içeren geçerli bir dünya rehberine sahip olun level.dat."
+environment = "The The The The The The The The Bukkit Canlı dünya tarafından kaydedilen dünya ortamı ya da yönetilen profil."
+generator = "Jeneratör Rift Bu yönetilen dünya yüklerini yeniden uygulayın. void Is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is is Rift“Yapılmış dünya jeneratörü."
+seed = "Bu dünya için kaydedilen tohum, mevcut arazi bu ekran değerini değiştirerek asla yeniden oluşturulmaz."
+autoload = "İster ne olsun? Rift Yükler bu otomatik olarak sunucu başlangıç sırasında dünyayı yönetiyor."
+protected = "Korumalı yönetilen dünyalar hareket edilemez Rift Kurantine."
+operation_active = "Bir yaşam döngüsü şu anda sahip olup olmadığı Rift“Dünya kilitleri."
+server = "Aktif sunucu uygulamaları ve sürüm tarafından bildirilen sürüm Bukkit."
+java_runtime = "The The The The The The The The Java runtime şu anda sunucuya ev sahipliği yapıyor. Rift's bytecode ile uyumlu olmaya devam ediyor Java 17."
+plugin_bytecode = "En eskileri Java runtime, yükleme yeteneğine sahip Rift“Sırık sınıflar derlendi."
+platform = "Programcı ve sunucu API ailesi Rift runtime'da tespit edildi."
+dynamic_lifecycle = "Bu platform güvenli bir şekilde tükenen dünya yaratıp, yük, yük, yarı iletken ve geri yükleme işlemleri oluştursa da."
+world_container = "sunucu rehberi nerede Bukkit Dünya klasörleri depolanır."
+writable = "İşletim sistemi şu anda izin veriyorsa Rift Dünya konteyneri içinde yazmak için."
+locale = "Aktif dil dosyası altında plugins/Rift/languagesEksik girişler düzenlenebilir İngilizce varsayılanleri kullanır."
+world_counts = "Yüklenenler aktif olarak aktif sayılır Bukkit Dünyalar; yönetilen sayılar Rift Profiller; eksik sayılar, disk üzerinde yüklü olmayan veya mevcut olmayan profiller yönetmektedir."
+quarantine = "Dünyalar bir kenara taşındı Rift Kurantine id tarafından geri yüklemek için silin ve kullanılabilir."
+world_entry = "Loaded şu anda aktif demektir; yönetilen anlamlar Rift Bir profili vardır; disk üzerinde geçerli olmayan bir dünya klasörü var demektir."
+
+[rift.feedback]
+title = "&d&lRIFT"
+world_subtitle = "&a{operation}&8: &f{world}"
+teleport_subtitle = "&aGelir içeri girdi &f{world}"
+failure_title = "&cOperasyon başarısız oldu"
+failure_subtitle = "&7{operation}&8: &f{world}"
+action_world = "&dRift &8• &a{operation} &f{world}"
+action_teleport = "&dRift &8• &aTeleported to &f{world}"
+action_failure = "&dRift &8• &c{operation} Başarısızlık için başarısız oldu &f{world}"
+
+[rift.gui]
+current = "&7Şu anki: &f{value}"
+autoload = "&dAuto-load yönetilen dünyalar"
+delete = "&dDünya karantinasına izin ver"
+verbose = "&dVerbose Girişi"
+debug_upload = "&dPublic debug yükler"
+bstats = "&dAnonim Anonim Anonim Anonim Anonim bStats metrics"
+confirm_seconds = "&dDelete onayı saniyeler"
+poll = "&dSıcak yük kirleticileri milisaniye"
+cooldown = "&dHot-reload cooldown milisans"
+evacuation = "&dEvacuation world"
+close = "&cClose Close Close Close Close Close Close"
+splash = "&dStartup frag ekran ekranı"
+lifecycle_feedback = "&dDünya hayat döngüsü geri bildirim"
+teleport_feedback = "&dTeleport geri bildirim"
+failure_feedback = "&dBaşarısız geri bildirim"
+title_popups = "&dAdı popups"
+action_bar_popups = "&dAction-bar popups"
+sounds = "&dGeri bildirim sesleri"
+root_title = "Rift Yapılandırma"
+category_title = "Rift: {category}"
+category_open = "&8Bu bölümde her ayarı düzenlemek için tıklayın"
+back = "&eBack Back Back Back"
+toggle = "&8Toggle için tıklayın"
+exact_number = "&8Sol sol sol sol sol sol/right Setler; tam bir değere girmek için Q basın"
+text = "&8sohbette yeni bir değer girmek için tıklayın"
+prompt = "{prefix}&7Tip için yeni bir değer &f{setting}&7 sohbette."
+prompt_cancel = "{prefix}&7Tipi Tipi Tipi Tipi Tipi Tipi &fiptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal&7 Bunu değiştirmeden geri dönmek."
+prompt_cancelled = "{prefix}&7Kurulum girişi iptal edildi."
+prompt_timeout = "{prefix}&7Kurulum girişi zamanı çıktı."
+setting_saved = "{prefix}&d{setting} &8› &aYeni değer: &f{after} &7önceki değer: &f{before}&a."
+setting_failed = "{prefix}&cGüncellemeyi güncellemek mümkün olmayabilir &f{setting}&c: {reason}"
+language = "&dDil yerele"
+language_select = "&8Kullanılabilir diller arasından seçmek için tıklayın"
+lifecycle_sound = "&dDünya hayat döngüsü ses"
+teleport_sound = "&dTeleport ses"
+failure_sound = "&dBaşarısız ses sesi"
+sound_volume = "&dSes hacimleri"
+sound_pitch = "&dSound pitch"
+title_fade_in = "&dAdı so-in ticks"
+title_stay = "&dTitle stay ticks"
+title_fade_out = "&dBaşlık so-out ticks"
+
+[rift.gui.category]
+general = "&dGeneral & Safety"
+feedback = "&dFeedback & Sounds"
+presentation = "&dSunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum Sunum"
+diagnostics = "&dTanılama&r"
+languages = "&dDiller ve iletiler"
+
+[director.help]
+no_subcommands = "Bu sayfada alt komut yok."
+no_description = "Açıklama sağlanmadı"
+command_group = "Komut grubu. Açmak için tıklayın."
+category = "Komut kategorisi"
+no_parameters = "Parametre yok. Komutu önceden doldurmak için tıklayın."
+parameters_hover = "Daha fazla bilgi için imleci parametrelerin üzerine getirin."
+
+[director.help.navigation]
+back = "Geri"
+page = "Sayfa"
+
+[director.help.navigation.parent]
+hover = "Üst komut grubuna dön"
+
+[director.help.navigation.previous]
+hover = "Önceki sayfa"
+
+[director.help.navigation.next]
+hover = "Sonraki sayfa"
+
+[director.help.parameter]
+required = "Bu parametre zorunludur."
+optional = "Bu parametre isteğe bağlıdır."
+default = "Belirtilmezse varsayılan değer \"{value}\" olur."
+type = "Bu parametrenin türü {type}."
+
+[director.runtime]
+usage = "Kullanım: {usage}"
+
+[director.runtime.error]
+invalid_origin = "Bu komut bu kaynaktan çalıştırılamaz."
+unknown_parameter = "Bilinmeyen parametre anahtarı: {key}"
+unexpected_argument = "Beklenmeyen bağımsız değişken \"{argument}\". İsteğe bağlı parametreler anahtarla belirtilmelidir, ör. seed=123"
+unclosed_group = "{key} parametresi için kapanış \"]\" karakteri eksik"
+conversion_failed = "\"{value}\", {parameter} için {type} türüne dönüştürülemiyor"
+default_parse_failed = "{parameter} parametresinin varsayılan değeri ayrıştırılamıyor"
+missing_argument = "Eksik bağımsız değişken \"{parameter}\" ({type})"
+execution_failed = "{command} komutu çalıştırılamadı: {reason}"
+
+[language.menu]
+your_language = "Diliniz"
+reset_your_language = "Dil seçiminizi sıfırla"
+server_default = "Sunucu varsayılanı"
+edit_messages = "Dil mesajlarını düzenle"
+use_server_default = "Sunucu varsayılanını kullan"
+current = "Geçerli: {locale}"
+current_with_personal = "Geçerli: {locale} (Sizin: {personal})"
+your_description = "Yalnızca gördüğünüz mesajları değiştirin."
+reset_description = "Sunucunun varsayılan dilini kullanın."
+server_description = "Sunucunun varsayılan dilini değiştirin."
+edit_description = "Her dil için mesaj düzenleyicisini açın."
+select_description = "Bu dili seçmek için tıklayın."
+remove_personal_description = "Kişisel dil seçiminizi kaldırın."
+no_controls = "Kullanabileceğiniz dil ayarı yok."

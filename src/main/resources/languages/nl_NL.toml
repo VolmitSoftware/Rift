@@ -1,0 +1,270 @@
+# Rift-taalbestand (Nederlands - Nederland).
+# Dit bestand wordt alleen gedownload als het ontbreekt; bewerk languages/nl_NL.toml rechtstreeks.
+# Lokale wijzigingen worden nooit automatisch vervangen; ontbrekende waarden gebruiken Engels.
+# Bewerk de onderstaande berichten; opgeslagen wijzigingen worden automatisch gedetecteerd en toegepast.
+# Behoud elke tijdelijke aanduiding exact zoals geschreven, inclusief de accolades.
+# Gebruik een tijdelijke aanduiding alleen in berichten waarvan de standaardsjabloon deze declareert; niet-ondersteunde aanduidingen worden niet vervangen.
+# Voorvoegsel: {prefix}=de globale waarde runtime.prefix. Verwijder {prefix} uit één bericht om het alleen daar te verbergen.
+# Beschikbare tijdelijke aanduidingen:
+#
+# {argument} - opdrachtargument
+# {category} - opdrachtcategorie
+# {command} - opdrachttekst of -naam
+# {count} - aantal items of resultaten
+# {detail} - beschrijvend detail
+# {id} - identificatie
+# {key} - configuratie- of berichtsleutel
+# {label} - weergavelabel
+# {locale} - taalregio
+#   {personal}      persoonlijke landinstelling
+# {name} - item- of weergavenaam
+# {operation} - naam van de bewerking
+# {parameter} - parameternaam
+# {permission} - permissieknooppunt
+# {player} - spelersnaam
+# {reason} - reden of foutdetail
+# {seconds} - duur in seconden
+# {setting} - naam van de instelling
+# {before} - vorige waarde
+# {after} - nieuwe waarde
+# {title} - titeltekst
+# {type} - waarde- of gegevenstype
+# {usage} - tekst voor opdrachtgebruik
+# {value} - huidige of nieuwe waarde
+# {version} - versie
+# {world} - wereldnaam
+#
+
+[runtime]
+prefix = "&5&lRIFT&r &8›&r "
+
+[rift.command]
+root = "Serverwerelden veilig beheren"
+create = "Een nieuwe wereld creëren en beheren"
+import = "Een bestaande wereldmap importeren"
+load = "Een beheerde of ontdekte wereld laden"
+unload = "Evacueer spelers en ontlaad een wereld"
+delete = "Verplaats een beheerde wereld in quarantaine"
+restore = "Herstel een in quarantaine gehouden wereld"
+teleport = "Teleporteer naar een geladen wereld"
+send = "Teleporteer een andere speler naar een geladen wereld"
+list = "Lijst geladen, beheerd, ontdekt en in quarantaine gehouden werelden"
+info = "Gedetailleerde staat voor één wereld tonen"
+generators = "Al door beheerde werelden gebruikte generator-id's tonen"
+config = "Open de in-game Rift configuratie-editor"
+language = "Een beschikbare Rift-taal selecteren"
+status = "Inspecteer platformmogelijkheden en Rift toestand"
+debug = "Diagnosehulpmiddelen voor Rift"
+debug_dump = "Een uitgebreid diagnostisch rapport voor Rift maken"
+autoload = "Veranderen of een beheerde wereld tijdens het opstarten belast"
+protect = "Een beheerde wereld beschermen of niet beschermen"
+
+[rift.parameter]
+name = "Wereldnaam"
+environment = "NORMAL, NETHER, THE_END, of CUSTOM"
+generator = "vanilla, void, of PluginName[:generator-id]"
+seed = "random of een ondertekend 64-bits zaadje"
+type = "Bukkit wereldtype"
+save = "Opslaan voor lossen"
+id = "Quarantaine-invoer-ID"
+player = "Naam van de onlinespeler"
+enabled = "true of false"
+page = "Pagina van de portalenlijst, beginnend bij één"
+upload = "Het rapport uploaden wanneer openbare uploads zijn ingeschakeld"
+sender = "Opdrachtgever"
+
+[rift.message]
+permission_denied = "{prefix}&cJe moet &f{permission}&c."
+unknown_command = "{prefix}&cOnbekende opdracht. Gebruik &f/rift help&c."
+player_only = "{prefix}&cDit commando vereist een speler."
+operation_queued = "{prefix}&7In de wachtrij &f{operation}&7 voor &d{world}&7."
+operation_failed = "{prefix}&c{operation} mislukt voor &f{world}&c: {reason}"
+created = "{prefix}&aAangemaakt en beheerd &f{world}&a."
+imported = "{prefix}&aGeïmporteerd en beheerd &f{world}&a."
+loaded = "{prefix}&aGeladen &f{world}&a."
+unloaded = "{prefix}&aOntladen &f{world}&a."
+teleported = "{prefix}&aGeteleporteerd &f{player}&a tot &f{world}&a."
+delete_confirm = "{prefix}&eUitvoeren &f/rift delete {world}&e opnieuw binnen &f{seconds}s&e om het in quarantaine te zetten."
+quarantined = "{prefix}&aVerplaatst &f{world}&a in quarantaine als &f{id}&a."
+restored = "{prefix}&aHersteld &f{world}&a van &f{id}&a."
+profile_updated = "{prefix}&aBijgewerkt &f{setting}&a voor &f{world}&a tot &f{value}&a."
+folia_limit = "{prefix}&e{operation} is niet beschikbaar op Folia omdat de wereld belasting/unload API is niet geïmplementeerd."
+config_saved = "{prefix}&aConfiguratie opgeslagen."
+config_opened = "{prefix}&aDe volledige configuratie-editor in het spel is geopend.&r"
+config_save_failed = "{prefix}&cConfiguratie kon niet worden opgeslagen. Controleer de console."
+empty_list = "{prefix}&7Er zijn geen gelijke werelden gevonden."
+player_offline = "{prefix}&cDe speler is niet online: &f{player}"
+unknown_world = "{prefix}&cOnbekende wereld: &f{world}"
+section = "{prefix}&d{title} &8(&f{count}&8)"
+entry = "{prefix}&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&8- &7{label}: &f{value}"
+info_title = "{prefix}&d{world}"
+status_title = "{prefix}&dRift {version} Status"
+generator_format = "{prefix}&7Custom formaat: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&eFolia ondersteuning Rift's lees-, editor-, profiel- en teleportfuncties; dynamische wereldlevenscyclus wordt afgesloten door het platform API."
+
+[rift.label]
+worlds = "Werelden"
+quarantine = "Quarantaine"
+loaded = "Geladen"
+managed = "Beheerd"
+on_disk = "Op schijf"
+missing = "ontbrekende beheerde werelden"
+environment = "Milieu"
+generator = "Generator"
+seed = "Zaad"
+autoload = "Automatisch laden"
+protected = "Beschermd"
+operation_active = "Actief"
+world_types = "Wereldtypen"
+configured_generators = "Geconfigureerde generatoren"
+available = "beschikbaar"
+unavailable = "niet beschikbaar"
+server = "Server"
+java_runtime = "Java runtime"
+plugin_bytecode = "Plugin bytecode"
+platform = "Platform"
+dynamic_lifecycle = "Dynamische wereldlevenscyclus"
+world_container = "Wereldcontainer"
+writable = "Wereld container beschrijfbaar"
+locale = "Lokaal"
+world_counts = "Werelden"
+quarantine_entries = "Quarantaine-items"
+
+[rift.explain]
+loaded = "Of Bukkit Momenteel heeft deze wereld actief in het geheugen."
+managed = "Of Rift bezit een profiel voor deze wereld en kan zijn generator- en opstartinstellingen herstellen."
+on_disk = "Of de wereld geladen is of een geldige wereldmap bevat level.dat."
+environment = "De Bukkit wereldomgeving geregistreerd door de levende wereld of beheerd profiel."
+generator = "De generator Rift Het regent als deze beheerde wereld laadt. void is Rift's ingebouwde lege wereld generator."
+seed = "Het zaad dat voor deze wereld wordt geregistreerd. Bestaande terrein wordt nooit geregenereerd door het veranderen van deze display waarde."
+autoload = "Of Rift laadt deze beheerde wereld automatisch tijdens het opstarten van de server."
+protected = "Beschermde beheerde werelden kunnen niet worden verplaatst naar Rift quarantaine."
+operation_active = "Of een levenscyclusoperatie op dit moment aanwezig is Rift's Per-werelds slot."
+server = "De actieve server implementatie en versie gerapporteerd door Bukkit."
+java_runtime = "De Java runtime momenteel hosting van de server. Rift's bytecode blijft compatibel met Java 17."
+plugin_bytecode = "De oudste Java runtime die kan worden geladen Rift's samengesteld klassen."
+platform = "De API-familie van de scheduler en server Rift Gedetecteerd op tijd."
+dynamic_lifecycle = "Of dit platform veilig onthult runtime wereld creëren, laden, lossen, quarantaine, en herstellen operaties."
+world_container = "De servermap waar Bukkit wereldmappen worden opgeslagen."
+writable = "Of het besturingssysteem het momenteel toelaat Rift om in de wereldcontainer te schrijven."
+locale = "Het actieve taalbestand onder plugins/Rift/languages. Ontbrekende items gebruiken de bewerkbare Engelse standaardinstellingen."
+world_counts = "Geladen aantallen actief Bukkit werelden; beheerde aantallen Rift profielen; ontbrekende nummers beheerde profielen die niet zijn geladen noch aanwezig op de schijf."
+quarantine = "Werelden opzij geschoven door Rift verwijderen en beschikbaar zijn om te herstellen door quarantaine-id."
+world_entry = "Geladen betekent nu actief; beheerde middelen Rift heeft een profiel; op schijf betekent dat er een geldige ongeladen wereldmap bestaat."
+
+[rift.feedback]
+title = "&d&lRIFT"
+world_subtitle = "&a{operation}&8: &f{world}"
+teleport_subtitle = "&aAangekomen &f{world}"
+failure_title = "&cOpdracht mislukt"
+failure_subtitle = "&7{operation}&8: &f{world}"
+action_world = "&dRift &8• &a{operation} &f{world}"
+action_teleport = "&dRift &8• &aTeleporteren naar &f{world}"
+action_failure = "&dRift &8• &c{operation} mislukt voor &f{world}"
+
+[rift.gui]
+current = "&7Huidig: &f{value}"
+autoload = "&dGemanagede werelden automatisch laden"
+delete = "&dWereldse quarantaine toestaan"
+verbose = "&dVerbose-logging"
+debug_upload = "&dOpenbare debug-uploads"
+bstats = "&dAnoniem bStats metrics"
+confirm_seconds = "&dBevestiging seconden verwijderen"
+poll = "&dHete herladen poll milliseconden"
+cooldown = "&dHot-herlaad koeldown milliseconden"
+evacuation = "&dEvacuatiewereld"
+close = "&cSluiten"
+splash = "&dOpstarten van opstartscherm"
+lifecycle_feedback = "&dWereldlevenscyclusfeedback"
+teleport_feedback = "&dTerugkoppeling teleporteren"
+failure_feedback = "&dTerugkoppeling van storingen"
+title_popups = "&dTitel popups"
+action_bar_popups = "&dActiebalk-popups"
+sounds = "&dGeluiden terugkoppeling"
+root_title = "Rift Instellingen"
+category_title = "Rift: {category}"
+category_open = "&8Klik om elke instelling in deze sectie te bewerken"
+back = "&eTerug"
+toggle = "&8Klik om te schakelen"
+exact_number = "&8Links/right past; druk op Q om een exacte waarde in te voeren"
+text = "&8Klik om een nieuwe waarde in de chat in te voeren"
+prompt = "{prefix}&7Typ een nieuwe waarde voor &f{setting}&7 in gesprek."
+prompt_cancel = "{prefix}&7Type &fannuleren&7 om terug te keren zonder het te veranderen."
+prompt_cancelled = "{prefix}&7Configuratie-invoer geannuleerd."
+prompt_timeout = "{prefix}&7Configuratie-invoer is uitgeschakeld."
+setting_saved = "{prefix}&d{setting} &8› &aGewijzigd naar &f{after} &7van &f{before}&a."
+setting_failed = "{prefix}&cKon niet bijwerken &f{setting}&c: {reason}"
+language = "&dTaalgebied"
+language_select = "&8Klik om uit de beschikbare talen te kiezen"
+lifecycle_sound = "&dWereldlevenscyclusgeluid"
+teleport_sound = "&dGeluid teleporteren"
+failure_sound = "&dFaalgeluid"
+sound_volume = "&dGeluidsvolume"
+sound_pitch = "&dGeluidspek"
+title_fade_in = "&dTitel fade-in teken"
+title_stay = "&dTitel blijft tikken"
+title_fade_out = "&dTitel fade-out teken"
+
+[rift.gui.category]
+general = "&dAlgemene & veiligheid"
+feedback = "&dFeedback & geluiden"
+presentation = "&dPresentatie"
+diagnostics = "&dDiagnostiek&r"
+languages = "&dTalen en berichten"
+
+[director.help]
+no_subcommands = "Geen subopdrachten op deze pagina."
+no_description = "Geen beschrijving opgegeven"
+command_group = "Opdrachtgroep. Klik om te openen."
+category = "Commandocategorie"
+no_parameters = "Geen parameters. Klik om de opdracht vooraf in te vullen."
+parameters_hover = "Beweeg de muis over de parameters voor meer informatie."
+
+[director.help.navigation]
+back = "Terug"
+page = "Pagina"
+
+[director.help.navigation.parent]
+hover = "Terug naar de bovenliggende opdrachtgroep"
+
+[director.help.navigation.previous]
+hover = "Vorige pagina"
+
+[director.help.navigation.next]
+hover = "Volgende pagina"
+
+[director.help.parameter]
+required = "Deze parameter is verplicht."
+optional = "Deze parameter is optioneel."
+default = "Standaard \"{value}\" indien niet opgegeven."
+type = "Deze parameter is van het type {type}."
+
+[director.runtime]
+usage = "Gebruik: {usage}"
+
+[director.runtime.error]
+invalid_origin = "Deze opdracht kan niet vanuit deze bron worden uitgevoerd."
+unknown_parameter = "Onbekende parametersleutel: {key}"
+unexpected_argument = "Onverwacht argument \"{argument}\". Optionele parameters moeten met een sleutel worden opgegeven, bijv. seed=123"
+unclosed_group = "Ontbrekende sluitende \"]\" voor parameter {key}"
+conversion_failed = "Kan \"{value}\" voor {parameter} niet naar {type} converteren"
+default_parse_failed = "Kan de standaardwaarde voor parameter {parameter} niet verwerken"
+missing_argument = "Ontbrekend argument \"{parameter}\" ({type})"
+execution_failed = "Opdracht {command} kon niet worden uitgevoerd: {reason}"
+
+[language.menu]
+your_language = "Jouw taal"
+reset_your_language = "Jouw taalkeuze herstellen"
+server_default = "Standaardtaal van de server"
+edit_messages = "Taalberichten bewerken"
+use_server_default = "Standaardtaal van de server gebruiken"
+current = "Huidig: {locale}"
+current_with_personal = "Huidig: {locale} (Jouw keuze: {personal})"
+your_description = "Wijzig alleen de berichten die jij ziet."
+reset_description = "Gebruik de standaardtaal van de server."
+server_description = "Wijzig de standaardtaal van de server."
+edit_description = "Open de berichteneditor voor elke taal."
+select_description = "Klik om deze taal te selecteren."
+remove_personal_description = "Verwijder jouw persoonlijke taalkeuze."
+no_controls = "Je hebt geen toegang tot taalinstellingen."

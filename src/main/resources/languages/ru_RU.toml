@@ -1,0 +1,270 @@
+# Языковой файл Rift (Русский - Россия).
+# Этот файл загружается только при отсутствии; редактируйте languages/ru_RU.toml напрямую.
+# Локальные изменения никогда не заменяются автоматически; для отсутствующих значений используется английский.
+# Редактируйте сообщения ниже; сохранённые изменения обнаруживаются и применяются автоматически.
+# Сохраняйте каждый заполнитель точно в указанном виде, включая фигурные скобки.
+# Используйте заполнитель только в сообщениях, стандартный шаблон которых его объявляет; неподдерживаемые заполнители не заменяются.
+# Префикс: {prefix}=глобальное значение runtime.prefix. Удалите {prefix} из отдельного сообщения, чтобы скрыть его только там.
+# Доступные заполнители:
+#
+# {argument} - аргумент команды
+# {category} - категория команд
+# {command} - текст или имя команды
+# {count} - количество элементов или результатов
+# {detail} - описательная подробность
+# {id} - идентификатор
+# {key} - ключ конфигурации или сообщения
+# {label} - отображаемая метка
+# {locale} - языковой стандарт
+#   {personal}      личная локаль
+# {name} - имя записи или отображаемое имя
+# {operation} - имя операции
+# {parameter} - имя параметра
+# {permission} - узел разрешения
+# {player} - имя игрока
+# {reason} - причина или подробность ошибки
+# {seconds} - длительность в секундах
+# {setting} - имя настройки
+# {before} - предыдущее значение
+# {after} - новое значение
+# {title} - текст заголовка
+# {type} - тип значения или данных
+# {usage} - текст использования команды
+# {value} - текущее или новое значение
+# {version} - версия
+# {world} - имя мира
+#
+
+[runtime]
+prefix = "&5&lRIFT&r &8›&r "
+
+[rift.command]
+root = "Безопасное управление серверными мирами"
+create = "Создавать и управлять новым миром"
+import = "Импорт существующего мирового каталога"
+load = "Загрузите управляемый или открытый мир"
+unload = "Эвакуировать игроков и разгружать мир"
+delete = "Переместить управляемый мир в карантин"
+restore = "Восстановление карантинного мира"
+teleport = "Телепорт в загруженный мир"
+send = "Телепортируйте другого игрока в загруженный мир"
+list = "Список загруженных, управляемых, обнаруженных и карантинных миров"
+info = "Показать подробное состояние для одного мира"
+generators = "Идентификаторы генераторов, уже используемые управляемыми мирами"
+config = "Откройте игру Rift Конфигурационный редактор"
+language = "Выбрать доступный язык Rift"
+status = "Проверить возможности платформы и Rift государство"
+debug = "Инструменты диагностики Rift"
+debug_dump = "Создать подробный диагностический отчёт Rift"
+autoload = "Изменить, загружается ли управляемый мир во время запуска"
+protect = "Защищать или не защищать управляемый мир"
+
+[rift.parameter]
+name = "Всемирное имя"
+environment = "NORMAL, NETHER, THE_ENDили CUSTOM"
+generator = "vanilla, voidили PluginName[:generator-id]"
+seed = "random или подписанное 64-разрядное семя"
+type = "Bukkit мировой тип"
+save = "Сохранить перед разгрузкой"
+id = "Карантин входной id"
+player = "Имя игрока онлайн"
+enabled = "true или false"
+page = "Номер страницы списка порталов, начиная с единицы"
+upload = "Загрузить отчёт, если включена публичная загрузка"
+sender = "Командный отправитель"
+
+[rift.message]
+permission_denied = "{prefix}&cТебе нужно &f{permission}&c."
+unknown_command = "{prefix}&cНеизвестная команда. &f/rift help&c."
+player_only = "{prefix}&cЭта команда требует игрока."
+operation_queued = "{prefix}&7Охваченный &f{operation}&7 для &d{world}&7."
+operation_failed = "{prefix}&c{operation} Неудавшийся для &f{world}&c: {reason}"
+created = "{prefix}&aСозданный и управляемый &f{world}&a."
+imported = "{prefix}&aИмпортируется и управляется &f{world}&a."
+loaded = "{prefix}&aзагруженный &f{world}&a."
+unloaded = "{prefix}&aНезагруженный &f{world}&a."
+teleported = "{prefix}&aТелепортированный &f{player}&a то &f{world}&a."
+delete_confirm = "{prefix}&eБеги. &f/rift delete {world}&e снова внутри &f{seconds}s&e Переместить его в карантин."
+quarantined = "{prefix}&aперемещенный &f{world}&a в карантин как &f{id}&a."
+restored = "{prefix}&aВосстановленный &f{world}&a из &f{id}&a."
+profile_updated = "{prefix}&aОбновлено &f{setting}&a для &f{world}&a то &f{value}&a."
+folia_limit = "{prefix}&e{operation} недоступен на Folia Потому что мир грузит/unload API не выполняется."
+config_saved = "{prefix}&aКонфигурация сохранена."
+config_opened = "{prefix}&aОткрыт полный внутриигровой редактор конфигурации.&r"
+config_save_failed = "{prefix}&cКонфигурацию не удалось сохранить. Проверьте консоль."
+empty_list = "{prefix}&7Никаких совпадающих миров найдено не было."
+player_offline = "{prefix}&cИгрок не находится в сети: &f{player}"
+unknown_world = "{prefix}&cНеизвестный мир: &f{world}"
+section = "{prefix}&d{title} &8(&f{count}&8)"
+entry = "{prefix}&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&8- &7{label}: &f{value}"
+info_title = "{prefix}&d{world}"
+status_title = "{prefix}&dRift {version} Состояние"
+generator_format = "{prefix}&7Custom Формат: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&eFolia поддержка RiftФункции чтения, редактора, профиля и телепортации; динамический жизненный цикл мира защищен API платформы."
+
+[rift.label]
+worlds = "Миры"
+quarantine = "карантин"
+loaded = "загруженный"
+managed = "управляемый"
+on_disk = "На диске"
+missing = "Недостающие управляемые миры"
+environment = "окружающая среда"
+generator = "генератор"
+seed = "семя"
+autoload = "Автозагрузка"
+protected = "защищенный"
+operation_active = "Операция активная"
+world_types = "Мировые типы"
+configured_generators = "Настроенные генераторы"
+available = "доступный"
+unavailable = "недоступный"
+server = "сервер"
+java_runtime = "Java время выполнения"
+plugin_bytecode = "Байт-код плагина"
+platform = "Платформа"
+dynamic_lifecycle = "Динамический жизненный цикл мира"
+world_container = "Мировой контейнер"
+writable = "Контейнер World Container"
+locale = "местность"
+world_counts = "Миры"
+quarantine_entries = "Карантинные записи"
+
+[rift.explain]
+loaded = "Либо Bukkit В настоящее время этот мир активен в памяти."
+managed = "Либо Rift Владеет профилем для этого мира и может восстановить настройки генератора и запуска."
+on_disk = "Является ли мир загруженным или имеет действительный мировой каталог, содержащий level.dat."
+environment = "The Bukkit Мировая среда, записанная живым миром или управляемым профилем."
+generator = "Генератор Rift Повторно применяется, когда этот управляемый мир загружается. void это RiftВстроенный генератор пустого мира."
+seed = "Существующая местность никогда не восстанавливается, изменяя значение дисплея."
+autoload = "Либо Rift Загружает этот управляемый мир автоматически во время запуска сервера."
+protected = "Защищенные управляемые миры не могут быть перемещены в Rift карантин."
+operation_active = "Есть ли в настоящее время операция жизненного цикла RiftЗамок на весь мир."
+server = "Реализация и версия активного сервера, о которых сообщается Bukkit."
+java_runtime = "The Java Runtime в настоящее время хостинг сервера. Riftбайт-код остается совместимым с Java 17."
+plugin_bytecode = "Самый старый Java время выполнения, способное к загрузке RiftСобранные классы."
+platform = "Семейство планировщиков и серверов API Rift Обнаружено во время выполнения."
+dynamic_lifecycle = "Безопасно ли эта платформа раскрывает мир выполнения, создает, загружает, разгружает, карантин и восстанавливает операции."
+world_container = "Каталог серверов, где Bukkit Хранятся мировые папки."
+writable = "Разрешается ли операционная система в настоящее время Rift Написать внутри мирового контейнера."
+locale = "Файл активного языка под plugins/Rift/languagesОтсутствующие записи используют редактируемые английские по умолчанию."
+world_counts = "Загруженные счета активные Bukkit Миры; управляемые счета Rift Профили; недостающие подсчеты управляемых профилей, которые не загружаются и не присутствуют на диске."
+quarantine = "Миры, отодвинутые в сторону Rift Удалить и восстановить с помощью карантинного идентификатора."
+world_entry = "Загруженные средства активны сейчас; управляемые средства Rift имеет профиль; на диске имеется действительная незагруженная мировая папка."
+
+[rift.feedback]
+title = "&d&lRIFT"
+world_subtitle = "&a{operation}&8: &f{world}"
+teleport_subtitle = "&aПрибывший в &f{world}"
+failure_title = "&cОперация провалилась"
+failure_subtitle = "&7{operation}&8: &f{world}"
+action_world = "&dRift &8• &a{operation} &f{world}"
+action_teleport = "&dRift &8• &aТелепортирован в &f{world}"
+action_failure = "&dRift &8• &c{operation} Неудавшийся для &f{world}"
+
+[rift.gui]
+current = "&7Текущее: &f{value}"
+autoload = "&dАвтозагрузка управляемых миров"
+delete = "&dРазрешить мировой карантин"
+verbose = "&dЛесозаготовка вербозы"
+debug_upload = "&dПубличные отладочные загрузки"
+bstats = "&dАнонимный bStats метрики"
+confirm_seconds = "&dУдалить секунды подтверждения"
+poll = "&dМиллисекунды опроса на горячую нагрузку"
+cooldown = "&dОхлаждение с горячей загрузкой в миллисекундах"
+evacuation = "&dЭвакуационный мир"
+close = "&cЗакрыть"
+splash = "&dЗапуск Splash Screen"
+lifecycle_feedback = "&dОтзывы о мировом жизненном цикле"
+teleport_feedback = "&dТелепортация обратной связи"
+failure_feedback = "&dНеудачная обратная связь"
+title_popups = "&dОригинальное название: Popups"
+action_bar_popups = "&dВсплывающие окна Action-bar"
+sounds = "&dЗвуки обратной связи"
+root_title = "Rift конфигурация"
+category_title = "Rift: {category}"
+category_open = "&8Нажмите, чтобы отредактировать каждую настройку в этом разделе"
+back = "&eНазад"
+toggle = "&8Кликните на Toggle"
+exact_number = "&8Левый/right регулировки; нажмите Q, чтобы ввести точное значение"
+text = "&8Нажмите, чтобы ввести новое значение в чате"
+prompt = "{prefix}&7Введите новое значение для &f{setting}&7 в чате."
+prompt_cancel = "{prefix}&7Тип &fотменять&7 Вернуться, не меняя его."
+prompt_cancelled = "{prefix}&7Конфигурационный ввод отменен."
+prompt_timeout = "{prefix}&7Конфигурационный ввод синхронизирован."
+setting_saved = "{prefix}&d{setting} &8› &aИзменено на &f{after} &7с &f{before}&a."
+setting_failed = "{prefix}&cНе могу обновить &f{setting}&c: {reason}"
+language = "&dЛокальный язык"
+language_select = "&8Нажмите, чтобы выбрать из доступных языков"
+lifecycle_sound = "&dЗвук жизненного цикла"
+teleport_sound = "&dЗвук телепортации"
+failure_sound = "&dНеудачный звук"
+sound_volume = "&dЗвуковой объем"
+sound_pitch = "&dЗвуковой звук"
+title_fade_in = "&dОригинальное название: Feldy-in Ticks"
+title_stay = "&dОригинальное название: Stay Ticks"
+title_fade_out = "&dОригинальное название: Blead-out Ticks"
+
+[rift.gui.category]
+general = "&dОбщее и безопасность"
+feedback = "&dОбсуждение Feedback & Sounds"
+presentation = "&dПрезентация"
+diagnostics = "&dДиагностика&r"
+languages = "&dЯзыки и сообщения"
+
+[director.help]
+no_subcommands = "На этой странице нет подкоманд."
+no_description = "Описание не указано"
+command_group = "Группа команд. Нажмите, чтобы открыть."
+category = "Категория команд"
+no_parameters = "Параметров нет. Нажмите, чтобы предварительно заполнить команду."
+parameters_hover = "Наведите курсор на параметры, чтобы узнать больше."
+
+[director.help.navigation]
+back = "Назад"
+page = "Страница"
+
+[director.help.navigation.parent]
+hover = "Вернуться к родительской группе команд"
+
+[director.help.navigation.previous]
+hover = "Предыдущая страница"
+
+[director.help.navigation.next]
+hover = "Следующая страница"
+
+[director.help.parameter]
+required = "Этот параметр является обязательным."
+optional = "Этот параметр является необязательным."
+default = "Если не задан, используется значение \"{value}\"."
+type = "Этот параметр имеет тип {type}."
+
+[director.runtime]
+usage = "Использование: {usage}"
+
+[director.runtime.error]
+invalid_origin = "Эту команду нельзя выполнить из данного источника."
+unknown_parameter = "Неизвестный ключ параметра: {key}"
+unexpected_argument = "Неожиданный аргумент \"{argument}\". Необязательные параметры должны задаваться с ключом, например seed=123"
+unclosed_group = "Отсутствует закрывающая скобка \"]\" для параметра {key}"
+conversion_failed = "Невозможно преобразовать \"{value}\" в {type} для {parameter}"
+default_parse_failed = "Невозможно разобрать значение по умолчанию параметра {parameter}"
+missing_argument = "Отсутствует аргумент \"{parameter}\" ({type})"
+execution_failed = "Не удалось выполнить команду {command}: {reason}"
+
+[language.menu]
+your_language = "Ваш язык"
+reset_your_language = "Сбросить выбор языка"
+server_default = "Язык сервера по умолчанию"
+edit_messages = "Изменить языковые сообщения"
+use_server_default = "Использовать язык сервера по умолчанию"
+current = "Текущий: {locale}"
+current_with_personal = "Текущий: {locale} (Ваш: {personal})"
+your_description = "Изменить только сообщения, которые видите вы."
+reset_description = "Использовать язык сервера по умолчанию."
+server_description = "Изменить язык сервера по умолчанию."
+edit_description = "Открыть редактор сообщений для каждого языка."
+select_description = "Нажмите, чтобы выбрать этот язык."
+remove_personal_description = "Удалить ваш личный выбор языка."
+no_controls = "У вас нет доступа к настройкам языка."
