@@ -11,14 +11,7 @@ import java.lang.management.ClassLoadingMXBean;
 import java.lang.management.CompilationMXBean;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryMXBean;
-import java.lang.management.MemoryPoolMXBean;
-import java.lang.management.MemoryUsage;
-import java.lang.management.LockInfo;
-import java.lang.management.MonitorInfo;
 import java.lang.management.RuntimeMXBean;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
 import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -31,7 +24,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.EnumMap;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Locale;
@@ -111,9 +103,7 @@ final class RiftDebugReport {
         appendQuarantine(report, snapshot.quarantine());
         appendPlugins(report, snapshot.plugins());
         appendRuntime(report);
-        appendMemory(report);
         appendCpu(report);
-        appendThreads(report);
         appendGarbageCollectors(report);
         appendBufferPools(report);
         appendStorage(report, "Plugin data filesystem", snapshot.dataDirectory());
@@ -266,24 +256,6 @@ final class RiftDebugReport {
         value(report, "Start time (epoch ms)", runtime.getStartTime());
     }
 
-    private static void appendMemory(StringBuilder report) {
-        MemoryMXBean memory = ManagementFactory.getMemoryMXBean();
-        Runtime runtime = Runtime.getRuntime();
-        section(report, "Memory");
-        value(report, "Objects pending finalization", memory.getObjectPendingFinalizationCount());
-        memoryUsage(report, "Heap", memory.getHeapMemoryUsage());
-        memoryUsage(report, "Non-heap", memory.getNonHeapMemoryUsage());
-        value(report, "Runtime used", bytes(runtime.totalMemory() - runtime.freeMemory()));
-        value(report, "Runtime free", bytes(runtime.freeMemory()));
-        value(report, "Runtime total", bytes(runtime.totalMemory()));
-        value(report, "Runtime maximum", bytes(runtime.maxMemory()));
-        for (MemoryPoolMXBean pool : ManagementFactory.getMemoryPoolMXBeans()) {
-            memoryUsage(report, "Pool " + pool.getName(), pool.getUsage());
-            memoryUsage(report, "Pool " + pool.getName() + " peak", pool.getPeakUsage());
-            memoryUsage(report, "Pool " + pool.getName() + " collection", pool.getCollectionUsage());
-        }
-    }
-
     private static void appendCpu(StringBuilder report) {
         java.lang.management.OperatingSystemMXBean base = ManagementFactory.getOperatingSystemMXBean();
         section(report, "CPU and operating system");
@@ -305,60 +277,6 @@ final class RiftDebugReport {
         if (base instanceof UnixOperatingSystemMXBean unix) {
             value(report, "Open file descriptors", unix.getOpenFileDescriptorCount());
             value(report, "Maximum file descriptors", unix.getMaxFileDescriptorCount());
-        }
-    }
-
-    private static void appendThreads(StringBuilder report) {
-        ThreadMXBean threads = ManagementFactory.getThreadMXBean();
-        section(report, "Threads");
-        value(report, "Live", threads.getThreadCount());
-        value(report, "Daemon", threads.getDaemonThreadCount());
-        value(report, "Peak", threads.getPeakThreadCount());
-        value(report, "Total started", threads.getTotalStartedThreadCount());
-        Map<Thread.State, Integer> states = new EnumMap<>(Thread.State.class);
-        ThreadInfo[] information = threads.getThreadInfo(threads.getAllThreadIds(), true, true);
-        for (ThreadInfo thread : information) {
-            if (thread != null) {
-                states.merge(thread.getThreadState(), 1, Integer::sum);
-            }
-        }
-        for (Thread.State state : Thread.State.values()) {
-            value(report, "State " + state.name().toLowerCase(Locale.ROOT), states.getOrDefault(state, 0));
-        }
-        long[] deadlocked = threads.findDeadlockedThreads();
-        value(report, "Deadlocked", deadlocked == null ? 0 : deadlocked.length);
-        value(report, "Thread CPU time supported", threads.isThreadCpuTimeSupported());
-        value(report, "Thread CPU time enabled", threads.isThreadCpuTimeSupported() && threads.isThreadCpuTimeEnabled());
-        for (ThreadInfo thread : information) {
-            if (thread == null) {
-                continue;
-            }
-            report.append("- id=").append(thread.getThreadId())
-                    .append(" | name=").append(sanitize(thread.getThreadName()))
-                    .append(" | state=").append(thread.getThreadState())
-                    .append(" | blockedCount=").append(thread.getBlockedCount())
-                    .append(" | blockedTime=").append(duration(thread.getBlockedTime()))
-                    .append(" | waitedCount=").append(thread.getWaitedCount())
-                    .append(" | waitedTime=").append(duration(thread.getWaitedTime()))
-                    .append(" | suspended=").append(thread.isSuspended())
-                    .append(" | native=").append(thread.isInNative())
-                    .append(" | lock=").append(sanitize(Objects.toString(thread.getLockInfo(), "none")))
-                    .append(" | lockOwner=").append(sanitize(Objects.toString(thread.getLockOwnerName(), "none")));
-            if (threads.isThreadCpuTimeSupported() && threads.isThreadCpuTimeEnabled()) {
-                report.append(" | cpuTime=").append(duration(threads.getThreadCpuTime(thread.getThreadId()) / 1_000_000L))
-                        .append(" | userTime=").append(duration(threads.getThreadUserTime(thread.getThreadId()) / 1_000_000L));
-            }
-            report.append('\n');
-            for (StackTraceElement frame : thread.getStackTrace()) {
-                report.append("    at ").append(sanitize(frame.toString())).append('\n');
-            }
-            for (MonitorInfo monitor : thread.getLockedMonitors()) {
-                report.append("    locked-monitor ").append(sanitize(monitor.toString()))
-                        .append(" at depth ").append(monitor.getLockedStackDepth()).append('\n');
-            }
-            for (LockInfo synchronizer : thread.getLockedSynchronizers()) {
-                report.append("    locked-synchronizer ").append(sanitize(synchronizer.toString())).append('\n');
-            }
         }
     }
 
@@ -486,15 +404,6 @@ final class RiftDebugReport {
             }
         }
         return HexFormat.of().formatHex(digest.digest());
-    }
-
-    private static void memoryUsage(StringBuilder report, String label, MemoryUsage usage) {
-        if (usage == null) {
-            value(report, label, "unavailable");
-            return;
-        }
-        value(report, label, "used=" + bytes(usage.getUsed()) + ", committed=" + bytes(usage.getCommitted())
-                + ", maximum=" + bytes(usage.getMax()));
     }
 
     private static void section(StringBuilder report, String name) {
