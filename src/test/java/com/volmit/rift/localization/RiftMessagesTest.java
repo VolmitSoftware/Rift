@@ -58,7 +58,7 @@ final class RiftMessagesTest {
                 .containsExactlyInAnyOrderElementsOf(RiftMessages.catalog().ids());
         assertThat(toml)
                 .contains("[runtime]", "prefix = \"&5&lRIFT&r &8›&r \"", "{world}", "{permission}",
-                        "{before}=previous value", "{after}=new value")
+                        "{before}  previous value", "{after}  new value")
                 .doesNotContain("messages:");
     }
 }

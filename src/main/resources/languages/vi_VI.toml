@@ -1,39 +1,51 @@
-# Tệp ngôn ngữ Rift (Tiếng Việt - Việt Nam).
-# Tệp này chỉ được tải xuống khi chưa tồn tại; hãy sửa trực tiếp languages/vi_VI.toml.
-# Thay đổi cục bộ không bao giờ bị tự động thay thế; mục còn thiếu dùng tiếng Anh.
-# Chỉnh sửa các thông báo bên dưới; thay đổi đã lưu sẽ được tự động phát hiện và áp dụng.
-# Giữ nguyên từng phần giữ chỗ đúng như cách viết, bao gồm cả dấu ngoặc nhọn.
-# Chỉ dùng phần giữ chỗ trong thông báo có mẫu mặc định khai báo phần đó; phần giữ chỗ không được hỗ trợ sẽ không được thay thế.
+# Rift — vi_VI
+#
+# === Chỉnh sửa tệp ===
+# plugins/Rift/languages/vi_VI.toml
+# Bạn có thể chỉnh sửa trực tiếp tệp này. Thay đổi cục bộ được giữ lại; mục thiếu hoặc không hợp lệ dùng bản tiếng Anh tích hợp.
+# /rift language server edit vi_VI
+#
+# === Tiền tố ===
 # Tiền tố: {prefix}=giá trị runtime.prefix toàn cục. Xóa {prefix} khỏi từng thông báo nếu không muốn hiện ở thông báo đó.
-# Các phần giữ chỗ có sẵn:
 #
-# {argument} - đối số lệnh
-# {category} - danh mục lệnh
-# {command} - văn bản hoặc tên lệnh
-# {count} - số lượng mục hoặc kết quả
-# {detail} - chi tiết mô tả
-# {id} - mã định danh
-# {key} - khóa cấu hình hoặc thông báo
-# {label} - nhãn hiển thị
-# {locale} - thiết lập vùng ngôn ngữ
-#   {personal}      mã vùng cá nhân
-# {name} - tên mục hoặc tên hiển thị
-# {operation} - tên thao tác
-# {parameter} - tên tham số
-# {permission} - nút quyền hạn
-# {player} - tên người chơi
-# {reason} - lý do hoặc chi tiết lỗi
-# {seconds} - thời lượng tính bằng giây
-# {setting} - tên cài đặt
-# {before} - giá trị trước đó
-# {after} - giá trị mới
-# {title} - văn bản tiêu đề
-# {type} - kiểu giá trị hoặc dữ liệu
-# {usage} - văn bản cách dùng lệnh
-# {value} - giá trị hiện tại hoặc mới
-# {version} - phiên bản
-# {world} - tên thế giới
+# === Định dạng ===
+# Màu: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B và [RRGGBB]. MiniMessage vẫn dùng được cho định dạng tùy chỉnh.
 #
+# === Biến ===
+# Giữ nguyên tên biến và chỉ dùng những biến có sẵn trong từng thông báo.
+#   {after}  giá trị mới
+#   {argument}  đối số lệnh
+#   {before}  giá trị trước đó
+#   {category}  danh mục lệnh
+#   {command}  văn bản hoặc tên lệnh
+#   {count}  số lượng mục hoặc kết quả
+#   {detail}  chi tiết mô tả
+#   {group}  Cho phép hay nhóm người chơi
+#   {id}  mã định danh
+#   {key}  khóa cấu hình hoặc thông báo
+#   {label}  nhãn hiển thị
+#   {line}  Số dòng hay dòng nguồn
+#   {locale}  thiết lập vùng ngôn ngữ
+#   {maximum}  Giá trị được chấp nhận tối đa
+#   {name}  tên mục hoặc tên hiển thị
+#   {operation}  tên thao tác
+#   {parameter}  tên tham số
+#   {permission}  nút quyền hạn
+#   {personal}  mã vùng cá nhân
+#   {player}  tên người chơi
+#   {plugin}  Tên phần bổ sung
+#   {prefix}  giá trị runtime.prefix toàn cục. Xóa {prefix} khỏi từng thông báo nếu không muốn hiện ở thông báo đó.
+#   {reason}  lý do hoặc chi tiết lỗi
+#   {seconds}  thời lượng tính bằng giây
+#   {setting}  tên cài đặt
+#   {target}  Người chơi đích, thực thể hay giá trị
+#   {title}  văn bản tiêu đề
+#   {type}  kiểu giá trị hoặc dữ liệu
+#   {usage}  văn bản cách dùng lệnh
+#   {value}  giá trị hiện tại hoặc mới
+#   {variables}  chỗ giữ chỗ hợp lệ
+#   {version}  phiên bản
+#   {world}  tên thế giới
 
 [runtime]
 prefix = "&5&lRIFT&r &8›&r "
@@ -132,26 +144,26 @@ world_counts = "Thế giới"
 quarantine_entries = "Mục cách ly"
 
 [rift.explain]
-loaded = "Cho dù Bukkit Hiện tại thế giới này đang hoạt động trong trí nhớ."
-managed = "Cho dù Rift sở hữu một hồ sơ cho thế giới này và có thể phục hồi lại máy phát và khởi động thiết lập."
-on_disk = "Thế giới có tải hay có thư mục thế giới hợp lệ chứa level.dat."
-environment = "Hạt Bukkit Môi trường thế giới được ghi nhận bởi thế giới sống hoặc quản lý hồ sơ."
-generator = "Máy phát điện Rift Những người được hưởng ứng khi thế giới này vận hành hàng loạt. void là RiftMáy phát điện thế giới rỗng."
-seed = "Đất đai tồn tại không bao giờ được tái tạo bằng cách thay đổi giá trị hiển thị này."
-autoload = "Cho dù Rift nạp điều này tự động quản lý thế giới trong khi khởi chạy máy phục vụ."
-protected = "Những thế giới được bảo vệ không thể bị chuyển vào Rift Cách ly."
-operation_active = "Cho dù một hoạt động vòng lặp đang giữ RiftKhóa trên toàn thế giới."
-server = "Trình phục vụ hoạt động thực hiện và phiên bản được báo cáo bởi Bukkit."
-java_runtime = "Hạt Java Chạy thời gian đang tổ chức máy phục vụ. RiftTheo mã số của hte code thì vẫn phù hợp với Java 17."
-plugin_bytecode = "Người già nhất Java chạy có khả năng nạp RiftLớp học biên tập."
-platform = "Name Rift Phát hiện lúc chạy."
-dynamic_lifecycle = "Dù nền tảng này có an toàn phơi bày các hoạt động của thế giới thời gian được tạo ra, tải lên, dỡ xuống, cách ly và khôi phục các hoạt động."
-world_container = "Thư mục máy phục vụ nơi Bukkit Các thư mục thế giới được cất giữ."
-writable = "Cho dù hệ điều hành hiện thời cho phép Rift để viết bên trong các container thế giới."
-locale = "Tập tin ngôn ngữ hoạt động dưới plugins/Rift/languages.. thiếu mục sử dụng mặc định tiếng Anh có thể sửa đổi."
-world_counts = "Số đếm đã tải hoạt động Bukkit Thế giới; quản lý đếm Rift hồ sơ: còn thiếu những hồ sơ đã được quản lý còn không tải hay hiện diện trên đĩa."
-quarantine = "Thế giới chuyển sang một bên. Rift xóa và có thể phục hồi bằng cách kiểm dịch."
-world_entry = "Trọng tải có nghĩa là hoạt động ngay bây giờ; quản lý phương tiện Rift có hồ sơ; trên đĩa có nghĩa là một thư mục thế giới bị gỡ bỏ hợp lệ tồn tại."
+loaded = "Cho biết Bukkit hiện có đang giữ thế giới này hoạt động trong bộ nhớ hay không."
+managed = "Cho biết Rift có hồ sơ của thế giới này để khôi phục trình tạo và thiết lập khởi động hay không."
+on_disk = "Cho biết thế giới đã được tải hoặc có thư mục thế giới hợp lệ chứa level.dat hay không."
+environment = "Môi trường thế giới Bukkit được ghi trong thế giới đang chạy hoặc hồ sơ quản lý."
+generator = "Trình tạo mà Rift áp dụng lại khi tải thế giới được quản lý. void là trình tạo thế giới trống tích hợp của Rift."
+seed = "Hạt giống được ghi cho thế giới này. Thay đổi giá trị hiển thị này không tạo lại địa hình hiện có."
+autoload = "Cho biết Rift có tự động tải thế giới được quản lý này khi máy chủ khởi động hay không."
+protected = "Không thể chuyển thế giới được quản lý có bảo vệ vào vùng cách ly Rift."
+operation_active = "Cho biết một thao tác vòng đời thế giới hiện có đang giữ khóa riêng cho thế giới của Rift hay không."
+server = "Bản triển khai và phiên bản máy chủ đang chạy do Bukkit báo cáo."
+java_runtime = "Môi trường Java đang chạy máy chủ. Mã byte của Rift vẫn tương thích với Java 17."
+plugin_bytecode = "Phiên bản Java cũ nhất có thể tải các lớp đã biên dịch của Rift."
+platform = "Bộ lập lịch và họ API máy chủ mà Rift phát hiện khi chạy."
+dynamic_lifecycle = "Cho biết nền tảng có hỗ trợ an toàn việc tạo, tải, dỡ tải, cách ly và khôi phục thế giới khi đang chạy hay không."
+world_container = "Thư mục máy chủ chứa các thư mục thế giới Bukkit."
+writable = "Cho biết hệ điều hành hiện có cho phép Rift ghi vào thư mục chứa thế giới hay không."
+locale = "Tệp ngôn ngữ đang dùng trong plugins/Rift/languages. Các mục còn thiếu sử dụng bản tiếng Anh tích hợp."
+world_counts = "Đã tải là số thế giới Bukkit đang hoạt động; được quản lý là số hồ sơ Rift; bị thiếu là số hồ sơ có thế giới chưa tải và không có trên đĩa."
+quarantine = "Các thế giới được lệnh delete của Rift chuyển sang một bên và có thể khôi phục bằng ID cách ly."
+world_entry = "Đã tải nghĩa là đang hoạt động; được quản lý nghĩa là có hồ sơ Rift; trên đĩa nghĩa là tồn tại thư mục thế giới hợp lệ chưa được tải."
 
 [rift.feedback]
 title = "&d&lRIFT"
@@ -254,6 +266,9 @@ missing_argument = "Thiếu đối số \"{parameter}\" ({type})"
 execution_failed = "Không thể thực thi lệnh {command}: {reason}"
 
 [language.menu]
+selected = "Đã chọn"
+command = "Câu lệnh: {command}"
+all-volmit-plugins = "Tất cả plugin Volmit"
 your_language = "Ngôn ngữ của bạn"
 reset_your_language = "Đặt lại ngôn ngữ của bạn"
 server_default = "Ngôn ngữ mặc định của máy chủ"
@@ -268,3 +283,89 @@ edit_description = "Mở trình chỉnh sửa thông báo cho từng ngôn ngữ
 select_description = "Nhấp để chọn ngôn ngữ này."
 remove_personal_description = "Xóa lựa chọn ngôn ngữ cá nhân của bạn."
 no_controls = "Bạn không có quyền dùng các tùy chọn ngôn ngữ."
+
+[language.editor]
+loading = "Đang tải tin nhắn cho {locale}..."
+
+[language.editor.category]
+open = "&8Nhấn vào để mở phân loại này.&r"
+message-count = "&7{count} tin nhắn&r"
+
+[language.editor.error]
+unable-to-edit = "Không thể chỉnh sửa: {reason}"
+no-permission = "Bạn không có quyền chỉnh sửa ngôn ngữ của {plugin}."
+
+[language.editor.input]
+unable-to-save = "Không thể lưu: {reason}"
+too-long = "Nội dung nhập chỉ được có tối đa {maximum} ký tự."
+expired = "Đã hết thời gian nhập trong trình chỉnh sửa ngôn ngữ."
+
+[language.editor.locale]
+open = "&8Nhấn vào để mở ngôn ngữ này.&r"
+
+[language.editor.message]
+variables = "&8{variables}&r"
+edit-plural = "&7Nhấp để chỉnh sửa một dạng số nhiều.&r"
+edit-lines = "&7Nhấp để chỉnh sửa từng dòng.&r"
+edit-chat = "&7Nhấp để chỉnh sửa trong trò chuyện.&r"
+current-value = "&7Giá trị hiện có:&r"
+
+[language.editor.navigation]
+previous-page = "&eTrang trước&r"
+next-page = "&eTrang kế&r"
+close = "&cĐóng&r"
+back = "&eQuay lại&r"
+
+[language.editor.part]
+line = "Dòng {line}"
+
+[language.editor.prompt]
+variables = "Biến: {variables}"
+value = "Nhập giá trị mới cho {key} trong trò chuyện."
+search = "Tìm khóa hoặc nội dung tin nhắn. Nhập cancel để quay lại."
+guidance = "Dùng \\n để xuống dòng, \\\\ để nhập dấu gạch chéo ngược, hoặc nhập cancel để quay lại."
+current = "Giá trị hiện tại: {value}"
+
+[language.editor.saved]
+summary = "Đã lưu {locale}. Các lựa chọn ngôn ngữ không thay đổi."
+change = "{key}: “{before}” đã đổi thành “{after}”."
+
+[language.editor.search]
+messages-lore = "Nhấn vào để tìm kiếm mọi tin nhắn."
+messages = "Tìm tin nhắn"
+clear = "Xóa tìm kiếm"
+
+[language.editor.section]
+search-title = "{locale} / Tìm kiếm"
+search = "Tìm kiếm"
+languages = "Ngôn ngữ"
+group-title = "{locale} / {group}"
+
+[language.editor.value]
+none = "Không có"
+empty = "(trống)"
+
+[language.error]
+unavailable-for-all = "Ngôn ngữ {locale} không khả dụng cho tất cả plugin đã chọn."
+stopping = "Không có khả năng chọn ngôn ngữ trong khi bổ sung đang dừng."
+server-locale-required = "Chọn mã ngôn ngữ như en_US làm ngôn ngữ mặc định của máy chủ."
+plugin-server-permission = "Bạn không có quyền thay đổi ngôn ngữ máy chủ cho {plugin}."
+plugin-personal-permission = "Bạn không có quyền chọn ngôn ngữ cá nhân cho {plugin}."
+personal-player-only = "Bạn phải chọn ngôn ngữ cá nhân trong trò chơi."
+personal-permission = "Bạn không có quyền chọn ngôn ngữ của mình."
+numeric-page = "Nhập số trang bằng chữ số."
+no-providers = "Không có nhà cung cấp ngôn ngữ Volmit nào khả dụng."
+editor-player-only = "Mở trình soạn thảo ngôn ngữ trong trò chơi."
+
+[language.selection]
+server-selected = "{plugin}: ngôn ngữ máy chủ hiện là {locale}."
+server-default-selected = "{plugin}: ngôn ngữ của bạn hiện theo ngôn ngữ mặc định của máy chủ."
+save-failed = "{plugin}: không thể lưu lựa chọn ngôn ngữ; hãy kiểm tra bảng điều khiển máy chủ."
+preparing = "Đang chuẩn bị ngôn ngữ {locale} cho {target}..."
+personal-selected = "{plugin}: ngôn ngữ của bạn hiện là {locale}."
+english-fallback = "{plugin}: {locale} không khả dụng; sẽ dùng tiếng Anh (en_US)."
+
+[language.usage]
+volmit-selection = "Cách dùng: /volmit plugins languages [locale]"
+selection = "Cách dùng: /{command} language self [locale|reset] or server [locale]"
+editor = "Cách dùng: /{command} language server edit [locale]"

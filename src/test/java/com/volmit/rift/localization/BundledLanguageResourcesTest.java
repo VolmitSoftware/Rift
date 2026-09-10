@@ -28,25 +28,6 @@ final class BundledLanguageResourcesTest {
     private static final Pattern COMMAND_LITERAL = Pattern.compile("/rift(?: [a-z]+)?", Pattern.CASE_INSENSITIVE);
     private static final Pattern PLACEHOLDER = Pattern.compile("\\{([a-z_]+)}");
     private static final Pattern TOKENIZER_ARTIFACT = Pattern.compile("(?:\\u2581|<unk>|\\u2047|@@|<s>|</s>)");
-    private static final Map<String, String> LOCALIZED_USAGE_WARNINGS = Map.ofEntries(
-            Map.entry("de_DE", "Verwende einen Platzhalter nur in Nachrichten"),
-            Map.entry("es_ES", "Usa cada marcador solo en mensajes"),
-            Map.entry("fi_FI", "Käytä paikkamerkkiä vain viesteissä"),
-            Map.entry("fr_FR", "Utilisez une variable uniquement dans les messages"),
-            Map.entry("he_IL", "יש להשתמש במציין מקום רק בהודעות"),
-            Map.entry("it_IT", "Usa un segnaposto solo nei messaggi"),
-            Map.entry("ja-JP", "プレースホルダーは、既定テンプレートで宣言されているメッセージでのみ使用してください"),
-            Map.entry("ko_KR", "자리표시자는 기본 템플릿에 선언된 메시지에서만 사용하세요"),
-            Map.entry("lt_LT", "Vietos žymeklį naudokite tik tuose pranešimuose"),
-            Map.entry("nl_NL", "Gebruik een tijdelijke aanduiding alleen in berichten"),
-            Map.entry("pl_PL", "Używaj znacznika tylko w wiadomościach"),
-            Map.entry("pt_PT", "Utilize um marcador apenas nas mensagens"),
-            Map.entry("ru_RU", "Используйте заполнитель только в сообщениях"),
-            Map.entry("tr_TR", "Bir yer tutucuyu yalnızca varsayılan şablonunda tanımlandığı mesajlarda kullanın"),
-            Map.entry("vi_VI", "Chỉ dùng phần giữ chỗ trong thông báo"),
-            Map.entry("zh_CN", "占位符只能用于默认模板已声明该占位符的消息"),
-            Map.entry("zh_TW", "預留位置只能用於預設範本已宣告該預留位置的訊息")
-    );
 
     @Test
     void providesExactlyTheCanonicalRemoteLanguageSources() throws Exception {
@@ -72,7 +53,7 @@ final class BundledLanguageResourcesTest {
     @Test
     void everyRemoteLocaleIsCompleteValidAndMeaningfullyTranslated() throws Exception {
         MessageCatalog catalog = RiftMessages.catalog();
-        assertThat(catalog.keys()).hasSize(198);
+        assertThat(catalog.keys()).hasSize(255);
         Set<String> expectedPlaceholders = catalog.keys().stream()
                 .flatMap(key -> key.placeholders().stream())
                 .collect(Collectors.toSet());
@@ -137,8 +118,6 @@ final class BundledLanguageResourcesTest {
 
     @Test
     void everyRemoteLocaleExplainsTheRemoteAndPrefixContractsInItsLanguage() throws Exception {
-        assertThat(LOCALIZED_USAGE_WARNINGS.keySet())
-                .containsExactlyInAnyOrderElementsOf(VolmitLocales.nonEnglish());
         for (String locale : VolmitLocales.nonEnglish()) {
             Path resource = LANGUAGE_ROOT.resolve(locale + ".toml");
             String content = Files.readString(resource);
@@ -146,7 +125,8 @@ final class BundledLanguageResourcesTest {
 
             assertThat(header)
                     .describedAs("localized placeholder warning in %s", resource)
-                    .contains(LOCALIZED_USAGE_WARNINGS.get(locale), "{prefix}", "runtime.prefix");
+                    .contains("{prefix}", "runtime.prefix", "plugins/Rift/languages/" + locale + ".toml");
+            assertThat(header.lines().filter(line -> line.startsWith("# === ")).count()).isEqualTo(4);
             assertThat(header.lines().findFirst().orElseThrow())
                     .describedAs("localized title in %s", resource)
                     .doesNotContain("Rift language file");

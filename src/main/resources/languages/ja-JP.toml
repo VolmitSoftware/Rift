@@ -1,39 +1,51 @@
-# Rift 言語ファイル（日本語 - 日本）。
-# このファイルは存在しない場合にのみダウンロードされます。languages/ja-JP.toml を直接編集してください。
-# ローカルの変更は自動的に上書きされません。未指定の項目は英語で補完されます。
-# 以下のメッセージを編集できます。保存した変更は自動的に検出され、適用されます。
-# 各プレースホルダーは波括弧を含め、記載どおりに残してください。
-# プレースホルダーは、既定テンプレートで宣言されているメッセージでのみ使用してください。未対応のプレースホルダーは置換されません。
+# Rift — ja-JP
+#
+# === ファイルの編集 ===
+# plugins/Rift/languages/ja-JP.toml
+# このファイルを直接編集できます。ローカルの変更は保持され、不足または無効な項目には内蔵の英語を使用します。
+# /rift language server edit ja-JP
+#
+# === 接頭辞 ===
 # 接頭辞: {prefix}=グローバルな runtime.prefix の値です。個別のメッセージから {prefix} を削除すると、その場所だけ非表示になります。
-# 使用可能なプレースホルダー：
 #
-# {argument} - コマンド引数
-# {category} - コマンドのカテゴリ
-# {command} - コマンドの文字列または名前
-# {count} - 項目または結果の件数
-# {detail} - 説明の詳細
-# {id} - 識別子
-# {key} - 設定またはメッセージのキー
-# {label} - 表示ラベル
-# {locale} - 言語ロケール
-#   {personal}      個人設定のロケール
-# {name} - 項目名または表示名
-# {operation} - 操作名
-# {parameter} - パラメーター名
-# {permission} - 権限ノード
-# {player} - プレイヤー名
-# {reason} - 理由またはエラーの詳細
-# {seconds} - 秒単位の時間
-# {setting} - 設定名
-# {before} - 変更前の値
-# {after} - 変更後の値
-# {title} - タイトル文字列
-# {type} - 値またはデータの型
-# {usage} - コマンドの使用法
-# {value} - 現在または新しい値
-# {version} - バージョン
-# {world} - ワールド名
+# === 書式 ===
+# 色: &0-&f、&k-&r、&#RRGGBB、&xRRGGBB、&x&R&R&G&G&B&B、[RRGGBB]。独自書式には MiniMessage も使用できます。
 #
+# === 変数 ===
+# 変数名を変更せず、各メッセージに元からある変数だけを使用してください。
+#   {after}  変更後の値
+#   {argument}  コマンド引数
+#   {before}  変更前の値
+#   {category}  コマンドのカテゴリ
+#   {command}  コマンドの文字列または名前
+#   {count}  項目または結果の件数
+#   {detail}  説明の詳細
+#   {group}  許可またはプレイヤーグループ
+#   {id}  識別子
+#   {key}  設定またはメッセージのキー
+#   {label}  表示ラベル
+#   {line}  ラインまたはライン番号
+#   {locale}  言語ロケール
+#   {maximum}  最大許容値
+#   {name}  項目名または表示名
+#   {operation}  操作名
+#   {parameter}  パラメーター名
+#   {permission}  権限ノード
+#   {personal}  個人設定のロケール
+#   {player}  プレイヤー名
+#   {plugin}  プラグイン名
+#   {prefix}  グローバルな runtime.prefix の値です。個別のメッセージから {prefix} を削除すると、その場所だけ非表示になります。
+#   {reason}  理由またはエラーの詳細
+#   {seconds}  秒単位の時間
+#   {setting}  設定名
+#   {target}  ターゲットプレーヤー、エンティティティティ、または値
+#   {title}  タイトル文字列
+#   {type}  値またはデータの型
+#   {usage}  コマンドの使用法
+#   {value}  現在または新しい値
+#   {variables}  使用可能なプレースホルダー
+#   {version}  バージョン
+#   {world}  ワールド名
 
 [runtime]
 prefix = "&5&lRIFT&r &8›&r "
@@ -132,26 +144,26 @@ world_counts = "ワールド"
 quarantine_entries = "Quarantine エントリ"
 
 [rift.explain]
-loaded = "????? Bukkit 現在、メモリにこの世界が活躍しています。"
-managed = "????? Rift 世界中のプロファイルを所有し、発電機とスタートアップの設定を復元できます。"
-on_disk = "世界がロードされるか、または有効な世界ディレクトリが含まれているか level.dat."
-environment = "ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ Bukkit ライブワールドやマネージドプロファイルで記録された世界環境。"
-generator = "発電機 Rift この管理された世界がロードしたときに再適用されます。 void です。 Rift's の組み込みの空の発電機。"
-seed = "この世界のために記録された種子。この表示値を変更することにより、既存の地形は再生されません。"
-autoload = "????? Rift サーバ起動時に自動で管理された世界をロードします。"
-protected = "保護された管理された世界は移動できません Rift 検疫。"
-operation_active = "現在、ライフサイクルの運用が保持されているかどうか Rift's per-world ロック。"
-server = "アクティブサーバの実装とバージョンが報告 Bukkit."
-java_runtime = "ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ザ・ Java 現在、サーバーをホスティングしているランタイム。 Rift's バイトコードは互換性がありません Java 17."
-plugin_bytecode = "最古の Java ローディングできるランタイム Rift's コンパイルされたクラス。"
-platform = "スケジューラとサーバーAPIファミリー Rift 実行時に検出される。"
-dynamic_lifecycle = "このプラットフォームは、ランタイム・ワールドを安全に公開するかどうかにかかわらず、操作を生成、負荷、アンロード、検疫、および復元します。"
-world_container = "サーバディレクトリー Bukkit 世界のフォルダが保存されます。"
-writable = "オペレーティングシステムが現在許可しているかどうか Rift 世界の容器の中に書き込む。"
-locale = "アクティブ言語ファイル plugins/Rift/languages. エントリを欠くと、編集可能な英語のデフォルトが使用されます。"
-world_counts = "ロードされたカウントのアクティブ Bukkit 世界のマネージドカウント Rift プロファイル; 欠落したカウントは、ディスクにロードされていないか、提示されていないプロファイルを管理しました。"
-quarantine = "世界を横に動かす Rift 検疫 ID で復元できるように削除して使用可能です。"
-world_entry = "今すぐロードされた手段; 管理された手段 Rift プロファイルを持ちます。ディスク上には、有効なアンロードされた世界フォルダが存在することを意味します。"
+loaded = "Bukkit が現在このワールドをメモリー上で有効にしているかを示します。"
+managed = "Rift がこのワールドのプロファイルを管理し、ジェネレーターと起動設定を復元できるかを示します。"
+on_disk = "ワールドが読み込まれているか、level.dat を含む有効なワールドフォルダーがあるかを示します。"
+environment = "読み込み中のワールドまたは管理プロファイルに記録された Bukkit のワールド環境です。"
+generator = "この管理対象ワールドの読み込み時に Rift が再適用するジェネレーターです。void は Rift 内蔵の空ワールド用ジェネレーターです。"
+seed = "このワールドに記録されたシード値です。この表示値を変えても既存の地形は再生成されません。"
+autoload = "サーバー起動時に Rift がこの管理対象ワールドを自動で読み込むかを示します。"
+protected = "保護された管理対象ワールドは Rift の隔離領域へ移動できません。"
+operation_active = "ワールドの作成・読み込み・削除などの処理が、現在 Rift のワールド単位のロックを保持しているかを示します。"
+server = "Bukkit が報告する、稼働中のサーバー実装とバージョンです。"
+java_runtime = "現在サーバーを実行している Java ランタイムです。Rift のバイトコードは Java 17 との互換性を維持しています。"
+plugin_bytecode = "Rift のコンパイル済みクラスを読み込める、最も古い Java ランタイムのバージョンです。"
+platform = "Rift が実行時に検出したスケジューラーとサーバー API の系統です。"
+dynamic_lifecycle = "このプラットフォームが稼働中のワールド作成・読み込み・アンロード・隔離・復元を安全に実行できるかを示します。"
+world_container = "Bukkit のワールドフォルダーを保存するサーバーディレクトリです。"
+writable = "OS が現在 Rift にワールド格納ディレクトリへの書き込みを許可しているかを示します。"
+locale = "plugins/Rift/languages 内の使用中の言語ファイル。不足している項目には内蔵の英語を使用します。"
+world_counts = "読み込み数は稼働中の Bukkit ワールド数、管理数は Rift プロファイル数です。不明数は、読み込まれておらずディスク上にもない管理プロファイル数です。"
+quarantine = "Rift の delete で退避され、隔離 ID を指定して復元できるワールドです。"
+world_entry = "読み込み済みは現在稼働中、管理対象は Rift のプロファイルがあることを示します。ディスク上は、有効な未読み込みワールドフォルダーがあることを示します。"
 
 [rift.feedback]
 title = "&d&lRIFT"
@@ -254,6 +266,9 @@ missing_argument = "引数 \"{parameter}\" ({type}) が必要です"
 execution_failed = "コマンド {command} の実行に失敗しました: {reason}"
 
 [language.menu]
+selected = "選択済み"
+command = "コマンド: {command}"
+all-volmit-plugins = "すべてのVolmitプラグイン"
 your_language = "あなたの言語"
 reset_your_language = "自分の言語をリセット"
 server_default = "サーバーのデフォルト"
@@ -268,3 +283,89 @@ edit_description = "言語ごとのメッセージエディターを開きます
 select_description = "クリックしてこの言語を選択します。"
 remove_personal_description = "個人の言語選択を削除します。"
 no_controls = "利用できる言語設定はありません。"
+
+[language.editor]
+loading = "{locale}のメッセージを読み込んでいます..."
+
+[language.editor.category]
+open = "&8クリックしてこのグループを開きます。&r"
+message-count = "&7{count}件のメッセージ&r"
+
+[language.editor.error]
+unable-to-edit = "編集できませんでした: {reason}"
+no-permission = "{plugin}の言語を編集する権限がありません。"
+
+[language.editor.input]
+unable-to-save = "保存できませんでした: {reason}"
+too-long = "入力は{maximum}文字以内にしてください。"
+expired = "言語エディターの入力時間が切れました。"
+
+[language.editor.locale]
+open = "&8クリックしてこの言語を開きます。&r"
+
+[language.editor.message]
+variables = "&8{variables}&r"
+edit-plural = "&7クリックして複数形を編集します。&r"
+edit-lines = "&7クリックして各行を編集します。&r"
+edit-chat = "&7クリックしてチャットで編集します。&r"
+current-value = "&7現在の値:&r"
+
+[language.editor.navigation]
+previous-page = "&e前のページ&r"
+next-page = "&e次のページ&r"
+close = "&c閉じる&r"
+back = "&e戻る&r"
+
+[language.editor.part]
+line = "行{line}"
+
+[language.editor.prompt]
+variables = "変数: {variables}"
+value = "{key}の新しい値をチャットに入力してください。"
+search = "メッセージキーまたは本文を検索してください。cancelと入力すると戻ります。"
+guidance = "改行には\\n、バックスラッシュには\\\\を使ってください。cancelと入力すると戻ります。"
+current = "現在の値: {value}"
+
+[language.editor.saved]
+summary = "{locale}を保存しました。言語の選択は変更されていません。"
+change = "{key}: 「{before}」を「{after}」に変更しました。"
+
+[language.editor.search]
+messages-lore = "クリックしてすべてのメッセージを検索します。"
+messages = "メッセージを検索"
+clear = "検索をクリア"
+
+[language.editor.section]
+search-title = "{locale} / 検索"
+search = "検索"
+languages = "言語"
+group-title = "{locale} / {group}"
+
+[language.editor.value]
+none = "なし"
+empty = "(空)"
+
+[language.error]
+unavailable-for-all = "選択したすべてのプラグインで言語{locale}を利用できるわけではありません。"
+stopping = "プラグインを停止している間は言語を選択できません。"
+server-locale-required = "サーバーの既定の言語としてen_USなどの言語コードを選択してください。"
+plugin-server-permission = "{plugin}のサーバー言語を変更する権限がありません。"
+plugin-personal-permission = "{plugin}の個人言語を選択する権限がありません。"
+personal-player-only = "プレイヤーの個人言語はゲーム内で選択してください。"
+personal-permission = "個人言語を選択する権限がありません。"
+numeric-page = "ページ番号を数字で入力してください。"
+no-providers = "利用できるVolmit言語プロバイダーがありません。"
+editor-player-only = "ゲーム内で言語エディターを開いてください。"
+
+[language.selection]
+server-selected = "{plugin}: サーバー言語を{locale}に変更しました。"
+server-default-selected = "{plugin}: 個人言語はサーバーの既定の言語に従うようになりました。"
+save-failed = "{plugin}: 言語の選択を保存できませんでした。サーバーコンソールを確認してください。"
+preparing = "{target}の言語{locale}を準備しています..."
+personal-selected = "{plugin}: 個人言語を{locale}に変更しました。"
+english-fallback = "{plugin}: {locale}は利用できないため、英語（en_US）を使用します。"
+
+[language.usage]
+volmit-selection = "使い方: /volmit plugins languages [locale]"
+selection = "使い方: /{command} language self [locale|reset] or server [locale]"
+editor = "使い方: /{command} language server edit [locale]"

@@ -46,18 +46,18 @@ final class RiftLocalizationTest {
         assertThat(languageFiles(languages)).containsExactly("en_US.toml");
         assertThat(Files.readString(languages.resolve("en_US.toml")))
                 .contains("[runtime]", "prefix = \"&5&lRIFT&r &8›&r \"")
-                .contains("{prefix}=the global runtime.prefix value")
+                .contains("{prefix}  the global runtime.prefix value")
                 .contains("[director.runtime]");
     }
 
     @Test
-    void preparingRemoteLocaleMaterializesNoUnselectedLanguageFiles() throws Exception {
+    void preparingRemoteLocaleAlsoCreatesEditableEnglish() throws Exception {
         RiftLocalization localization = localization(new RiftConfig().normalize());
         RiftLocalization.PreparedLanguage prepared = localization.prepare("fr_FR");
 
         assertThat(prepared.selectionReady()).isFalse();
         assertThat(prepared.file()).doesNotExist();
-        assertThat(languageFiles(temporaryDirectory.resolve("languages"))).isEmpty();
+        assertThat(languageFiles(temporaryDirectory.resolve("languages"))).containsExactly("en_US.toml");
     }
 
     @Test
@@ -140,7 +140,7 @@ final class RiftLocalizationTest {
     }
 
     @Test
-    void rejectsInvalidSelectedFilesWithoutReplacingActiveLanguage() throws Exception {
+    void invalidEntriesUseEnglishWhileKeepingTheSelectedLocale() throws Exception {
         RiftLocalization localization = localization(new RiftConfig().normalize());
         assertThat(localization.loadInitial()).isTrue();
         Path french = temporaryDirectory.resolve("languages").resolve("fr_FR.toml");
@@ -148,10 +148,30 @@ final class RiftLocalizationTest {
                 "[rift.message]\ncreated = \"{prefix}&cMissing the required world placeholder\"\n",
                 StandardCharsets.UTF_8);
 
-        assertThatThrownBy(() -> localization.prepare("fr_FR"))
-                .isInstanceOf(IOException.class);
-        assertThat(localization.activeLocale()).isEqualTo("en_US");
+        localization.install(localization.prepare("fr_FR"));
+        assertThat(localization.activeLocale()).isEqualTo("fr_FR");
+        assertThat(localization.text(RiftMessages.CREATED,
+                MessageArgs.builder().untrusted("world", "test").build()).plain())
+                .contains("Created and managed test.");
         assertThat(Files.readString(french)).contains("Missing the required world placeholder");
+    }
+
+    @Test
+    void partialDownloadsAcceptMissingAndInvalidTranslations() throws Exception {
+        RiftLocalization localization = localization(new RiftConfig().normalize());
+        localization.validateDownloadedContent("fr_FR", "");
+        localization.validateDownloadedContent("fr_FR", "[runtime]\nprefix = 42\n");
+        localization.validateDownloadedContent("fr_FR", "[rift.message]\ncreated = \"{wrong}\"\n");
+    }
+
+    @Test
+    void malformedLanguageSnapshotUsesEnglish() throws Exception {
+        RiftLocalization localization = localization(new RiftConfig().normalize());
+        assertThat(localization.loadInitial()).isTrue();
+        localization.install(localization.prepareSnapshot("en_US", "[rift.message]\ncreated = \"unterminated"));
+        assertThat(localization.text(RiftMessages.CREATED,
+                MessageArgs.builder().untrusted("world", "test").build()).plain())
+                .contains("Created and managed test.");
     }
 
     @Test
@@ -191,7 +211,7 @@ final class RiftLocalizationTest {
         String edited = Files.readString(english);
 
         assertThat(edited)
-                .startsWith("# Rift language: en_US")
+                .startsWith("# Rift — en_US")
                 .contains("permission_denied = \"{prefix}&cEdited &f{permission}&c.\"")
                 .contains("[future]\nenabled = true");
         assertThat(localization.text(RiftMessages.PERMISSION_DENIED,

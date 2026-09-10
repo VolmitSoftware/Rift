@@ -1,39 +1,51 @@
-# Rift-kielitiedosto (Suomi - Suomi).
-# Tämä tiedosto ladataan vain, jos se puuttuu; muokkaa tiedostoa languages/fi_FI.toml suoraan.
-# Paikallisia muutoksia ei korvata automaattisesti; puuttuvat kohdat käyttävät englantia.
-# Muokkaa alla olevia viestejä; tallennetut muutokset havaitaan ja otetaan käyttöön automaattisesti.
-# Säilytä jokainen paikkamerkki täsmälleen kirjoitetussa muodossa aaltosulkeineen.
-# Käytä paikkamerkkiä vain viesteissä, joiden oletusmalli määrittää sen; tukemattomia paikkamerkkejä ei korvata.
+# Rift — fi_FI
+#
+# === Tiedoston muokkaus ===
+# plugins/Rift/languages/fi_FI.toml
+# Voit muokata tätä tiedostoa suoraan. Paikalliset muutokset säilyvät; puuttuvat tai virheelliset kohdat käyttävät sisäänrakennettua englantia.
+# /rift language server edit fi_FI
+#
+# === Etuliite ===
 # Etuliite: {prefix}=yleinen runtime.prefix-arvo. Poista {prefix} yksittäisestä viestistä piilottaaksesi sen siinä.
-# Käytettävissä olevat paikkamerkit:
 #
-# {argument} - komennon argumentti
-# {category} - komentoluokka
-# {command} - komennon teksti tai nimi
-# {count} - kohteiden tai tulosten määrä
-# {detail} - kuvaava lisätieto
-# {id} - tunniste
-# {key} - asetuksen tai viestin avain
-# {label} - näyttönimike
-# {locale} - kielen alueasetus
-#   {personal}      henkilökohtainen kielitunnus
-# {name} - merkinnän tai näytön nimi
-# {operation} - toiminnon nimi
-# {parameter} - parametrin nimi
-# {permission} - käyttöoikeussolmu
-# {player} - pelaajan nimi
-# {reason} - syy tai virheen lisätieto
-# {seconds} - kesto sekunteina
-# {setting} - asetuksen nimi
-# {before} - edellinen arvo
-# {after} - uusi arvo
-# {title} - otsikkoteksti
-# {type} - arvon tai tiedon tyyppi
-# {usage} - komennon käyttöteksti
-# {value} - nykyinen tai uusi arvo
-# {version} - versio
-# {world} - maailman nimi
+# === Muotoilu ===
+# Värit: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B ja [RRGGBB]. MiniMessage toimii myös omissa muotoiluissa.
 #
+# === Muuttujat ===
+# Säilytä muuttujien nimet ja käytä vain kunkin viestin omia muuttujia.
+#   {after}  uusi arvo
+#   {argument}  komennon argumentti
+#   {before}  edellinen arvo
+#   {category}  komentoluokka
+#   {command}  komennon teksti tai nimi
+#   {count}  kohteiden tai tulosten määrä
+#   {detail}  kuvaava lisätieto
+#   {group}  Lupa tai pelaajaryhmä
+#   {id}  tunniste
+#   {key}  asetuksen tai viestin avain
+#   {label}  näyttönimike
+#   {line}  Lähderivi tai viivanumero
+#   {locale}  kielen alueasetus
+#   {maximum}  Suurin sallittu arvo
+#   {name}  merkinnän tai näytön nimi
+#   {operation}  toiminnon nimi
+#   {parameter}  parametrin nimi
+#   {permission}  käyttöoikeussolmu
+#   {personal}  henkilökohtainen kielitunnus
+#   {player}  pelaajan nimi
+#   {plugin}  Liitännäisen nimi
+#   {prefix}  yleinen runtime.prefix-arvo. Poista {prefix} yksittäisestä viestistä piilottaaksesi sen siinä.
+#   {reason}  syy tai virheen lisätieto
+#   {seconds}  kesto sekunteina
+#   {setting}  asetuksen nimi
+#   {target}  Kohdepelaaja, yhteisö tai arvo
+#   {title}  otsikkoteksti
+#   {type}  arvon tai tiedon tyyppi
+#   {usage}  komennon käyttöteksti
+#   {value}  nykyinen tai uusi arvo
+#   {variables}  sallitut paikkamerkit
+#   {version}  versio
+#   {world}  maailman nimi
 
 [runtime]
 prefix = "&5&lRIFT&r &8›&r "
@@ -132,26 +144,26 @@ world_counts = "Maailmat"
 quarantine_entries = "Karanteenimerkinnät"
 
 [rift.explain]
-loaded = "Onko Bukkit Tällä hetkellä tämä maailma on aktiivinen muistissa."
-managed = "Onko Rift Omistaa profiilin tälle maailmalle ja voi palauttaa sen generaattori ja startup-asetukset."
-on_disk = "Onko maailma ladattu tai onko sillä voimassa oleva maailman hakemisto, joka sisältää level.dat."
-environment = "• Bukkit elävän maailman tai hallitun profiilin rekisteröimä maailmanlaajuinen ympäristö."
-generator = "Generaattori Rift Nouto tapahtuu, kun tämä hallittu maailma kuormittaa. void ilu RiftSisäänrakennettu tyhjän maailman generaattori."
-seed = "Nykyistä maastoa ei koskaan regeneroida muuttamalla tätä näyttöarvoa."
-autoload = "Onko Rift lataa tämän hallitun maailman automaattisesti aikana palvelimen käynnistys."
-protected = "Suojeltuja hallittuja maailmoja ei voi siirtää Rift Karanteeni."
-operation_active = "Onko elinkaaritoiminto tällä hetkellä käytössä RiftSe on maailmanlopun lukko."
-server = "Aktiivisen palvelimen käyttöönotto ja versio raportoinut Bukkit."
-java_runtime = "• Java Runtime tällä hetkellä isännöi palvelimen. Rift's tatecode pysyy yhteensopivana Java 17."
-plugin_bytecode = "Vanhin Java ajoaika, joka voidaan lastata RiftHän on koossa."
-platform = "Aikataulu ja palvelin API-perhe Rift Havaittu ajon aikana."
-dynamic_lifecycle = "Paljastaako tämä alusta turvallisesti ajoajan maailman luo, lastaa, purkaa, karanteeni ja palauttaa toiminnot."
-world_container = "Palvelinhakemisto, jossa Bukkit maailman kansiot tallennetaan."
-writable = "Sallitaanko käyttöjärjestelmä tällä hetkellä Rift kirjoittaa maailman sisälle astia."
-locale = "Aktiivisen kielitiedoston alla plugins/Rift/languages. Puuttuvat merkinnät käyttävät muokattavissa Englanti oletuksia."
-world_counts = "Ladatut määrät aktiivisia Bukkit Maailmat; hallitut laskut Rift profiileja; puuttuvia lukuja hallinnoituja profiileja, joita ei ole ladattu tai jotka ovat läsnä levyllä."
-quarantine = "Maailmat siirtyivät syrjään Rift poistetaan ja voidaan palauttaa karanteenin tunnisteella."
-world_entry = "Ladatut välineet käytössä nyt; hallinnoidut keinot Rift on profiili; levyllä tarkoittaa voimassa purettu maailman kansio on olemassa."
+loaded = "Onko Bukkit ladannut tämän maailman aktiiviseksi muistiin."
+managed = "Onko Riftillä tälle maailmalle profiili, josta sen generaattori- ja käynnistysasetukset voidaan palauttaa."
+on_disk = "Onko maailma ladattu tai onko sillä kelvollinen maailmakansio, joka sisältää level.dat-tiedoston."
+environment = "Aktiiviseen maailmaan tai hallittuun profiiliin tallennettu Bukkit-maailmaympäristö."
+generator = "Generaattori, jonka Rift ottaa uudelleen käyttöön tämän hallitun maailman latautuessa. void on Riftin sisäinen tyhjän maailman generaattori."
+seed = "Maailmalle tallennettu siemenluku. Tämän näyttöarvon muuttaminen ei generoi olemassa olevaa maastoa uudelleen."
+autoload = "Lataako Rift tämän hallitun maailman automaattisesti palvelimen käynnistyessä."
+protected = "Suojattuja hallittuja maailmoja ei voi siirtää Riftin karanteeniin."
+operation_active = "Pitääkö jokin elinkaaritoiminto parhaillaan hallussaan Riftin maailmakohtaista lukkoa."
+server = "Bukkitin ilmoittama käytössä oleva palvelintoteutus ja versio."
+java_runtime = "Java-ajoympäristö, jossa palvelin on käynnissä. Riftin tavukoodi on yhteensopiva Java 17:n kanssa."
+plugin_bytecode = "Vanhin Java-ajoympäristö, joka pystyy lataamaan Riftin käännetyt luokat."
+platform = "Riftin ajon aikana tunnistama ajoitin- ja palvelinrajapintaperhe."
+dynamic_lifecycle = "Tarjoaako alusta turvalliset ajonaikaiset toiminnot maailmojen luomiseen, lataamiseen, purkamiseen, karanteeniin siirtämiseen ja palauttamiseen."
+world_container = "Palvelimen kansio, johon Bukkitin maailmakansiot tallennetaan."
+writable = "Salliiko käyttöjärjestelmä Riftin kirjoittaa maailmakansioiden sijaintikansioon."
+locale = "Aktiivinen kielitiedosto kansiossa plugins/Rift/languages. Puuttuvat merkinnät käyttävät sisäänrakennettua englantia."
+world_counts = "Ladatut tarkoittaa aktiivisten Bukkit-maailmojen määrää, hallitut Rift-profiilien määrää ja puuttuvat niiden hallittujen profiilien määrää, joiden maailmaa ei ole ladattu eikä löydy levyltä."
+quarantine = "Riftin poistotoiminnon syrjään siirtämät maailmat, jotka voidaan palauttaa karanteenitunnuksella."
+world_entry = "Ladattu tarkoittaa parhaillaan aktiivista maailmaa; hallittu tarkoittaa, että Riftillä on sille profiili; levyllä tarkoittaa, että kelvollinen mutta lataamaton maailmakansio on olemassa."
 
 [rift.feedback]
 title = "&d&lRIFT"
@@ -254,6 +266,9 @@ missing_argument = "Puuttuva argumentti \"{parameter}\" ({type})"
 execution_failed = "Komennon {command} suoritus epäonnistui: {reason}"
 
 [language.menu]
+selected = "valittu"
+command = "Komento: {command}"
+all-volmit-plugins = "Kaikki Volmit-lisäosat"
 your_language = "Oma kielesi"
 reset_your_language = "Palauta oma kielesi"
 server_default = "Palvelimen oletuskieli"
@@ -268,3 +283,89 @@ edit_description = "Avaa kielikohtainen viestieditori."
 select_description = "Napsauta valitaksesi tämän kielen."
 remove_personal_description = "Poista henkilökohtainen kielivalintasi."
 no_controls = "Sinulla ei ole käytettävissä kieliasetuksia."
+
+[language.editor]
+loading = "Ladataan kielen {locale} viestejä..."
+
+[language.editor.category]
+open = "&8Avaa tämä luokka napsauttamalla.&r"
+message-count = "&7{count} viestiä&r"
+
+[language.editor.error]
+unable-to-edit = "Muokkaus epäonnistui: {reason}"
+no-permission = "Sinulla ei ole oikeutta muokata lisäosan {plugin} kieliä."
+
+[language.editor.input]
+unable-to-save = "Tallennus epäonnistui: {reason}"
+too-long = "Syöte saa sisältää enintään {maximum} merkkiä."
+expired = "Kielieditorin syöttöaika päättyi."
+
+[language.editor.locale]
+open = "&8Avaa tämä kieli napsauttamalla.&r"
+
+[language.editor.message]
+variables = "&8{variables}&r"
+edit-plural = "&7Muokkaa monikkomuotoa napsauttamalla.&r"
+edit-lines = "&7Muokkaa yksittäisiä rivejä napsauttamalla.&r"
+edit-chat = "&7Muokkaa chatissa napsauttamalla.&r"
+current-value = "&7Nykyinen arvo:&r"
+
+[language.editor.navigation]
+previous-page = "&eEdellinen sivu&r"
+next-page = "&eSeuraava sivu&r"
+close = "&cSulje&r"
+back = "&eTakaisin&r"
+
+[language.editor.part]
+line = "Rivi {line}"
+
+[language.editor.prompt]
+variables = "Muuttujat: {variables}"
+value = "Kirjoita avaimen {key} uusi arvo chattiin."
+search = "Hae viestin avainta tai tekstiä. Palaa kirjoittamalla cancel."
+guidance = "Käytä \\n rivinvaihtoon ja \\\\ kenoviivaan tai palaa kirjoittamalla cancel."
+current = "Nykyinen arvo: {value}"
+
+[language.editor.saved]
+summary = "{locale} tallennettu. Kielivalinnat säilyvät ennallaan."
+change = "{key}: ”{before}” muutettiin arvoon ”{after}”."
+
+[language.editor.search]
+messages-lore = "Napsauta hakeaksesi kaikista viesteistä."
+messages = "Hae viestejä"
+clear = "Tyhjennä haku"
+
+[language.editor.section]
+search-title = "{locale} / Etsi"
+search = "Etsi"
+languages = "Kielet"
+group-title = "{locale} / {group}"
+
+[language.editor.value]
+none = "Ei ole"
+empty = "(tyhjä)"
+
+[language.error]
+unavailable-for-all = "Kieli {locale} ei ole saatavilla kaikille valituille lisäosille."
+stopping = "Kielivalintaa ei ole saatavilla, kun plugin pysähtyy."
+server-locale-required = "Valitse palvelimen oletuskieleksi kielikoodi, kuten en_US."
+plugin-server-permission = "Sinulla ei ole oikeutta muuttaa lisäosan {plugin} palvelinkieltä."
+plugin-personal-permission = "Sinulla ei ole oikeutta valita kieltäsi lisäosalle {plugin}."
+personal-player-only = "Pelaajan kieliasetukset on valittava pelissä."
+personal-permission = "Sinulla ei ole lupaa valita kieltäsi."
+numeric-page = "Anna sivunumero numerona."
+no-providers = "Yhtään Volmit-kielipalvelua ei ole saatavilla."
+editor-player-only = "Avaa kielieditori pelissä."
+
+[language.selection]
+server-selected = "{plugin}: palvelinkieli on nyt {locale}."
+server-default-selected = "{plugin}: kielesi noudattaa nyt palvelimen oletuskieltä."
+save-failed = "{plugin}: kielivalintaa ei voitu tallentaa; tarkista palvelinkonsoli."
+preparing = "Valmistellaan kieltä {locale} kohteelle {target}..."
+personal-selected = "{plugin}: kieli on nyt {locale}."
+english-fallback = "{plugin}: {locale} ei ole saatavilla; käytetään englantia (en_US)."
+
+[language.usage]
+volmit-selection = "Käyttö: /volmit plugins languages [locale]"
+selection = "Käyttö: /{command} language self [locale|reset] or server [locale]"
+editor = "Käyttö: /{command} language server edit [locale]"

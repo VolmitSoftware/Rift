@@ -1,39 +1,51 @@
-# Archivo de idioma de Rift (Español - España).
-# Este archivo se descarga solo si no existe; edita languages/es_ES.toml directamente.
-# Los cambios locales nunca se reemplazan automáticamente; las entradas ausentes usan inglés.
-# Edita los mensajes siguientes; los cambios guardados se detectan y aplican automáticamente.
-# Conserva cada marcador exactamente como aparece, incluidas las llaves.
-# Usa cada marcador solo en mensajes cuya plantilla predeterminada lo declare; los marcadores no admitidos no se sustituyen.
+# Rift — es_ES
+#
+# === Editar el archivo ===
+# plugins/Rift/languages/es_ES.toml
+# Puede editar este archivo directamente. Los cambios locales se conservan; las entradas ausentes o no válidas usan el inglés incorporado.
+# /rift language server edit es_ES
+#
+# === Prefijo ===
 # Prefijo: {prefix}=el valor global runtime.prefix. Elimina {prefix} de un mensaje para ocultarlo solo allí.
-# Marcadores disponibles:
 #
-# {argument} - argumento del comando
-# {category} - categoría del comando
-# {command} - texto o nombre del comando
-# {count} - cantidad de elementos o resultados
-# {detail} - detalle descriptivo
-# {id} - identificador
-# {key} - clave de configuración o mensaje
-# {label} - etiqueta visible
-# {locale} - configuración regional del idioma
-#   {personal}      configuración regional personal
-# {name} - nombre de entrada o visible
-# {operation} - nombre de la operación
-# {parameter} - nombre del parámetro
-# {permission} - nodo de permiso
-# {player} - nombre del jugador
-# {reason} - motivo o detalle del error
-# {seconds} - duración en segundos
-# {setting} - nombre del ajuste
-# {before} - valor anterior
-# {after} - valor nuevo
-# {title} - texto del título
-# {type} - tipo de valor o dato
-# {usage} - texto de uso del comando
-# {value} - valor actual o nuevo
-# {version} - versión
-# {world} - nombre del mundo
+# === Formato ===
+# Colores: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B y [RRGGBB]. MiniMessage sigue disponible para formatos personalizados.
 #
+# === Variables ===
+# Mantenga los nombres de las variables y use solo las que ya contiene cada mensaje.
+#   {after}  valor nuevo
+#   {argument}  argumento del comando
+#   {before}  valor anterior
+#   {category}  categoría del comando
+#   {command}  texto o nombre del comando
+#   {count}  cantidad de elementos o resultados
+#   {detail}  detalle descriptivo
+#   {group}  Grupo de permisos o jugadores
+#   {id}  identificador
+#   {key}  clave de configuración o mensaje
+#   {label}  etiqueta visible
+#   {line}  Línea de origen o número de línea
+#   {locale}  configuración regional del idioma
+#   {maximum}  Valor máximo permitido
+#   {name}  nombre de entrada o visible
+#   {operation}  nombre de la operación
+#   {parameter}  nombre del parámetro
+#   {permission}  nodo de permiso
+#   {personal}  configuración regional personal
+#   {player}  nombre del jugador
+#   {plugin}  Nombre de plugin
+#   {prefix}  el valor global runtime.prefix. Elimina {prefix} de un mensaje para ocultarlo solo allí.
+#   {reason}  motivo o detalle del error
+#   {seconds}  duración en segundos
+#   {setting}  nombre del ajuste
+#   {target}  Objetivo jugador, entidad o valor
+#   {title}  texto del título
+#   {type}  tipo de valor o dato
+#   {usage}  texto de uso del comando
+#   {value}  valor actual o nuevo
+#   {variables}  marcadores válidos
+#   {version}  versión
+#   {world}  nombre del mundo
 
 [runtime]
 prefix = "&5&lRIFT&r &8›&r "
@@ -100,8 +112,8 @@ entry = "{prefix}&8- &f{name} &8| &7{detail}"
 detail = "{prefix}&8- &7{label}: &f{value}"
 info_title = "{prefix}&d{world}"
 status_title = "{prefix}&dRift {version} Estado"
-generator_format = "{prefix}&7Custom formato: &fPluginName[:generador-id]"
-folia_status_note = "{prefix}&eFolia soportes Rift's leer, editor, perfil y características de teleport; ciclo de vida dinámico mundial está cerrado por la plataforma API."
+generator_format = "{prefix}&7Formato personalizado: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&eFolia admite las funciones de consulta, edición, perfiles y teletransporte de Rift; el ciclo de vida dinámico de los mundos depende de la API de la plataforma."
 
 [rift.label]
 worlds = "Mundos"
@@ -121,37 +133,37 @@ configured_generators = "Generadores configurados"
 available = "disponible"
 unavailable = "no disponible"
 server = "Servidor"
-java_runtime = "Java Hora de correr"
-plugin_bytecode = "Plugin bytecode"
+java_runtime = "Entorno de ejecución de Java"
+plugin_bytecode = "Bytecode del plugin"
 platform = "Plataforma"
 dynamic_lifecycle = "Ciclo de vida mundial dinámico"
-world_container = "Contenedor mundial"
-writable = "Contenedor mundial writable"
-locale = "Locale"
+world_container = "Carpeta de mundos"
+writable = "Permiso de escritura en la carpeta de mundos"
+locale = "Idioma"
 world_counts = "Mundos"
 quarantine_entries = "Entradas cuarentena"
 
 [rift.explain]
-loaded = "Ya. Bukkit Actualmente tiene este mundo activo en la memoria."
-managed = "Ya. Rift posee un perfil para este mundo y puede restaurar su generador y configuración de arranque."
-on_disk = "Ya sea que el mundo esté cargado o tenga un directorio mundial válido que contenga level.dat."
-environment = "El Bukkit ambiente mundial registrado por el mundo vivo o perfil gestionado."
-generator = "El generador Rift reaplica cuando este mundo gestionado carga. void es RiftEs generador de mundo vacío incorporado."
-seed = "La semilla grabada para este mundo. El terreno existente nunca se regenera cambiando este valor de visualización."
-autoload = "Ya. Rift carga este mundo gestionado automáticamente durante el inicio del servidor."
-protected = "Los mundos gestionados protegidos no pueden ser trasladados a Rift cuarentena."
-operation_active = "Ya sea que una operación de ciclo de vida actualmente tiene RiftEs una cerradura por mundo."
-server = "Aplicación y versión del servidor activo notificadas por Bukkit."
-java_runtime = "El Java runtime actualmente hospedando el servidor. Rift's bytecode remains compatible with Java 17."
-plugin_bytecode = "El más viejo Java tiempo de ejecución capaz de cargar Rift's clases compiladas."
-platform = "El programador y el servidor API familia Rift detectado a tiempo de ejecución."
-dynamic_lifecycle = "Si esta plataforma expone con seguridad el mundo del tiempo de ejecución crear, cargar, descargar, cuarentena y restaurar operaciones."
-world_container = "El directorio servidor donde Bukkit las carpetas del mundo se almacenan."
-writable = "Si el sistema operativo permite actualmente Rift para escribir dentro del contenedor mundial."
-locale = "El archivo de idioma activo bajo plugins/Rift/languages. Las entradas perdidas usan los defectos de inglés editables."
-world_counts = "Cuentas cargadas activas Bukkit mundos; cuentas gestionadas Rift perfiles; faltantes cuenta con perfiles gestionados que no están cargados ni presentes en el disco."
-quarantine = "Mundos dejados a un lado por Rift Borrar y disponible para restaurar por cuarentena id."
-world_entry = "Cargado significa activo ahora; medios gestionados Rift tiene un perfil; en el disco significa que existe una carpeta mundial descargada válida."
+loaded = "Indica si Bukkit mantiene actualmente este mundo activo en memoria."
+managed = "Indica si Rift tiene un perfil de este mundo y puede restaurar sus ajustes de generador y de inicio."
+on_disk = "Indica si el mundo está cargado o tiene un directorio de mundo válido que contiene level.dat."
+environment = "El entorno de mundo de Bukkit registrado en el mundo activo o en el perfil gestionado."
+generator = "El generador que Rift vuelve a aplicar al cargar este mundo gestionado. void es el generador de mundos vacíos integrado de Rift."
+seed = "La semilla registrada para este mundo. Cambiar este valor de visualización nunca regenera el terreno existente."
+autoload = "Indica si Rift carga automáticamente este mundo gestionado al iniciar el servidor."
+protected = "Los mundos gestionados protegidos no pueden trasladarse a la cuarentena de Rift."
+operation_active = "Indica si una operación del ciclo de vida mantiene actualmente el bloqueo de Rift específico de este mundo."
+server = "La implementación del servidor activo y su versión, según informa Bukkit."
+java_runtime = "El entorno de ejecución de Java que aloja actualmente el servidor. El bytecode de Rift sigue siendo compatible con Java 17."
+plugin_bytecode = "El entorno de ejecución de Java más antiguo capaz de cargar las clases compiladas de Rift."
+platform = "El planificador y la familia de API del servidor que Rift detectó durante la ejecución."
+dynamic_lifecycle = "Indica si esta plataforma permite crear, cargar, descargar, poner en cuarentena y restaurar mundos de forma segura durante la ejecución."
+world_container = "El directorio del servidor donde se almacenan las carpetas de mundos de Bukkit."
+writable = "Indica si el sistema operativo permite actualmente que Rift escriba en el directorio de mundos."
+locale = "El archivo de idioma activo en plugins/Rift/languages. Las entradas ausentes usan el inglés integrado."
+world_counts = "Cargados cuenta los mundos activos de Bukkit; gestionados cuenta los perfiles de Rift; ausentes cuenta los perfiles gestionados cuyos mundos no están cargados ni presentes en disco."
+quarantine = "Mundos apartados por el comando de eliminación de Rift que pueden restaurarse mediante su identificador de cuarentena."
+world_entry = "Cargado significa activo ahora; gestionado significa que Rift tiene un perfil; en disco significa que existe una carpeta válida de un mundo descargado."
 
 [rift.feedback]
 title = "&d&lRIFT"
@@ -175,7 +187,7 @@ poll = "&dEncuesta de recarga caliente milisegundos"
 cooldown = "&dRecarga caliente milisegundos de refrigeración"
 evacuation = "&dMundo de evacuación"
 close = "&cCerca"
-splash = "&dStartup splash screen"
+splash = "&dPantalla de inicio"
 lifecycle_feedback = "&dReseña del ciclo de vida mundial"
 teleport_feedback = "&dReacción del teleporto"
 failure_feedback = "&dIncumplimiento de la información"
@@ -207,7 +219,7 @@ title_stay = "&dTítulo mantener las garrapatas"
 title_fade_out = "&dTítulo de las garrapatas de la moda"
 
 [rift.gui.category]
-general = "&dGeneral & Safety"
+general = "&dGeneral y seguridad"
 feedback = "&dRetroalimentación \" Sonidos"
 presentation = "&dPresentación"
 diagnostics = "&dDiagnóstico&r"
@@ -254,6 +266,9 @@ missing_argument = "Falta el argumento \"{parameter}\" ({type})"
 execution_failed = "No se pudo ejecutar el comando {command}: {reason}"
 
 [language.menu]
+selected = "seleccionado"
+command = "Comando: {command}"
+all-volmit-plugins = "Todos los plugins de Volmit"
 your_language = "Tu idioma"
 reset_your_language = "Restablecer tu idioma"
 server_default = "Idioma predeterminado del servidor"
@@ -268,3 +283,89 @@ edit_description = "Abre el editor de mensajes de cada idioma."
 select_description = "Haz clic para seleccionar este idioma."
 remove_personal_description = "Elimina tu selección personal de idioma."
 no_controls = "No tienes acceso a opciones de idioma."
+
+[language.editor]
+loading = "Cargando los mensajes de {locale}..."
+
+[language.editor.category]
+open = "&8Haga clic para abrir esta categoría.&r"
+message-count = "&7{count} mensajes&r"
+
+[language.editor.error]
+unable-to-edit = "No se pudo editar: {reason}"
+no-permission = "No tienes permiso para editar los idiomas de {plugin}."
+
+[language.editor.input]
+unable-to-save = "No se pudo guardar: {reason}"
+too-long = "La entrada debe tener como máximo {maximum} caracteres."
+expired = "Se agotó el tiempo de entrada del editor de idiomas."
+
+[language.editor.locale]
+open = "&8Haga clic para abrir este idioma.&r"
+
+[language.editor.message]
+variables = "&8{variables}&r"
+edit-plural = "&7Haz clic para editar una forma plural.&r"
+edit-lines = "&7Haz clic para editar cada línea.&r"
+edit-chat = "&7Haz clic para editar en el chat.&r"
+current-value = "&7Valor actual:&r"
+
+[language.editor.navigation]
+previous-page = "&ePágina anterior&r"
+next-page = "&ePágina siguiente&r"
+close = "&cCerrar&r"
+back = "&eAtrás&r"
+
+[language.editor.part]
+line = "Línea {line}"
+
+[language.editor.prompt]
+variables = "Marcadores disponibles: {variables}"
+value = "Escribe un nuevo valor para {key} en el chat."
+search = "Busca una clave de mensaje o texto. Escribe cancel para volver."
+guidance = "Usa \\n para saltos de línea, \\\\ para una barra invertida, o escribe cancel para volver."
+current = "Valor actual: {value}"
+
+[language.editor.saved]
+summary = "Se guardó {locale}. Las selecciones de idioma no cambian."
+change = "{key}: «{before}» se cambió por «{after}»."
+
+[language.editor.search]
+messages-lore = "Haga clic para buscar todos los mensajes."
+messages = "Buscar mensajes"
+clear = "Borrar la búsqueda"
+
+[language.editor.section]
+search-title = "{locale} / Búsqueda"
+search = "Búsqueda"
+languages = "Idiomas"
+group-title = "{locale} / {group}"
+
+[language.editor.value]
+none = "Ninguno"
+empty = "(vacío)"
+
+[language.error]
+unavailable-for-all = "El idioma {locale} no está disponible para todos los plugins seleccionados."
+stopping = "No se puede elegir un idioma mientras se detiene el plugin."
+server-locale-required = "Elige un código como en_US para el idioma predeterminado del servidor."
+plugin-server-permission = "No tienes permiso para cambiar el idioma del servidor en {plugin}."
+plugin-personal-permission = "No tienes permiso para elegir tu idioma en {plugin}."
+personal-player-only = "El idioma personal debe seleccionarse dentro del juego."
+personal-permission = "Usted no tiene permiso para seleccionar su idioma."
+numeric-page = "Introduce un número de página."
+no-providers = "No hay proveedores de idiomas de Volmit disponibles."
+editor-player-only = "Abre el editor de idiomas dentro del juego."
+
+[language.selection]
+server-selected = "{plugin}: el idioma del servidor ahora es {locale}."
+server-default-selected = "{plugin}: tu idioma ahora sigue el idioma predeterminado del servidor."
+save-failed = "{plugin}: no se pudo guardar la selección de idioma; revisa la consola del servidor."
+preparing = "Preparando el idioma {locale} para {target}..."
+personal-selected = "{plugin}: tu idioma ahora es {locale}."
+english-fallback = "{plugin}: {locale} no está disponible; se usará inglés (en_US)."
+
+[language.usage]
+volmit-selection = "Uso: /volmit plugins languages [locale]"
+selection = "Uso: /{command} language self [locale|reset] or server [locale]"
+editor = "Uso: /{command} language server edit [locale]"

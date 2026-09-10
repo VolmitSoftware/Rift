@@ -1,39 +1,51 @@
-# Rift 語言檔案（繁體中文 - 台灣）。
-# 此檔案僅在缺少時下載；請直接編輯 languages/zh_TW.toml。
-# 本機變更絕不會被自動取代；缺少的項目使用英文。
-# 可編輯下方訊息；儲存的變更會被自動偵測並套用。
-# 請將每個預留位置（包括大括號）保持原樣。
-# 預留位置只能用於預設範本已宣告該預留位置的訊息；不支援的預留位置不會被替換。
+# Rift — zh_TW
+#
+# === 編輯檔案 ===
+# plugins/Rift/languages/zh_TW.toml
+# 可直接編輯此檔案。本機修改會保留；缺少或無效的項目使用內建英文文字。
+# /rift language server edit zh_TW
+#
+# === 前綴 ===
 # 前綴：{prefix}=全域 runtime.prefix 值。從個別訊息中移除 {prefix}，即可只在該處隱藏前綴。
-# 可用預留位置：
 #
-# {argument} - 指令引數
-# {category} - 指令類別
-# {command} - 指令文字或名稱
-# {count} - 項目或結果數量
-# {detail} - 描述詳情
-# {id} - 識別碼
-# {key} - 設定鍵或訊息鍵
-# {label} - 顯示標籤
-# {locale} - 語言地區
-#   {personal}      個人地區設定
-# {name} - 項目名稱或顯示名稱
-# {operation} - 操作名稱
-# {parameter} - 參數名稱
-# {permission} - 權限節點
-# {player} - 玩家名稱
-# {reason} - 原因或錯誤詳情
-# {seconds} - 持續秒數
-# {setting} - 設定名稱
-# {before} - 變更前的值
-# {after} - 變更後的值
-# {title} - 標題文字
-# {type} - 值或資料類型
-# {usage} - 指令用法文字
-# {value} - 目前值或新值
-# {version} - 版本
-# {world} - 世界名稱
+# === 格式 ===
+# 顏色：&0-&f、&k-&r、&#RRGGBB、&xRRGGBB、&x&R&R&G&G&B&B 和 [RRGGBB]。自訂格式仍可使用 MiniMessage。
 #
+# === 變數 ===
+# 請勿變更變數名稱，僅使用各訊息中原有的變數。
+#   {after}  變更後的值
+#   {argument}  指令引數
+#   {before}  變更前的值
+#   {category}  指令類別
+#   {command}  指令文字或名稱
+#   {count}  項目或結果數量
+#   {detail}  描述詳情
+#   {group}  權限或玩家群組
+#   {id}  識別碼
+#   {key}  設定鍵或訊息鍵
+#   {label}  顯示標籤
+#   {line}  來源行或行號
+#   {locale}  語言地區
+#   {maximum}  最大允許值
+#   {name}  項目名稱或顯示名稱
+#   {operation}  操作名稱
+#   {parameter}  參數名稱
+#   {permission}  權限節點
+#   {personal}  個人地區設定
+#   {player}  玩家名稱
+#   {plugin}  插件名稱
+#   {prefix}  全域 runtime.prefix 值。從個別訊息中移除 {prefix}，即可只在該處隱藏前綴。
+#   {reason}  原因或錯誤詳情
+#   {seconds}  持續秒數
+#   {setting}  設定名稱
+#   {target}  目標播放器、 實體或值
+#   {title}  標題文字
+#   {type}  值或資料類型
+#   {usage}  指令用法文字
+#   {value}  目前值或新值
+#   {variables}  可用佔位符
+#   {version}  版本
+#   {world}  世界名稱
 
 [runtime]
 prefix = "&5&lRIFT&r &8›&r "
@@ -132,26 +144,26 @@ world_counts = "世間"
 quarantine_entries = "檢疫條目"
 
 [rift.explain]
-loaded = "是否為 Bukkit 目前這個世界在記憶中非常活躍。"
-managed = "是否為 Rift 擁有此世界的配置檔案,並可以恢復其生成器和啟動設定."
-on_disk = "是否裝入了世界, 或是否有一個有效的世界目錄 。 level.dat."
-environment = "那個... Bukkit 活世界記錄的世界環境或管理概況。"
-generator = "發電機 Rift 重新應用此管理的世界載入時 。 void 為: Rift'是內建的空世界生成器."
-seed = "記錄的種子是這個世界的。 現有的地形永遠不會透過改變這個顯示值來再生成 。"
-autoload = "是否為 Rift 伺服器啟動時自動裝入此管理的世界 。"
-protected = "受保護的管理世界不能移動到 Rift 隔離。"
-operation_active = "生命週期操作目前是否有效 Rift\"每個世界的鎖。\""
-server = "正在執行的伺服器執行和版本由 : Bukkit."
-java_runtime = "那個... Java 執行時間當前託管伺服器 。 Rift'位元組程式碼仍然相容 Java 17."
-plugin_bytecode = "最年長的 Java 能夠載入的執行時間 Rift'是編成的課。"
-platform = "排程器和伺服器 API 家族 Rift 執行時檢測到 。"
-dynamic_lifecycle = "這個平臺是否安全地暴露了執行時世界的建立,裝載,解除安裝,隔離,以及恢復執行."
-world_container = "伺服器目錄 : Bukkit 世界資料夾被儲存 。"
-writable = "目前作業系統是否允許 Rift 寫在世界容器內。"
-locale = "活動語言檔案 plugins/Rift/languages。缺失的條目使用可編輯的英語預設值。"
-world_counts = "已裝入的計數活動 Bukkit 世界; 管理計數 Rift 配置檔案; 缺少既未裝入也未在磁碟上顯示的計數管理配置檔案。"
-quarantine = "世界移動到另一邊 Rift 刪除並可透過隔離ID恢復。"
-world_entry = "已裝入表示已啟用; 已管理 。 Rift 擁有配置檔案; 在磁碟上表示有效的已解除安裝的世界資料夾存在 。"
+loaded = "Bukkit 目前是否已在記憶體中啟用此世界。"
+managed = "Rift 是否管理此世界的設定檔，並能還原其生成器和啟動設定。"
+on_disk = "世界是否已載入，或存在包含 level.dat 的有效世界目錄。"
+environment = "執行中的世界或管理設定檔所記錄的 Bukkit 世界環境。"
+generator = "載入此受管理世界時，Rift 重新套用的生成器。void 是 Rift 內建的空世界生成器。"
+seed = "此世界記錄的種子。變更此顯示值不會重新生成既有地形。"
+autoload = "Rift 是否在伺服器啟動時自動載入此受管理世界。"
+protected = "受保護的管理世界不能移入 Rift 隔離區。"
+operation_active = "世界生命週期操作目前是否持有 Rift 的對應世界鎖定。"
+server = "Bukkit 回報的目前伺服器實作及版本。"
+java_runtime = "目前執行伺服器的 Java 執行環境。Rift 的位元組碼保持與 Java 17 相容。"
+plugin_bytecode = "能夠載入 Rift 已編譯類別的最舊 Java 執行環境版本。"
+platform = "Rift 在執行時偵測到的排程器和伺服器 API 類型。"
+dynamic_lifecycle = "此平台是否安全支援在執行時建立、載入、卸載、隔離和還原世界。"
+world_container = "存放 Bukkit 世界資料夾的伺服器目錄。"
+writable = "作業系統目前是否允許 Rift 寫入世界存放目錄。"
+locale = "plugins/Rift/languages 中目前使用的語言檔案。缺少的項目使用內建英文文字。"
+world_counts = "已載入數統計作用中的 Bukkit 世界；受管理數統計 Rift 設定檔；缺少數統計既未載入、磁碟上也不存在對應世界的管理設定檔。"
+quarantine = "由 Rift delete 移至隔離區、可透過隔離 ID 還原的世界。"
+world_entry = "已載入表示目前作用中；受管理表示有 Rift 設定檔；在磁碟上表示存在有效但未載入的世界資料夾。"
 
 [rift.feedback]
 title = "&d&lRIFT"
@@ -254,6 +266,9 @@ missing_argument = "缺少參數 \"{parameter}\" ({type})"
 execution_failed = "執行指令 {command} 失敗: {reason}"
 
 [language.menu]
+selected = "已選擇"
+command = "命令: {command}"
+all-volmit-plugins = "所有 Volmit 外掛"
 your_language = "您的語言"
 reset_your_language = "重設您的語言"
 server_default = "伺服器預設語言"
@@ -268,3 +283,89 @@ edit_description = "開啟各語言的訊息編輯器。"
 select_description = "點擊以選擇此語言。"
 remove_personal_description = "移除您的個人語言選擇。"
 no_controls = "您無權使用語言設定。"
+
+[language.editor]
+loading = "正在載入 {locale} 的訊息..."
+
+[language.editor.category]
+open = "&8點擊開啟此類別。&r"
+message-count = "&7{count} 則訊息&r"
+
+[language.editor.error]
+unable-to-edit = "無法編輯：{reason}"
+no-permission = "你沒有權限編輯 {plugin} 的語言。"
+
+[language.editor.input]
+unable-to-save = "無法儲存：{reason}"
+too-long = "輸入最多可包含 {maximum} 個字元。"
+expired = "語言編輯器的輸入時間已到期。"
+
+[language.editor.locale]
+open = "&8點擊開啟此語言。&r"
+
+[language.editor.message]
+variables = "&8{variables}&r"
+edit-plural = "&7點擊編輯複數形式。&r"
+edit-lines = "&7點擊逐行編輯。&r"
+edit-chat = "&7點擊在聊天中編輯。&r"
+current-value = "&7目前值:&r"
+
+[language.editor.navigation]
+previous-page = "&e前一頁&r"
+next-page = "&e下一頁&r"
+close = "&c關閉&r"
+back = "&e返回&r"
+
+[language.editor.part]
+line = "第 {line} 行"
+
+[language.editor.prompt]
+variables = "變數: {variables}"
+value = "請在聊天中輸入 {key} 的新值。"
+search = "搜尋訊息鍵或內容。輸入 cancel 返回。"
+guidance = "使用 \\n 表示換行，\\\\ 表示反斜線，或輸入 cancel 返回。"
+current = "目前值： {value}"
+
+[language.editor.saved]
+summary = "已儲存 {locale}。語言選擇保持不變。"
+change = "{key}：已將「{before}」改為「{after}」。"
+
+[language.editor.search]
+messages-lore = "點擊搜尋所有訊息。"
+messages = "搜尋訊息"
+clear = "清除搜尋"
+
+[language.editor.section]
+search-title = "{locale} / 搜尋"
+search = "搜尋"
+languages = "語言"
+group-title = "{locale} / {group}"
+
+[language.editor.value]
+none = "無"
+empty = "(空)"
+
+[language.error]
+unavailable-for-all = "語言 {locale} 並非適用於所有選取的外掛。"
+stopping = "外掛停止期間無法選擇語言。"
+server-locale-required = "請選擇 en_US 等語言代碼作為伺服器預設語言。"
+plugin-server-permission = "你沒有權限變更 {plugin} 的伺服器語言。"
+plugin-personal-permission = "你沒有權限為 {plugin} 選擇個人語言。"
+personal-player-only = "玩家必須在遊戲中選擇個人語言。"
+personal-permission = "你沒有權限選擇個人語言。"
+numeric-page = "請輸入數字頁碼。"
+no-providers = "沒有可用的 Volmit 語言提供程式。"
+editor-player-only = "請在遊戲中開啟語言編輯器。"
+
+[language.selection]
+server-selected = "{plugin}：伺服器語言現在是 {locale}。"
+server-default-selected = "{plugin}：你的語言現在跟隨伺服器預設語言。"
+save-failed = "{plugin}：無法儲存語言選擇；請檢查伺服器主控台。"
+preparing = "正在為 {target} 準備語言 {locale}..."
+personal-selected = "{plugin}：你的語言現在是 {locale}。"
+english-fallback = "{plugin}：{locale} 無法使用；將使用英語（en_US）。"
+
+[language.usage]
+volmit-selection = "用法: /volmit plugins languages [locale]"
+selection = "用法: /{command} language self [locale|reset] or server [locale]"
+editor = "用法: /{command} language server edit [locale]"

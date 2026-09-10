@@ -115,7 +115,7 @@ public final class RiftMessages {
     public static final TextKey EXPLAIN_DYNAMIC_LIFECYCLE = key("rift.explain.dynamic_lifecycle", "Whether this platform safely exposes runtime world create, load, unload, quarantine, and restore operations.");
     public static final TextKey EXPLAIN_WORLD_CONTAINER = key("rift.explain.world_container", "The server directory where Bukkit world folders are stored.");
     public static final TextKey EXPLAIN_WRITABLE = key("rift.explain.writable", "Whether the operating system currently permits Rift to write inside the world container.");
-    public static final TextKey EXPLAIN_LOCALE = key("rift.explain.locale", "The active language file under plugins/Rift/languages. Missing entries use the editable English defaults.");
+    public static final TextKey EXPLAIN_LOCALE = key("rift.explain.locale", "The active language file under plugins/Rift/languages. Missing entries use built-in English.");
     public static final TextKey EXPLAIN_WORLD_COUNTS = key("rift.explain.world_counts", "Loaded counts active Bukkit worlds; managed counts Rift profiles; missing counts managed profiles that are neither loaded nor present on disk.");
     public static final TextKey EXPLAIN_QUARANTINE = key("rift.explain.quarantine", "Worlds moved aside by Rift delete and available to restore by quarantine id.");
     public static final TextKey EXPLAIN_WORLD_ENTRY = key("rift.explain.world_entry", "Loaded means active now; managed means Rift has a profile; on disk means a valid unloaded world folder exists.");

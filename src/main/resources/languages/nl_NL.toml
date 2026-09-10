@@ -1,39 +1,51 @@
-# Rift-taalbestand (Nederlands - Nederland).
-# Dit bestand wordt alleen gedownload als het ontbreekt; bewerk languages/nl_NL.toml rechtstreeks.
-# Lokale wijzigingen worden nooit automatisch vervangen; ontbrekende waarden gebruiken Engels.
-# Bewerk de onderstaande berichten; opgeslagen wijzigingen worden automatisch gedetecteerd en toegepast.
-# Behoud elke tijdelijke aanduiding exact zoals geschreven, inclusief de accolades.
-# Gebruik een tijdelijke aanduiding alleen in berichten waarvan de standaardsjabloon deze declareert; niet-ondersteunde aanduidingen worden niet vervangen.
+# Rift — nl_NL
+#
+# === Bestand bewerken ===
+# plugins/Rift/languages/nl_NL.toml
+# Je kunt dit bestand rechtstreeks bewerken. Lokale wijzigingen blijven behouden; ontbrekende of ongeldige vermeldingen gebruiken het ingebouwde Engels.
+# /rift language server edit nl_NL
+#
+# === Voorvoegsel ===
 # Voorvoegsel: {prefix}=de globale waarde runtime.prefix. Verwijder {prefix} uit één bericht om het alleen daar te verbergen.
-# Beschikbare tijdelijke aanduidingen:
 #
-# {argument} - opdrachtargument
-# {category} - opdrachtcategorie
-# {command} - opdrachttekst of -naam
-# {count} - aantal items of resultaten
-# {detail} - beschrijvend detail
-# {id} - identificatie
-# {key} - configuratie- of berichtsleutel
-# {label} - weergavelabel
-# {locale} - taalregio
-#   {personal}      persoonlijke landinstelling
-# {name} - item- of weergavenaam
-# {operation} - naam van de bewerking
-# {parameter} - parameternaam
-# {permission} - permissieknooppunt
-# {player} - spelersnaam
-# {reason} - reden of foutdetail
-# {seconds} - duur in seconden
-# {setting} - naam van de instelling
-# {before} - vorige waarde
-# {after} - nieuwe waarde
-# {title} - titeltekst
-# {type} - waarde- of gegevenstype
-# {usage} - tekst voor opdrachtgebruik
-# {value} - huidige of nieuwe waarde
-# {version} - versie
-# {world} - wereldnaam
+# === Opmaak ===
+# Kleuren: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B en [RRGGBB]. MiniMessage blijft beschikbaar voor eigen opmaak.
 #
+# === Variabelen ===
+# Behoud de namen van variabelen en gebruik alleen de variabelen die bij het bericht horen.
+#   {after}  nieuwe waarde
+#   {argument}  opdrachtargument
+#   {before}  vorige waarde
+#   {category}  opdrachtcategorie
+#   {command}  opdrachttekst of -naam
+#   {count}  aantal items of resultaten
+#   {detail}  beschrijvend detail
+#   {group}  Toestemming of spelersgroep
+#   {id}  identificatie
+#   {key}  configuratie- of berichtsleutel
+#   {label}  weergavelabel
+#   {line}  Bronregel of regelnummer
+#   {locale}  taalregio
+#   {maximum}  Maximaal toegestane waarde
+#   {name}  item- of weergavenaam
+#   {operation}  naam van de bewerking
+#   {parameter}  parameternaam
+#   {permission}  permissieknooppunt
+#   {personal}  persoonlijke landinstelling
+#   {player}  spelersnaam
+#   {plugin}  Pluginnaam
+#   {prefix}  de globale waarde runtime.prefix. Verwijder {prefix} uit één bericht om het alleen daar te verbergen.
+#   {reason}  reden of foutdetail
+#   {seconds}  duur in seconden
+#   {setting}  naam van de instelling
+#   {target}  Doelspeler, entiteit of waarde
+#   {title}  titeltekst
+#   {type}  waarde- of gegevenstype
+#   {usage}  tekst voor opdrachtgebruik
+#   {value}  huidige of nieuwe waarde
+#   {variables}  geldige tijdelijke aanduidingen
+#   {version}  versie
+#   {world}  wereldnaam
 
 [runtime]
 prefix = "&5&lRIFT&r &8›&r "
@@ -99,7 +111,7 @@ section = "{prefix}&d{title} &8(&f{count}&8)"
 entry = "{prefix}&8- &f{name} &8| &7{detail}"
 detail = "{prefix}&8- &7{label}: &f{value}"
 info_title = "{prefix}&d{world}"
-status_title = "{prefix}&dRift {version} Status"
+status_title = "{prefix}&dStatus van Rift {version}"
 generator_format = "{prefix}&7Custom formaat: &fPluginName[:generator-id]"
 folia_status_note = "{prefix}&eFolia ondersteuning Rift's lees-, editor-, profiel- en teleportfuncties; dynamische wereldlevenscyclus wordt afgesloten door het platform API."
 
@@ -121,8 +133,8 @@ configured_generators = "Geconfigureerde generatoren"
 available = "beschikbaar"
 unavailable = "niet beschikbaar"
 server = "Server"
-java_runtime = "Java runtime"
-plugin_bytecode = "Plugin bytecode"
+java_runtime = "Java-uitvoeringsomgeving"
+plugin_bytecode = "Bytecode van de plugin"
 platform = "Platform"
 dynamic_lifecycle = "Dynamische wereldlevenscyclus"
 world_container = "Wereldcontainer"
@@ -132,26 +144,26 @@ world_counts = "Werelden"
 quarantine_entries = "Quarantaine-items"
 
 [rift.explain]
-loaded = "Of Bukkit Momenteel heeft deze wereld actief in het geheugen."
-managed = "Of Rift bezit een profiel voor deze wereld en kan zijn generator- en opstartinstellingen herstellen."
-on_disk = "Of de wereld geladen is of een geldige wereldmap bevat level.dat."
-environment = "De Bukkit wereldomgeving geregistreerd door de levende wereld of beheerd profiel."
-generator = "De generator Rift Het regent als deze beheerde wereld laadt. void is Rift's ingebouwde lege wereld generator."
-seed = "Het zaad dat voor deze wereld wordt geregistreerd. Bestaande terrein wordt nooit geregenereerd door het veranderen van deze display waarde."
-autoload = "Of Rift laadt deze beheerde wereld automatisch tijdens het opstarten van de server."
-protected = "Beschermde beheerde werelden kunnen niet worden verplaatst naar Rift quarantaine."
-operation_active = "Of een levenscyclusoperatie op dit moment aanwezig is Rift's Per-werelds slot."
-server = "De actieve server implementatie en versie gerapporteerd door Bukkit."
-java_runtime = "De Java runtime momenteel hosting van de server. Rift's bytecode blijft compatibel met Java 17."
-plugin_bytecode = "De oudste Java runtime die kan worden geladen Rift's samengesteld klassen."
-platform = "De API-familie van de scheduler en server Rift Gedetecteerd op tijd."
-dynamic_lifecycle = "Of dit platform veilig onthult runtime wereld creëren, laden, lossen, quarantaine, en herstellen operaties."
-world_container = "De servermap waar Bukkit wereldmappen worden opgeslagen."
-writable = "Of het besturingssysteem het momenteel toelaat Rift om in de wereldcontainer te schrijven."
-locale = "Het actieve taalbestand onder plugins/Rift/languages. Ontbrekende items gebruiken de bewerkbare Engelse standaardinstellingen."
-world_counts = "Geladen aantallen actief Bukkit werelden; beheerde aantallen Rift profielen; ontbrekende nummers beheerde profielen die niet zijn geladen noch aanwezig op de schijf."
-quarantine = "Werelden opzij geschoven door Rift verwijderen en beschikbaar zijn om te herstellen door quarantaine-id."
-world_entry = "Geladen betekent nu actief; beheerde middelen Rift heeft een profiel; op schijf betekent dat er een geldige ongeladen wereldmap bestaat."
+loaded = "Geeft aan of Bukkit deze wereld momenteel actief in het geheugen heeft."
+managed = "Geeft aan of Rift een profiel voor deze wereld heeft en de generator- en opstartinstellingen kan herstellen."
+on_disk = "Geeft aan of de wereld is geladen of een geldige wereldmap met level.dat heeft."
+environment = "De Bukkit-wereldomgeving die in de actieve wereld of het beheerde profiel is vastgelegd."
+generator = "De generator die Rift opnieuw toepast wanneer deze beheerde wereld wordt geladen. void is de ingebouwde generator van Rift voor lege werelden."
+seed = "De seed die voor deze wereld is vastgelegd. Het wijzigen van deze weergavewaarde genereert bestaand terrein nooit opnieuw."
+autoload = "Geeft aan of Rift deze beheerde wereld automatisch laadt wanneer de server opstart."
+protected = "Beschermde beheerde werelden kunnen niet naar de quarantaine van Rift worden verplaatst."
+operation_active = "Geeft aan of een levenscyclusbewerking momenteel de wereldspecifieke vergrendeling van Rift bezet houdt."
+server = "De actieve serverimplementatie en versie die Bukkit rapporteert."
+java_runtime = "De Java-runtime waarop de server momenteel draait. De bytecode van Rift blijft compatibel met Java 17."
+plugin_bytecode = "De oudste Java-runtime die de gecompileerde klassen van Rift kan laden."
+platform = "De familie van de scheduler en server-API die Rift tijdens het uitvoeren heeft gedetecteerd."
+dynamic_lifecycle = "Geeft aan of dit platform tijdens het uitvoeren veilig het aanmaken, laden, ontladen, in quarantaine plaatsen en herstellen van werelden ondersteunt."
+world_container = "De servermap waarin de wereldmappen van Bukkit worden opgeslagen."
+writable = "Geeft aan of het besturingssysteem Rift momenteel toestaat te schrijven in de map die de werelden bevat."
+locale = "Het actieve taalbestand in plugins/Rift/languages. Ontbrekende vermeldingen gebruiken het ingebouwde Engels."
+world_counts = "Geladen telt actieve Bukkit-werelden; beheerd telt Rift-profielen; ontbrekend telt beheerde profielen waarvan de wereld niet is geladen en niet op schijf staat."
+quarantine = "Werelden die door de verwijderfunctie van Rift apart zijn gezet en via hun quarantaine-id kunnen worden hersteld."
+world_entry = "Geladen betekent nu actief; beheerd betekent dat Rift een profiel heeft; op schijf betekent dat er een geldige map van een niet-geladen wereld bestaat."
 
 [rift.feedback]
 title = "&d&lRIFT"
@@ -254,6 +266,9 @@ missing_argument = "Ontbrekend argument \"{parameter}\" ({type})"
 execution_failed = "Opdracht {command} kon niet worden uitgevoerd: {reason}"
 
 [language.menu]
+selected = "geselecteerd"
+command = "Commando: {command}"
+all-volmit-plugins = "Alle Volmit-plugins"
 your_language = "Jouw taal"
 reset_your_language = "Jouw taalkeuze herstellen"
 server_default = "Standaardtaal van de server"
@@ -268,3 +283,89 @@ edit_description = "Open de berichteneditor voor elke taal."
 select_description = "Klik om deze taal te selecteren."
 remove_personal_description = "Verwijder jouw persoonlijke taalkeuze."
 no_controls = "Je hebt geen toegang tot taalinstellingen."
+
+[language.editor]
+loading = "Berichten voor {locale} laden..."
+
+[language.editor.category]
+open = "&8Klik om deze categorie te openen.&r"
+message-count = "&7{count} berichten&r"
+
+[language.editor.error]
+unable-to-edit = "Bewerken mislukt: {reason}"
+no-permission = "Je hebt geen toestemming om de talen van {plugin} te bewerken."
+
+[language.editor.input]
+unable-to-save = "Opslaan mislukt: {reason}"
+too-long = "De invoer mag maximaal {maximum} tekens bevatten."
+expired = "De invoer voor de taalbewerker is verlopen."
+
+[language.editor.locale]
+open = "&8Klik om deze taal te openen.&r"
+
+[language.editor.message]
+variables = "&8{variables}&r"
+edit-plural = "&7Klik om een meervoudsvorm te bewerken.&r"
+edit-lines = "&7Klik om afzonderlijke regels te bewerken.&r"
+edit-chat = "&7Klik om in de chat te bewerken.&r"
+current-value = "&7Huidige waarde:&r"
+
+[language.editor.navigation]
+previous-page = "&eVorige pagina&r"
+next-page = "&eVolgende pagina&r"
+close = "&cSluiten&r"
+back = "&eTerug&r"
+
+[language.editor.part]
+line = "Regel {line}"
+
+[language.editor.prompt]
+variables = "Variabelen: {variables}"
+value = "Typ in de chat een nieuwe waarde voor {key}."
+search = "Zoek op berichtsleutel of tekst. Typ cancel om terug te gaan."
+guidance = "Gebruik \\n voor een nieuwe regel, \\\\ voor een backslash, of typ cancel om terug te gaan."
+current = "Huidige waarde: {value}"
+
+[language.editor.saved]
+summary = "{locale} opgeslagen. De taalkeuzes blijven ongewijzigd."
+change = "{key}: “{before}” is gewijzigd in “{after}”."
+
+[language.editor.search]
+messages-lore = "Klik om alle berichten te doorzoeken."
+messages = "Berichten doorzoeken"
+clear = "Zoekopdracht wissen"
+
+[language.editor.section]
+search-title = "{locale} / Zoeken"
+search = "Zoeken"
+languages = "Talen"
+group-title = "{locale} / {group}"
+
+[language.editor.value]
+none = "Geen"
+empty = "(leeg)"
+
+[language.error]
+unavailable-for-all = "De taal {locale} is niet voor alle geselecteerde plugins beschikbaar."
+stopping = "Taalselectie is niet beschikbaar terwijl de plugin stopt."
+server-locale-required = "Kies een taalcode zoals en_US voor de standaardtaal van de server."
+plugin-server-permission = "Je hebt geen toestemming om de servertaal voor {plugin} te wijzigen."
+plugin-personal-permission = "Je hebt geen toestemming om je taal voor {plugin} te kiezen."
+personal-player-only = "Spelertaalvoorkeuren moeten in het spel worden geselecteerd."
+personal-permission = "U hebt geen toestemming om uw taal te selecteren."
+numeric-page = "Voer een paginanummer in."
+no-providers = "Er zijn geen Volmit-taalaanbieders beschikbaar."
+editor-player-only = "Open de taalbewerker in het spel."
+
+[language.selection]
+server-selected = "{plugin}: servertaal is nu {locale}."
+server-default-selected = "{plugin}: je taal volgt nu de standaardtaal van de server."
+save-failed = "{plugin}: de taalkeuze kon niet worden opgeslagen; controleer de serverconsole."
+preparing = "Taal {locale} wordt voorbereid voor {target}..."
+personal-selected = "{plugin}: uw taal is nu {locale}."
+english-fallback = "{plugin}: {locale} is niet beschikbaar; Engels (en_US) wordt gebruikt."
+
+[language.usage]
+volmit-selection = "Gebruik: /volmit plugins languages [locale]"
+selection = "Gebruik: /{command} language self [locale|reset] or server [locale]"
+editor = "Gebruik: /{command} language server edit [locale]"

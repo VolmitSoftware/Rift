@@ -1,5 +1,7 @@
 package com.volmit.rift.localization;
 
+import art.arcane.volmlib.util.localization.LanguageFileHeader;
+
 import art.arcane.volmlib.util.director.DirectorTextResolver;
 import art.arcane.volmlib.util.io.AtomicFileIO;
 import art.arcane.volmlib.util.localization.LanguageReferenceRenderer;
@@ -101,7 +103,6 @@ public final class RiftLocalization implements AutoCloseable {
                     "src/main/resources/languages",
                     ".toml",
                     "rift-language-source.properties",
-                    new File(directory.getParentFile(), ".language-cache").toPath(),
                     RiftLocalization.class.getClassLoader()
             ));
         } catch (Throwable failure) {
@@ -167,16 +168,19 @@ public final class RiftLocalization implements AutoCloseable {
     public synchronized PreparedLanguage prepare(String requestedLocale) throws IOException {
         String locale = canonicalLocale(requestedLocale);
         prepareLanguageDirectory();
+        createEnglishLanguageIfMissing();
         File target = file(locale);
         requireRegularLanguageFile(target, true);
-        if (!target.exists() && locale.equalsIgnoreCase(CATALOG.englishLocale())) {
-            createEnglishLanguageIfMissing();
-        } else if (!target.exists() && !isRepositoryLocale(locale)) {
+        if (!target.exists() && !isRepositoryLocale(locale)) {
             createCustomLanguageIfMissing(locale);
         }
         ArrayList<LocaleOverlay> overlays = new ArrayList<>();
         if (target.isFile()) {
-            overlays.add(createOverlay(locale, target.getPath(), loadEditableLanguage(target)));
+            try {
+                overlays.add(createOverlay(locale, target.getPath(), loadEditableLanguage(target)));
+            } catch (IOException | RuntimeException exception) {
+                plugin.getLogger().log(Level.WARNING, "Using English for unreadable language file " + target, exception);
+            }
         }
         PreparedLanguage prepared = createPrepared(locale, target, overlays, target.isFile());
         refreshAvailableLocales();
@@ -190,7 +194,13 @@ public final class RiftLocalization implements AutoCloseable {
         String locale = canonicalLocale(requestedLocale);
         File target = file(locale);
         requireRegularLanguageFile(target, false);
-        Map<String, String> values = parseValues(raw, locale);
+        Map<String, String> values;
+        try {
+            values = parseValues(raw, locale);
+        } catch (IOException exception) {
+            plugin.getLogger().log(Level.WARNING, "Using English for unreadable language snapshot " + target, exception);
+            values = Map.of();
+        }
         LocaleOverlay overlay = createOverlay(locale, target.getPath(), values);
         return createPrepared(locale, target, List.of(overlay), true);
     }
@@ -198,6 +208,7 @@ public final class RiftLocalization implements AutoCloseable {
     public synchronized PreparedLanguage englishFallback(String locale) throws IOException {
         String requiredLocale = canonicalLocale(locale);
         prepareLanguageDirectory();
+        createEnglishLanguageIfMissing();
         refreshAvailableLocales();
         return new PreparedLanguage(
                 requiredLocale,
@@ -288,6 +299,13 @@ public final class RiftLocalization implements AutoCloseable {
         if (!(definition instanceof TextKey)) {
             throw new IOException("Language editor does not support key shape: " + definition.id());
         }
+        try {
+            validateTemplate("language:" + key, value, sampleArguments(definition.placeholders()));
+            LocalizationSnapshot.create(new LocalizationCandidate(CATALOG,
+                    List.of(LocaleOverlay.builder("editor", requiredLocale).text(key, value).build()), ENGLISH_PLURALS));
+        } catch (RuntimeException exception) {
+            throw new IOException("Language file contains invalid message markup: " + key, exception);
+        }
         PreparedLanguage current = prepare(requiredLocale);
         if (!current.selectionReady()) {
             throw new IOException("Language file is not installed: " + requiredLocale);
@@ -299,7 +317,7 @@ public final class RiftLocalization implements AutoCloseable {
         if (content.getBytes(StandardCharsets.UTF_8).length > MAXIMUM_LANGUAGE_BYTES) {
             throw new IOException("Language file exceeds the 2 MiB safety limit");
         }
-        Map<String, String> values = TomlLanguageParser.parseText(content, CATALOG.byId().keySet());
+        Map<String, String> values = TomlLanguageParser.parseValidText(content, CATALOG);
         LocaleOverlay overlay = createOverlay(requiredLocale, target.getPath(), values);
         PreparedLanguage prepared = createPrepared(requiredLocale, target, List.of(overlay), true);
         verifyUnchanged(target, source);
@@ -552,9 +570,6 @@ public final class RiftLocalization implements AutoCloseable {
     void validateDownloadedContent(String locale, String content) throws IOException {
         Set<String> expected = CATALOG.byId().keySet();
         Map<String, String> values = parseStrictValues(content, locale, expected);
-        if (values.isEmpty()) {
-            throw new IOException("Downloaded locale does not contain any recognized Rift messages: " + locale);
-        }
         LocaleOverlay overlay = createOverlay(locale, "download:" + locale, values);
         try {
             LocalizationSnapshot.create(new LocalizationCandidate(CATALOG, List.of(overlay), ENGLISH_PLURALS));
@@ -640,11 +655,10 @@ public final class RiftLocalization implements AutoCloseable {
     private synchronized LocalizationSnapshot loadSelectionSnapshot(String locale) throws Exception {
         String requiredLocale = canonicalLocale(locale);
         prepareLanguageDirectory();
+        createEnglishLanguageIfMissing();
         File target = file(requiredLocale);
         requireRegularLanguageFile(target, true);
-        if (!target.exists() && requiredLocale.equalsIgnoreCase(CATALOG.englishLocale())) {
-            createEnglishLanguageIfMissing();
-        } else if (!target.exists() && hasRemoteCatalogLocale(requiredLocale)) {
+        if (!target.exists() && hasRemoteCatalogLocale(requiredLocale)) {
             URI source = remoteCatalog.sourceUri(requiredLocale);
             plugin.getLogger().info("Downloading Rift language " + requiredLocale + " from " + source + "...");
             String content = remoteCatalog.readOrInstall(
@@ -704,7 +718,8 @@ public final class RiftLocalization implements AutoCloseable {
                 validateTemplate("language:" + entry.getKey(), entry.getValue(),
                         sampleArguments(definition.placeholders()));
             } catch (RuntimeException exception) {
-                throw new IOException("Language file contains invalid message markup: " + entry.getKey(), exception);
+                plugin.getLogger().log(Level.WARNING, "Using English for invalid language message " + source + ":" + entry.getKey(), exception);
+                continue;
             }
             overlay.text(entry.getKey(), entry.getValue());
         }
@@ -714,7 +729,7 @@ public final class RiftLocalization implements AutoCloseable {
     private Map<String, String> loadEditableLanguage(File file) throws IOException {
         FileSource source = readFileSource(file);
         try {
-            return TomlLanguageParser.parseText(source.content(), CATALOG.byId().keySet());
+            return TomlLanguageParser.parseValidText(source.content(), CATALOG);
         } catch (IOException exception) {
             throw new IOException("Invalid TOML in " + file.getName() + ": " + exception.getMessage(), exception);
         }
@@ -733,7 +748,7 @@ public final class RiftLocalization implements AutoCloseable {
             throw new IOException("Language file exceeds the 2 MiB safety limit");
         }
         try {
-            return TomlLanguageParser.parseText(content, expected);
+            return TomlLanguageParser.parseValidText(content, CATALOG);
         } catch (IOException exception) {
             throw new IOException("Invalid TOML in " + locale + ".toml: " + exception.getMessage(), exception);
         }
@@ -877,23 +892,45 @@ public final class RiftLocalization implements AutoCloseable {
     }
 
     private static List<String> englishHeader(String locale) {
-        return List.of(
-                "Rift language: " + locale,
-                "This editable language file is created or downloaded only when missing.",
-                "Local edits are never automatically replaced; missing entries use built-in English.",
-                "Saved changes to the selected locale hot reload automatically.",
-                "Colors: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B, and [RRGGBB].",
-                "Shipped defaults use classic ampersand codes; MiniMessage remains supported for custom formatting.",
-                "Keep only the placeholders already present in each message and never rename them.",
-                "Prefix: {prefix}=the global runtime.prefix value. Remove {prefix} from one message to hide it there.",
-                "Commands: {argument}=argument; {command}=command path; {key}=parameter key; {parameter}=parameter; {type}=value type; {usage}=usage text.",
-                "Worlds: {world}=world; {player}=player; {operation}=operation; {id}=quarantine ID; {seconds}=duration; {permission}=permission.",
-                "Lists: {count}=entry count; {name}=entry name; {detail}=entry detail; {title}=section title; {label}=display label.",
-                "Configuration: {category}=category; {setting}=setting; {before}=previous value; {after}=new value; {value}=current or new value; {locale}=locale; {reason}=failure detail.",
-                "Language selection: {personal}=a player's personal locale when it differs from the server default.",
-                "Runtime: {version}=plugin version.",
-                "Prefix & or [ with a backslash to display it literally."
-        );
+        return LanguageFileHeader.render(new LanguageFileHeader.Options(
+                "Rift", locale,
+                List.of("runtime.prefix supplies {prefix}. Remove {prefix} from an individual message to hide it there."),
+                List.of("Colors and styles: &0-&f, &k-&r.", "RGB colors: &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B, [RRGGBB].", "MiniMessage supports custom formatting. Put a backslash before & or [ to display it literally."),
+                Map.ofEntries(
+                        Map.entry("after", "new value"),
+                        Map.entry("argument", "argument"),
+                        Map.entry("before", "previous value"),
+                        Map.entry("category", "category"),
+                        Map.entry("command", "command path"),
+                        Map.entry("count", "entry count"),
+                        Map.entry("detail", "entry detail"),
+                        Map.entry("group", "message group"),
+                        Map.entry("id", "quarantine ID"),
+                        Map.entry("key", "parameter key"),
+                        Map.entry("label", "display label"),
+                        Map.entry("line", "line number"),
+                        Map.entry("locale", "locale"),
+                        Map.entry("maximum", "maximum input length"),
+                        Map.entry("name", "entry name"),
+                        Map.entry("operation", "operation"),
+                        Map.entry("parameter", "parameter"),
+                        Map.entry("permission", "permission"),
+                        Map.entry("personal", "a player's personal locale when it differs from the server default"),
+                        Map.entry("player", "player"),
+                        Map.entry("plugin", "plugin name"),
+                        Map.entry("prefix", "the global runtime.prefix value. Remove {prefix} from one message to hide it there"),
+                        Map.entry("reason", "failure detail"),
+                        Map.entry("seconds", "duration"),
+                        Map.entry("setting", "setting"),
+                        Map.entry("target", "selection target"),
+                        Map.entry("title", "section title"),
+                        Map.entry("type", "value type"),
+                        Map.entry("usage", "usage text"),
+                        Map.entry("value", "current or new value"),
+                        Map.entry("variables", "allowed placeholders"),
+                        Map.entry("version", "plugin version"),
+                        Map.entry("world", "world")
+                )));
     }
 
     private void validateCatalogTemplates() {

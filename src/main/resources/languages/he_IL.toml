@@ -1,39 +1,51 @@
-# קובץ השפה של Rift (עברית - ישראל).
-# הקובץ יורד רק אם הוא חסר; יש לערוך ישירות את languages/he_IL.toml.
-# שינויים מקומיים לעולם אינם מוחלפים אוטומטית; ערכים חסרים משתמשים באנגלית.
-# אפשר לערוך את ההודעות שלמטה; שינויים שנשמרו מזוהים ומוחלים באופן אוטומטי.
-# יש להשאיר כל מציין מקום בדיוק כפי שנכתב, כולל הסוגריים המסולסלים.
-# יש להשתמש במציין מקום רק בהודעות שתבנית ברירת המחדל שלהן מגדירה אותו; מציינים שאינם נתמכים לא יוחלפו.
+# Rift — he_IL
+#
+# === עריכת הקובץ ===
+# plugins/Rift/languages/he_IL.toml
+# אפשר לערוך קובץ זה ישירות. שינויים מקומיים נשמרים; ערכים חסרים או לא תקינים משתמשים באנגלית המובנית.
+# /rift language server edit he_IL
+#
+# === קידומת ===
 # קידומת: {prefix}=הערך הגלובלי runtime.prefix. הסירו את {prefix} מהודעה מסוימת כדי להסתיר אותה רק שם.
-# מצייני מקום זמינים:
 #
-# {argument} - ארגומנט פקודה
-# {category} - קטגוריית פקודה
-# {command} - טקסט או שם הפקודה
-# {count} - מספר פריטים או תוצאות
-# {detail} - פרט תיאורי
-# {id} - מזהה
-# {key} - מפתח הגדרה או הודעה
-# {label} - תווית תצוגה
-# {locale} - אזור השפה
-#   {personal}      אזור השפה האישי
-# {name} - שם רשומה או שם תצוגה
-# {operation} - שם הפעולה
-# {parameter} - שם הפרמטר
-# {permission} - צומת הרשאה
-# {player} - שם השחקן
-# {reason} - סיבה או פרטי שגיאה
-# {seconds} - משך בשניות
-# {setting} - שם ההגדרה
-# {before} - הערך הקודם
-# {after} - הערך החדש
-# {title} - טקסט הכותרת
-# {type} - סוג הערך או הנתון
-# {usage} - טקסט השימוש בפקודה
-# {value} - הערך הנוכחי או החדש
-# {version} - גרסה
-# {world} - שם העולם
+# === עיצוב ===
+# צבעים: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B וגם [RRGGBB]. ניתן להשתמש גם ב-MiniMessage לעיצוב מותאם.
 #
+# === משתנים ===
+# יש לשמור על שמות המשתנים ולהשתמש רק במשתנים הקיימים בכל הודעה.
+#   {after}  הערך החדש
+#   {argument}  ארגומנט פקודה
+#   {before}  הערך הקודם
+#   {category}  קטגוריית פקודה
+#   {command}  טקסט או שם הפקודה
+#   {count}  מספר פריטים או תוצאות
+#   {detail}  פרט תיאורי
+#   {group}  Permission או שחקן
+#   {id}  מזהה
+#   {key}  מפתח הגדרה או הודעה
+#   {label}  תווית תצוגה
+#   {line}  מקור או קו מספר
+#   {locale}  אזור השפה
+#   {maximum}  ערך מותר מקסימלי
+#   {name}  שם רשומה או שם תצוגה
+#   {operation}  שם הפעולה
+#   {parameter}  שם הפרמטר
+#   {permission}  צומת הרשאה
+#   {personal}  אזור השפה האישי
+#   {player}  שם השחקן
+#   {plugin}  שם Plugin
+#   {prefix}  הערך הגלובלי runtime.prefix. הסירו את {prefix} מהודעה מסוימת כדי להסתיר אותה רק שם.
+#   {reason}  סיבה או פרטי שגיאה
+#   {seconds}  משך בשניות
+#   {setting}  שם ההגדרה
+#   {target}  שחקן היעד, הישות או הערך
+#   {title}  טקסט הכותרת
+#   {type}  סוג הערך או הנתון
+#   {usage}  טקסט השימוש בפקודה
+#   {value}  הערך הנוכחי או החדש
+#   {variables}  מצייני מקום תקינים
+#   {version}  גרסה
+#   {world}  שם העולם
 
 [runtime]
 prefix = "&5&lRIFT&r &8›&r "
@@ -120,9 +132,9 @@ world_types = "סוגי העולם"
 configured_generators = "גנרטורים מוגדרים"
 available = "זמין זמין"
 unavailable = "לא זמין"
-server = "Server Server Server"
+server = "שרת"
 java_runtime = "Java זמן ריצה"
-plugin_bytecode = "Plugin bytecode"
+plugin_bytecode = "קוד הביניים של התוסף"
 platform = "פלטפורמה"
 dynamic_lifecycle = "דינמיקה Worldcycle"
 world_container = "מיכל עולמי"
@@ -132,26 +144,26 @@ world_counts = "עולמות"
 quarantine_entries = "רשומות Quarantine"
 
 [rift.explain]
-loaded = "בין אם Bukkit כיום יש את העולם הזה פעיל בזיכרון."
-managed = "בין אם Rift הוא הבעלים של פרופיל עבור העולם הזה והוא יכול לשחזר את הגדרות הגנרטור והסטארט-אפ שלו."
-on_disk = "בין אם העולם טעון או יש מנהל עולמי תקף המכיל level.dat."
-environment = "The The The Bukkit הסביבה העולמית שנרשמה על ידי עולם החי או פרופיל מנוהל."
-generator = "הגנרטור Rift מתפוגגות כאשר העולם מנוהל זה נטען. void הוא Rift\"גנרטור של עולם ריק."
-seed = "הזרעים המתועדים לעולם זה.שטח קיים לעולם אינו מתחדש על ידי שינוי ערך התצוגה הזה."
-autoload = "בין אם Rift לטעון את העולם מנוהל באופן אוטומטי במהלך ההפעלה השרת."
-protected = "עולמות מנוהלים מוגנים לא ניתן להזיז Rift quarantine"
-operation_active = "בין אם ניתוח מחזור חיים כרגע Rift\"נעלמת עולם."
-server = "יישום השרת הפעיל והגרסה שדווחו על ידי Bukkit."
-java_runtime = "The The The Java זמן ריצה כרגע מארח את השרת. Rift\"הקוד נשאר תואם Java 17."
-plugin_bytecode = "המבוגר ביותר Java זמן ריצה מסוגל לטעון Rift\"שיעורים מורכבים."
-platform = "משפחת ה- API וה- API של השרת Rift מזוהה בזמן ריצה."
-dynamic_lifecycle = "בין אם פלטפורמה זו חושפת בבטחה את העולם בריצה ליצור, לטעון, לעומס, ל quarantine, ולשחזר פעולות."
-world_container = "מנהל השרת שבו Bukkit תיקיות עולם מאוחסנות."
-writable = "בין אם מערכת ההפעלה מתירה כיום Rift לכתוב בתוך מיכל העולם."
-locale = "קובץ השפה הפעיל תחת plugins/Rift/languagesערכים חסרים משתמשים כברירת מחדלים באנגלית בת קיימא."
-world_counts = "ספירות חזקות Bukkit עולמות; ספירות מנוהלות Rift פרופילים; פרופילים נעדרים מנוהלים שאינם טעון ואינם נוכחים בדיסק."
-quarantine = "העולמות עברו בצד Rift למחוק וזמין לשחזר על ידי quarantine id."
-world_entry = "טעינה פירושה פעיל עכשיו; אמצעים מנוהלים Rift יש פרופיל; על דיסק פירושו תיקיית עולם לא מועילה קיימת."
+loaded = "האם Bukkit מחזיק כעת את העולם הזה פעיל בזיכרון."
+managed = "האם ל־Rift יש פרופיל לעולם הזה המאפשר לשחזר את המחולל והגדרות האתחול שלו."
+on_disk = "האם העולם טעון או שקיימת תיקיית עולם תקינה המכילה level.dat."
+environment = "סביבת העולם של Bukkit הרשומה בעולם הפעיל או בפרופיל המנוהל."
+generator = "המחולל ש־Rift מחיל מחדש בעת טעינת העולם המנוהל. void הוא המחולל המובנה של Rift לעולם ריק."
+seed = "ערך הזרע הרשום לעולם הזה. שינוי ערך התצוגה אינו יוצר מחדש שטח קיים."
+autoload = "האם Rift טוען את העולם המנוהל הזה אוטומטית בעת אתחול השרת."
+protected = "לא ניתן להעביר עולמות מנוהלים מוגנים להסגר של Rift."
+operation_active = "האם פעולת מחזור חיים של עולם מחזיקה כעת בנעילה של Rift עבור העולם הזה."
+server = "מימוש השרת הפעיל והגרסה שעליהם Bukkit מדווח."
+java_runtime = "סביבת Java המריצה כעת את השרת. קוד הביניים של Rift נשאר תואם ל־Java 17."
+plugin_bytecode = "גרסת Java הישנה ביותר המסוגלת לטעון את המחלקות המהודרות של Rift."
+platform = "המתזמן ומשפחת API השרת ש־Rift זיהה בזמן הריצה."
+dynamic_lifecycle = "האם הפלטפורמה מאפשרת בבטחה ליצור, לטעון, לפרוק, לבודד ולשחזר עולמות בזמן הריצה."
+world_container = "תיקיית השרת שבה נשמרות תיקיות העולמות של Bukkit."
+writable = "האם מערכת ההפעלה מאפשרת כעת ל־Rift לכתוב בתיקייה המכילה את העולמות."
+locale = "קובץ השפה הפעיל בתיקייה plugins/Rift/languages. ערכים חסרים משתמשים בטקסט האנגלי המובנה."
+world_counts = "הטעונים הם עולמות Bukkit פעילים; המנוהלים הם פרופילי Rift; החסרים הם פרופילים מנוהלים שהעולם שלהם אינו טעון ואינו קיים בדיסק."
+quarantine = "עולמות שהועברו הצדה בפקודת delete של Rift וניתן לשחזר באמצעות מזהה ההסגר."
+world_entry = "טעון פירושו פעיל כעת; מנוהל פירושו שקיים פרופיל Rift; בדיסק פירושו שקיימת תיקיית עולם תקינה שאינה טעונה."
 
 [rift.feedback]
 title = "&d&lRIFT"
@@ -254,6 +266,9 @@ missing_argument = "חסר ארגומנט \"{parameter}\" ({type})"
 execution_failed = "הפעלת הפקודה {command} נכשלה: {reason}"
 
 [language.menu]
+selected = "נבחר"
+command = "פקודה: {command}"
+all-volmit-plugins = "כל תוספי Volmit"
 your_language = "השפה שלך"
 reset_your_language = "איפוס השפה שלך"
 server_default = "ברירת המחדל של השרת"
@@ -268,3 +283,89 @@ edit_description = "פתח את עורך ההודעות לכל שפה."
 select_description = "לחץ כדי לבחור בשפה זו."
 remove_personal_description = "הסר את בחירת השפה האישית שלך."
 no_controls = "אין לך גישה להגדרות שפה."
+
+[language.editor]
+loading = "טוען הודעות עבור {locale}..."
+
+[language.editor.category]
+open = "&8לחץ לפתוח קטגוריה זו.&r"
+message-count = "&7{count} הודעות&r"
+
+[language.editor.error]
+unable-to-edit = "לא ניתן לערוך: {reason}"
+no-permission = "אין לך הרשאה לערוך את השפות של {plugin}."
+
+[language.editor.input]
+unable-to-save = "לא ניתן לשמור: {reason}"
+too-long = "הקלט יכול להכיל לכל היותר {maximum} תווים."
+expired = "זמן ההזנה בעורך השפה פג."
+
+[language.editor.locale]
+open = "&8לחץ לפתוח את השפה.&r"
+
+[language.editor.message]
+variables = "&8{variables}&r"
+edit-plural = "&7לחיצה לעריכת צורת רבים.&r"
+edit-lines = "&7לחיצה לעריכת שורות בודדות.&r"
+edit-chat = "&7לחיצה לעריכה בצ׳אט.&r"
+current-value = "&7ערך נוכחי:&r"
+
+[language.editor.navigation]
+previous-page = "&eהעמוד הקודם&r"
+next-page = "&eדף הבא&r"
+close = "&cסגור&r"
+back = "&eחזרה&r"
+
+[language.editor.part]
+line = "שורה {line}"
+
+[language.editor.prompt]
+variables = "משתנים: {variables}"
+value = "יש להקליד בצ׳אט ערך חדש עבור {key}."
+search = "יש לחפש מפתח הודעה או טקסט. לחזרה, יש להקליד cancel."
+guidance = "יש להשתמש ב־\\n לשורה חדשה וב־\\\\ ללוכסן הפוך, או להקליד cancel כדי לחזור."
+current = "ערך נוכחי: {value}"
+
+[language.editor.saved]
+summary = "{locale} נשמרה. בחירות השפה לא השתנו."
+change = "{key}: הערך ״{before}״ הוחלף ב־״{after}״."
+
+[language.editor.search]
+messages-lore = "לחיצה לחיפוש בכל ההודעות."
+messages = "חיפוש הודעות"
+clear = "ניקוי החיפוש"
+
+[language.editor.section]
+search-title = "{locale} / חיפוש"
+search = "חיפוש"
+languages = "שפות"
+group-title = "{locale} / {group}"
+
+[language.editor.value]
+none = "אין"
+empty = "(ריק)"
+
+[language.error]
+unavailable-for-all = "השפה {locale} אינה זמינה לכל התוספים שנבחרו."
+stopping = "בחירת שפה אינה זמינה בזמן שהתוסף מפסיק."
+server-locale-required = "יש לבחור קוד שפה כגון en_US כשפת ברירת המחדל של השרת."
+plugin-server-permission = "אין לך הרשאה לשנות את שפת השרת עבור {plugin}."
+plugin-personal-permission = "אין לך הרשאה לבחור שפה אישית עבור {plugin}."
+personal-player-only = "יש לבחור העדפות שפה של שחקן במשחק."
+personal-permission = "אין לך רשות לבחור את השפה שלך."
+numeric-page = "יש להזין מספר עמוד."
+no-providers = "אין ספקי שפה זמינים של Volmit."
+editor-player-only = "פתח את עורך השפה במשחק."
+
+[language.selection]
+server-selected = "{plugin}: שפת השרת עכשיו {locale}."
+server-default-selected = "{plugin}: השפה שלך תואמת כעת לשפת ברירת המחדל של השרת."
+save-failed = "{plugin}: לא ניתן לשמור את בחירת השפה; יש לבדוק את מסוף השרת."
+preparing = "מכין את השפה {locale} עבור {target}..."
+personal-selected = "{plugin}: השפה שלך עכשיו {locale}."
+english-fallback = "{plugin}: השפה {locale} אינה זמינה; נעשה שימוש באנגלית (en_US)."
+
+[language.usage]
+volmit-selection = "שימוש: /volmit plugins languages [locale]"
+selection = "שימוש: /{command} language self [locale|reset] or server [locale]"
+editor = "שימוש: /{command} language server edit [locale]"
