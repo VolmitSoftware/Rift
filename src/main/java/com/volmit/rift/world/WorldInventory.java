@@ -38,13 +38,14 @@ public final class WorldInventory {
     public List<WorldSnapshot> snapshots() {
         Map<String, WorldSnapshot> snapshots = new LinkedHashMap<>();
         for (WorldProfile profile : profiles.all()) {
-            World world = Bukkit.getWorld(profile.getName());
+            World world = RiftWorldIdentity.findLoaded(profile.getName());
             boolean onDisk = world != null || isWorldDirectory(profile.getName());
-            snapshots.put(profile.key(), from(profile, world, onDisk));
+            snapshots.put(profile.key(), from(profile, world, onDisk, profile.getName()));
         }
         for (World world : Bukkit.getWorlds()) {
-            String key = world.getName().toLowerCase(Locale.ROOT);
-            snapshots.putIfAbsent(key, from(null, world, true));
+            String logicalName = RiftWorldIdentity.logicalName(world, profiles);
+            String key = logicalName.toLowerCase(Locale.ROOT);
+            snapshots.putIfAbsent(key, from(null, world, true, logicalName));
         }
         for (String discovered : discoveredWorlds) {
             String key = discovered.toLowerCase(Locale.ROOT);
@@ -143,7 +144,7 @@ public final class WorldInventory {
         return name != null && discoveredKeys.contains(name.toLowerCase(Locale.ROOT));
     }
 
-    private static WorldSnapshot from(WorldProfile profile, World world, boolean onDisk) {
+    private static WorldSnapshot from(WorldProfile profile, World world, boolean onDisk, String logicalName) {
         if (profile != null) {
             return new WorldSnapshot(
                     profile.getName(),
@@ -158,7 +159,7 @@ public final class WorldInventory {
             );
         }
         return new WorldSnapshot(
-                world.getName(), true, false, onDisk, false, false,
+                logicalName, true, false, onDisk, false, false,
                 world.getEnvironment().name(), "", world.getSeed()
         );
     }

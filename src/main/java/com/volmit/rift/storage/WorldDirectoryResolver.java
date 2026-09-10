@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public final class WorldDirectoryResolver {
+    public static final String RIFT_NAMESPACE = "rift";
     private static final Set<String> PRIMARY_DIMENSION_KEYS = Set.of("overworld", "the_nether", "the_end");
 
     private final Path worldContainer;
@@ -48,7 +49,11 @@ public final class WorldDirectoryResolver {
         if (isLegacyWorld(legacy)) {
             return Optional.of(legacy);
         }
-        Path minecraftDimension = dimensionRoot.resolve("minecraft").resolve(validName).normalize();
+        Path riftDimension = riftDimension(validName);
+        if (isWorldStorage(riftDimension)) {
+            return Optional.of(riftDimension);
+        }
+        Path minecraftDimension = minecraftDimension(validName);
         if (!PRIMARY_DIMENSION_KEYS.contains(validName.toLowerCase(Locale.ROOT)) && isWorldStorage(minecraftDimension)) {
             return Optional.of(minecraftDimension);
         }
@@ -58,14 +63,14 @@ public final class WorldDirectoryResolver {
     public Path require(WorldProfile profile) throws IOException {
         return find(profile).orElseThrow(() -> new IOException(
                 "Managed world storage does not exist for " + profile.getName()
-                        + "; checked legacy and modern dimension layouts"
+                        + "; checked standalone, Rift, and Minecraft dimension layouts"
         ));
     }
 
     public Path require(String name) throws IOException {
         return find(name).orElseThrow(() -> new IOException(
                 "World storage does not exist for " + names.requireValid(name)
-                        + "; checked legacy and modern dimension layouts"
+                        + "; checked standalone, Rift, and Minecraft dimension layouts"
         ));
     }
 
@@ -85,8 +90,9 @@ public final class WorldDirectoryResolver {
         }
         String validName = names.requireValid(profile.getName());
         Path legacy = names.resolve(validName);
-        Path minecraftDimension = dimensionRoot.resolve("minecraft").resolve(validName).normalize();
-        return pathIsMissing(legacy) && pathIsMissing(minecraftDimension);
+        Path riftDimension = riftDimension(validName);
+        Path minecraftDimension = minecraftDimension(validName);
+        return pathIsMissing(legacy) && pathIsMissing(riftDimension) && pathIsMissing(minecraftDimension);
     }
 
     public Path restoreTarget(WorldProfile profile) throws IOException {
@@ -100,13 +106,20 @@ public final class WorldDirectoryResolver {
         String validName = names.requireValid(worldName);
         Path normalized = directory.toAbsolutePath().normalize();
         requireConfined(normalized);
-        if (!normalized.getFileName().toString().equals(validName)) {
-            throw new IOException("World storage folder does not match its Bukkit name: " + normalized);
-        }
         if (!isLegacyLocation(normalized) && !isDimensionLocation(normalized)) {
             throw new IOException("Bukkit returned an unsupported world storage layout: " + normalized);
         }
+        if (!matchesWorldName(normalized, validName)) {
+            throw new IOException("World storage folder does not match its Rift name: " + normalized);
+        }
         return worldContainer.relativize(normalized).toString().replace('\\', '/');
+    }
+
+    public boolean isRiftDimension(Path directory, String worldName) throws IOException {
+        String validName = names.requireValid(worldName);
+        Path normalized = directory.toAbsolutePath().normalize();
+        requireConfined(normalized);
+        return normalized.equals(riftDimension(validName));
     }
 
     public List<DiscoveredWorld> discover() throws IOException {
@@ -131,11 +144,11 @@ public final class WorldDirectoryResolver {
         }
         Path candidate = worldContainer.resolve(relativePath).toAbsolutePath().normalize();
         requireConfined(candidate);
-        if (!candidate.getFileName().toString().equals(validName)) {
-            throw new IOException("Managed world storage path does not end with its Bukkit name: " + relative);
-        }
         if (!isLegacyLocation(candidate) && !isDimensionLocation(candidate)) {
             throw new IOException("Managed world storage path is not a supported Bukkit layout: " + relative);
+        }
+        if (!matchesWorldName(candidate, validName)) {
+            throw new IOException("Managed world storage path does not end with its Rift name: " + relative);
         }
         return candidate;
     }
@@ -180,8 +193,10 @@ public final class WorldDirectoryResolver {
     private void requireNoAlternateStorage(String worldName, Path configured) throws IOException {
         String validName = names.requireValid(worldName);
         Path legacy = names.resolve(validName);
-        Path minecraftDimension = dimensionRoot.resolve("minecraft").resolve(validName).normalize();
+        Path riftDimension = riftDimension(validName);
+        Path minecraftDimension = minecraftDimension(validName);
         if ((!configured.equals(legacy) && !pathIsMissing(legacy))
+                || (!configured.equals(riftDimension) && !pathIsMissing(riftDimension))
                 || (!configured.equals(minecraftDimension) && !pathIsMissing(minecraftDimension))) {
             throw new IOException("Recorded world storage is absent for " + validName
                     + " but another same-name storage entry exists; the managed profile was retained");
@@ -195,6 +210,20 @@ public final class WorldDirectoryResolver {
     private boolean isDimensionLocation(Path candidate) {
         Path namespace = candidate.getParent();
         return namespace != null && dimensionRoot.equals(namespace.getParent());
+    }
+
+    private Path minecraftDimension(String worldName) {
+        return dimensionRoot.resolve("minecraft").resolve(worldName.toLowerCase(Locale.ROOT)).normalize();
+    }
+
+    private Path riftDimension(String worldName) {
+        return dimensionRoot.resolve(RIFT_NAMESPACE).resolve(worldName.toLowerCase(Locale.ROOT)).normalize();
+    }
+
+    private boolean matchesWorldName(Path directory, String worldName) {
+        Path fileName = directory.getFileName();
+        String expected = isLegacyLocation(directory) ? worldName : worldName.toLowerCase(Locale.ROOT);
+        return fileName != null && fileName.toString().equals(expected);
     }
 
     private Path resolveDimensionRoot(Path primary) {
@@ -236,13 +265,24 @@ public final class WorldDirectoryResolver {
     }
 
     private void discoverDimensions(Map<String, DiscoveredWorld> discovered) throws IOException {
-        Path minecraft = dimensionRoot.resolve("minecraft");
-        if (!Files.isDirectory(minecraft, LinkOption.NOFOLLOW_LINKS) || Files.isSymbolicLink(minecraft)) {
+        discoverDimensionNamespace(discovered, RIFT_NAMESPACE, false);
+        discoverDimensionNamespace(discovered, "minecraft", true);
+    }
+
+    private void discoverDimensionNamespace(
+            Map<String, DiscoveredWorld> discovered,
+            String namespace,
+            boolean filterPrimaryDimensions
+    ) throws IOException {
+        Path namespaceDirectory = dimensionRoot.resolve(namespace);
+        if (!Files.isDirectory(namespaceDirectory, LinkOption.NOFOLLOW_LINKS)
+                || Files.isSymbolicLink(namespaceDirectory)) {
             return;
         }
-        try (Stream<Path> entries = Files.list(minecraft)) {
+        try (Stream<Path> entries = Files.list(namespaceDirectory)) {
             entries.filter(this::isDimensionWorld)
-                    .filter(path -> !PRIMARY_DIMENSION_KEYS.contains(path.getFileName().toString().toLowerCase(Locale.ROOT)))
+                    .filter(path -> !filterPrimaryDimensions
+                            || !PRIMARY_DIMENSION_KEYS.contains(path.getFileName().toString().toLowerCase(Locale.ROOT)))
                     .forEach(path -> addDiscovered(discovered, path));
         }
     }

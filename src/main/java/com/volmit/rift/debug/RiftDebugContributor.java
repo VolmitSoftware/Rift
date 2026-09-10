@@ -5,6 +5,7 @@ import com.volmit.rift.Rift;
 import com.volmit.rift.hotload.RiftHotloadService;
 import com.volmit.rift.storage.TrashEntry;
 import com.volmit.rift.storage.WorldProfile;
+import com.volmit.rift.world.RiftWorldIdentity;
 import com.volmit.rift.world.WorldSnapshot;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -60,7 +61,7 @@ public final class RiftDebugContributor implements DebugDumpContributor {
         List<RiftDebugSnapshot.WorldState> worlds = new ArrayList<>();
         for (WorldSnapshot world : plugin.worldInventory().snapshots()) {
             Optional<WorldProfile> profile = plugin.profiles().find(world.name());
-            World loadedWorld = Bukkit.getWorld(world.name());
+            World loadedWorld = RiftWorldIdentity.findLoaded(world.name());
             Path detectedDirectory = loadedWorld == null
                     ? plugin.worldInventory().discoveredDirectory(world.name()).orElse(null)
                     : loadedWorld.getWorldFolder().toPath().toAbsolutePath().normalize();
@@ -173,8 +174,15 @@ public final class RiftDebugContributor implements DebugDumpContributor {
         if (!normalized.contains("/")) {
             return "standalone world folder";
         }
-        if (normalized.toLowerCase(Locale.ROOT).contains("/dimensions/")) {
-            return "Paper dimension storage";
+        String lowercase = normalized.toLowerCase(Locale.ROOT);
+        if (lowercase.contains("/dimensions/rift/")) {
+            return "Rift namespaced dimension";
+        }
+        if (lowercase.contains("/dimensions/minecraft/")) {
+            return "Minecraft namespaced dimension";
+        }
+        if (lowercase.contains("/dimensions/")) {
+            return "other namespaced dimension";
         }
         return "server-managed world folder";
     }

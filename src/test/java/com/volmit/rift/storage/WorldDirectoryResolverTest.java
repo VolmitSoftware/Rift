@@ -89,6 +89,63 @@ final class WorldDirectoryResolverTest {
     }
 
     @Test
+    void resolvesPaperLowercaseDimensionForMixedCaseBukkitWorldName() throws Exception {
+        Path primary = temporaryDirectory.resolve("world");
+        Files.createDirectories(primary);
+        Files.createFile(primary.resolve("level.dat"));
+        Path testing = primary.resolve("dimensions/minecraft/testing");
+        Files.createDirectories(testing.resolve("region"));
+        WorldDirectoryResolver resolver = new WorldDirectoryResolver(
+                temporaryDirectory,
+                primary,
+                new WorldNamePolicy(temporaryDirectory)
+        );
+        WorldProfile profile = new WorldProfile();
+        profile.setName("Testing");
+        profile.setDirectory("world/dimensions/minecraft/testing");
+
+        assertThat(resolver.find("Testing")).contains(testing.toAbsolutePath().normalize());
+        assertThat(resolver.require(profile)).isEqualTo(testing.toAbsolutePath().normalize());
+        assertThat(resolver.relative(testing, "Testing")).isEqualTo("world/dimensions/minecraft/testing");
+        assertThat(resolver.isDefinitelyMissing(profile)).isFalse();
+        assertThatThrownBy(() -> resolver.relative(testing, "AnotherWorld"))
+                .isInstanceOf(IOException.class)
+                .hasMessageContaining("does not match");
+
+        Path lowercaseLegacy = temporaryDirectory.resolve("testing");
+        Files.createDirectories(lowercaseLegacy);
+        Files.createFile(lowercaseLegacy.resolve("level.dat"));
+        assertThatThrownBy(() -> resolver.relative(lowercaseLegacy, "Testing"))
+                .isInstanceOf(IOException.class)
+                .hasMessageContaining("does not match");
+    }
+
+    @Test
+    void resolvesAndDiscoversRiftNamespacedDimensionForMixedCaseLogicalName() throws Exception {
+        Path primary = temporaryDirectory.resolve("world");
+        Files.createDirectories(primary);
+        Files.createFile(primary.resolve("level.dat"));
+        Path testing = primary.resolve("dimensions/rift/testing");
+        Files.createDirectories(testing.resolve("region"));
+        WorldDirectoryResolver resolver = new WorldDirectoryResolver(
+                temporaryDirectory,
+                primary,
+                new WorldNamePolicy(temporaryDirectory)
+        );
+        WorldProfile profile = new WorldProfile();
+        profile.setName("Testing");
+        profile.setDirectory("world/dimensions/rift/testing");
+
+        assertThat(resolver.find("Testing")).contains(testing.toAbsolutePath().normalize());
+        assertThat(resolver.require(profile)).isEqualTo(testing.toAbsolutePath().normalize());
+        assertThat(resolver.relative(testing, "Testing")).isEqualTo("world/dimensions/rift/testing");
+        assertThat(resolver.isRiftDimension(testing, "Testing")).isTrue();
+        assertThat(resolver.isDefinitelyMissing(profile)).isFalse();
+        assertThat(resolver.discover()).extracting(WorldDirectoryResolver.DiscoveredWorld::name)
+                .containsExactly("testing", "world");
+    }
+
+    @Test
     void ignoresOtherPluginNamespacesUnlessAProfileStoresTheExactPath() throws Exception {
         Path primary = temporaryDirectory.resolve("world");
         Files.createDirectories(primary);

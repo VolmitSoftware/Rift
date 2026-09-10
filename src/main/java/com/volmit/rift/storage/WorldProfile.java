@@ -10,7 +10,7 @@ import java.util.Locale;
 
 @ConfigDescription("A world managed by Rift")
 public final class WorldProfile {
-    @ConfigDoc("Canonical Bukkit world name.")
+    @ConfigDoc("Rift command name for this world.")
     private String name = "world";
 
     @ConfigDoc("Environment used when the world was created.")
@@ -34,9 +34,15 @@ public final class WorldProfile {
     @ConfigDoc("Prevent Rift from unloading or deleting this world.")
     private boolean protectedWorld = false;
 
-    public static WorldProfile fromWorld(World world, String generator, WorldType worldType, boolean autoLoad) {
+    public static WorldProfile fromWorld(
+            String logicalName,
+            World world,
+            String generator,
+            WorldType worldType,
+            boolean autoLoad
+    ) {
         WorldProfile profile = new WorldProfile();
-        profile.name = world.getName();
+        profile.name = logicalName;
         profile.environment = world.getEnvironment().name();
         profile.generator = normalizeGenerator(generator);
         profile.worldType = worldType.name();
@@ -146,8 +152,11 @@ public final class WorldProfile {
         } catch (RuntimeException exception) {
             throw new IllegalArgumentException("Invalid world storage directory: " + value, exception);
         }
-        if (path.isAbsolute() || path.startsWith("..") || path.getFileName() == null
-                || !path.getFileName().toString().equals(worldName)) {
+        if (path.isAbsolute() || path.startsWith("..") || path.getFileName() == null) {
+            throw new IllegalArgumentException("World storage directory must be relative and end with " + worldName);
+        }
+        String storageName = path.getFileName().toString();
+        if (!storageName.equals(worldName) && !storageName.equals(worldName.toLowerCase(Locale.ROOT))) {
             throw new IllegalArgumentException("World storage directory must be relative and end with " + worldName);
         }
         return path.toString().replace('\\', '/');

@@ -91,6 +91,28 @@ final class WorldProfileStoreTest {
         assertThat(store.find("testing100")).isPresent();
     }
 
+    @Test
+    void storesPaperLowercaseDirectoryForMixedCaseWorldName() throws Exception {
+        Path worldContainer = temporaryDirectory.resolve("server");
+        Path profileDirectory = temporaryDirectory.resolve("plugins/Rift/worlds");
+        WorldProfileStore store = store(worldContainer, profileDirectory);
+        assertThat(store.loadAll()).isTrue();
+        WorldProfile profile = profile("Testing");
+        profile.setDirectory("world/dimensions/minecraft/testing");
+
+        store.save(profile);
+
+        assertThat(store.find("Testing")).isPresent();
+        assertThat(store.find("Testing").orElseThrow().getDirectory())
+                .isEqualTo("world/dimensions/minecraft/testing");
+
+        WorldProfileStore reloaded = store(worldContainer, profileDirectory);
+        assertThat(reloaded.loadAll()).isTrue();
+        assertThat(reloaded.find("Testing")).isPresent();
+        assertThat(reloaded.find("Testing").orElseThrow().getDirectory())
+                .isEqualTo("world/dimensions/minecraft/testing");
+    }
+
     private WorldProfileStore store(Path worldContainer, Path profileDirectory) {
         Plugin plugin = mock(Plugin.class);
         when(plugin.getLogger()).thenReturn(Logger.getLogger("WorldProfileStoreTest"));

@@ -8,7 +8,6 @@ import com.volmit.rift.storage.TrashEntry;
 import com.volmit.rift.storage.WorldProfile;
 import com.volmit.rift.world.WorldSnapshot;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.LinkedHashSet;
@@ -44,8 +43,10 @@ public final class RiftCommandHandlers {
         @Override
         protected Set<String> values() {
             Set<String> values = new LinkedHashSet<>();
-            for (World world : Bukkit.getWorlds()) {
-                values.add(world.getName());
+            for (WorldSnapshot snapshot : Rift.get().worldInventory().snapshots()) {
+                if (snapshot.loaded()) {
+                    values.add(snapshot.name());
+                }
             }
             return values;
         }

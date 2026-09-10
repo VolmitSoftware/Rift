@@ -80,7 +80,7 @@ dependencies {
     implementation('net.kyori:adventure-text-serializer-legacy:4.26.1')
     implementation('net.kyori:adventure-text-serializer-plain:4.26.1')
 
-    currentPaperCompatibility('io.papermc.paper:paper-api:26.1.2.build.74-stable')
+    currentPaperCompatibility('io.papermc.paper:paper-api:26.2.build.121-stable')
     currentSpigotCompatibility('org.spigotmc:spigot-api:26.2-R0.1-SNAPSHOT')
 
     testImplementation('org.junit.jupiter:junit-jupiter:5.11.4')
@@ -88,6 +88,10 @@ dependencies {
     testImplementation('org.assertj:assertj-core:3.26.3')
     testImplementation('org.mockito:mockito-core:5.14.2')
     testImplementation('org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT')
+}
+
+tasks.withType(Test).configureEach {
+    jvmArgs('-Dnet.bytebuddy.experimental=true')
 }
 
 tasks.withType(JavaCompile).configureEach {
