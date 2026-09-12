@@ -6,7 +6,7 @@
 # /rift language server edit he_IL
 #
 # === קידומת ===
-# קידומת: {prefix}=הערך הגלובלי runtime.prefix. הסירו את {prefix} מהודעה מסוימת כדי להסתיר אותה רק שם.
+# runtime.prefix מכיל רק את השם המעוצב. {prefix} מוסיף את השם; את › והרווחים עורכים בכל הודעה.
 #
 # === עיצוב ===
 # צבעים: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B וגם [RRGGBB]. ניתן להשתמש גם ב-MiniMessage לעיצוב מותאם.
@@ -33,24 +33,27 @@
 #   {permission}  צומת הרשאה
 #   {personal}  אזור השפה האישי
 #   {player}  שם השחקן
-#   {plugin}  שם Plugin
-#   {prefix}  הערך הגלובלי runtime.prefix. הסירו את {prefix} מהודעה מסוימת כדי להסתיר אותה רק שם.
+#   {prefix}  runtime.prefix מכיל רק את השם המעוצב. {prefix} מוסיף את השם; את › והרווחים עורכים בכל הודעה.
 #   {reason}  סיבה או פרטי שגיאה
 #   {seconds}  משך בשניות
 #   {setting}  שם ההגדרה
 #   {target}  שחקן היעד, הישות או הערך
 #   {title}  טקסט הכותרת
 #   {type}  סוג הערך או הנתון
-#   {usage}  טקסט השימוש בפקודה
 #   {value}  הערך הנוכחי או החדש
 #   {variables}  מצייני מקום תקינים
 #   {version}  גרסה
 #   {world}  שם העולם
 
+#   {section}  מקטע בעורך
+#   {path}  נתיב הדוח המקומי
+#   {url}  כתובת הדוח
+
 [runtime]
-prefix = "&5&lRIFT&r &8›&r "
+prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+version = "הצגת הגרסה של {prefix}"
 root = "לנהל את עולמות השרתים בבטחה"
 create = "ליצור ולנהל עולם חדש"
 import = "יבוא מנהל עולם קיים"
@@ -63,11 +66,11 @@ send = "טלפורט שחקן אחר לעולם טעון"
 list = "רשימה עמוסה, מנוהלת, התגלתה ועולמות מקובעים"
 info = "מדינה מפורטת עבור עולם אחד"
 generators = "הצג גנרטור מזהה כבר בשימוש על ידי עולמות מנוהלים"
-config = "פתח את המשחק Rift עורך תצורה"
-language = "בחירת שפת Rift זמינה"
-status = "יכולות פלטפורמה ו Rift מדינה"
-debug = "כלי האבחון של Rift"
-debug_dump = "יצירת דוח אבחון מקיף של Rift"
+config = "פתח את המשחק {prefix} עורך תצורה"
+language = "בחירת שפת {prefix} זמינה"
+status = "יכולות פלטפורמה ו {prefix} מדינה"
+debug = "כלי האבחון של {prefix}"
+debug_dump = "יצירת דוח אבחון מקיף של {prefix}"
 autoload = "שינוי אם העולם מנוהל נטען במהלך ההפעלה"
 protect = "להגן או לא להגן על עולם מנוהל"
 
@@ -86,34 +89,35 @@ upload = "העלאת הדוח כאשר העלאות ציבוריות מופעל�
 sender = "שולח פיקוד"
 
 [rift.message]
-permission_denied = "{prefix}&cאתה צריך &f{permission}&c."
-unknown_command = "{prefix}&cפקודה לא ידועה &f/rift help&c."
-player_only = "{prefix}&cהפיקוד הזה דורש שחקן."
-operation_queued = "{prefix}&7Queued &f{operation}&7 עבור &d{world}&7."
-operation_failed = "{prefix}&c{operation} נכשלת &f{world}&c: {reason}"
-created = "{prefix}&aנוצר ולנהל &f{world}&a."
-imported = "{prefix}&aייבוא ונוהל &f{world}&a."
-loaded = "{prefix}&aטעון &f{world}&a."
-unloaded = "{prefix}&aהמונחים: &f{world}&a."
-teleported = "{prefix}&aטלפורט &f{player}&a to to &f{world}&a."
-delete_confirm = "{prefix}&eRun Run &f/rift delete {world}&e שוב בפנים &f{seconds}s&e להעביר את זה לתוך quarantine."
-quarantined = "{prefix}&aהזיז &f{world}&a המונחים: asrantine &f{id}&a."
-restored = "{prefix}&aשחזור &f{world}&a מתוך &f{id}&a."
-profile_updated = "{prefix}&aעדכון &f{setting}&a עבור &f{world}&a to to &f{value}&a."
-folia_limit = "{prefix}&e{operation} לא זמין Folia כי העולם שלו עומס/unload API לא ייושם."
-config_saved = "{prefix}&aהקונפדרציה הצילה."
-config_opened = "{prefix}&aעורך התצורה המלא בתוך המשחק נפתח.&r"
-config_save_failed = "{prefix}&cאי אפשר להציל את הקונפדרציה. בדוק את הקונסולה."
-empty_list = "{prefix}&7לא נמצאו עולמות מתאימים."
-player_offline = "{prefix}&cשחקן אינו מקוון: &f{player}"
-unknown_world = "{prefix}&cעולם לא ידוע: &f{world}"
-section = "{prefix}&d{title} &8(&f{count}&8)"
-entry = "{prefix}&8- &f{name} &8| &7{detail}"
-detail = "{prefix}&8- &7{label}: &f{value}"
-info_title = "{prefix}&d{world}"
-status_title = "{prefix}&dRift {version} מצב"
-generator_format = "{prefix}&7Custom פורמט: &fPluginName[:generator-id]"
-folia_status_note = "{prefix}&eFolia תמיכה Rift\"קריאה, עורך, פרופיל ותכונות טלפורט; מחזור חיי העולם דינמי נחצב על ידי ממשק API."
+version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
+permission_denied = "{prefix}&r &7› &7&cאתה צריך &f{permission}&7."
+unknown_command = "{prefix}&r &7› &7&cפקודה לא ידועה &f/rift help&7."
+player_only = "{prefix}&r &7› &7&cהפיקוד הזה דורש שחקן."
+operation_queued = "{prefix}&r &7› &7Queued &f{operation}&7 עבור &d{world}&7."
+operation_failed = "{prefix}&r &7› &7&c{operation} נכשלת &f{world}&7: {reason}"
+created = "{prefix}&r &7› &7נוצר ולנהל &a{world}&7."
+imported = "{prefix}&r &7› &7ייבוא ונוהל &a{world}&7."
+loaded = "{prefix}&r &7› &7טעון &a{world}&7."
+unloaded = "{prefix}&r &7› &7המונחים: &a{world}&7."
+teleported = "{prefix}&r &7› &7טלפורט &a{player}&7 to to &a{world}&7."
+delete_confirm = "{prefix}&r &7› &7Run Run &e/rift delete {world}&7 שוב בפנים &e{seconds}s&7 להעביר את זה לתוך quarantine."
+quarantined = "{prefix}&r &7› &7הזיז &a{world}&7 המונחים: asrantine &a{id}&7."
+restored = "{prefix}&r &7› &7שחזור &a{world}&7 מתוך &a{id}&7."
+profile_updated = "{prefix}&r &7› &7עדכון &a{setting}&7 עבור &a{world}&7 to to &a{value}&7."
+folia_limit = "{prefix}&r &7› &7{operation} לא זמין Folia כי העולם שלו עומס/unload API לא ייושם."
+config_saved = "{prefix}&r &7› &7&aהקונפדרציה הצילה."
+config_opened = "{prefix}&r &7› &7עורך התצורה המלא בתוך המשחק נפתח.&r"
+config_save_failed = "{prefix}&r &7› &7&cאי אפשר להציל את הקונפדרציה. בדוק את הקונסולה."
+empty_list = "{prefix}&r &7› &7לא נמצאו עולמות מתאימים."
+player_offline = "{prefix}&r &7› &7&cשחקן אינו מקוון: &f{player}"
+unknown_world = "{prefix}&r &7› &7&cעולם לא ידוע: &f{world}"
+section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
+entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
+info_title = "{prefix}&r &7› &7&d{world}"
+status_title = "{prefix}&r &7› &7{prefix} {version} מצב"
+generator_format = "{prefix}&r &7› &7Custom פורמט: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&r &7› &7Folia תמיכה {prefix}\"קריאה, עורך, פרופיל ותכונות טלפורט; מחזור חיי העולם דינמי נחצב על ידי ממשק API."
 
 [rift.label]
 worlds = "עולמות"
@@ -145,35 +149,35 @@ quarantine_entries = "רשומות Quarantine"
 
 [rift.explain]
 loaded = "האם Bukkit מחזיק כעת את העולם הזה פעיל בזיכרון."
-managed = "האם ל־Rift יש פרופיל לעולם הזה המאפשר לשחזר את המחולל והגדרות האתחול שלו."
+managed = "האם ל־{prefix} יש פרופיל לעולם הזה המאפשר לשחזר את המחולל והגדרות האתחול שלו."
 on_disk = "האם העולם טעון או שקיימת תיקיית עולם תקינה המכילה level.dat."
 environment = "סביבת העולם של Bukkit הרשומה בעולם הפעיל או בפרופיל המנוהל."
-generator = "המחולל ש־Rift מחיל מחדש בעת טעינת העולם המנוהל. void הוא המחולל המובנה של Rift לעולם ריק."
+generator = "המחולל ש־{prefix} מחיל מחדש בעת טעינת העולם המנוהל. void הוא המחולל המובנה של {prefix} לעולם ריק."
 seed = "ערך הזרע הרשום לעולם הזה. שינוי ערך התצוגה אינו יוצר מחדש שטח קיים."
-autoload = "האם Rift טוען את העולם המנוהל הזה אוטומטית בעת אתחול השרת."
-protected = "לא ניתן להעביר עולמות מנוהלים מוגנים להסגר של Rift."
-operation_active = "האם פעולת מחזור חיים של עולם מחזיקה כעת בנעילה של Rift עבור העולם הזה."
+autoload = "האם {prefix} טוען את העולם המנוהל הזה אוטומטית בעת אתחול השרת."
+protected = "לא ניתן להעביר עולמות מנוהלים מוגנים להסגר של {prefix}."
+operation_active = "האם פעולת מחזור חיים של עולם מחזיקה כעת בנעילה של {prefix} עבור העולם הזה."
 server = "מימוש השרת הפעיל והגרסה שעליהם Bukkit מדווח."
-java_runtime = "סביבת Java המריצה כעת את השרת. קוד הביניים של Rift נשאר תואם ל־Java 17."
-plugin_bytecode = "גרסת Java הישנה ביותר המסוגלת לטעון את המחלקות המהודרות של Rift."
-platform = "המתזמן ומשפחת API השרת ש־Rift זיהה בזמן הריצה."
+java_runtime = "סביבת Java המריצה כעת את השרת. קוד הביניים של {prefix} נשאר תואם ל־Java 17."
+plugin_bytecode = "גרסת Java הישנה ביותר המסוגלת לטעון את המחלקות המהודרות של {prefix}."
+platform = "המתזמן ומשפחת API השרת ש־{prefix} זיהה בזמן הריצה."
 dynamic_lifecycle = "האם הפלטפורמה מאפשרת בבטחה ליצור, לטעון, לפרוק, לבודד ולשחזר עולמות בזמן הריצה."
 world_container = "תיקיית השרת שבה נשמרות תיקיות העולמות של Bukkit."
-writable = "האם מערכת ההפעלה מאפשרת כעת ל־Rift לכתוב בתיקייה המכילה את העולמות."
+writable = "האם מערכת ההפעלה מאפשרת כעת ל־{prefix} לכתוב בתיקייה המכילה את העולמות."
 locale = "קובץ השפה הפעיל בתיקייה plugins/Rift/languages. ערכים חסרים משתמשים בטקסט האנגלי המובנה."
-world_counts = "הטעונים הם עולמות Bukkit פעילים; המנוהלים הם פרופילי Rift; החסרים הם פרופילים מנוהלים שהעולם שלהם אינו טעון ואינו קיים בדיסק."
-quarantine = "עולמות שהועברו הצדה בפקודת delete של Rift וניתן לשחזר באמצעות מזהה ההסגר."
-world_entry = "טעון פירושו פעיל כעת; מנוהל פירושו שקיים פרופיל Rift; בדיסק פירושו שקיימת תיקיית עולם תקינה שאינה טעונה."
+world_counts = "הטעונים הם עולמות Bukkit פעילים; המנוהלים הם פרופילי {prefix}; החסרים הם פרופילים מנוהלים שהעולם שלהם אינו טעון ואינו קיים בדיסק."
+quarantine = "עולמות שהועברו הצדה בפקודת delete של {prefix} וניתן לשחזר באמצעות מזהה ההסגר."
+world_entry = "טעון פירושו פעיל כעת; מנוהל פירושו שקיים פרופיל {prefix}; בדיסק פירושו שקיימת תיקיית עולם תקינה שאינה טעונה."
 
 [rift.feedback]
-title = "&d&lRIFT"
+title = "{prefix}"
 world_subtitle = "&a{operation}&8: &f{world}"
 teleport_subtitle = "&aמגיע &f{world}"
 failure_title = "&cהמבצע נכשל"
 failure_subtitle = "&7{operation}&8: &f{world}"
-action_world = "&dRift &8• &a{operation} &f{world}"
-action_teleport = "&dRift &8• &aנשלחה ל &f{world}"
-action_failure = "&dRift &8• &c{operation} נכשלת &f{world}"
+action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
+action_teleport = "{prefix}&r &7› &7&aנשלחה ל &a{world}"
+action_failure = "{prefix}&r &7› &7&c{operation} נכשלת &f{world}"
 
 [rift.gui]
 current = "&7המונחים: &f{value}"
@@ -194,19 +198,19 @@ failure_feedback = "&dכשלון משוב"
 title_popups = "&dתגית: Popups"
 action_bar_popups = "&dתגית: Action-bar Popups"
 sounds = "&dצלילי Feedback"
-root_title = "Rift קונפדרציה"
-category_title = "Rift: {category}"
+root_title = "{prefix} קונפדרציה"
+category_title = "{prefix}: {category}"
 category_open = "&8לחץ לערוך כל הגדרה בסעיף זה"
 back = "&eבחזרה בחזרה"
 toggle = "&8לחץ על toggle"
 exact_number = "&8השמאל/right התאמה: הקש Q כדי להזין ערך מדויק"
 text = "&8לחץ להזין ערך חדש בצ'אט"
-prompt = "{prefix}&7סוג של ערך חדש &f{setting}&7 בצ'אט."
-prompt_cancel = "{prefix}&7סוג &fביטול&7 לחזור מבלי לשנות את זה."
-prompt_cancelled = "{prefix}&7הקלט בוטל."
-prompt_timeout = "{prefix}&7הקלט המפונקציה פסק זמן."
-setting_saved = "{prefix}&d{setting} &8› &aשונה ל־&f{after} &7מ־&f{before}&a."
-setting_failed = "{prefix}&cלא יכול לעדכן &f{setting}&c: {reason}"
+prompt = "{prefix}&r &7› &7סוג של ערך חדש &f{setting}&7 בצ'אט."
+prompt_cancel = "{prefix}&r &7› &7סוג &fביטול&7 לחזור מבלי לשנות את זה."
+prompt_cancelled = "{prefix}&r &7› &7הקלט בוטל."
+prompt_timeout = "{prefix}&r &7› &7הקלט המפונקציה פסק זמן."
+setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7שונה ל־&a{after} &7מ־&f{before}&7."
+setting_failed = "{prefix}&r &7› &7&cלא יכול לעדכן &f{setting}&7: {reason}"
 language = "&dשפה מקומית"
 language_select = "&8לחצו כדי לבחור מבין השפות הזמינות"
 lifecycle_sound = "&dתגית: Worldcycle"
@@ -252,18 +256,15 @@ optional = "פרמטר זה הוא אופציונלי."
 default = "ברירת המחדל היא \"{value}\" אם לא הוגדר."
 type = "פרמטר זה הוא מסוג {type}."
 
-[director.runtime]
-usage = "שימוש: {usage}"
-
 [director.runtime.error]
-invalid_origin = "לא ניתן להריץ פקודה זו ממקור זה."
-unknown_parameter = "מפתח פרמטר לא ידוע: {key}"
-unexpected_argument = "ארגומנט לא צפוי \"{argument}\". פרמטרים אופציונליים חייבים להינתן עם מפתח, לדוגמה seed=123"
-unclosed_group = "חסר סוגר \"]\" עבור הפרמטר {key}"
-conversion_failed = "לא ניתן להמיר את \"{value}\" ל-{type} עבור {parameter}"
-default_parse_failed = "לא ניתן לנתח את ערך ברירת המחדל של הפרמטר {parameter}"
-missing_argument = "חסר ארגומנט \"{parameter}\" ({type})"
-execution_failed = "הפעלת הפקודה {command} נכשלה: {reason}"
+invalid_origin = "{prefix}&r &7› &7&cלא ניתן להריץ פקודה זו ממקור זה."
+unknown_parameter = "{prefix}&r &7› &7&cמפתח פרמטר לא ידוע: {key}"
+unexpected_argument = "{prefix}&r &7› &7&cארגומנט לא צפוי \"{argument}\". פרמטרים אופציונליים חייבים להינתן עם מפתח, לדוגמה seed=123"
+unclosed_group = "{prefix}&r &7› &7&cחסר סוגר \"]\" עבור הפרמטר {key}"
+conversion_failed = "{prefix}&r &7› &7&cלא ניתן להמיר את \"{value}\" ל-{type} עבור {parameter}"
+default_parse_failed = "{prefix}&r &7› &7&cלא ניתן לנתח את ערך ברירת המחדל של הפרמטר {parameter}"
+missing_argument = "{prefix}&r &7› &7&cחסר ארגומנט \"{parameter}\" ({type})"
+execution_failed = "{prefix}&r &7› &7&cהפעלת הפקודה {command} נכשלה: {reason}"
 
 [language.menu]
 selected = "נבחר"
@@ -285,20 +286,21 @@ remove_personal_description = "הסר את בחירת השפה האישית של
 no_controls = "אין לך גישה להגדרות שפה."
 
 [language.editor]
-loading = "טוען הודעות עבור {locale}..."
+title = "{prefix} › {section}"
+loading = "{prefix}&r &7› &7&7טוען הודעות עבור {locale}..."
 
 [language.editor.category]
 open = "&8לחץ לפתוח קטגוריה זו.&r"
 message-count = "&7{count} הודעות&r"
 
 [language.editor.error]
-unable-to-edit = "לא ניתן לערוך: {reason}"
-no-permission = "אין לך הרשאה לערוך את השפות של {plugin}."
+unable-to-edit = "{prefix}&r &7› &7&cלא ניתן לערוך: {reason}"
+no-permission = "{prefix}&r &7› &7&cאין לך הרשאה לערוך את השפות של {prefix}."
 
 [language.editor.input]
-unable-to-save = "לא ניתן לשמור: {reason}"
-too-long = "הקלט יכול להכיל לכל היותר {maximum} תווים."
-expired = "זמן ההזנה בעורך השפה פג."
+unable-to-save = "{prefix}&r &7› &7&7לא ניתן לשמור: {reason}"
+too-long = "{prefix}&r &7› &7&7הקלט יכול להכיל לכל היותר {maximum} תווים."
+expired = "{prefix}&r &7› &7&7זמן ההזנה בעורך השפה פג."
 
 [language.editor.locale]
 open = "&8לחץ לפתוח את השפה.&r"
@@ -320,15 +322,15 @@ back = "&eחזרה&r"
 line = "שורה {line}"
 
 [language.editor.prompt]
-variables = "משתנים: {variables}"
-value = "יש להקליד בצ׳אט ערך חדש עבור {key}."
-search = "יש לחפש מפתח הודעה או טקסט. לחזרה, יש להקליד cancel."
-guidance = "יש להשתמש ב־\\n לשורה חדשה וב־\\\\ ללוכסן הפוך, או להקליד cancel כדי לחזור."
-current = "ערך נוכחי: {value}"
+variables = "{prefix}&r &7› &7&7משתנים: {variables}"
+value = "{prefix}&r &7› &7&7יש להקליד בצ׳אט ערך חדש עבור {key}."
+search = "{prefix}&r &7› &7&7יש לחפש מפתח הודעה או טקסט. לחזרה, יש להקליד cancel."
+guidance = "{prefix}&r &7› &7&7יש להשתמש ב־\\n לשורה חדשה וב־\\\\ ללוכסן הפוך, או להקליד cancel כדי לחזור."
+current = "{prefix}&r &7› &7&7ערך נוכחי: {value}"
 
 [language.editor.saved]
-summary = "{locale} נשמרה. בחירות השפה לא השתנו."
-change = "{key}: הערך ״{before}״ הוחלף ב־״{after}״."
+summary = "{prefix}&r &7› &7&7{locale} נשמרה. בחירות השפה לא השתנו."
+change = "{prefix}&r &7› &7&7{key}: הערך ״{before}״ הוחלף ב־״{after}״."
 
 [language.editor.search]
 messages-lore = "לחיצה לחיפוש בכל ההודעות."
@@ -346,26 +348,54 @@ none = "אין"
 empty = "(ריק)"
 
 [language.error]
-unavailable-for-all = "השפה {locale} אינה זמינה לכל התוספים שנבחרו."
-stopping = "בחירת שפה אינה זמינה בזמן שהתוסף מפסיק."
-server-locale-required = "יש לבחור קוד שפה כגון en_US כשפת ברירת המחדל של השרת."
-plugin-server-permission = "אין לך הרשאה לשנות את שפת השרת עבור {plugin}."
-plugin-personal-permission = "אין לך הרשאה לבחור שפה אישית עבור {plugin}."
-personal-player-only = "יש לבחור העדפות שפה של שחקן במשחק."
-personal-permission = "אין לך רשות לבחור את השפה שלך."
-numeric-page = "יש להזין מספר עמוד."
-no-providers = "אין ספקי שפה זמינים של Volmit."
-editor-player-only = "פתח את עורך השפה במשחק."
+unavailable-for-all = "{prefix}&r &7› &7&cהשפה {locale} אינה זמינה לכל התוספים שנבחרו."
+stopping = "{prefix}&r &7› &7&cבחירת שפה אינה זמינה בזמן שהתוסף מפסיק."
+server-locale-required = "{prefix}&r &7› &7&cיש לבחור קוד שפה כגון en_US כשפת ברירת המחדל של השרת."
+plugin-server-permission = "{prefix}&r &7› &7&cאין לך הרשאה לשנות את שפת השרת עבור {prefix}."
+plugin-personal-permission = "{prefix}&r &7› &7&cאין לך הרשאה לבחור שפה אישית עבור {prefix}."
+personal-player-only = "{prefix}&r &7› &7&cיש לבחור העדפות שפה של שחקן במשחק."
+personal-permission = "{prefix}&r &7› &7&cאין לך רשות לבחור את השפה שלך."
+numeric-page = "{prefix}&r &7› &7&cיש להזין מספר עמוד."
+no-providers = "{prefix}&r &7› &7&cאין ספקי שפה זמינים של Volmit."
+editor-player-only = "{prefix}&r &7› &7&cפתח את עורך השפה במשחק."
 
 [language.selection]
-server-selected = "{plugin}: שפת השרת עכשיו {locale}."
-server-default-selected = "{plugin}: השפה שלך תואמת כעת לשפת ברירת המחדל של השרת."
-save-failed = "{plugin}: לא ניתן לשמור את בחירת השפה; יש לבדוק את מסוף השרת."
-preparing = "מכין את השפה {locale} עבור {target}..."
-personal-selected = "{plugin}: השפה שלך עכשיו {locale}."
-english-fallback = "{plugin}: השפה {locale} אינה זמינה; נעשה שימוש באנגלית (en_US)."
+server-selected = "{prefix}&r &7› &7&7שפת השרת עכשיו {locale}."
+server-default-selected = "{prefix}&r &7› &7&7השפה שלך תואמת כעת לשפת ברירת המחדל של השרת."
+save-failed = "{prefix}&r &7› &7&cלא ניתן לשמור את בחירת השפה; יש לבדוק את מסוף השרת."
+preparing = "{prefix}&r &7› &7&7מכין את השפה {locale} עבור {target}..."
+personal-selected = "{prefix}&r &7› &7&7השפה שלך עכשיו {locale}."
+english-fallback = "{prefix}&r &7› &7&7השפה {locale} אינה זמינה; נעשה שימוש באנגלית (en_US)."
 
 [language.usage]
-volmit-selection = "שימוש: /volmit plugins languages [locale]"
-selection = "שימוש: /{command} language self [locale|reset] or server [locale]"
-editor = "שימוש: /{command} language server edit [locale]"
+volmit-selection = "{prefix}&r &7› &7&7שימוש: /volmit plugins languages [locale]"
+selection = "{prefix}&r &7› &7&7שימוש: /{command} language self [locale|reset] or server [locale]"
+editor = "{prefix}&r &7› &7&7שימוש: /{command} language server edit [locale]"
+
+
+[debug.error]
+missing-permission = "{prefix}&r &7› &7&cחסרה הרשאה: {permission}"
+already-preparing = "{prefix}&r &7› &7&cכבר מתבצעת הכנת דוח אבחון עבור {prefix}."
+already-preparing-short = "{prefix}&r &7› &7&cכבר מתבצעת הכנת דוח אבחון."
+schedule-failed = "{prefix}&r &7› &7&cלא ניתן לתזמן את הכנת דוח האבחון."
+provider-closed = "{prefix}&r &7› &7&cספק האבחון נסגר."
+closed-before-capture = "{prefix}&r &7› &7&cספק האבחון נסגר לפני איסוף נתוני הדוח."
+writer-schedule-failed = "{prefix}&r &7› &7&cלא ניתן לתזמן את כתיבת דוח האבחון."
+capture-failed = "{prefix}&r &7› &7&cלא ניתן לאסוף את נתוני דוח האבחון; יש לבדוק את מסוף השרת."
+closed-before-write = "{prefix}&r &7› &7&cספק האבחון נסגר לפני כתיבת הדוח."
+write-failed = "{prefix}&r &7› &7&cלא ניתן לכתוב את דוח האבחון; יש לבדוק את מסוף השרת."
+
+[debug]
+preparing = "{prefix}&r &7› &7&7מכין דוח אבחון של {prefix}..."
+saved = "{prefix}&r &7› &7&7דוח האבחון של {prefix} נשמר בנתיב {path}."
+
+[debug.upload]
+interrupted = "{prefix}&r &7› &7&7העלאת דוח האבחון הופסקה; הדוח המקומי נשמר."
+failed = "{prefix}&r &7› &7&cהעלאת דוח האבחון נכשלה; הדוח המקומי נשמר."
+completed = "{prefix}&r &7› &7&7הועלה בשם VolmitSoftware - {prefix} - v{version}."
+
+[debug.action]
+open = "פתיחה: {url}"
+open-description = "פתיחת דוח האבחון שהועלה."
+copy-path = "העתקת הנתיב המקומי"
+copy-path-description = "העתקת הנתיב של הדוח המקומי."

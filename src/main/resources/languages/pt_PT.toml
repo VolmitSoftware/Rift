@@ -6,7 +6,7 @@
 # /rift language server edit pt_PT
 #
 # === Prefixo ===
-# Prefixo: {prefix}=o valor global runtime.prefix. Remove {prefix} de uma mensagem para o ocultar apenas aí.
+# runtime.prefix contém apenas o nome formatado. {prefix} insere o nome; › e os espaços editam-se em cada mensagem.
 #
 # === Formatação ===
 # Cores: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B e [RRGGBB]. O MiniMessage continua disponível para formatação personalizada.
@@ -33,24 +33,27 @@
 #   {permission}  nó de permissão
 #   {personal}  região pessoal
 #   {player}  nome do jogador
-#   {plugin}  Nome do plug-in
-#   {prefix}  o valor global runtime.prefix. Remove {prefix} de uma mensagem para o ocultar apenas aí.
+#   {prefix}  runtime.prefix contém apenas o nome formatado. {prefix} insere o nome; › e os espaços editam-se em cada mensagem.
 #   {reason}  motivo ou detalhe do erro
 #   {seconds}  duração em segundos
 #   {setting}  nome da definição
 #   {target}  Jogador alvo, entidade ou valor
 #   {title}  texto do título
 #   {type}  tipo de valor ou dados
-#   {usage}  texto de utilização do comando
 #   {value}  valor atual ou novo
 #   {variables}  marcadores válidos
 #   {version}  versão
 #   {world}  nome do mundo
 
+#   {section}  Secção do editor
+#   {path}  Caminho do relatório local
+#   {url}  URL do relatório
+
 [runtime]
-prefix = "&5&lRIFT&r &8›&r "
+prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+version = "Mostrar a versão do {prefix}"
 root = "Gerenciar mundos de servidor com segurança"
 create = "Crie e gerencie um novo mundo"
 import = "Importar um diretório mundial existente"
@@ -63,11 +66,11 @@ send = "Teleportar outro jogador para um mundo carregado"
 list = "Lista de mundos carregados, geridos, descobertos e em quarentena"
 info = "Mostrar o estado detalhado de um mundo"
 generators = "Mostrar os identificadores do gerador já utilizados pelos mundos geridos"
-config = "Abrir o jogo Rift editor de configuração"
-language = "Selecionar um idioma Rift disponível"
-status = "Inspecionar capacidades da plataforma e Rift estado"
-debug = "Ferramentas de diagnóstico do Rift"
-debug_dump = "Criar um relatório de diagnóstico completo do Rift"
+config = "Abrir o jogo {prefix} editor de configuração"
+language = "Selecionar um idioma {prefix} disponível"
+status = "Inspecionar capacidades da plataforma e {prefix} estado"
+debug = "Ferramentas de diagnóstico do {prefix}"
+debug_dump = "Criar um relatório de diagnóstico completo do {prefix}"
 autoload = "Alterar se um mundo gerenciado carrega durante a inicialização"
 protect = "Proteger ou desproteger um mundo gerido"
 
@@ -86,34 +89,35 @@ upload = "Carregar o relatório quando os carregamentos públicos estão ativado
 sender = "Enviador de comandos"
 
 [rift.message]
-permission_denied = "{prefix}&cPrecisas de... &f{permission}&c."
-unknown_command = "{prefix}&cComando desconhecido. Use &f/rift help&c."
-player_only = "{prefix}&cEste comando requer um jogador."
-operation_queued = "{prefix}&7Em fila &f{operation}&7 em vez de &d{world}&7."
-operation_failed = "{prefix}&c{operation} falhou por &f{world}&c: {reason}"
-created = "{prefix}&aCriado e gerenciado &f{world}&a."
-imported = "{prefix}&aImportado e gerido &f{world}&a."
-loaded = "{prefix}&aCarregado &f{world}&a."
-unloaded = "{prefix}&aDescarregado &f{world}&a."
-teleported = "{prefix}&aTeletransportado &f{player}&a para &f{world}&a."
-delete_confirm = "{prefix}&eExecutar &f/rift delete {world}&e novamente dentro &f{seconds}s&e Movê-lo para a quarentena."
-quarantined = "{prefix}&aMovido &f{world}&a em quarentena como &f{id}&a."
-restored = "{prefix}&aRestaurado &f{world}&a de &f{id}&a."
-profile_updated = "{prefix}&aActualizado &f{setting}&a em vez de &f{world}&a para &f{value}&a."
-folia_limit = "{prefix}&e{operation} não está disponível em Folia porque a sua carga mundial/unload A API não está implementada."
-config_saved = "{prefix}&aA configuração foi salva."
-config_opened = "{prefix}&aO editor completo de configuração no jogo foi aberto.&r"
-config_save_failed = "{prefix}&cNão foi possível gravar a configuração. Verifique a consola."
-empty_list = "{prefix}&7Não foram encontrados mundos iguais."
-player_offline = "{prefix}&cO jogador não está online: &f{player}"
-unknown_world = "{prefix}&cMundo desconhecido: &f{world}"
-section = "{prefix}&d{title} &8(&f{count}&8)"
-entry = "{prefix}&8- &f{name} &8| &7{detail}"
-detail = "{prefix}&8- &7{label}: &f{value}"
-info_title = "{prefix}&d{world}"
-status_title = "{prefix}&dRift {version} Estado"
-generator_format = "{prefix}&7Custom formato: &fPluginName[:generator-id]"
-folia_status_note = "{prefix}&eFolia suportes Rift's lida, editor, perfil e recursos de teletransporte; ciclo de vida mundial dinâmico é fechado pela API da plataforma."
+version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
+permission_denied = "{prefix}&r &7› &7&cPrecisas de... &f{permission}&7."
+unknown_command = "{prefix}&r &7› &7&cComando desconhecido. Use &f/rift help&7."
+player_only = "{prefix}&r &7› &7&cEste comando requer um jogador."
+operation_queued = "{prefix}&r &7› &7Em fila &f{operation}&7 em vez de &d{world}&7."
+operation_failed = "{prefix}&r &7› &7&c{operation} falhou por &f{world}&7: {reason}"
+created = "{prefix}&r &7› &7Criado e gerenciado &a{world}&7."
+imported = "{prefix}&r &7› &7Importado e gerido &a{world}&7."
+loaded = "{prefix}&r &7› &7Carregado &a{world}&7."
+unloaded = "{prefix}&r &7› &7Descarregado &a{world}&7."
+teleported = "{prefix}&r &7› &7Teletransportado &a{player}&7 para &a{world}&7."
+delete_confirm = "{prefix}&r &7› &7Executar &e/rift delete {world}&7 novamente dentro &e{seconds}s&7 Movê-lo para a quarentena."
+quarantined = "{prefix}&r &7› &7Movido &a{world}&7 em quarentena como &a{id}&7."
+restored = "{prefix}&r &7› &7Restaurado &a{world}&7 de &a{id}&7."
+profile_updated = "{prefix}&r &7› &7Actualizado &a{setting}&7 em vez de &a{world}&7 para &a{value}&7."
+folia_limit = "{prefix}&r &7› &7{operation} não está disponível em Folia porque a sua carga mundial/unload A API não está implementada."
+config_saved = "{prefix}&r &7› &7&aA configuração foi salva."
+config_opened = "{prefix}&r &7› &7O editor completo de configuração no jogo foi aberto.&r"
+config_save_failed = "{prefix}&r &7› &7&cNão foi possível gravar a configuração. Verifique a consola."
+empty_list = "{prefix}&r &7› &7Não foram encontrados mundos iguais."
+player_offline = "{prefix}&r &7› &7&cO jogador não está online: &f{player}"
+unknown_world = "{prefix}&r &7› &7&cMundo desconhecido: &f{world}"
+section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
+entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
+info_title = "{prefix}&r &7› &7&d{world}"
+status_title = "{prefix}&r &7› &7{prefix} {version} Estado"
+generator_format = "{prefix}&r &7› &7Custom formato: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&r &7› &7Folia suportes {prefix}'s lida, editor, perfil e recursos de teletransporte; ciclo de vida mundial dinâmico é fechado pela API da plataforma."
 
 [rift.label]
 worlds = "Mundos"
@@ -145,35 +149,35 @@ quarantine_entries = "Entradas de quarentena"
 
 [rift.explain]
 loaded = "Indica se o Bukkit mantém atualmente este mundo ativo na memória."
-managed = "Indica se o Rift tem um perfil para este mundo e pode restaurar o gerador e as definições de arranque."
+managed = "Indica se o {prefix} tem um perfil para este mundo e pode restaurar o gerador e as definições de arranque."
 on_disk = "Indica se o mundo está carregado ou tem uma pasta de mundo válida que contém level.dat."
 environment = "O ambiente do mundo Bukkit registado no mundo ativo ou no perfil gerido."
-generator = "O gerador que o Rift volta a aplicar quando este mundo gerido é carregado. void é o gerador de mundos vazios integrado no Rift."
+generator = "O gerador que o {prefix} volta a aplicar quando este mundo gerido é carregado. void é o gerador de mundos vazios integrado no {prefix}."
 seed = "A semente registada para este mundo. Alterar este valor apresentado nunca volta a gerar o terreno existente."
-autoload = "Indica se o Rift carrega automaticamente este mundo gerido durante o arranque do servidor."
-protected = "Os mundos geridos protegidos não podem ser movidos para a quarentena do Rift."
-operation_active = "Indica se uma operação do ciclo de vida detém atualmente o bloqueio do Rift específico deste mundo."
+autoload = "Indica se o {prefix} carrega automaticamente este mundo gerido durante o arranque do servidor."
+protected = "Os mundos geridos protegidos não podem ser movidos para a quarentena do {prefix}."
+operation_active = "Indica se uma operação do ciclo de vida detém atualmente o bloqueio do {prefix} específico deste mundo."
 server = "A implementação e a versão do servidor ativo comunicadas pelo Bukkit."
-java_runtime = "O ambiente de execução Java que aloja atualmente o servidor. O bytecode do Rift continua compatível com Java 17."
-plugin_bytecode = "O ambiente de execução Java mais antigo capaz de carregar as classes compiladas do Rift."
-platform = "A família do agendador e da API do servidor detetada pelo Rift durante a execução."
+java_runtime = "O ambiente de execução Java que aloja atualmente o servidor. O bytecode do {prefix} continua compatível com Java 17."
+plugin_bytecode = "O ambiente de execução Java mais antigo capaz de carregar as classes compiladas do {prefix}."
+platform = "A família do agendador e da API do servidor detetada pelo {prefix} durante a execução."
 dynamic_lifecycle = "Indica se a plataforma disponibiliza com segurança operações de criação, carregamento, descarregamento, quarentena e restauro de mundos durante a execução."
 world_container = "A pasta do servidor onde são guardadas as pastas dos mundos Bukkit."
-writable = "Indica se o sistema operativo permite atualmente ao Rift escrever na pasta que contém os mundos."
+writable = "Indica se o sistema operativo permite atualmente ao {prefix} escrever na pasta que contém os mundos."
 locale = "O ficheiro do idioma ativo em plugins/Rift/languages. As entradas em falta usam o inglês integrado."
-world_counts = "Carregados conta os mundos Bukkit ativos; geridos conta os perfis Rift; em falta conta os perfis geridos cujos mundos não estão carregados nem presentes no disco."
-quarantine = "Mundos colocados de parte pela função de eliminação do Rift e disponíveis para restauro através do identificador de quarentena."
-world_entry = "Carregado significa ativo agora; gerido significa que o Rift tem um perfil; no disco significa que existe uma pasta válida de um mundo não carregado."
+world_counts = "Carregados conta os mundos Bukkit ativos; geridos conta os perfis {prefix}; em falta conta os perfis geridos cujos mundos não estão carregados nem presentes no disco."
+quarantine = "Mundos colocados de parte pela função de eliminação do {prefix} e disponíveis para restauro através do identificador de quarentena."
+world_entry = "Carregado significa ativo agora; gerido significa que o {prefix} tem um perfil; no disco significa que existe uma pasta válida de um mundo não carregado."
 
 [rift.feedback]
-title = "&d&lRIFT"
+title = "{prefix}"
 world_subtitle = "&a{operation}&8: &f{world}"
 teleport_subtitle = "&aChegou. &f{world}"
 failure_title = "&cA operação falhou"
 failure_subtitle = "&7{operation}&8: &f{world}"
-action_world = "&dRift &8• &a{operation} &f{world}"
-action_teleport = "&dRift &8• &aTeletransportado para &f{world}"
-action_failure = "&dRift &8• &c{operation} falhou por &f{world}"
+action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
+action_teleport = "{prefix}&r &7› &7&aTeletransportado para &a{world}"
+action_failure = "{prefix}&r &7› &7&c{operation} falhou por &f{world}"
 
 [rift.gui]
 current = "&7Atual: &f{value}"
@@ -194,19 +198,19 @@ failure_feedback = "&dFeedback de falha"
 title_popups = "&dPopups de título"
 action_bar_popups = "&dPopups da barra de ação"
 sounds = "&dSons de feedback"
-root_title = "Rift Configuração"
-category_title = "Rift: {category}"
+root_title = "{prefix} Configuração"
+category_title = "{prefix}: {category}"
 category_open = "&8Clique para editar todas as configurações nesta seção"
 back = "&eRecuar"
 toggle = "&8Clique para alternar"
 exact_number = "&8Esquerda/right ajusta; pressione Q para digitar um valor exato"
 text = "&8Clique para inserir um novo valor no chat"
-prompt = "{prefix}&7Digite um novo valor para &f{setting}&7 Em chat."
-prompt_cancel = "{prefix}&7Tipo &fcancelar&7 para voltar sem mudar isso."
-prompt_cancelled = "{prefix}&7A entrada de configuração foi cancelada."
-prompt_timeout = "{prefix}&7O tempo de entrada da configuração foi expirado."
-setting_saved = "{prefix}&d{setting} &8› &aAlterado para &f{after} &7de &f{before}&a."
-setting_failed = "{prefix}&cNão foi possível atualizar &f{setting}&c: {reason}"
+prompt = "{prefix}&r &7› &7Digite um novo valor para &f{setting}&7 Em chat."
+prompt_cancel = "{prefix}&r &7› &7Tipo &fcancelar&7 para voltar sem mudar isso."
+prompt_cancelled = "{prefix}&r &7› &7A entrada de configuração foi cancelada."
+prompt_timeout = "{prefix}&r &7› &7O tempo de entrada da configuração foi expirado."
+setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7Alterado para &a{after} &7de &f{before}&7."
+setting_failed = "{prefix}&r &7› &7&cNão foi possível atualizar &f{setting}&7: {reason}"
 language = "&dLocalização da língua"
 language_select = "&8Clique para escolher entre os idiomas disponíveis"
 lifecycle_sound = "&dSom do ciclo de vida mundial"
@@ -252,18 +256,15 @@ optional = "Este parâmetro é opcional."
 default = "Predefinição \"{value}\" se não for definido."
 type = "Este parâmetro é do tipo {type}."
 
-[director.runtime]
-usage = "Utilização: {usage}"
-
 [director.runtime.error]
-invalid_origin = "Este comando não pode ser executado a partir desta origem."
-unknown_parameter = "Chave de parâmetro desconhecida: {key}"
-unexpected_argument = "Argumento inesperado \"{argument}\". Os parâmetros opcionais devem ser indicados por chave, por ex. seed=123"
-unclosed_group = "Falta o \"]\" de fecho para o parâmetro {key}"
-conversion_failed = "Não foi possível converter \"{value}\" em {type} para {parameter}"
-default_parse_failed = "Não foi possível interpretar o valor predefinido do parâmetro {parameter}"
-missing_argument = "Falta o argumento \"{parameter}\" ({type})"
-execution_failed = "Falha ao executar o comando {command}: {reason}"
+invalid_origin = "{prefix}&r &7› &7&cEste comando não pode ser executado a partir desta origem."
+unknown_parameter = "{prefix}&r &7› &7&cChave de parâmetro desconhecida: {key}"
+unexpected_argument = "{prefix}&r &7› &7&cArgumento inesperado \"{argument}\". Os parâmetros opcionais devem ser indicados por chave, por ex. seed=123"
+unclosed_group = "{prefix}&r &7› &7&cFalta o \"]\" de fecho para o parâmetro {key}"
+conversion_failed = "{prefix}&r &7› &7&cNão foi possível converter \"{value}\" em {type} para {parameter}"
+default_parse_failed = "{prefix}&r &7› &7&cNão foi possível interpretar o valor predefinido do parâmetro {parameter}"
+missing_argument = "{prefix}&r &7› &7&cFalta o argumento \"{parameter}\" ({type})"
+execution_failed = "{prefix}&r &7› &7&cFalha ao executar o comando {command}: {reason}"
 
 [language.menu]
 selected = "selecionado"
@@ -285,20 +286,21 @@ remove_personal_description = "Remove a tua escolha pessoal de idioma."
 no_controls = "Não tens acesso às opções de idioma."
 
 [language.editor]
-loading = "A carregar as mensagens de {locale}..."
+title = "{prefix} › {section}"
+loading = "{prefix}&r &7› &7&7A carregar as mensagens de {locale}..."
 
 [language.editor.category]
 open = "&8Clique para abrir esta categoria.&r"
 message-count = "&7{count} mensagens&r"
 
 [language.editor.error]
-unable-to-edit = "Não foi possível editar: {reason}"
-no-permission = "Não tem permissão para editar os idiomas de {plugin}."
+unable-to-edit = "{prefix}&r &7› &7&cNão foi possível editar: {reason}"
+no-permission = "{prefix}&r &7› &7&cNão tem permissão para editar os idiomas de {prefix}."
 
 [language.editor.input]
-unable-to-save = "Não foi possível guardar: {reason}"
-too-long = "O texto pode ter no máximo {maximum} caracteres."
-expired = "O prazo de introdução de texto no editor de idiomas expirou."
+unable-to-save = "{prefix}&r &7› &7&7Não foi possível guardar: {reason}"
+too-long = "{prefix}&r &7› &7&7O texto pode ter no máximo {maximum} caracteres."
+expired = "{prefix}&r &7› &7&7O prazo de introdução de texto no editor de idiomas expirou."
 
 [language.editor.locale]
 open = "&8Clique para abrir este idioma.&r"
@@ -320,15 +322,15 @@ back = "&eVoltar&r"
 line = "Linha {line}"
 
 [language.editor.prompt]
-variables = "Variáveis: {variables}"
-value = "Escreva um novo valor para {key} no chat."
-search = "Pesquise uma chave de mensagem ou texto. Escreva cancel para voltar."
-guidance = "Use \\n para mudar de linha, \\\\ para uma barra invertida, ou escreva cancel para voltar."
-current = "Valor atual: {value}"
+variables = "{prefix}&r &7› &7&7Variáveis: {variables}"
+value = "{prefix}&r &7› &7&7Escreva um novo valor para {key} no chat."
+search = "{prefix}&r &7› &7&7Pesquise uma chave de mensagem ou texto. Escreva cancel para voltar."
+guidance = "{prefix}&r &7› &7&7Use \\n para mudar de linha, \\\\ para uma barra invertida, ou escreva cancel para voltar."
+current = "{prefix}&r &7› &7&7Valor atual: {value}"
 
 [language.editor.saved]
-summary = "{locale} guardado. As escolhas de idioma não foram alteradas."
-change = "{key}: «{before}» foi alterado para «{after}»."
+summary = "{prefix}&r &7› &7&7{locale} guardado. As escolhas de idioma não foram alteradas."
+change = "{prefix}&r &7› &7&7{key}: «{before}» foi alterado para «{after}»."
 
 [language.editor.search]
 messages-lore = "Clique para pesquisar todas as mensagens."
@@ -346,26 +348,54 @@ none = "Nenhum"
 empty = "(vazio)"
 
 [language.error]
-unavailable-for-all = "O idioma {locale} não está disponível para todos os plugins selecionados."
-stopping = "A escolha de idioma não está disponível enquanto o plugin está a parar."
-server-locale-required = "Escolha um código como en_US para o idioma predefinido do servidor."
-plugin-server-permission = "Não tem permissão para alterar o idioma do servidor em {plugin}."
-plugin-personal-permission = "Não tem permissão para escolher o seu idioma em {plugin}."
-personal-player-only = "As preferências do idioma do jogador devem ser selecionadas no jogo."
-personal-permission = "Você não tem permissão para selecionar seu idioma."
-numeric-page = "Introduza um número de página."
-no-providers = "Não há fornecedores de idiomas Volmit disponíveis."
-editor-player-only = "Abra o editor de idiomas dentro do jogo."
+unavailable-for-all = "{prefix}&r &7› &7&cO idioma {locale} não está disponível para todos os plugins selecionados."
+stopping = "{prefix}&r &7› &7&cA escolha de idioma não está disponível enquanto o plugin está a parar."
+server-locale-required = "{prefix}&r &7› &7&cEscolha um código como en_US para o idioma predefinido do servidor."
+plugin-server-permission = "{prefix}&r &7› &7&cNão tem permissão para alterar o idioma do servidor em {prefix}."
+plugin-personal-permission = "{prefix}&r &7› &7&cNão tem permissão para escolher o seu idioma em {prefix}."
+personal-player-only = "{prefix}&r &7› &7&cAs preferências do idioma do jogador devem ser selecionadas no jogo."
+personal-permission = "{prefix}&r &7› &7&cVocê não tem permissão para selecionar seu idioma."
+numeric-page = "{prefix}&r &7› &7&cIntroduza um número de página."
+no-providers = "{prefix}&r &7› &7&cNão há fornecedores de idiomas Volmit disponíveis."
+editor-player-only = "{prefix}&r &7› &7&cAbra o editor de idiomas dentro do jogo."
 
 [language.selection]
-server-selected = "{plugin}: o idioma do servidor agora é {locale}."
-server-default-selected = "{plugin}: o seu idioma segue agora o idioma predefinido do servidor."
-save-failed = "{plugin}: não foi possível guardar a escolha de idioma; consulte a consola do servidor."
-preparing = "A preparar o idioma {locale} para {target}..."
-personal-selected = "{plugin}: o seu idioma agora é {locale}."
-english-fallback = "{plugin}: {locale} não está disponível; será usado inglês (en_US)."
+server-selected = "{prefix}&r &7› &7&7o idioma do servidor agora é {locale}."
+server-default-selected = "{prefix}&r &7› &7&7o seu idioma segue agora o idioma predefinido do servidor."
+save-failed = "{prefix}&r &7› &7&cnão foi possível guardar a escolha de idioma; consulte a consola do servidor."
+preparing = "{prefix}&r &7› &7&7A preparar o idioma {locale} para {target}..."
+personal-selected = "{prefix}&r &7› &7&7o seu idioma agora é {locale}."
+english-fallback = "{prefix}&r &7› &7&7{locale} não está disponível; será usado inglês (en_US)."
 
 [language.usage]
-volmit-selection = "Uso: /volmit plugins languages [locale]"
-selection = "Uso: /{command} language self [locale|reset] or server [locale]"
-editor = "Uso: /{command} language server edit [locale]"
+volmit-selection = "{prefix}&r &7› &7&7Uso: /volmit plugins languages [locale]"
+selection = "{prefix}&r &7› &7&7Uso: /{command} language self [locale|reset] or server [locale]"
+editor = "{prefix}&r &7› &7&7Uso: /{command} language server edit [locale]"
+
+
+[debug]
+preparing = "{prefix}&r &7› &7&7A preparar o relatório de diagnóstico de {prefix}..."
+saved = "{prefix}&r &7› &7&7Relatório de diagnóstico de {prefix} guardado em {path}."
+
+[debug.error]
+missing-permission = "{prefix}&r &7› &7&cPermissão em falta: {permission}"
+already-preparing = "{prefix}&r &7› &7&cJá está a ser preparado um relatório de diagnóstico de {prefix}."
+already-preparing-short = "{prefix}&r &7› &7&cJá está a ser preparado um relatório de diagnóstico."
+schedule-failed = "{prefix}&r &7› &7&cNão foi possível agendar a criação do relatório de diagnóstico."
+provider-closed = "{prefix}&r &7› &7&cO fornecedor de diagnósticos está encerrado."
+closed-before-capture = "{prefix}&r &7› &7&cO fornecedor de diagnósticos foi encerrado antes da recolha dos dados do relatório."
+writer-schedule-failed = "{prefix}&r &7› &7&cNão foi possível agendar a escrita do relatório de diagnóstico."
+capture-failed = "{prefix}&r &7› &7&cNão foi possível recolher os dados do relatório de diagnóstico. Consulta a consola do servidor."
+closed-before-write = "{prefix}&r &7› &7&cO fornecedor de diagnósticos foi encerrado antes da escrita do relatório."
+write-failed = "{prefix}&r &7› &7&cNão foi possível escrever o relatório de diagnóstico. Consulta a consola do servidor."
+
+[debug.upload]
+interrupted = "{prefix}&r &7› &7&7O envio do relatório de diagnóstico foi interrompido. O relatório local está guardado."
+failed = "{prefix}&r &7› &7&cO envio do relatório de diagnóstico falhou. O relatório local está guardado."
+completed = "{prefix}&r &7› &7&7Enviado como VolmitSoftware - {prefix} - v{version}."
+
+[debug.action]
+open = "Abrir: {url}"
+open-description = "Abrir o relatório de diagnóstico enviado."
+copy-path = "Copiar caminho local"
+copy-path-description = "Copiar o caminho do relatório local."

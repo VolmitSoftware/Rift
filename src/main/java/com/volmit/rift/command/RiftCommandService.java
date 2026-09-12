@@ -14,6 +14,7 @@ import art.arcane.volmlib.util.plugin.ComponentText;
 import com.volmit.rift.Rift;
 import com.volmit.rift.localization.RiftLocalization;
 import com.volmit.rift.localization.RiftMessages;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,8 +33,9 @@ import java.util.logging.Level;
 import java.util.UUID;
 
 public final class RiftCommandService implements CommandExecutor, TabCompleter {
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
     private static final DirectorMiniMenu.Theme THEME = new DirectorMiniMenu.Theme(
-            "#6f2dbd", "#d16ba5", "#31104f", "#7d3cc8", "#dec8f5", "#ff6666", "#d9a7ff", "#9370aa"
+            "#6f2dbd", "#d16ba5", "#31104f", "#7d3cc8", "#AAAAAA", "#FF5555", "#D1ADE8", "#AAAAAA"
     );
     private static final Map<String, String> PERMISSIONS = permissions();
 
@@ -239,7 +241,7 @@ public final class RiftCommandService implements CommandExecutor, TabCompleter {
         @Override
         public void sendMessage(String message) {
             if (message != null && !message.isBlank()) {
-                language.send(sender, ComponentText.literal(message));
+                language.send(sender, ComponentText.component(MINI_MESSAGE.deserialize(message)));
             }
         }
     }

@@ -134,7 +134,7 @@ public final class Rift extends JavaPlugin implements ReloadAware {
                             "/rift debug dump",
                             "/rift debug",
                             RiftCommandService.theme(),
-                            language.directorResolver()
+                            language::text
                     )
             ));
             commands = new RiftCommandService(this);

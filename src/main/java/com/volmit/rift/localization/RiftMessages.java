@@ -1,15 +1,20 @@
 package com.volmit.rift.localization;
 
 import art.arcane.volmlib.util.director.DirectorMessages;
+import art.arcane.volmlib.util.diagnostics.BukkitDebugMessages;
 import art.arcane.volmlib.util.localization.BukkitLanguageMessages;
 import art.arcane.volmlib.util.localization.MessageCatalog;
+import art.arcane.volmlib.util.localization.MessageKey;
 import art.arcane.volmlib.util.localization.TextKey;
 import art.arcane.volmlib.util.localization.VolmitLocales;
 
 import java.util.List;
 
 public final class RiftMessages {
-    public static final TextKey PREFIX = key("runtime.prefix", "&5&lRIFT&r &8›&r ");
+    public static final String CHAT_PREFIX = "{prefix}&r &7› &7";
+    public static final TextKey PREFIX = key("runtime.prefix", "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>");
+
+    public static final TextKey VERSION = key("rift.message.version", "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>");
 
     public static final TextKey COMMAND_ROOT = key("rift.command.root", "Manage server worlds safely");
     public static final TextKey COMMAND_CREATE = key("rift.command.create", "Create and manage a new world");
@@ -23,11 +28,12 @@ public final class RiftMessages {
     public static final TextKey COMMAND_LIST = key("rift.command.list", "List loaded, managed, discovered, and quarantined worlds");
     public static final TextKey COMMAND_INFO = key("rift.command.info", "Show detailed state for one world");
     public static final TextKey COMMAND_GENERATORS = key("rift.command.generators", "Show generator identifiers already used by managed worlds");
-    public static final TextKey COMMAND_CONFIG = key("rift.command.config", "Open the in-game Rift configuration editor");
-    public static final TextKey COMMAND_LANGUAGE = key("rift.command.language", "Select an available Rift language");
-    public static final TextKey COMMAND_STATUS = key("rift.command.status", "Inspect platform capabilities and Rift state");
-    public static final TextKey COMMAND_DEBUG = key("rift.command.debug", "Rift diagnostic tools");
-    public static final TextKey COMMAND_DEBUG_DUMP = key("rift.command.debug_dump", "Create a comprehensive Rift diagnostic report");
+    public static final TextKey COMMAND_CONFIG = key("rift.command.config", "Open the in-game {prefix} configuration editor");
+    public static final TextKey COMMAND_LANGUAGE = key("rift.command.language", "Select an available {prefix} language");
+    public static final TextKey COMMAND_STATUS = key("rift.command.status", "Inspect platform capabilities and {prefix} state");
+    public static final TextKey COMMAND_DEBUG = key("rift.command.debug", "{prefix} diagnostic tools");
+    public static final TextKey COMMAND_VERSION = key("rift.command.version", "Show the {prefix} version");
+    public static final TextKey COMMAND_DEBUG_DUMP = key("rift.command.debug_dump", "Create a comprehensive {prefix} diagnostic report");
     public static final TextKey COMMAND_AUTOLOAD = key("rift.command.autoload", "Change whether a managed world loads during startup");
     public static final TextKey COMMAND_PROTECT = key("rift.command.protect", "Protect or unprotect a managed world");
 
@@ -44,34 +50,34 @@ public final class RiftMessages {
     public static final TextKey PARAM_UPLOAD = key("rift.parameter.upload", "Upload the report when public uploads are enabled");
     public static final TextKey PARAM_SENDER = key("rift.parameter.sender", "Command sender");
 
-    public static final TextKey PERMISSION_DENIED = prefixed("rift.message.permission_denied", "&cYou need &f{permission}&c.");
-    public static final TextKey UNKNOWN_COMMAND = prefixed("rift.message.unknown_command", "&cUnknown command. Use &f/rift help&c.");
+    public static final TextKey PERMISSION_DENIED = prefixed("rift.message.permission_denied", "&cYou need &f{permission}&7.");
+    public static final TextKey UNKNOWN_COMMAND = prefixed("rift.message.unknown_command", "&cUnknown command. Use &f/rift help&7.");
     public static final TextKey PLAYER_ONLY = prefixed("rift.message.player_only", "&cThis command requires a player.");
-    public static final TextKey OPERATION_QUEUED = prefixed("rift.message.operation_queued", "&7Queued &f{operation}&7 for &d{world}&7.");
-    public static final TextKey OPERATION_FAILED = prefixed("rift.message.operation_failed", "&c{operation} failed for &f{world}&c: {reason}");
-    public static final TextKey CREATED = prefixed("rift.message.created", "&aCreated and managed &f{world}&a.");
-    public static final TextKey IMPORTED = prefixed("rift.message.imported", "&aImported and managed &f{world}&a.");
-    public static final TextKey LOADED = prefixed("rift.message.loaded", "&aLoaded &f{world}&a.");
-    public static final TextKey UNLOADED = prefixed("rift.message.unloaded", "&aUnloaded &f{world}&a.");
-    public static final TextKey TELEPORTED = prefixed("rift.message.teleported", "&aTeleported &f{player}&a to &f{world}&a.");
-    public static final TextKey DELETE_CONFIRM = prefixed("rift.message.delete_confirm", "&eRun &f/rift delete {world}&e again within &f{seconds}s&e to move it into quarantine.");
-    public static final TextKey QUARANTINED = prefixed("rift.message.quarantined", "&aMoved &f{world}&a into quarantine as &f{id}&a.");
-    public static final TextKey RESTORED = prefixed("rift.message.restored", "&aRestored &f{world}&a from &f{id}&a.");
-    public static final TextKey PROFILE_UPDATED = prefixed("rift.message.profile_updated", "&aUpdated &f{setting}&a for &f{world}&a to &f{value}&a.");
-    public static final TextKey FOLIA_LIMIT = prefixed("rift.message.folia_limit", "&e{operation} is unavailable on Folia because its world load/unload API is not implemented.");
+    public static final TextKey OPERATION_QUEUED = prefixed("rift.message.operation_queued", "Queued &f{operation}&7 for &d{world}&7.");
+    public static final TextKey OPERATION_FAILED = prefixed("rift.message.operation_failed", "&c{operation} failed for &f{world}&7: {reason}");
+    public static final TextKey CREATED = prefixed("rift.message.created", "Created and managed &a{world}&7.");
+    public static final TextKey IMPORTED = prefixed("rift.message.imported", "Imported and managed &a{world}&7.");
+    public static final TextKey LOADED = prefixed("rift.message.loaded", "Loaded &a{world}&7.");
+    public static final TextKey UNLOADED = prefixed("rift.message.unloaded", "Unloaded &a{world}&7.");
+    public static final TextKey TELEPORTED = prefixed("rift.message.teleported", "Teleported &a{player}&7 to &a{world}&7.");
+    public static final TextKey DELETE_CONFIRM = prefixed("rift.message.delete_confirm", "Run &e/rift delete {world}&7 again within &e{seconds}s&7 to move it into quarantine.");
+    public static final TextKey QUARANTINED = prefixed("rift.message.quarantined", "Moved &a{world}&7 into quarantine as &a{id}&7.");
+    public static final TextKey RESTORED = prefixed("rift.message.restored", "Restored &a{world}&7 from &a{id}&7.");
+    public static final TextKey PROFILE_UPDATED = prefixed("rift.message.profile_updated", "Updated &a{setting}&7 for &a{world}&7 to &a{value}&7.");
+    public static final TextKey FOLIA_LIMIT = prefixed("rift.message.folia_limit", "{operation} is unavailable on Folia because its world load/unload API is not implemented.");
     public static final TextKey CONFIG_SAVED = prefixed("rift.message.config_saved", "&aConfiguration saved.");
-    public static final TextKey CONFIG_OPENED = prefixed("rift.message.config_opened", "&aOpened the complete in-game configuration editor.&r");
+    public static final TextKey CONFIG_OPENED = prefixed("rift.message.config_opened", "Opened the complete in-game configuration editor.&r");
     public static final TextKey CONFIG_SAVE_FAILED = prefixed("rift.message.config_save_failed", "&cConfiguration could not be saved. Check the console.");
-    public static final TextKey EMPTY_LIST = prefixed("rift.message.empty_list", "&7No matching worlds were found.");
+    public static final TextKey EMPTY_LIST = prefixed("rift.message.empty_list", "No matching worlds were found.");
     public static final TextKey PLAYER_OFFLINE = prefixed("rift.message.player_offline", "&cPlayer is not online: &f{player}");
     public static final TextKey UNKNOWN_WORLD = prefixed("rift.message.unknown_world", "&cUnknown world: &f{world}");
     public static final TextKey SECTION = prefixed("rift.message.section", "&d{title} &8(&f{count}&8)");
     public static final TextKey ENTRY = prefixed("rift.message.entry", "&8- &f{name} &8| &7{detail}");
     public static final TextKey DETAIL = prefixed("rift.message.detail", "&8- &7{label}: &f{value}");
     public static final TextKey INFO_TITLE = prefixed("rift.message.info_title", "&d{world}");
-    public static final TextKey STATUS_TITLE = prefixed("rift.message.status_title", "&dRift {version} Status");
-    public static final TextKey GENERATOR_FORMAT = prefixed("rift.message.generator_format", "&7Custom format: &fPluginName[:generator-id]");
-    public static final TextKey FOLIA_STATUS_NOTE = prefixed("rift.message.folia_status_note", "&eFolia supports Rift's read, editor, profile, and teleport features; dynamic world lifecycle is gated by the platform API.");
+    public static final TextKey STATUS_TITLE = prefixed("rift.message.status_title", "{prefix} {version} Status");
+    public static final TextKey GENERATOR_FORMAT = prefixed("rift.message.generator_format", "Custom format: &fPluginName[:generator-id]");
+    public static final TextKey FOLIA_STATUS_NOTE = prefixed("rift.message.folia_status_note", "Folia supports {prefix}'s read, editor, profile, and teleport features; dynamic world lifecycle is gated by the platform API.");
     public static final TextKey LABEL_WORLDS = key("rift.label.worlds", "Worlds");
     public static final TextKey LABEL_QUARANTINE = key("rift.label.quarantine", "Quarantine");
     public static final TextKey LABEL_LOADED = key("rift.label.loaded", "Loaded");
@@ -100,34 +106,34 @@ public final class RiftMessages {
     public static final TextKey LABEL_QUARANTINE_ENTRIES = key("rift.label.quarantine_entries", "Quarantine entries");
 
     public static final TextKey EXPLAIN_LOADED = key("rift.explain.loaded", "Whether Bukkit currently has this world active in memory.");
-    public static final TextKey EXPLAIN_MANAGED = key("rift.explain.managed", "Whether Rift owns a profile for this world and can restore its generator and startup settings.");
+    public static final TextKey EXPLAIN_MANAGED = key("rift.explain.managed", "Whether {prefix} owns a profile for this world and can restore its generator and startup settings.");
     public static final TextKey EXPLAIN_ON_DISK = key("rift.explain.on_disk", "Whether the world is loaded or has a valid world directory containing level.dat.");
     public static final TextKey EXPLAIN_ENVIRONMENT = key("rift.explain.environment", "The Bukkit world environment recorded by the live world or managed profile.");
-    public static final TextKey EXPLAIN_GENERATOR = key("rift.explain.generator", "The generator Rift reapplies when this managed world loads. void is Rift's built-in empty-world generator.");
+    public static final TextKey EXPLAIN_GENERATOR = key("rift.explain.generator", "The generator {prefix} reapplies when this managed world loads. void is {prefix}'s built-in empty-world generator.");
     public static final TextKey EXPLAIN_SEED = key("rift.explain.seed", "The seed recorded for this world. Existing terrain is never regenerated by changing this display value.");
-    public static final TextKey EXPLAIN_AUTOLOAD = key("rift.explain.autoload", "Whether Rift loads this managed world automatically during server startup.");
-    public static final TextKey EXPLAIN_PROTECTED = key("rift.explain.protected", "Protected managed worlds cannot be moved into Rift quarantine.");
-    public static final TextKey EXPLAIN_OPERATION_ACTIVE = key("rift.explain.operation_active", "Whether a lifecycle operation currently holds Rift's per-world lock.");
+    public static final TextKey EXPLAIN_AUTOLOAD = key("rift.explain.autoload", "Whether {prefix} loads this managed world automatically during server startup.");
+    public static final TextKey EXPLAIN_PROTECTED = key("rift.explain.protected", "Protected managed worlds cannot be moved into {prefix} quarantine.");
+    public static final TextKey EXPLAIN_OPERATION_ACTIVE = key("rift.explain.operation_active", "Whether a lifecycle operation currently holds {prefix}'s per-world lock.");
     public static final TextKey EXPLAIN_SERVER = key("rift.explain.server", "The active server implementation and version reported by Bukkit.");
-    public static final TextKey EXPLAIN_JAVA_RUNTIME = key("rift.explain.java_runtime", "The Java runtime currently hosting the server. Rift's bytecode remains compatible with Java 17.");
-    public static final TextKey EXPLAIN_PLUGIN_BYTECODE = key("rift.explain.plugin_bytecode", "The oldest Java runtime capable of loading Rift's compiled classes.");
-    public static final TextKey EXPLAIN_PLATFORM = key("rift.explain.platform", "The scheduler and server API family Rift detected at runtime.");
+    public static final TextKey EXPLAIN_JAVA_RUNTIME = key("rift.explain.java_runtime", "The Java runtime currently hosting the server. {prefix}'s bytecode remains compatible with Java 17.");
+    public static final TextKey EXPLAIN_PLUGIN_BYTECODE = key("rift.explain.plugin_bytecode", "The oldest Java runtime capable of loading {prefix}'s compiled classes.");
+    public static final TextKey EXPLAIN_PLATFORM = key("rift.explain.platform", "The scheduler and server API family {prefix} detected at runtime.");
     public static final TextKey EXPLAIN_DYNAMIC_LIFECYCLE = key("rift.explain.dynamic_lifecycle", "Whether this platform safely exposes runtime world create, load, unload, quarantine, and restore operations.");
     public static final TextKey EXPLAIN_WORLD_CONTAINER = key("rift.explain.world_container", "The server directory where Bukkit world folders are stored.");
-    public static final TextKey EXPLAIN_WRITABLE = key("rift.explain.writable", "Whether the operating system currently permits Rift to write inside the world container.");
+    public static final TextKey EXPLAIN_WRITABLE = key("rift.explain.writable", "Whether the operating system currently permits {prefix} to write inside the world container.");
     public static final TextKey EXPLAIN_LOCALE = key("rift.explain.locale", "The active language file under plugins/Rift/languages. Missing entries use built-in English.");
-    public static final TextKey EXPLAIN_WORLD_COUNTS = key("rift.explain.world_counts", "Loaded counts active Bukkit worlds; managed counts Rift profiles; missing counts managed profiles that are neither loaded nor present on disk.");
-    public static final TextKey EXPLAIN_QUARANTINE = key("rift.explain.quarantine", "Worlds moved aside by Rift delete and available to restore by quarantine id.");
-    public static final TextKey EXPLAIN_WORLD_ENTRY = key("rift.explain.world_entry", "Loaded means active now; managed means Rift has a profile; on disk means a valid unloaded world folder exists.");
+    public static final TextKey EXPLAIN_WORLD_COUNTS = key("rift.explain.world_counts", "Loaded counts active Bukkit worlds; managed counts {prefix} profiles; missing counts managed profiles that are neither loaded nor present on disk.");
+    public static final TextKey EXPLAIN_QUARANTINE = key("rift.explain.quarantine", "Worlds moved aside by {prefix} delete and available to restore by quarantine id.");
+    public static final TextKey EXPLAIN_WORLD_ENTRY = key("rift.explain.world_entry", "Loaded means active now; managed means {prefix} has a profile; on disk means a valid unloaded world folder exists.");
 
-    public static final TextKey FEEDBACK_TITLE = key("rift.feedback.title", "&d&lRIFT");
+    public static final TextKey FEEDBACK_TITLE = key("rift.feedback.title", "{prefix}");
     public static final TextKey FEEDBACK_WORLD_SUBTITLE = key("rift.feedback.world_subtitle", "&a{operation}&8: &f{world}");
     public static final TextKey FEEDBACK_TELEPORT_SUBTITLE = key("rift.feedback.teleport_subtitle", "&aArrived in &f{world}");
     public static final TextKey FEEDBACK_FAILURE_TITLE = key("rift.feedback.failure_title", "&cOperation failed");
     public static final TextKey FEEDBACK_FAILURE_SUBTITLE = key("rift.feedback.failure_subtitle", "&7{operation}&8: &f{world}");
-    public static final TextKey FEEDBACK_ACTION_WORLD = key("rift.feedback.action_world", "&dRift &8• &a{operation} &f{world}");
-    public static final TextKey FEEDBACK_ACTION_TELEPORT = key("rift.feedback.action_teleport", "&dRift &8• &aTeleported to &f{world}");
-    public static final TextKey FEEDBACK_ACTION_FAILURE = key("rift.feedback.action_failure", "&dRift &8• &c{operation} failed for &f{world}");
+    public static final TextKey FEEDBACK_ACTION_WORLD = key("rift.feedback.action_world", "{prefix}&r &7› &7&a{operation} &a{world}");
+    public static final TextKey FEEDBACK_ACTION_TELEPORT = key("rift.feedback.action_teleport", "{prefix}&r &7› &7&aTeleported to &a{world}");
+    public static final TextKey FEEDBACK_ACTION_FAILURE = key("rift.feedback.action_failure", "{prefix}&r &7› &7&c{operation} failed for &f{world}");
 
     public static final TextKey GUI_CURRENT = key("rift.gui.current", "&7Current: &f{value}");
     public static final TextKey GUI_AUTOLOAD = key("rift.gui.autoload", "&dAuto-load managed worlds");
@@ -147,8 +153,8 @@ public final class RiftMessages {
     public static final TextKey GUI_TITLE_POPUPS = key("rift.gui.title_popups", "&dTitle popups");
     public static final TextKey GUI_ACTION_BAR_POPUPS = key("rift.gui.action_bar_popups", "&dAction-bar popups");
     public static final TextKey GUI_SOUNDS = key("rift.gui.sounds", "&dFeedback sounds");
-    public static final TextKey GUI_ROOT_TITLE = key("rift.gui.root_title", "Rift Configuration");
-    public static final TextKey GUI_CATEGORY_TITLE = key("rift.gui.category_title", "Rift: {category}");
+    public static final TextKey GUI_ROOT_TITLE = key("rift.gui.root_title", "{prefix} Configuration");
+    public static final TextKey GUI_CATEGORY_TITLE = key("rift.gui.category_title", "{prefix}: {category}");
     public static final TextKey GUI_CATEGORY_GENERAL = key("rift.gui.category.general", "&dGeneral & Safety");
     public static final TextKey GUI_CATEGORY_FEEDBACK = key("rift.gui.category.feedback", "&dFeedback & Sounds");
     public static final TextKey GUI_CATEGORY_PRESENTATION = key("rift.gui.category.presentation", "&dPresentation");
@@ -159,13 +165,13 @@ public final class RiftMessages {
     public static final TextKey GUI_TOGGLE = key("rift.gui.toggle", "&8Click to toggle");
     public static final TextKey GUI_EXACT_NUMBER = key("rift.gui.exact_number", "&8Left/right adjusts; press Q to enter an exact value");
     public static final TextKey GUI_TEXT = key("rift.gui.text", "&8Click to enter a new value in chat");
-    public static final TextKey GUI_PROMPT = prefixed("rift.gui.prompt", "&7Type a new value for &f{setting}&7 in chat.");
-    public static final TextKey GUI_PROMPT_CANCEL = prefixed("rift.gui.prompt_cancel", "&7Type &fcancel&7 to return without changing it.");
-    public static final TextKey GUI_PROMPT_CANCELLED = prefixed("rift.gui.prompt_cancelled", "&7Configuration input cancelled.");
-    public static final TextKey GUI_PROMPT_TIMEOUT = prefixed("rift.gui.prompt_timeout", "&7Configuration input timed out.");
+    public static final TextKey GUI_PROMPT = prefixed("rift.gui.prompt", "Type a new value for &f{setting}&7 in chat.");
+    public static final TextKey GUI_PROMPT_CANCEL = prefixed("rift.gui.prompt_cancel", "Type &fcancel&7 to return without changing it.");
+    public static final TextKey GUI_PROMPT_CANCELLED = prefixed("rift.gui.prompt_cancelled", "Configuration input cancelled.");
+    public static final TextKey GUI_PROMPT_TIMEOUT = prefixed("rift.gui.prompt_timeout", "Configuration input timed out.");
     public static final TextKey GUI_SETTING_SAVED = prefixed("rift.gui.setting_saved",
-            "&d{setting} &8› &aChanged to &f{after} &7from &f{before}&a.");
-    public static final TextKey GUI_SETTING_FAILED = prefixed("rift.gui.setting_failed", "&cCould not update &f{setting}&c: {reason}");
+            "&f{setting} &7› &7Changed to &a{after} &7from &f{before}&7.");
+    public static final TextKey GUI_SETTING_FAILED = prefixed("rift.gui.setting_failed", "&cCould not update &f{setting}&7: {reason}");
     public static final TextKey GUI_LANGUAGE = key("rift.gui.language", "&dLanguage locale");
     public static final TextKey GUI_LANGUAGE_SELECT = key("rift.gui.language_select", "&8Click to choose from available languages");
     public static final TextKey GUI_LIFECYCLE_SOUND = key("rift.gui.lifecycle_sound", "&dWorld lifecycle sound");
@@ -178,9 +184,9 @@ public final class RiftMessages {
     public static final TextKey GUI_TITLE_FADE_OUT = key("rift.gui.title_fade_out", "&dTitle fade-out ticks");
 
     private static final List<TextKey> KEYS = List.of(
-            PREFIX, COMMAND_ROOT, COMMAND_CREATE, COMMAND_IMPORT, COMMAND_LOAD, COMMAND_UNLOAD, COMMAND_DELETE,
+            PREFIX, VERSION, COMMAND_ROOT, COMMAND_CREATE, COMMAND_IMPORT, COMMAND_LOAD, COMMAND_UNLOAD, COMMAND_DELETE,
             COMMAND_RESTORE, COMMAND_TELEPORT, COMMAND_SEND, COMMAND_LIST, COMMAND_INFO, COMMAND_GENERATORS,
-            COMMAND_CONFIG, COMMAND_LANGUAGE, COMMAND_STATUS, COMMAND_DEBUG, COMMAND_DEBUG_DUMP,
+            COMMAND_CONFIG, COMMAND_LANGUAGE, COMMAND_STATUS, COMMAND_DEBUG, COMMAND_DEBUG_DUMP, COMMAND_VERSION,
             COMMAND_AUTOLOAD, COMMAND_PROTECT,
             PARAM_NAME, PARAM_ENVIRONMENT, PARAM_GENERATOR, PARAM_SEED, PARAM_TYPE, PARAM_SAVE, PARAM_ID,
             PARAM_PLAYER, PARAM_ENABLED, PARAM_PAGE, PARAM_UPLOAD, PARAM_SENDER,
@@ -226,19 +232,48 @@ public final class RiftMessages {
         return CATALOG;
     }
 
+    public static boolean isSharedChat(String id) {
+        return id.startsWith("director.runtime.")
+                || id.startsWith("language.error.")
+                || id.startsWith("language.usage.")
+                || id.startsWith("language.selection.")
+                || id.startsWith("language.editor.prompt.")
+                || id.startsWith("language.editor.error.")
+                || id.startsWith("language.editor.input.")
+                || id.startsWith("language.editor.saved.")
+                || id.equals("language.editor.loading")
+                || id.startsWith("debug.") && !id.startsWith("debug.action.");
+    }
+
     private static TextKey key(String id, String english) {
-        return TextKey.of(id, english);
+        return english.contains("{prefix}")
+                ? TextKey.ofOptional(id, english, "prefix")
+                : TextKey.of(id, english);
     }
 
     private static TextKey prefixed(String id, String english) {
-        return TextKey.ofOptional(id, "{prefix}" + english, "prefix");
+        return TextKey.ofOptional(id, CHAT_PREFIX + english, "prefix");
     }
 
     private static MessageCatalog createCatalog() {
         MessageCatalog.Builder builder = MessageCatalog.builder(VolmitLocales.ENGLISH);
-        builder.addAll(DirectorMessages.keys());
-        builder.addAll(BukkitLanguageMessages.keys());
+        addSharedMessages(builder, DirectorMessages.keys());
+        addSharedMessages(builder, BukkitLanguageMessages.keys());
+        addSharedMessages(builder, BukkitDebugMessages.keys());
         builder.addAll(KEYS);
         return builder.build();
     }
+
+    private static void addSharedMessages(MessageCatalog.Builder builder, List<MessageKey> keys) {
+        for (MessageKey definition : keys) {
+            TextKey text = (TextKey) definition;
+            String template = text.english().replace("{plugin}: ", "").replace("{plugin}", "{prefix}");
+            if (isSharedChat(text.id())) {
+                String color = text.id().contains(".error.") || text.id().endsWith("failed") ? "&c" : "&7";
+                template = CHAT_PREFIX + color + template;
+            }
+            builder.add(key(text.id(), template));
+        }
+    }
+
 }

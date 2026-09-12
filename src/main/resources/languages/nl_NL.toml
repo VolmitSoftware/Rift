@@ -6,7 +6,7 @@
 # /rift language server edit nl_NL
 #
 # === Voorvoegsel ===
-# Voorvoegsel: {prefix}=de globale waarde runtime.prefix. Verwijder {prefix} uit één bericht om het alleen daar te verbergen.
+# runtime.prefix bevat alleen de opgemaakte naam. {prefix} voegt de naam in; › en spaties staan in elk bericht.
 #
 # === Opmaak ===
 # Kleuren: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B en [RRGGBB]. MiniMessage blijft beschikbaar voor eigen opmaak.
@@ -33,24 +33,27 @@
 #   {permission}  permissieknooppunt
 #   {personal}  persoonlijke landinstelling
 #   {player}  spelersnaam
-#   {plugin}  Pluginnaam
-#   {prefix}  de globale waarde runtime.prefix. Verwijder {prefix} uit één bericht om het alleen daar te verbergen.
+#   {prefix}  runtime.prefix bevat alleen de opgemaakte naam. {prefix} voegt de naam in; › en spaties staan in elk bericht.
 #   {reason}  reden of foutdetail
 #   {seconds}  duur in seconden
 #   {setting}  naam van de instelling
 #   {target}  Doelspeler, entiteit of waarde
 #   {title}  titeltekst
 #   {type}  waarde- of gegevenstype
-#   {usage}  tekst voor opdrachtgebruik
 #   {value}  huidige of nieuwe waarde
 #   {variables}  geldige tijdelijke aanduidingen
 #   {version}  versie
 #   {world}  wereldnaam
 
+#   {section}  Sectie van de editor
+#   {path}  Lokaal rapportpad
+#   {url}  Rapport-URL
+
 [runtime]
-prefix = "&5&lRIFT&r &8›&r "
+prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+version = "Toon de versie van {prefix}"
 root = "Serverwerelden veilig beheren"
 create = "Een nieuwe wereld creëren en beheren"
 import = "Een bestaande wereldmap importeren"
@@ -63,11 +66,11 @@ send = "Teleporteer een andere speler naar een geladen wereld"
 list = "Lijst geladen, beheerd, ontdekt en in quarantaine gehouden werelden"
 info = "Gedetailleerde staat voor één wereld tonen"
 generators = "Al door beheerde werelden gebruikte generator-id's tonen"
-config = "Open de in-game Rift configuratie-editor"
-language = "Een beschikbare Rift-taal selecteren"
-status = "Inspecteer platformmogelijkheden en Rift toestand"
-debug = "Diagnosehulpmiddelen voor Rift"
-debug_dump = "Een uitgebreid diagnostisch rapport voor Rift maken"
+config = "Open de in-game {prefix} configuratie-editor"
+language = "Een beschikbare {prefix}-taal selecteren"
+status = "Inspecteer platformmogelijkheden en {prefix} toestand"
+debug = "Diagnosehulpmiddelen voor {prefix}"
+debug_dump = "Een uitgebreid diagnostisch rapport voor {prefix} maken"
 autoload = "Veranderen of een beheerde wereld tijdens het opstarten belast"
 protect = "Een beheerde wereld beschermen of niet beschermen"
 
@@ -86,34 +89,35 @@ upload = "Het rapport uploaden wanneer openbare uploads zijn ingeschakeld"
 sender = "Opdrachtgever"
 
 [rift.message]
-permission_denied = "{prefix}&cJe moet &f{permission}&c."
-unknown_command = "{prefix}&cOnbekende opdracht. Gebruik &f/rift help&c."
-player_only = "{prefix}&cDit commando vereist een speler."
-operation_queued = "{prefix}&7In de wachtrij &f{operation}&7 voor &d{world}&7."
-operation_failed = "{prefix}&c{operation} mislukt voor &f{world}&c: {reason}"
-created = "{prefix}&aAangemaakt en beheerd &f{world}&a."
-imported = "{prefix}&aGeïmporteerd en beheerd &f{world}&a."
-loaded = "{prefix}&aGeladen &f{world}&a."
-unloaded = "{prefix}&aOntladen &f{world}&a."
-teleported = "{prefix}&aGeteleporteerd &f{player}&a tot &f{world}&a."
-delete_confirm = "{prefix}&eUitvoeren &f/rift delete {world}&e opnieuw binnen &f{seconds}s&e om het in quarantaine te zetten."
-quarantined = "{prefix}&aVerplaatst &f{world}&a in quarantaine als &f{id}&a."
-restored = "{prefix}&aHersteld &f{world}&a van &f{id}&a."
-profile_updated = "{prefix}&aBijgewerkt &f{setting}&a voor &f{world}&a tot &f{value}&a."
-folia_limit = "{prefix}&e{operation} is niet beschikbaar op Folia omdat de wereld belasting/unload API is niet geïmplementeerd."
-config_saved = "{prefix}&aConfiguratie opgeslagen."
-config_opened = "{prefix}&aDe volledige configuratie-editor in het spel is geopend.&r"
-config_save_failed = "{prefix}&cConfiguratie kon niet worden opgeslagen. Controleer de console."
-empty_list = "{prefix}&7Er zijn geen gelijke werelden gevonden."
-player_offline = "{prefix}&cDe speler is niet online: &f{player}"
-unknown_world = "{prefix}&cOnbekende wereld: &f{world}"
-section = "{prefix}&d{title} &8(&f{count}&8)"
-entry = "{prefix}&8- &f{name} &8| &7{detail}"
-detail = "{prefix}&8- &7{label}: &f{value}"
-info_title = "{prefix}&d{world}"
-status_title = "{prefix}&dStatus van Rift {version}"
-generator_format = "{prefix}&7Custom formaat: &fPluginName[:generator-id]"
-folia_status_note = "{prefix}&eFolia ondersteuning Rift's lees-, editor-, profiel- en teleportfuncties; dynamische wereldlevenscyclus wordt afgesloten door het platform API."
+version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
+permission_denied = "{prefix}&r &7› &7&cJe moet &f{permission}&7."
+unknown_command = "{prefix}&r &7› &7&cOnbekende opdracht. Gebruik &f/rift help&7."
+player_only = "{prefix}&r &7› &7&cDit commando vereist een speler."
+operation_queued = "{prefix}&r &7› &7In de wachtrij &f{operation}&7 voor &d{world}&7."
+operation_failed = "{prefix}&r &7› &7&c{operation} mislukt voor &f{world}&7: {reason}"
+created = "{prefix}&r &7› &7Aangemaakt en beheerd &a{world}&7."
+imported = "{prefix}&r &7› &7Geïmporteerd en beheerd &a{world}&7."
+loaded = "{prefix}&r &7› &7Geladen &a{world}&7."
+unloaded = "{prefix}&r &7› &7Ontladen &a{world}&7."
+teleported = "{prefix}&r &7› &7Geteleporteerd &a{player}&7 tot &a{world}&7."
+delete_confirm = "{prefix}&r &7› &7Uitvoeren &e/rift delete {world}&7 opnieuw binnen &e{seconds}s&7 om het in quarantaine te zetten."
+quarantined = "{prefix}&r &7› &7Verplaatst &a{world}&7 in quarantaine als &a{id}&7."
+restored = "{prefix}&r &7› &7Hersteld &a{world}&7 van &a{id}&7."
+profile_updated = "{prefix}&r &7› &7Bijgewerkt &a{setting}&7 voor &a{world}&7 tot &a{value}&7."
+folia_limit = "{prefix}&r &7› &7{operation} is niet beschikbaar op Folia omdat de wereld belasting/unload API is niet geïmplementeerd."
+config_saved = "{prefix}&r &7› &7&aConfiguratie opgeslagen."
+config_opened = "{prefix}&r &7› &7De volledige configuratie-editor in het spel is geopend.&r"
+config_save_failed = "{prefix}&r &7› &7&cConfiguratie kon niet worden opgeslagen. Controleer de console."
+empty_list = "{prefix}&r &7› &7Er zijn geen gelijke werelden gevonden."
+player_offline = "{prefix}&r &7› &7&cDe speler is niet online: &f{player}"
+unknown_world = "{prefix}&r &7› &7&cOnbekende wereld: &f{world}"
+section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
+entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
+info_title = "{prefix}&r &7› &7&d{world}"
+status_title = "{prefix}&r &7› &7Status van {prefix} {version}"
+generator_format = "{prefix}&r &7› &7Custom formaat: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&r &7› &7Folia ondersteuning {prefix}'s lees-, editor-, profiel- en teleportfuncties; dynamische wereldlevenscyclus wordt afgesloten door het platform API."
 
 [rift.label]
 worlds = "Werelden"
@@ -145,35 +149,35 @@ quarantine_entries = "Quarantaine-items"
 
 [rift.explain]
 loaded = "Geeft aan of Bukkit deze wereld momenteel actief in het geheugen heeft."
-managed = "Geeft aan of Rift een profiel voor deze wereld heeft en de generator- en opstartinstellingen kan herstellen."
+managed = "Geeft aan of {prefix} een profiel voor deze wereld heeft en de generator- en opstartinstellingen kan herstellen."
 on_disk = "Geeft aan of de wereld is geladen of een geldige wereldmap met level.dat heeft."
 environment = "De Bukkit-wereldomgeving die in de actieve wereld of het beheerde profiel is vastgelegd."
-generator = "De generator die Rift opnieuw toepast wanneer deze beheerde wereld wordt geladen. void is de ingebouwde generator van Rift voor lege werelden."
+generator = "De generator die {prefix} opnieuw toepast wanneer deze beheerde wereld wordt geladen. void is de ingebouwde generator van {prefix} voor lege werelden."
 seed = "De seed die voor deze wereld is vastgelegd. Het wijzigen van deze weergavewaarde genereert bestaand terrein nooit opnieuw."
-autoload = "Geeft aan of Rift deze beheerde wereld automatisch laadt wanneer de server opstart."
-protected = "Beschermde beheerde werelden kunnen niet naar de quarantaine van Rift worden verplaatst."
-operation_active = "Geeft aan of een levenscyclusbewerking momenteel de wereldspecifieke vergrendeling van Rift bezet houdt."
+autoload = "Geeft aan of {prefix} deze beheerde wereld automatisch laadt wanneer de server opstart."
+protected = "Beschermde beheerde werelden kunnen niet naar de quarantaine van {prefix} worden verplaatst."
+operation_active = "Geeft aan of een levenscyclusbewerking momenteel de wereldspecifieke vergrendeling van {prefix} bezet houdt."
 server = "De actieve serverimplementatie en versie die Bukkit rapporteert."
-java_runtime = "De Java-runtime waarop de server momenteel draait. De bytecode van Rift blijft compatibel met Java 17."
-plugin_bytecode = "De oudste Java-runtime die de gecompileerde klassen van Rift kan laden."
-platform = "De familie van de scheduler en server-API die Rift tijdens het uitvoeren heeft gedetecteerd."
+java_runtime = "De Java-runtime waarop de server momenteel draait. De bytecode van {prefix} blijft compatibel met Java 17."
+plugin_bytecode = "De oudste Java-runtime die de gecompileerde klassen van {prefix} kan laden."
+platform = "De familie van de scheduler en server-API die {prefix} tijdens het uitvoeren heeft gedetecteerd."
 dynamic_lifecycle = "Geeft aan of dit platform tijdens het uitvoeren veilig het aanmaken, laden, ontladen, in quarantaine plaatsen en herstellen van werelden ondersteunt."
 world_container = "De servermap waarin de wereldmappen van Bukkit worden opgeslagen."
-writable = "Geeft aan of het besturingssysteem Rift momenteel toestaat te schrijven in de map die de werelden bevat."
+writable = "Geeft aan of het besturingssysteem {prefix} momenteel toestaat te schrijven in de map die de werelden bevat."
 locale = "Het actieve taalbestand in plugins/Rift/languages. Ontbrekende vermeldingen gebruiken het ingebouwde Engels."
-world_counts = "Geladen telt actieve Bukkit-werelden; beheerd telt Rift-profielen; ontbrekend telt beheerde profielen waarvan de wereld niet is geladen en niet op schijf staat."
-quarantine = "Werelden die door de verwijderfunctie van Rift apart zijn gezet en via hun quarantaine-id kunnen worden hersteld."
-world_entry = "Geladen betekent nu actief; beheerd betekent dat Rift een profiel heeft; op schijf betekent dat er een geldige map van een niet-geladen wereld bestaat."
+world_counts = "Geladen telt actieve Bukkit-werelden; beheerd telt {prefix}-profielen; ontbrekend telt beheerde profielen waarvan de wereld niet is geladen en niet op schijf staat."
+quarantine = "Werelden die door de verwijderfunctie van {prefix} apart zijn gezet en via hun quarantaine-id kunnen worden hersteld."
+world_entry = "Geladen betekent nu actief; beheerd betekent dat {prefix} een profiel heeft; op schijf betekent dat er een geldige map van een niet-geladen wereld bestaat."
 
 [rift.feedback]
-title = "&d&lRIFT"
+title = "{prefix}"
 world_subtitle = "&a{operation}&8: &f{world}"
 teleport_subtitle = "&aAangekomen &f{world}"
 failure_title = "&cOpdracht mislukt"
 failure_subtitle = "&7{operation}&8: &f{world}"
-action_world = "&dRift &8• &a{operation} &f{world}"
-action_teleport = "&dRift &8• &aTeleporteren naar &f{world}"
-action_failure = "&dRift &8• &c{operation} mislukt voor &f{world}"
+action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
+action_teleport = "{prefix}&r &7› &7&aTeleporteren naar &a{world}"
+action_failure = "{prefix}&r &7› &7&c{operation} mislukt voor &f{world}"
 
 [rift.gui]
 current = "&7Huidig: &f{value}"
@@ -194,19 +198,19 @@ failure_feedback = "&dTerugkoppeling van storingen"
 title_popups = "&dTitel popups"
 action_bar_popups = "&dActiebalk-popups"
 sounds = "&dGeluiden terugkoppeling"
-root_title = "Rift Instellingen"
-category_title = "Rift: {category}"
+root_title = "{prefix} Instellingen"
+category_title = "{prefix}: {category}"
 category_open = "&8Klik om elke instelling in deze sectie te bewerken"
 back = "&eTerug"
 toggle = "&8Klik om te schakelen"
 exact_number = "&8Links/right past; druk op Q om een exacte waarde in te voeren"
 text = "&8Klik om een nieuwe waarde in de chat in te voeren"
-prompt = "{prefix}&7Typ een nieuwe waarde voor &f{setting}&7 in gesprek."
-prompt_cancel = "{prefix}&7Type &fannuleren&7 om terug te keren zonder het te veranderen."
-prompt_cancelled = "{prefix}&7Configuratie-invoer geannuleerd."
-prompt_timeout = "{prefix}&7Configuratie-invoer is uitgeschakeld."
-setting_saved = "{prefix}&d{setting} &8› &aGewijzigd naar &f{after} &7van &f{before}&a."
-setting_failed = "{prefix}&cKon niet bijwerken &f{setting}&c: {reason}"
+prompt = "{prefix}&r &7› &7Typ een nieuwe waarde voor &f{setting}&7 in gesprek."
+prompt_cancel = "{prefix}&r &7› &7Type &fannuleren&7 om terug te keren zonder het te veranderen."
+prompt_cancelled = "{prefix}&r &7› &7Configuratie-invoer geannuleerd."
+prompt_timeout = "{prefix}&r &7› &7Configuratie-invoer is uitgeschakeld."
+setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7Gewijzigd naar &a{after} &7van &f{before}&7."
+setting_failed = "{prefix}&r &7› &7&cKon niet bijwerken &f{setting}&7: {reason}"
 language = "&dTaalgebied"
 language_select = "&8Klik om uit de beschikbare talen te kiezen"
 lifecycle_sound = "&dWereldlevenscyclusgeluid"
@@ -252,18 +256,15 @@ optional = "Deze parameter is optioneel."
 default = "Standaard \"{value}\" indien niet opgegeven."
 type = "Deze parameter is van het type {type}."
 
-[director.runtime]
-usage = "Gebruik: {usage}"
-
 [director.runtime.error]
-invalid_origin = "Deze opdracht kan niet vanuit deze bron worden uitgevoerd."
-unknown_parameter = "Onbekende parametersleutel: {key}"
-unexpected_argument = "Onverwacht argument \"{argument}\". Optionele parameters moeten met een sleutel worden opgegeven, bijv. seed=123"
-unclosed_group = "Ontbrekende sluitende \"]\" voor parameter {key}"
-conversion_failed = "Kan \"{value}\" voor {parameter} niet naar {type} converteren"
-default_parse_failed = "Kan de standaardwaarde voor parameter {parameter} niet verwerken"
-missing_argument = "Ontbrekend argument \"{parameter}\" ({type})"
-execution_failed = "Opdracht {command} kon niet worden uitgevoerd: {reason}"
+invalid_origin = "{prefix}&r &7› &7&cDeze opdracht kan niet vanuit deze bron worden uitgevoerd."
+unknown_parameter = "{prefix}&r &7› &7&cOnbekende parametersleutel: {key}"
+unexpected_argument = "{prefix}&r &7› &7&cOnverwacht argument \"{argument}\". Optionele parameters moeten met een sleutel worden opgegeven, bijv. seed=123"
+unclosed_group = "{prefix}&r &7› &7&cOntbrekende sluitende \"]\" voor parameter {key}"
+conversion_failed = "{prefix}&r &7› &7&cKan \"{value}\" voor {parameter} niet naar {type} converteren"
+default_parse_failed = "{prefix}&r &7› &7&cKan de standaardwaarde voor parameter {parameter} niet verwerken"
+missing_argument = "{prefix}&r &7› &7&cOntbrekend argument \"{parameter}\" ({type})"
+execution_failed = "{prefix}&r &7› &7&cOpdracht {command} kon niet worden uitgevoerd: {reason}"
 
 [language.menu]
 selected = "geselecteerd"
@@ -285,20 +286,21 @@ remove_personal_description = "Verwijder jouw persoonlijke taalkeuze."
 no_controls = "Je hebt geen toegang tot taalinstellingen."
 
 [language.editor]
-loading = "Berichten voor {locale} laden..."
+title = "{prefix} › {section}"
+loading = "{prefix}&r &7› &7&7Berichten voor {locale} laden..."
 
 [language.editor.category]
 open = "&8Klik om deze categorie te openen.&r"
 message-count = "&7{count} berichten&r"
 
 [language.editor.error]
-unable-to-edit = "Bewerken mislukt: {reason}"
-no-permission = "Je hebt geen toestemming om de talen van {plugin} te bewerken."
+unable-to-edit = "{prefix}&r &7› &7&cBewerken mislukt: {reason}"
+no-permission = "{prefix}&r &7› &7&cJe hebt geen toestemming om de talen van {prefix} te bewerken."
 
 [language.editor.input]
-unable-to-save = "Opslaan mislukt: {reason}"
-too-long = "De invoer mag maximaal {maximum} tekens bevatten."
-expired = "De invoer voor de taalbewerker is verlopen."
+unable-to-save = "{prefix}&r &7› &7&7Opslaan mislukt: {reason}"
+too-long = "{prefix}&r &7› &7&7De invoer mag maximaal {maximum} tekens bevatten."
+expired = "{prefix}&r &7› &7&7De invoer voor de taalbewerker is verlopen."
 
 [language.editor.locale]
 open = "&8Klik om deze taal te openen.&r"
@@ -320,15 +322,15 @@ back = "&eTerug&r"
 line = "Regel {line}"
 
 [language.editor.prompt]
-variables = "Variabelen: {variables}"
-value = "Typ in de chat een nieuwe waarde voor {key}."
-search = "Zoek op berichtsleutel of tekst. Typ cancel om terug te gaan."
-guidance = "Gebruik \\n voor een nieuwe regel, \\\\ voor een backslash, of typ cancel om terug te gaan."
-current = "Huidige waarde: {value}"
+variables = "{prefix}&r &7› &7&7Variabelen: {variables}"
+value = "{prefix}&r &7› &7&7Typ in de chat een nieuwe waarde voor {key}."
+search = "{prefix}&r &7› &7&7Zoek op berichtsleutel of tekst. Typ cancel om terug te gaan."
+guidance = "{prefix}&r &7› &7&7Gebruik \\n voor een nieuwe regel, \\\\ voor een backslash, of typ cancel om terug te gaan."
+current = "{prefix}&r &7› &7&7Huidige waarde: {value}"
 
 [language.editor.saved]
-summary = "{locale} opgeslagen. De taalkeuzes blijven ongewijzigd."
-change = "{key}: “{before}” is gewijzigd in “{after}”."
+summary = "{prefix}&r &7› &7&7{locale} opgeslagen. De taalkeuzes blijven ongewijzigd."
+change = "{prefix}&r &7› &7&7{key}: “{before}” is gewijzigd in “{after}”."
 
 [language.editor.search]
 messages-lore = "Klik om alle berichten te doorzoeken."
@@ -346,26 +348,54 @@ none = "Geen"
 empty = "(leeg)"
 
 [language.error]
-unavailable-for-all = "De taal {locale} is niet voor alle geselecteerde plugins beschikbaar."
-stopping = "Taalselectie is niet beschikbaar terwijl de plugin stopt."
-server-locale-required = "Kies een taalcode zoals en_US voor de standaardtaal van de server."
-plugin-server-permission = "Je hebt geen toestemming om de servertaal voor {plugin} te wijzigen."
-plugin-personal-permission = "Je hebt geen toestemming om je taal voor {plugin} te kiezen."
-personal-player-only = "Spelertaalvoorkeuren moeten in het spel worden geselecteerd."
-personal-permission = "U hebt geen toestemming om uw taal te selecteren."
-numeric-page = "Voer een paginanummer in."
-no-providers = "Er zijn geen Volmit-taalaanbieders beschikbaar."
-editor-player-only = "Open de taalbewerker in het spel."
+unavailable-for-all = "{prefix}&r &7› &7&cDe taal {locale} is niet voor alle geselecteerde plugins beschikbaar."
+stopping = "{prefix}&r &7› &7&cTaalselectie is niet beschikbaar terwijl de plugin stopt."
+server-locale-required = "{prefix}&r &7› &7&cKies een taalcode zoals en_US voor de standaardtaal van de server."
+plugin-server-permission = "{prefix}&r &7› &7&cJe hebt geen toestemming om de servertaal voor {prefix} te wijzigen."
+plugin-personal-permission = "{prefix}&r &7› &7&cJe hebt geen toestemming om je taal voor {prefix} te kiezen."
+personal-player-only = "{prefix}&r &7› &7&cSpelertaalvoorkeuren moeten in het spel worden geselecteerd."
+personal-permission = "{prefix}&r &7› &7&cU hebt geen toestemming om uw taal te selecteren."
+numeric-page = "{prefix}&r &7› &7&cVoer een paginanummer in."
+no-providers = "{prefix}&r &7› &7&cEr zijn geen Volmit-taalaanbieders beschikbaar."
+editor-player-only = "{prefix}&r &7› &7&cOpen de taalbewerker in het spel."
 
 [language.selection]
-server-selected = "{plugin}: servertaal is nu {locale}."
-server-default-selected = "{plugin}: je taal volgt nu de standaardtaal van de server."
-save-failed = "{plugin}: de taalkeuze kon niet worden opgeslagen; controleer de serverconsole."
-preparing = "Taal {locale} wordt voorbereid voor {target}..."
-personal-selected = "{plugin}: uw taal is nu {locale}."
-english-fallback = "{plugin}: {locale} is niet beschikbaar; Engels (en_US) wordt gebruikt."
+server-selected = "{prefix}&r &7› &7&7servertaal is nu {locale}."
+server-default-selected = "{prefix}&r &7› &7&7je taal volgt nu de standaardtaal van de server."
+save-failed = "{prefix}&r &7› &7&cde taalkeuze kon niet worden opgeslagen; controleer de serverconsole."
+preparing = "{prefix}&r &7› &7&7Taal {locale} wordt voorbereid voor {target}..."
+personal-selected = "{prefix}&r &7› &7&7uw taal is nu {locale}."
+english-fallback = "{prefix}&r &7› &7&7{locale} is niet beschikbaar; Engels (en_US) wordt gebruikt."
 
 [language.usage]
-volmit-selection = "Gebruik: /volmit plugins languages [locale]"
-selection = "Gebruik: /{command} language self [locale|reset] or server [locale]"
-editor = "Gebruik: /{command} language server edit [locale]"
+volmit-selection = "{prefix}&r &7› &7&7Gebruik: /volmit plugins languages [locale]"
+selection = "{prefix}&r &7› &7&7Gebruik: /{command} language self [locale|reset] or server [locale]"
+editor = "{prefix}&r &7› &7&7Gebruik: /{command} language server edit [locale]"
+
+
+[debug]
+preparing = "{prefix}&r &7› &7&7Diagnoserapport voor {prefix} wordt voorbereid..."
+saved = "{prefix}&r &7› &7&7Diagnoserapport voor {prefix} opgeslagen in {path}."
+
+[debug.error]
+missing-permission = "{prefix}&r &7› &7&cOntbrekende machtiging: {permission}"
+already-preparing = "{prefix}&r &7› &7&cEr wordt al een diagnoserapport voor {prefix} voorbereid."
+already-preparing-short = "{prefix}&r &7› &7&cEr wordt al een diagnoserapport voorbereid."
+schedule-failed = "{prefix}&r &7› &7&cHet maken van het diagnoserapport kon niet worden ingepland."
+provider-closed = "{prefix}&r &7› &7&cDe diagnoseprovider is gesloten."
+closed-before-capture = "{prefix}&r &7› &7&cDe diagnoseprovider is gesloten voordat de rapportgegevens waren verzameld."
+writer-schedule-failed = "{prefix}&r &7› &7&cHet schrijven van het diagnoserapport kon niet worden ingepland."
+capture-failed = "{prefix}&r &7› &7&cDe gegevens voor het diagnoserapport konden niet worden verzameld. Controleer de serverconsole."
+closed-before-write = "{prefix}&r &7› &7&cDe diagnoseprovider is gesloten voordat het rapport was geschreven."
+write-failed = "{prefix}&r &7› &7&cHet diagnoserapport kon niet worden geschreven. Controleer de serverconsole."
+
+[debug.upload]
+interrupted = "{prefix}&r &7› &7&7Het uploaden van het diagnoserapport is onderbroken. Het lokale rapport is opgeslagen."
+failed = "{prefix}&r &7› &7&cHet uploaden van het diagnoserapport is mislukt. Het lokale rapport is opgeslagen."
+completed = "{prefix}&r &7› &7&7Geüpload als VolmitSoftware - {prefix} - v{version}."
+
+[debug.action]
+open = "Openen: {url}"
+open-description = "Open het geüploade diagnoserapport."
+copy-path = "Lokaal pad kopiëren"
+copy-path-description = "Kopieer het pad van het lokale rapport."

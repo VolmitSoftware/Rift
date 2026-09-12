@@ -15,6 +15,19 @@ public final class RiftDebugCommands {
         this.plugin = plugin;
     }
 
+    @Director(name = "version", description = "Show the Rift version", descriptionKey = "rift.command.version")
+    public void version(@Param(name = "sender", contextual = true) CommandSender sender) {
+        if (!sender.hasPermission("rift.command") && !sender.hasPermission("rift.admin")) {
+            plugin.language().send(sender, RiftMessages.PERMISSION_DENIED, MessageArgs.builder()
+                    .untrusted("permission", "rift.command")
+                    .build());
+            return;
+        }
+        plugin.language().send(sender, RiftMessages.VERSION, MessageArgs.builder()
+                .untrusted("version", plugin.getDescription().getVersion())
+                .build());
+    }
+
     @Director(name = "dump", sync = true, description = "Create a comprehensive Rift diagnostic report", descriptionKey = "rift.command.debug_dump")
     public void dump(
             @Param(name = "upload", defaultValue = "true", description = "Upload the report when public uploads are enabled", descriptionKey = "rift.parameter.upload") boolean upload,

@@ -6,7 +6,7 @@
 # /rift language server edit vi_VI
 #
 # === Tiền tố ===
-# Tiền tố: {prefix}=giá trị runtime.prefix toàn cục. Xóa {prefix} khỏi từng thông báo nếu không muốn hiện ở thông báo đó.
+# runtime.prefix chỉ chứa tên đã định dạng. {prefix} chèn tên; chỉnh sửa › và khoảng trắng trong từng thông báo.
 #
 # === Định dạng ===
 # Màu: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B và [RRGGBB]. MiniMessage vẫn dùng được cho định dạng tùy chỉnh.
@@ -33,24 +33,27 @@
 #   {permission}  nút quyền hạn
 #   {personal}  mã vùng cá nhân
 #   {player}  tên người chơi
-#   {plugin}  Tên phần bổ sung
-#   {prefix}  giá trị runtime.prefix toàn cục. Xóa {prefix} khỏi từng thông báo nếu không muốn hiện ở thông báo đó.
+#   {prefix}  runtime.prefix chỉ chứa tên đã định dạng. {prefix} chèn tên; chỉnh sửa › và khoảng trắng trong từng thông báo.
 #   {reason}  lý do hoặc chi tiết lỗi
 #   {seconds}  thời lượng tính bằng giây
 #   {setting}  tên cài đặt
 #   {target}  Người chơi đích, thực thể hay giá trị
 #   {title}  văn bản tiêu đề
 #   {type}  kiểu giá trị hoặc dữ liệu
-#   {usage}  văn bản cách dùng lệnh
 #   {value}  giá trị hiện tại hoặc mới
 #   {variables}  chỗ giữ chỗ hợp lệ
 #   {version}  phiên bản
 #   {world}  tên thế giới
 
+#   {section}  Mục trong trình chỉnh sửa
+#   {path}  Đường dẫn báo cáo cục bộ
+#   {url}  URL báo cáo
+
 [runtime]
-prefix = "&5&lRIFT&r &8›&r "
+prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+version = "Hiển thị phiên bản {prefix}"
 root = "Quản lý thế giới máy phục vụ an toàn"
 create = "Tạo ra và quản lý một thế giới mới"
 import = "Nhập thư mục thế giới đã có"
@@ -63,11 +66,11 @@ send = "Name"
 list = "Danh sách được nạp, quản lý, phát hiện và cách ly các thế giới"
 info = "Hiện trạng thái chi tiết cho một thế giới"
 generators = "Hiện bộ nhận diện trình tạo đã được sử dụng bởi các thế giới quản lý"
-config = "Mở trò chơi Rift Trình soạn thảo cấu hình"
-language = "Chọn một ngôn ngữ Rift có sẵn"
-status = "Kiểm tra khả năng nền tảng và Rift Tình trạng"
-debug = "Công cụ chẩn đoán Rift"
-debug_dump = "Tạo báo cáo chẩn đoán Rift toàn diện"
+config = "Mở trò chơi {prefix} Trình soạn thảo cấu hình"
+language = "Chọn một ngôn ngữ {prefix} có sẵn"
+status = "Kiểm tra khả năng nền tảng và {prefix} Tình trạng"
+debug = "Công cụ chẩn đoán {prefix}"
+debug_dump = "Tạo báo cáo chẩn đoán {prefix} toàn diện"
 autoload = "Thay đổi cho dù một tải thế giới quản lý trong khi khởi động"
 protect = "Bảo vệ hoặc không bảo vệ một thế giới quản lý"
 
@@ -86,34 +89,35 @@ upload = "Tải báo cáo lên khi bật tải lên công khai"
 sender = "Bộ gửi lệnh"
 
 [rift.message]
-permission_denied = "{prefix}&cAnh cần &f{permission}&c."
-unknown_command = "{prefix}&cLệnh lạ. Dùng &f/rift help&c."
-player_only = "{prefix}&cLệnh này yêu cầu một người chơi."
-operation_queued = "{prefix}&7Hàng đợi &f{operation}&7 Vì &d{world}&7."
-operation_failed = "{prefix}&c{operation} bị lỗi &f{world}&c: {reason}"
-created = "{prefix}&aTạo ra và quản lý &f{world}&a."
-imported = "{prefix}&aNhập và quản lý &f{world}&a."
-loaded = "{prefix}&aĐã nạp &f{world}&a."
-unloaded = "{prefix}&aChưa tải &f{world}&a."
-teleported = "{prefix}&aChuyển tiếp &f{player}&a phải &f{world}&a."
-delete_confirm = "{prefix}&eChạy &f/rift delete {world}&e bên trong &f{seconds}s&e để đưa nó vào trạm kiểm dịch."
-quarantined = "{prefix}&aChuyển &f{world}&a vào khu cách ly như &f{id}&a."
-restored = "{prefix}&aĐã phục hồi &f{world}&a từ &f{id}&a."
-profile_updated = "{prefix}&aCập nhật &f{setting}&a Vì &f{world}&a phải &f{value}&a."
-folia_limit = "{prefix}&e{operation} không sẵn sàng trên Folia bởi vì thế giới của nó gánh nặng/unload ARI chưa được thực hiện."
-config_saved = "{prefix}&aĐã lưu cấu hình."
-config_opened = "{prefix}&aĐã mở trình chỉnh sửa cấu hình đầy đủ trong trò chơi.&r"
-config_save_failed = "{prefix}&cKhông thể lưu cấu hình. Hãy kiểm tra lại bàn giao diện."
-empty_list = "{prefix}&7Không tìm thấy thế giới nào giống nhau cả."
-player_offline = "{prefix}&cNgười chơi không trực tuyến: &f{player}"
-unknown_world = "{prefix}&cThế giới không rõ: &f{world}"
-section = "{prefix}&d{title} &8(&f{count}&8)"
-entry = "{prefix}&8- &f{name} &8| &7{detail}"
-detail = "{prefix}&8- &7{label}: &f{value}"
-info_title = "{prefix}&d{world}"
-status_title = "{prefix}&dRift {version} Trạng thái"
-generator_format = "{prefix}&7Custom Định dạng: &fPluginName[:gentor-id]"
-folia_status_note = "{prefix}&eFolia Hỗ trợ Rift'đã đọc, biên tập, hồ sơ, và dịch chuyển tức thời; xe đạp thế giới sống động được đóng cửa bởi sân ga ARI."
+version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
+permission_denied = "{prefix}&r &7› &7&cAnh cần &f{permission}&7."
+unknown_command = "{prefix}&r &7› &7&cLệnh lạ. Dùng &f/rift help&7."
+player_only = "{prefix}&r &7› &7&cLệnh này yêu cầu một người chơi."
+operation_queued = "{prefix}&r &7› &7Hàng đợi &f{operation}&7 Vì &d{world}&7."
+operation_failed = "{prefix}&r &7› &7&c{operation} bị lỗi &f{world}&7: {reason}"
+created = "{prefix}&r &7› &7Tạo ra và quản lý &a{world}&7."
+imported = "{prefix}&r &7› &7Nhập và quản lý &a{world}&7."
+loaded = "{prefix}&r &7› &7Đã nạp &a{world}&7."
+unloaded = "{prefix}&r &7› &7Chưa tải &a{world}&7."
+teleported = "{prefix}&r &7› &7Chuyển tiếp &a{player}&7 phải &a{world}&7."
+delete_confirm = "{prefix}&r &7› &7Chạy &e/rift delete {world}&7 bên trong &e{seconds}s&7 để đưa nó vào trạm kiểm dịch."
+quarantined = "{prefix}&r &7› &7Chuyển &a{world}&7 vào khu cách ly như &a{id}&7."
+restored = "{prefix}&r &7› &7Đã phục hồi &a{world}&7 từ &a{id}&7."
+profile_updated = "{prefix}&r &7› &7Cập nhật &a{setting}&7 Vì &a{world}&7 phải &a{value}&7."
+folia_limit = "{prefix}&r &7› &7{operation} không sẵn sàng trên Folia bởi vì thế giới của nó gánh nặng/unload ARI chưa được thực hiện."
+config_saved = "{prefix}&r &7› &7&aĐã lưu cấu hình."
+config_opened = "{prefix}&r &7› &7Đã mở trình chỉnh sửa cấu hình đầy đủ trong trò chơi.&r"
+config_save_failed = "{prefix}&r &7› &7&cKhông thể lưu cấu hình. Hãy kiểm tra lại bàn giao diện."
+empty_list = "{prefix}&r &7› &7Không tìm thấy thế giới nào giống nhau cả."
+player_offline = "{prefix}&r &7› &7&cNgười chơi không trực tuyến: &f{player}"
+unknown_world = "{prefix}&r &7› &7&cThế giới không rõ: &f{world}"
+section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
+entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
+info_title = "{prefix}&r &7› &7&d{world}"
+status_title = "{prefix}&r &7› &7{prefix} {version} Trạng thái"
+generator_format = "{prefix}&r &7› &7Custom Định dạng: &fPluginName[:gentor-id]"
+folia_status_note = "{prefix}&r &7› &7Folia Hỗ trợ {prefix}'đã đọc, biên tập, hồ sơ, và dịch chuyển tức thời; xe đạp thế giới sống động được đóng cửa bởi sân ga ARI."
 
 [rift.label]
 worlds = "Thế giới"
@@ -145,35 +149,35 @@ quarantine_entries = "Mục cách ly"
 
 [rift.explain]
 loaded = "Cho biết Bukkit hiện có đang giữ thế giới này hoạt động trong bộ nhớ hay không."
-managed = "Cho biết Rift có hồ sơ của thế giới này để khôi phục trình tạo và thiết lập khởi động hay không."
+managed = "Cho biết {prefix} có hồ sơ của thế giới này để khôi phục trình tạo và thiết lập khởi động hay không."
 on_disk = "Cho biết thế giới đã được tải hoặc có thư mục thế giới hợp lệ chứa level.dat hay không."
 environment = "Môi trường thế giới Bukkit được ghi trong thế giới đang chạy hoặc hồ sơ quản lý."
-generator = "Trình tạo mà Rift áp dụng lại khi tải thế giới được quản lý. void là trình tạo thế giới trống tích hợp của Rift."
+generator = "Trình tạo mà {prefix} áp dụng lại khi tải thế giới được quản lý. void là trình tạo thế giới trống tích hợp của {prefix}."
 seed = "Hạt giống được ghi cho thế giới này. Thay đổi giá trị hiển thị này không tạo lại địa hình hiện có."
-autoload = "Cho biết Rift có tự động tải thế giới được quản lý này khi máy chủ khởi động hay không."
-protected = "Không thể chuyển thế giới được quản lý có bảo vệ vào vùng cách ly Rift."
-operation_active = "Cho biết một thao tác vòng đời thế giới hiện có đang giữ khóa riêng cho thế giới của Rift hay không."
+autoload = "Cho biết {prefix} có tự động tải thế giới được quản lý này khi máy chủ khởi động hay không."
+protected = "Không thể chuyển thế giới được quản lý có bảo vệ vào vùng cách ly {prefix}."
+operation_active = "Cho biết một thao tác vòng đời thế giới hiện có đang giữ khóa riêng cho thế giới của {prefix} hay không."
 server = "Bản triển khai và phiên bản máy chủ đang chạy do Bukkit báo cáo."
-java_runtime = "Môi trường Java đang chạy máy chủ. Mã byte của Rift vẫn tương thích với Java 17."
-plugin_bytecode = "Phiên bản Java cũ nhất có thể tải các lớp đã biên dịch của Rift."
-platform = "Bộ lập lịch và họ API máy chủ mà Rift phát hiện khi chạy."
+java_runtime = "Môi trường Java đang chạy máy chủ. Mã byte của {prefix} vẫn tương thích với Java 17."
+plugin_bytecode = "Phiên bản Java cũ nhất có thể tải các lớp đã biên dịch của {prefix}."
+platform = "Bộ lập lịch và họ API máy chủ mà {prefix} phát hiện khi chạy."
 dynamic_lifecycle = "Cho biết nền tảng có hỗ trợ an toàn việc tạo, tải, dỡ tải, cách ly và khôi phục thế giới khi đang chạy hay không."
 world_container = "Thư mục máy chủ chứa các thư mục thế giới Bukkit."
-writable = "Cho biết hệ điều hành hiện có cho phép Rift ghi vào thư mục chứa thế giới hay không."
+writable = "Cho biết hệ điều hành hiện có cho phép {prefix} ghi vào thư mục chứa thế giới hay không."
 locale = "Tệp ngôn ngữ đang dùng trong plugins/Rift/languages. Các mục còn thiếu sử dụng bản tiếng Anh tích hợp."
-world_counts = "Đã tải là số thế giới Bukkit đang hoạt động; được quản lý là số hồ sơ Rift; bị thiếu là số hồ sơ có thế giới chưa tải và không có trên đĩa."
-quarantine = "Các thế giới được lệnh delete của Rift chuyển sang một bên và có thể khôi phục bằng ID cách ly."
-world_entry = "Đã tải nghĩa là đang hoạt động; được quản lý nghĩa là có hồ sơ Rift; trên đĩa nghĩa là tồn tại thư mục thế giới hợp lệ chưa được tải."
+world_counts = "Đã tải là số thế giới Bukkit đang hoạt động; được quản lý là số hồ sơ {prefix}; bị thiếu là số hồ sơ có thế giới chưa tải và không có trên đĩa."
+quarantine = "Các thế giới được lệnh delete của {prefix} chuyển sang một bên và có thể khôi phục bằng ID cách ly."
+world_entry = "Đã tải nghĩa là đang hoạt động; được quản lý nghĩa là có hồ sơ {prefix}; trên đĩa nghĩa là tồn tại thư mục thế giới hợp lệ chưa được tải."
 
 [rift.feedback]
-title = "&d&lRIFT"
+title = "{prefix}"
 world_subtitle = "&a{operation}&8: &f{world}"
 teleport_subtitle = "&aĐến &f{world}"
 failure_title = "&cThao tác thất bại"
 failure_subtitle = "&7{operation}&8: &f{world}"
-action_world = "&dRift &8• &a{operation} &f{world}"
-action_teleport = "&dRift &8• &aChuyển tới &f{world}"
-action_failure = "&dRift &8• &c{operation} bị lỗi &f{world}"
+action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
+action_teleport = "{prefix}&r &7› &7&aChuyển tới &a{world}"
+action_failure = "{prefix}&r &7› &7&c{operation} bị lỗi &f{world}"
 
 [rift.gui]
 current = "&7& Hiện có: &f{value}"
@@ -194,19 +198,19 @@ failure_feedback = "&dPhản hồi sai"
 title_popups = "&dHiển thị tiêu đề"
 action_bar_popups = "&dComment"
 sounds = "&dÂm thanh trả lời"
-root_title = "Rift Cấu hình"
-category_title = "Rift: {category}"
+root_title = "{prefix} Cấu hình"
+category_title = "{prefix}: {category}"
 category_open = "&8Nhấn vào để sửa đổi mọi thiết lập trong phần này"
 back = "&eLùi"
 toggle = "&8Nhấn vào để bật lên"
 exact_number = "&8Trái/right điều chỉnh; bấm Q để nhập một giá trị chính xác"
 text = "&8Nhấn vào để nhập một giá trị mới vào trò chuyện"
-prompt = "{prefix}&7Gõ một giá trị mới cho &f{setting}&7 Nói chuyện."
-prompt_cancel = "{prefix}&7Kiểu &fhủy bỏ&7 trở về mà không thay đổi nó."
-prompt_cancelled = "{prefix}&7Việc nhập dữ liệu cấu hình bị thôi."
-prompt_timeout = "{prefix}&7Cấu hình nhập đã quá giờ."
-setting_saved = "{prefix}&d{setting} &8› &aĐã đổi thành &f{after} &7từ &f{before}&a."
-setting_failed = "{prefix}&cKhông thể cập nhật &f{setting}&c: {reason}"
+prompt = "{prefix}&r &7› &7Gõ một giá trị mới cho &f{setting}&7 Nói chuyện."
+prompt_cancel = "{prefix}&r &7› &7Kiểu &fhủy bỏ&7 trở về mà không thay đổi nó."
+prompt_cancelled = "{prefix}&r &7› &7Việc nhập dữ liệu cấu hình bị thôi."
+prompt_timeout = "{prefix}&r &7› &7Cấu hình nhập đã quá giờ."
+setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7Đã đổi thành &a{after} &7từ &f{before}&7."
+setting_failed = "{prefix}&r &7› &7&cKhông thể cập nhật &f{setting}&7: {reason}"
 language = "&dMiền ngôn ngữ"
 language_select = "&8Nhấn để chọn từ các ngôn ngữ có sẵn"
 lifecycle_sound = "&dTiếng xe đạp của thế giới"
@@ -252,18 +256,15 @@ optional = "Tham số này là tùy chọn."
 default = "Mặc định là \"{value}\" nếu không được chỉ định."
 type = "Tham số này có kiểu {type}."
 
-[director.runtime]
-usage = "Cách dùng: {usage}"
-
 [director.runtime.error]
-invalid_origin = "Không thể chạy lệnh này từ nguồn này."
-unknown_parameter = "Khóa tham số không xác định: {key}"
-unexpected_argument = "Đối số không mong đợi \"{argument}\". Các tham số tùy chọn phải được chỉ định bằng khóa, ví dụ seed=123"
-unclosed_group = "Thiếu dấu \"]\" đóng cho tham số {key}"
-conversion_failed = "Không thể chuyển \"{value}\" thành {type} cho {parameter}"
-default_parse_failed = "Không thể phân tích giá trị mặc định của tham số {parameter}"
-missing_argument = "Thiếu đối số \"{parameter}\" ({type})"
-execution_failed = "Không thể thực thi lệnh {command}: {reason}"
+invalid_origin = "{prefix}&r &7› &7&cKhông thể chạy lệnh này từ nguồn này."
+unknown_parameter = "{prefix}&r &7› &7&cKhóa tham số không xác định: {key}"
+unexpected_argument = "{prefix}&r &7› &7&cĐối số không mong đợi \"{argument}\". Các tham số tùy chọn phải được chỉ định bằng khóa, ví dụ seed=123"
+unclosed_group = "{prefix}&r &7› &7&cThiếu dấu \"]\" đóng cho tham số {key}"
+conversion_failed = "{prefix}&r &7› &7&cKhông thể chuyển \"{value}\" thành {type} cho {parameter}"
+default_parse_failed = "{prefix}&r &7› &7&cKhông thể phân tích giá trị mặc định của tham số {parameter}"
+missing_argument = "{prefix}&r &7› &7&cThiếu đối số \"{parameter}\" ({type})"
+execution_failed = "{prefix}&r &7› &7&cKhông thể thực thi lệnh {command}: {reason}"
 
 [language.menu]
 selected = "Đã chọn"
@@ -285,20 +286,21 @@ remove_personal_description = "Xóa lựa chọn ngôn ngữ cá nhân của b�
 no_controls = "Bạn không có quyền dùng các tùy chọn ngôn ngữ."
 
 [language.editor]
-loading = "Đang tải tin nhắn cho {locale}..."
+title = "{prefix} › {section}"
+loading = "{prefix}&r &7› &7&7Đang tải tin nhắn cho {locale}..."
 
 [language.editor.category]
 open = "&8Nhấn vào để mở phân loại này.&r"
 message-count = "&7{count} tin nhắn&r"
 
 [language.editor.error]
-unable-to-edit = "Không thể chỉnh sửa: {reason}"
-no-permission = "Bạn không có quyền chỉnh sửa ngôn ngữ của {plugin}."
+unable-to-edit = "{prefix}&r &7› &7&cKhông thể chỉnh sửa: {reason}"
+no-permission = "{prefix}&r &7› &7&cBạn không có quyền chỉnh sửa ngôn ngữ của {prefix}."
 
 [language.editor.input]
-unable-to-save = "Không thể lưu: {reason}"
-too-long = "Nội dung nhập chỉ được có tối đa {maximum} ký tự."
-expired = "Đã hết thời gian nhập trong trình chỉnh sửa ngôn ngữ."
+unable-to-save = "{prefix}&r &7› &7&7Không thể lưu: {reason}"
+too-long = "{prefix}&r &7› &7&7Nội dung nhập chỉ được có tối đa {maximum} ký tự."
+expired = "{prefix}&r &7› &7&7Đã hết thời gian nhập trong trình chỉnh sửa ngôn ngữ."
 
 [language.editor.locale]
 open = "&8Nhấn vào để mở ngôn ngữ này.&r"
@@ -320,15 +322,15 @@ back = "&eQuay lại&r"
 line = "Dòng {line}"
 
 [language.editor.prompt]
-variables = "Biến: {variables}"
-value = "Nhập giá trị mới cho {key} trong trò chuyện."
-search = "Tìm khóa hoặc nội dung tin nhắn. Nhập cancel để quay lại."
-guidance = "Dùng \\n để xuống dòng, \\\\ để nhập dấu gạch chéo ngược, hoặc nhập cancel để quay lại."
-current = "Giá trị hiện tại: {value}"
+variables = "{prefix}&r &7› &7&7Biến: {variables}"
+value = "{prefix}&r &7› &7&7Nhập giá trị mới cho {key} trong trò chuyện."
+search = "{prefix}&r &7› &7&7Tìm khóa hoặc nội dung tin nhắn. Nhập cancel để quay lại."
+guidance = "{prefix}&r &7› &7&7Dùng \\n để xuống dòng, \\\\ để nhập dấu gạch chéo ngược, hoặc nhập cancel để quay lại."
+current = "{prefix}&r &7› &7&7Giá trị hiện tại: {value}"
 
 [language.editor.saved]
-summary = "Đã lưu {locale}. Các lựa chọn ngôn ngữ không thay đổi."
-change = "{key}: “{before}” đã đổi thành “{after}”."
+summary = "{prefix}&r &7› &7&7Đã lưu {locale}. Các lựa chọn ngôn ngữ không thay đổi."
+change = "{prefix}&r &7› &7&7{key}: “{before}” đã đổi thành “{after}”."
 
 [language.editor.search]
 messages-lore = "Nhấn vào để tìm kiếm mọi tin nhắn."
@@ -346,26 +348,54 @@ none = "Không có"
 empty = "(trống)"
 
 [language.error]
-unavailable-for-all = "Ngôn ngữ {locale} không khả dụng cho tất cả plugin đã chọn."
-stopping = "Không có khả năng chọn ngôn ngữ trong khi bổ sung đang dừng."
-server-locale-required = "Chọn mã ngôn ngữ như en_US làm ngôn ngữ mặc định của máy chủ."
-plugin-server-permission = "Bạn không có quyền thay đổi ngôn ngữ máy chủ cho {plugin}."
-plugin-personal-permission = "Bạn không có quyền chọn ngôn ngữ cá nhân cho {plugin}."
-personal-player-only = "Bạn phải chọn ngôn ngữ cá nhân trong trò chơi."
-personal-permission = "Bạn không có quyền chọn ngôn ngữ của mình."
-numeric-page = "Nhập số trang bằng chữ số."
-no-providers = "Không có nhà cung cấp ngôn ngữ Volmit nào khả dụng."
-editor-player-only = "Mở trình soạn thảo ngôn ngữ trong trò chơi."
+unavailable-for-all = "{prefix}&r &7› &7&cNgôn ngữ {locale} không khả dụng cho tất cả plugin đã chọn."
+stopping = "{prefix}&r &7› &7&cKhông có khả năng chọn ngôn ngữ trong khi bổ sung đang dừng."
+server-locale-required = "{prefix}&r &7› &7&cChọn mã ngôn ngữ như en_US làm ngôn ngữ mặc định của máy chủ."
+plugin-server-permission = "{prefix}&r &7› &7&cBạn không có quyền thay đổi ngôn ngữ máy chủ cho {prefix}."
+plugin-personal-permission = "{prefix}&r &7› &7&cBạn không có quyền chọn ngôn ngữ cá nhân cho {prefix}."
+personal-player-only = "{prefix}&r &7› &7&cBạn phải chọn ngôn ngữ cá nhân trong trò chơi."
+personal-permission = "{prefix}&r &7› &7&cBạn không có quyền chọn ngôn ngữ của mình."
+numeric-page = "{prefix}&r &7› &7&cNhập số trang bằng chữ số."
+no-providers = "{prefix}&r &7› &7&cKhông có nhà cung cấp ngôn ngữ Volmit nào khả dụng."
+editor-player-only = "{prefix}&r &7› &7&cMở trình soạn thảo ngôn ngữ trong trò chơi."
 
 [language.selection]
-server-selected = "{plugin}: ngôn ngữ máy chủ hiện là {locale}."
-server-default-selected = "{plugin}: ngôn ngữ của bạn hiện theo ngôn ngữ mặc định của máy chủ."
-save-failed = "{plugin}: không thể lưu lựa chọn ngôn ngữ; hãy kiểm tra bảng điều khiển máy chủ."
-preparing = "Đang chuẩn bị ngôn ngữ {locale} cho {target}..."
-personal-selected = "{plugin}: ngôn ngữ của bạn hiện là {locale}."
-english-fallback = "{plugin}: {locale} không khả dụng; sẽ dùng tiếng Anh (en_US)."
+server-selected = "{prefix}&r &7› &7&7ngôn ngữ máy chủ hiện là {locale}."
+server-default-selected = "{prefix}&r &7› &7&7ngôn ngữ của bạn hiện theo ngôn ngữ mặc định của máy chủ."
+save-failed = "{prefix}&r &7› &7&ckhông thể lưu lựa chọn ngôn ngữ; hãy kiểm tra bảng điều khiển máy chủ."
+preparing = "{prefix}&r &7› &7&7Đang chuẩn bị ngôn ngữ {locale} cho {target}..."
+personal-selected = "{prefix}&r &7› &7&7ngôn ngữ của bạn hiện là {locale}."
+english-fallback = "{prefix}&r &7› &7&7{locale} không khả dụng; sẽ dùng tiếng Anh (en_US)."
 
 [language.usage]
-volmit-selection = "Cách dùng: /volmit plugins languages [locale]"
-selection = "Cách dùng: /{command} language self [locale|reset] or server [locale]"
-editor = "Cách dùng: /{command} language server edit [locale]"
+volmit-selection = "{prefix}&r &7› &7&7Cách dùng: /volmit plugins languages [locale]"
+selection = "{prefix}&r &7› &7&7Cách dùng: /{command} language self [locale|reset] or server [locale]"
+editor = "{prefix}&r &7› &7&7Cách dùng: /{command} language server edit [locale]"
+
+
+[debug.error]
+missing-permission = "{prefix}&r &7› &7&cThiếu quyền: {permission}"
+already-preparing = "{prefix}&r &7› &7&cMột báo cáo chẩn đoán cho {prefix} đang được chuẩn bị."
+already-preparing-short = "{prefix}&r &7› &7&cMột báo cáo chẩn đoán đang được chuẩn bị."
+schedule-failed = "{prefix}&r &7› &7&cKhông thể lên lịch tạo báo cáo chẩn đoán."
+provider-closed = "{prefix}&r &7› &7&cBộ cung cấp dữ liệu chẩn đoán đã đóng."
+closed-before-capture = "{prefix}&r &7› &7&cBộ cung cấp dữ liệu chẩn đoán đã đóng trước khi thu thập dữ liệu báo cáo."
+writer-schedule-failed = "{prefix}&r &7› &7&cKhông thể lên lịch ghi báo cáo chẩn đoán."
+capture-failed = "{prefix}&r &7› &7&cKhông thể thu thập dữ liệu báo cáo chẩn đoán; hãy kiểm tra bảng điều khiển máy chủ."
+closed-before-write = "{prefix}&r &7› &7&cBộ cung cấp dữ liệu chẩn đoán đã đóng trước khi ghi báo cáo."
+write-failed = "{prefix}&r &7› &7&cKhông thể ghi báo cáo chẩn đoán; hãy kiểm tra bảng điều khiển máy chủ."
+
+[debug]
+preparing = "{prefix}&r &7› &7&7Đang chuẩn bị báo cáo chẩn đoán {prefix}..."
+saved = "{prefix}&r &7› &7&7Đã lưu báo cáo chẩn đoán {prefix} vào {path}."
+
+[debug.upload]
+interrupted = "{prefix}&r &7› &7&7Việc tải báo cáo chẩn đoán lên đã bị gián đoạn; báo cáo cục bộ đã được lưu."
+failed = "{prefix}&r &7› &7&cKhông thể tải báo cáo chẩn đoán lên; báo cáo cục bộ đã được lưu."
+completed = "{prefix}&r &7› &7&7Đã tải lên với tên VolmitSoftware - {prefix} - v{version}."
+
+[debug.action]
+open = "Mở: {url}"
+open-description = "Mở báo cáo chẩn đoán đã tải lên."
+copy-path = "Sao chép đường dẫn cục bộ"
+copy-path-description = "Sao chép đường dẫn của báo cáo cục bộ."

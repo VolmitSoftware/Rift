@@ -3,6 +3,7 @@ package com.volmit.rift.localization;
 import art.arcane.volmlib.util.localization.LanguageFileHeader;
 
 import art.arcane.volmlib.util.director.DirectorTextResolver;
+import art.arcane.volmlib.util.format.ColorFormatter;
 import art.arcane.volmlib.util.io.AtomicFileIO;
 import art.arcane.volmlib.util.localization.LanguageReferenceRenderer;
 import art.arcane.volmlib.util.localization.LocaleOverlay;
@@ -28,7 +29,9 @@ import art.arcane.volmlib.util.plugin.ComponentMessenger;
 import art.arcane.volmlib.util.plugin.ComponentText;
 import art.arcane.volmlib.util.scheduling.FoliaScheduler;
 import com.volmit.rift.config.RiftConfig;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -148,17 +151,31 @@ public final class RiftLocalization implements AutoCloseable {
         }
     }
 
-    public synchronized boolean reloadSnapshot(String raw) {
-        if (raw == null) {
-            plugin.getLogger().severe("Rejected missing language snapshot; the last valid language remains active");
+    public synchronized boolean reloadSnapshot(File source, String raw) {
+        if (!isLanguageFile(source)) {
             return false;
         }
         try {
-            install(prepareSnapshot(config.get().getLanguage(), raw));
+            String locale = canonicalLocale(locale(source.toPath()).orElseThrow());
+            PreparedLanguage prepared;
+            if (raw == null) {
+                if (!Files.notExists(source.toPath(), LinkOption.NOFOLLOW_LINKS)) {
+                    throw new IOException("Language snapshot is unreadable: " + source);
+                }
+                prepared = new PreparedLanguage(locale, source,
+                        LocalizationSnapshot.create(LocalizationCandidate.english(CATALOG, ENGLISH_PLURALS)), false);
+            } else {
+                prepared = prepareSnapshot(locale, raw);
+            }
+            if (sameLocale(locale, config.get().getLanguage())) {
+                install(prepared);
+            } else if (selections != null) {
+                selections.cache(locale, selectionSnapshot(locale, prepared.snapshot()));
+            }
             return true;
         } catch (IOException | RuntimeException exception) {
             plugin.getLogger().log(Level.SEVERE,
-                    "Rejected invalid language snapshot for " + config.get().getLanguage()
+                    "Rejected invalid language snapshot for " + source
                             + "; the last valid language remains active",
                     exception);
             return false;
@@ -194,13 +211,7 @@ public final class RiftLocalization implements AutoCloseable {
         String locale = canonicalLocale(requestedLocale);
         File target = file(locale);
         requireRegularLanguageFile(target, false);
-        Map<String, String> values;
-        try {
-            values = parseValues(raw, locale);
-        } catch (IOException exception) {
-            plugin.getLogger().log(Level.WARNING, "Using English for unreadable language snapshot " + target, exception);
-            values = Map.of();
-        }
+        Map<String, String> values = parseValues(raw, locale);
         LocaleOverlay overlay = createOverlay(locale, target.getPath(), values);
         return createPrepared(locale, target, List.of(overlay), true);
     }
@@ -225,7 +236,6 @@ public final class RiftLocalization implements AutoCloseable {
         activeLocale.set(required.locale());
         PluginLanguageService activeSelections = selections;
         if (activeSelections != null) {
-            activeSelections.invalidate();
             activeSelections.cache(required.locale(), selectionSnapshot(required.locale(), required.snapshot()));
         }
     }
@@ -478,7 +488,7 @@ public final class RiftLocalization implements AutoCloseable {
 
     public ComponentText text(TextKey key, MessageArgs arguments) {
         LocalizationSnapshot snapshot = selectedSnapshot(null);
-        return ComponentText.markup(render(snapshot, key, arguments, renderPrefix(snapshot)));
+        return render(snapshot, key, arguments, false);
     }
 
     public ComponentText text(CommandSender sender, TextKey key) {
@@ -487,15 +497,15 @@ public final class RiftLocalization implements AutoCloseable {
 
     public ComponentText text(CommandSender sender, TextKey key, MessageArgs arguments) {
         LocalizationSnapshot snapshot = selectedSnapshot(sender);
-        return ComponentText.markup(render(snapshot, key, arguments, renderPrefix(snapshot)));
+        return render(snapshot, key, arguments, false);
     }
 
     public ComponentText textWithoutPrefix(TextKey key, MessageArgs arguments) {
-        return ComponentText.markup(render(selectedSnapshot(null), key, arguments, ""));
+        return render(selectedSnapshot(null), key, arguments, true);
     }
 
     public ComponentText textWithoutPrefix(CommandSender sender, TextKey key, MessageArgs arguments) {
-        return ComponentText.markup(render(selectedSnapshot(sender), key, arguments, ""));
+        return render(selectedSnapshot(sender), key, arguments, true);
     }
 
     public ComponentText prefix() {
@@ -503,7 +513,8 @@ public final class RiftLocalization implements AutoCloseable {
     }
 
     public ComponentText prefixed(ComponentText message) {
-        return prefix().append(Objects.requireNonNull(message, "message"));
+        return prefix().append(ComponentText.markup("&r &7› &7"))
+                .append(Objects.requireNonNull(message, "message").colorIfAbsent("#AAAAAA"));
     }
 
     public void send(CommandSender sender, TextKey key) {
@@ -515,7 +526,8 @@ public final class RiftLocalization implements AutoCloseable {
     }
 
     public void sendPrefixed(CommandSender sender, ComponentText message) {
-        send(sender, prefixed(message));
+        send(sender, text(sender, RiftMessages.PREFIX).append(ComponentText.markup("&r &7› &7"))
+                .append(Objects.requireNonNull(message, "message").colorIfAbsent("#AAAAAA")));
     }
 
     public DirectorTextResolver directorResolver() {
@@ -524,7 +536,10 @@ public final class RiftLocalization implements AutoCloseable {
             if (!(definition instanceof TextKey textKey)) {
                 return DirectorTextResolver.ENGLISH.resolve(key, arguments);
             }
-            return textWithoutPrefix(textKey, arguments).plain();
+            return RiftMessages.isSharedChat(textKey.id()) || textKey.id().equals("language.editor.title")
+                    || textKey.id().equals(RiftMessages.VERSION.id())
+                    ? text(textKey, arguments).miniMessage()
+                    : textWithoutPrefix(textKey, arguments).plain();
         };
     }
 
@@ -844,7 +859,9 @@ public final class RiftLocalization implements AutoCloseable {
     }
 
     private Optional<String> locale(Path path) {
-        if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS) || Files.isSymbolicLink(path)) {
+        if (Files.isSymbolicLink(path)
+                || (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)
+                && !Files.notExists(path, LinkOption.NOFOLLOW_LINKS))) {
             return Optional.empty();
         }
         String fileName = path.getFileName().toString();
@@ -894,7 +911,8 @@ public final class RiftLocalization implements AutoCloseable {
     private static List<String> englishHeader(String locale) {
         return LanguageFileHeader.render(new LanguageFileHeader.Options(
                 "Rift", locale,
-                List.of("runtime.prefix supplies {prefix}. Remove {prefix} from an individual message to hide it there."),
+                List.of("runtime.prefix stores the styled plugin name used by {prefix}.",
+                        "Messages supply the separator and spacing. Remove {prefix}&r &7› &7 to hide the complete chat prefix."),
                 List.of("Colors and styles: &0-&f, &k-&r.", "RGB colors: &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B, [RRGGBB].", "MiniMessage supports custom formatting. Put a backslash before & or [ to display it literally."),
                 Map.ofEntries(
                         Map.entry("after", "new value"),
@@ -917,15 +935,16 @@ public final class RiftLocalization implements AutoCloseable {
                         Map.entry("permission", "permission"),
                         Map.entry("personal", "a player's personal locale when it differs from the server default"),
                         Map.entry("player", "player"),
-                        Map.entry("plugin", "plugin name"),
-                        Map.entry("prefix", "the global runtime.prefix value. Remove {prefix} from one message to hide it there"),
+                        Map.entry("path", "local report path"),
+                        Map.entry("prefix", "the styled name from runtime.prefix; separators and spacing belong to each message"),
                         Map.entry("reason", "failure detail"),
                         Map.entry("seconds", "duration"),
+                        Map.entry("section", "editor section"),
                         Map.entry("setting", "setting"),
                         Map.entry("target", "selection target"),
                         Map.entry("title", "section title"),
                         Map.entry("type", "value type"),
-                        Map.entry("usage", "usage text"),
+                        Map.entry("url", "uploaded report URL"),
                         Map.entry("value", "current or new value"),
                         Map.entry("variables", "allowed placeholders"),
                         Map.entry("version", "plugin version"),
@@ -952,10 +971,40 @@ public final class RiftLocalization implements AutoCloseable {
                 : activeSelections.snapshot();
     }
 
-    private String render(LocalizationSnapshot snapshot, TextKey key, MessageArgs arguments, String prefix) {
-        MessageArgs resolvedArguments = argumentsWithPrefix(key, arguments, prefix);
-        String template = snapshot.resolve(key, resolvedArguments).template();
-        return interpolate(template, resolvedArguments);
+    private ComponentText render(LocalizationSnapshot snapshot, TextKey key, MessageArgs arguments, boolean withoutChatPrefix) {
+        TextKey definition = (TextKey) CATALOG.require(key.id());
+        MessageArgs resolvedArguments = argumentsWithPrefix(definition, arguments, "<rift_prefix>");
+        String template = snapshot.resolve(definition, resolvedArguments).template();
+        if (withoutChatPrefix && template.startsWith(RiftMessages.CHAT_PREFIX)) {
+            template = template.substring(RiftMessages.CHAT_PREFIX.length());
+        }
+        return renderTemplate(template, resolvedArguments, prefixComponent(snapshot, definition, arguments));
+    }
+
+    private Component prefixComponent(LocalizationSnapshot snapshot, MessageKey definition, MessageArgs arguments) {
+        if (arguments != null && arguments.names().contains("plugin")) {
+            String name = String.valueOf(arguments.require("plugin").value());
+            if (!name.equalsIgnoreCase("Rift")) {
+                return Component.text(ColorFormatter.stripColor(name));
+            }
+        }
+        Component prefix = MINI_MESSAGE.deserialize(ComponentText.normalizeMarkup(renderPrefix(snapshot)));
+        return definition.id().equals(RiftMessages.VERSION.id())
+                ? Component.text(ComponentText.component(prefix).plain())
+                : prefix;
+    }
+
+    private ComponentText renderTemplate(String template, MessageArgs arguments, Component prefix) {
+        MessageArgs.Builder replacements = MessageArgs.builder();
+        for (MessageArgument argument : arguments.arguments().values()) {
+            String value = String.valueOf(argument.value());
+            replacements.trusted(argument.name(), argument.kind() == MessageArgumentKind.UNTRUSTED
+                    ? ColorFormatter.stripColor(value).replace("\\", "\\\\").replace("<", "\\<")
+                    : ComponentText.normalizeMarkup(value));
+        }
+        String rendered = interpolate(ComponentText.normalizeMarkup(template), replacements.build());
+        return ComponentText.component(MINI_MESSAGE.deserialize(rendered,
+                Placeholder.component("rift_prefix", prefix)));
     }
 
     private String renderPrefix(LocalizationSnapshot snapshot) {
@@ -973,7 +1022,12 @@ public final class RiftLocalization implements AutoCloseable {
         }
         MessageArgs.Builder builder = MessageArgs.builder();
         for (MessageArgument argument : resolved.arguments().values()) {
-            builder.add(argument);
+            if (key.id().equals("language.selection.preparing") && argument.name().equals("target")
+                    && "Rift".equalsIgnoreCase(String.valueOf(argument.value()))) {
+                builder.trusted("target", prefix);
+            } else if (!argument.name().equals("plugin") || key.placeholders().contains("plugin")) {
+                builder.add(argument);
+            }
         }
         builder.trusted("prefix", prefix);
         return builder.build();
@@ -1065,12 +1119,12 @@ public final class RiftLocalization implements AutoCloseable {
                 if (!(prefixValue instanceof TextValue prefixText)) {
                     throw new IllegalStateException("Language prefix is not text");
                 }
-                arguments.trusted(placeholder, prefixText.template());
+                arguments.trusted(placeholder, "<rift_prefix>");
             } else {
                 arguments.untrusted(placeholder, "[" + placeholder + "]");
             }
         }
-        return interpolate(template, arguments.build());
+        return renderTemplate(template, arguments.build(), prefixComponent(snapshot, definition, MessageArgs.empty())).miniMessage();
     }
 
     private String escapeUntrusted(String value) {

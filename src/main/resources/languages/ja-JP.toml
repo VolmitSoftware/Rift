@@ -6,7 +6,7 @@
 # /rift language server edit ja-JP
 #
 # === 接頭辞 ===
-# 接頭辞: {prefix}=グローバルな runtime.prefix の値です。個別のメッセージから {prefix} を削除すると、その場所だけ非表示になります。
+# runtime.prefix は書式付きの名前のみです。{prefix} で名前を挿入します。› と空白は各メッセージで編集してください。
 #
 # === 書式 ===
 # 色: &0-&f、&k-&r、&#RRGGBB、&xRRGGBB、&x&R&R&G&G&B&B、[RRGGBB]。独自書式には MiniMessage も使用できます。
@@ -33,24 +33,27 @@
 #   {permission}  権限ノード
 #   {personal}  個人設定のロケール
 #   {player}  プレイヤー名
-#   {plugin}  プラグイン名
-#   {prefix}  グローバルな runtime.prefix の値です。個別のメッセージから {prefix} を削除すると、その場所だけ非表示になります。
+#   {prefix}  runtime.prefix は書式付きの名前のみです。{prefix} で名前を挿入します。› と空白は各メッセージで編集してください。
 #   {reason}  理由またはエラーの詳細
 #   {seconds}  秒単位の時間
 #   {setting}  設定名
 #   {target}  ターゲットプレーヤー、エンティティティティ、または値
 #   {title}  タイトル文字列
 #   {type}  値またはデータの型
-#   {usage}  コマンドの使用法
 #   {value}  現在または新しい値
 #   {variables}  使用可能なプレースホルダー
 #   {version}  バージョン
 #   {world}  ワールド名
 
+#   {section}  エディターのセクション
+#   {path}  ローカルレポートのパス
+#   {url}  レポートのURL
+
 [runtime]
-prefix = "&5&lRIFT&r &8›&r "
+prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+version = "{prefix} のバージョンを表示"
 root = "サーバの世界を安全に管理"
 create = "新しい世界を創造し、管理する"
 import = "既存の世界ディレクトリをインポートする"
@@ -63,11 +66,11 @@ send = "ロードされた世界へ別のプレイヤーをテレポート"
 list = "読み込まれたリスト, 管理, 発見された, 検疫された世界"
 info = "1つの世界のための詳細な状態を表示"
 generators = "管理された世界が既に使用しているジェネレータの識別子を表示"
-config = "ゲーム内オープン Rift 設定エディタ"
-language = "利用可能な Rift 言語を選択"
-status = "プラットフォームの機能と Rift ステート"
-debug = "Rift診断ツール"
-debug_dump = "包括的なRift診断レポートを作成"
+config = "ゲーム内オープン {prefix} 設定エディタ"
+language = "利用可能な {prefix} 言語を選択"
+status = "プラットフォームの機能と {prefix} ステート"
+debug = "{prefix}診断ツール"
+debug_dump = "包括的な{prefix}診断レポートを作成"
 autoload = "スタートアップ時に管理された世界がロードするかどうかを変更"
 protect = "管理された世界を保護または保護する"
 
@@ -86,34 +89,35 @@ upload = "公開アップロードが有効な場合にレポートをアップ�
 sender = "コマンド送信者"
 
 [rift.message]
-permission_denied = "{prefix}&c必要事項 &f{permission}&c."
-unknown_command = "{prefix}&c未知のコマンド。 &f/rift help&c."
-player_only = "{prefix}&cこのコマンドは、プレイヤーが必要です。"
-operation_queued = "{prefix}&7キューイング &f{operation}&7 詳しくはこちら &d{world}&7."
-operation_failed = "{prefix}&c{operation} 失敗しました &f{world}&c: {reason}"
-created = "{prefix}&a作成と管理 &f{world}&a."
-imported = "{prefix}&aインポートと管理 &f{world}&a."
-loaded = "{prefix}&aロード &f{world}&a."
-unloaded = "{prefix}&a積み荷なし &f{world}&a."
-teleported = "{prefix}&aテレポート &f{player}&a とりあえず &f{world}&a."
-delete_confirm = "{prefix}&eログイン &f/rift delete {world}&e 再入荷 &f{seconds}フリガナ&e それを検疫に動かす。"
-quarantined = "{prefix}&a移動する &f{world}&a 検疫にとして &f{id}&a."
-restored = "{prefix}&a復元 &f{world}&a から &f{id}&a."
-profile_updated = "{prefix}&a更新情報 &f{setting}&a 詳しくはこちら &f{world}&a とりあえず &f{value}&a."
-folia_limit = "{prefix}&e{operation} 利用不可 Folia 世界の負荷のために/unload API は実装されていません。"
-config_saved = "{prefix}&a保存された構成。"
-config_opened = "{prefix}&aゲーム内の完全な設定エディターを開きました。&r"
-config_save_failed = "{prefix}&c設定は保存できません。 コンソールを確認してください。"
-empty_list = "{prefix}&7マッチングワールドが見つかりませんでした。"
-player_offline = "{prefix}&cプレイヤーはオンラインではありません: &f{player}"
-unknown_world = "{prefix}&c未知の世界: &f{world}"
-section = "{prefix}&d{title} &8(&f{count}&8)"
-entry = "{prefix}&8- &f{name} &8| &7{detail}"
-detail = "{prefix}&8- &7{label}: &f{value}"
-info_title = "{prefix}&d{world}"
-status_title = "{prefix}&dRift {version} 状態"
-generator_format = "{prefix}&7Custom フォーマット: &fPluginName[:generator-id]"
-folia_status_note = "{prefix}&eFolia サポート Rift's read, editor, Profile, and teleport の機能; 動的世界ライフサイクルはプラットフォーム API によってゲートされます。"
+version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
+permission_denied = "{prefix}&r &7› &7&c必要事項 &f{permission}&7."
+unknown_command = "{prefix}&r &7› &7&c未知のコマンド。 &f/rift help&7."
+player_only = "{prefix}&r &7› &7&cこのコマンドは、プレイヤーが必要です。"
+operation_queued = "{prefix}&r &7› &7キューイング &f{operation}&7 詳しくはこちら &d{world}&7."
+operation_failed = "{prefix}&r &7› &7&c{operation} 失敗しました &f{world}&7: {reason}"
+created = "{prefix}&r &7› &7作成と管理 &a{world}&7."
+imported = "{prefix}&r &7› &7インポートと管理 &a{world}&7."
+loaded = "{prefix}&r &7› &7ロード &a{world}&7."
+unloaded = "{prefix}&r &7› &7積み荷なし &a{world}&7."
+teleported = "{prefix}&r &7› &7テレポート &a{player}&7 とりあえず &a{world}&7."
+delete_confirm = "{prefix}&r &7› &7ログイン &e/rift delete {world}&7 再入荷 &e{seconds}フリガナ&7 それを検疫に動かす。"
+quarantined = "{prefix}&r &7› &7移動する &a{world}&7 検疫にとして &a{id}&7."
+restored = "{prefix}&r &7› &7復元 &a{world}&7 から &a{id}&7."
+profile_updated = "{prefix}&r &7› &7更新情報 &a{setting}&7 詳しくはこちら &a{world}&7 とりあえず &a{value}&7."
+folia_limit = "{prefix}&r &7› &7{operation} 利用不可 Folia 世界の負荷のために/unload API は実装されていません。"
+config_saved = "{prefix}&r &7› &7&a保存された構成。"
+config_opened = "{prefix}&r &7› &7ゲーム内の完全な設定エディターを開きました。&r"
+config_save_failed = "{prefix}&r &7› &7&c設定は保存できません。 コンソールを確認してください。"
+empty_list = "{prefix}&r &7› &7マッチングワールドが見つかりませんでした。"
+player_offline = "{prefix}&r &7› &7&cプレイヤーはオンラインではありません: &f{player}"
+unknown_world = "{prefix}&r &7› &7&c未知の世界: &f{world}"
+section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
+entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
+info_title = "{prefix}&r &7› &7&d{world}"
+status_title = "{prefix}&r &7› &7{prefix} {version} 状態"
+generator_format = "{prefix}&r &7› &7Custom フォーマット: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&r &7› &7Folia サポート {prefix}'s read, editor, Profile, and teleport の機能; 動的世界ライフサイクルはプラットフォーム API によってゲートされます。"
 
 [rift.label]
 worlds = "ワールド"
@@ -145,35 +149,35 @@ quarantine_entries = "Quarantine エントリ"
 
 [rift.explain]
 loaded = "Bukkit が現在このワールドをメモリー上で有効にしているかを示します。"
-managed = "Rift がこのワールドのプロファイルを管理し、ジェネレーターと起動設定を復元できるかを示します。"
+managed = "{prefix} がこのワールドのプロファイルを管理し、ジェネレーターと起動設定を復元できるかを示します。"
 on_disk = "ワールドが読み込まれているか、level.dat を含む有効なワールドフォルダーがあるかを示します。"
 environment = "読み込み中のワールドまたは管理プロファイルに記録された Bukkit のワールド環境です。"
-generator = "この管理対象ワールドの読み込み時に Rift が再適用するジェネレーターです。void は Rift 内蔵の空ワールド用ジェネレーターです。"
+generator = "この管理対象ワールドの読み込み時に {prefix} が再適用するジェネレーターです。void は {prefix} 内蔵の空ワールド用ジェネレーターです。"
 seed = "このワールドに記録されたシード値です。この表示値を変えても既存の地形は再生成されません。"
-autoload = "サーバー起動時に Rift がこの管理対象ワールドを自動で読み込むかを示します。"
-protected = "保護された管理対象ワールドは Rift の隔離領域へ移動できません。"
-operation_active = "ワールドの作成・読み込み・削除などの処理が、現在 Rift のワールド単位のロックを保持しているかを示します。"
+autoload = "サーバー起動時に {prefix} がこの管理対象ワールドを自動で読み込むかを示します。"
+protected = "保護された管理対象ワールドは {prefix} の隔離領域へ移動できません。"
+operation_active = "ワールドの作成・読み込み・削除などの処理が、現在 {prefix} のワールド単位のロックを保持しているかを示します。"
 server = "Bukkit が報告する、稼働中のサーバー実装とバージョンです。"
-java_runtime = "現在サーバーを実行している Java ランタイムです。Rift のバイトコードは Java 17 との互換性を維持しています。"
-plugin_bytecode = "Rift のコンパイル済みクラスを読み込める、最も古い Java ランタイムのバージョンです。"
-platform = "Rift が実行時に検出したスケジューラーとサーバー API の系統です。"
+java_runtime = "現在サーバーを実行している Java ランタイムです。{prefix} のバイトコードは Java 17 との互換性を維持しています。"
+plugin_bytecode = "{prefix} のコンパイル済みクラスを読み込める、最も古い Java ランタイムのバージョンです。"
+platform = "{prefix} が実行時に検出したスケジューラーとサーバー API の系統です。"
 dynamic_lifecycle = "このプラットフォームが稼働中のワールド作成・読み込み・アンロード・隔離・復元を安全に実行できるかを示します。"
 world_container = "Bukkit のワールドフォルダーを保存するサーバーディレクトリです。"
-writable = "OS が現在 Rift にワールド格納ディレクトリへの書き込みを許可しているかを示します。"
+writable = "OS が現在 {prefix} にワールド格納ディレクトリへの書き込みを許可しているかを示します。"
 locale = "plugins/Rift/languages 内の使用中の言語ファイル。不足している項目には内蔵の英語を使用します。"
-world_counts = "読み込み数は稼働中の Bukkit ワールド数、管理数は Rift プロファイル数です。不明数は、読み込まれておらずディスク上にもない管理プロファイル数です。"
-quarantine = "Rift の delete で退避され、隔離 ID を指定して復元できるワールドです。"
-world_entry = "読み込み済みは現在稼働中、管理対象は Rift のプロファイルがあることを示します。ディスク上は、有効な未読み込みワールドフォルダーがあることを示します。"
+world_counts = "読み込み数は稼働中の Bukkit ワールド数、管理数は {prefix} プロファイル数です。不明数は、読み込まれておらずディスク上にもない管理プロファイル数です。"
+quarantine = "{prefix} の delete で退避され、隔離 ID を指定して復元できるワールドです。"
+world_entry = "読み込み済みは現在稼働中、管理対象は {prefix} のプロファイルがあることを示します。ディスク上は、有効な未読み込みワールドフォルダーがあることを示します。"
 
 [rift.feedback]
-title = "&d&lRIFT"
+title = "{prefix}"
 world_subtitle = "&a{operation}&8: &f{world}"
 teleport_subtitle = "&a到着予定 &f{world}"
 failure_title = "&c操作が失敗しました"
 failure_subtitle = "&7{operation}&8: &f{world}"
-action_world = "&dRift &8• &a{operation} &f{world}"
-action_teleport = "&dRift &8• &aテレポートへ &f{world}"
-action_failure = "&dRift &8• &c{operation} 失敗しました &f{world}"
+action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
+action_teleport = "{prefix}&r &7› &7&aテレポートへ &a{world}"
+action_failure = "{prefix}&r &7› &7&c{operation} 失敗しました &f{world}"
 
 [rift.gui]
 current = "&7現在の: &f{value}"
@@ -194,19 +198,19 @@ failure_feedback = "&d失敗のフィードバック"
 title_popups = "&dタイトルポップアップ"
 action_bar_popups = "&dアクションバーポップアップ"
 sounds = "&dフィードバックの音"
-root_title = "Rift 構成:"
-category_title = "Rift: {category}"
+root_title = "{prefix} 構成:"
+category_title = "{prefix}: {category}"
 category_open = "&8このセクションのすべての設定を編集するためにクリック"
 back = "&eバックナンバー"
 toggle = "&8クリックしてトグル"
 exact_number = "&8ふりがな/right 調整; 正確な値を入力するQを押します"
 text = "&8チャットで新しい値を入力してください"
-prompt = "{prefix}&7新たな値を入力します。 &f{setting}&7 チャット"
-prompt_cancel = "{prefix}&7タイプ: &fキャンセル&7 変更せずに戻ります。"
-prompt_cancelled = "{prefix}&7構成入力はキャンセルしました。"
-prompt_timeout = "{prefix}&7構成入力はタイムアウトしました。"
-setting_saved = "{prefix}&d{setting} &8› &a変更後: &f{after} &7変更前: &f{before}&a。"
-setting_failed = "{prefix}&c更新できません &f{setting}&c: {reason}"
+prompt = "{prefix}&r &7› &7新たな値を入力します。 &f{setting}&7 チャット"
+prompt_cancel = "{prefix}&r &7› &7タイプ: &fキャンセル&7 変更せずに戻ります。"
+prompt_cancelled = "{prefix}&r &7› &7構成入力はキャンセルしました。"
+prompt_timeout = "{prefix}&r &7› &7構成入力はタイムアウトしました。"
+setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7変更後: &a{after} &7変更前: &f{before}&7。"
+setting_failed = "{prefix}&r &7› &7&c更新できません &f{setting}&7: {reason}"
 language = "&d言語のロケール"
 language_select = "&8クリックして利用可能な言語から選択します"
 lifecycle_sound = "&dワールド・ライフサイクル・サウンド"
@@ -252,18 +256,15 @@ optional = "このパラメータは任意です。"
 default = "未指定の場合は \"{value}\" になります。"
 type = "このパラメータの型は {type} です。"
 
-[director.runtime]
-usage = "使用法: {usage}"
-
 [director.runtime.error]
-invalid_origin = "この実行元からはコマンドを実行できません。"
-unknown_parameter = "不明なパラメーターキー: {key}"
-unexpected_argument = "予期しない引数 \"{argument}\"。オプションのパラメーターはキー付きで指定してください。例: seed=123"
-unclosed_group = "パラメータ {key} の閉じかっこ \"]\" がありません"
-conversion_failed = "\"{value}\" を {parameter} 用の {type} に変換できません"
-default_parse_failed = "パラメーター {parameter} のデフォルト値を解析できません"
-missing_argument = "引数 \"{parameter}\" ({type}) が必要です"
-execution_failed = "コマンド {command} の実行に失敗しました: {reason}"
+invalid_origin = "{prefix}&r &7› &7&cこの実行元からはコマンドを実行できません。"
+unknown_parameter = "{prefix}&r &7› &7&c不明なパラメーターキー: {key}"
+unexpected_argument = "{prefix}&r &7› &7&c予期しない引数 \"{argument}\"。オプションのパラメーターはキー付きで指定してください。例: seed=123"
+unclosed_group = "{prefix}&r &7› &7&cパラメータ {key} の閉じかっこ \"]\" がありません"
+conversion_failed = "{prefix}&r &7› &7&c\"{value}\" を {parameter} 用の {type} に変換できません"
+default_parse_failed = "{prefix}&r &7› &7&cパラメーター {parameter} のデフォルト値を解析できません"
+missing_argument = "{prefix}&r &7› &7&c引数 \"{parameter}\" ({type}) が必要です"
+execution_failed = "{prefix}&r &7› &7&cコマンド {command} の実行に失敗しました: {reason}"
 
 [language.menu]
 selected = "選択済み"
@@ -285,20 +286,21 @@ remove_personal_description = "個人の言語選択を削除します。"
 no_controls = "利用できる言語設定はありません。"
 
 [language.editor]
-loading = "{locale}のメッセージを読み込んでいます..."
+title = "{prefix} › {section}"
+loading = "{prefix}&r &7› &7&7{locale}のメッセージを読み込んでいます..."
 
 [language.editor.category]
 open = "&8クリックしてこのグループを開きます。&r"
 message-count = "&7{count}件のメッセージ&r"
 
 [language.editor.error]
-unable-to-edit = "編集できませんでした: {reason}"
-no-permission = "{plugin}の言語を編集する権限がありません。"
+unable-to-edit = "{prefix}&r &7› &7&c編集できませんでした: {reason}"
+no-permission = "{prefix}&r &7› &7&c{prefix}の言語を編集する権限がありません。"
 
 [language.editor.input]
-unable-to-save = "保存できませんでした: {reason}"
-too-long = "入力は{maximum}文字以内にしてください。"
-expired = "言語エディターの入力時間が切れました。"
+unable-to-save = "{prefix}&r &7› &7&7保存できませんでした: {reason}"
+too-long = "{prefix}&r &7› &7&7入力は{maximum}文字以内にしてください。"
+expired = "{prefix}&r &7› &7&7言語エディターの入力時間が切れました。"
 
 [language.editor.locale]
 open = "&8クリックしてこの言語を開きます。&r"
@@ -320,15 +322,15 @@ back = "&e戻る&r"
 line = "行{line}"
 
 [language.editor.prompt]
-variables = "変数: {variables}"
-value = "{key}の新しい値をチャットに入力してください。"
-search = "メッセージキーまたは本文を検索してください。cancelと入力すると戻ります。"
-guidance = "改行には\\n、バックスラッシュには\\\\を使ってください。cancelと入力すると戻ります。"
-current = "現在の値: {value}"
+variables = "{prefix}&r &7› &7&7変数: {variables}"
+value = "{prefix}&r &7› &7&7{key}の新しい値をチャットに入力してください。"
+search = "{prefix}&r &7› &7&7メッセージキーまたは本文を検索してください。cancelと入力すると戻ります。"
+guidance = "{prefix}&r &7› &7&7改行には\\n、バックスラッシュには\\\\を使ってください。cancelと入力すると戻ります。"
+current = "{prefix}&r &7› &7&7現在の値: {value}"
 
 [language.editor.saved]
-summary = "{locale}を保存しました。言語の選択は変更されていません。"
-change = "{key}: 「{before}」を「{after}」に変更しました。"
+summary = "{prefix}&r &7› &7&7{locale}を保存しました。言語の選択は変更されていません。"
+change = "{prefix}&r &7› &7&7{key}: 「{before}」を「{after}」に変更しました。"
 
 [language.editor.search]
 messages-lore = "クリックしてすべてのメッセージを検索します。"
@@ -346,26 +348,54 @@ none = "なし"
 empty = "(空)"
 
 [language.error]
-unavailable-for-all = "選択したすべてのプラグインで言語{locale}を利用できるわけではありません。"
-stopping = "プラグインを停止している間は言語を選択できません。"
-server-locale-required = "サーバーの既定の言語としてen_USなどの言語コードを選択してください。"
-plugin-server-permission = "{plugin}のサーバー言語を変更する権限がありません。"
-plugin-personal-permission = "{plugin}の個人言語を選択する権限がありません。"
-personal-player-only = "プレイヤーの個人言語はゲーム内で選択してください。"
-personal-permission = "個人言語を選択する権限がありません。"
-numeric-page = "ページ番号を数字で入力してください。"
-no-providers = "利用できるVolmit言語プロバイダーがありません。"
-editor-player-only = "ゲーム内で言語エディターを開いてください。"
+unavailable-for-all = "{prefix}&r &7› &7&c選択したすべてのプラグインで言語{locale}を利用できるわけではありません。"
+stopping = "{prefix}&r &7› &7&cプラグインを停止している間は言語を選択できません。"
+server-locale-required = "{prefix}&r &7› &7&cサーバーの既定の言語としてen_USなどの言語コードを選択してください。"
+plugin-server-permission = "{prefix}&r &7› &7&c{prefix}のサーバー言語を変更する権限がありません。"
+plugin-personal-permission = "{prefix}&r &7› &7&c{prefix}の個人言語を選択する権限がありません。"
+personal-player-only = "{prefix}&r &7› &7&cプレイヤーの個人言語はゲーム内で選択してください。"
+personal-permission = "{prefix}&r &7› &7&c個人言語を選択する権限がありません。"
+numeric-page = "{prefix}&r &7› &7&cページ番号を数字で入力してください。"
+no-providers = "{prefix}&r &7› &7&c利用できるVolmit言語プロバイダーがありません。"
+editor-player-only = "{prefix}&r &7› &7&cゲーム内で言語エディターを開いてください。"
 
 [language.selection]
-server-selected = "{plugin}: サーバー言語を{locale}に変更しました。"
-server-default-selected = "{plugin}: 個人言語はサーバーの既定の言語に従うようになりました。"
-save-failed = "{plugin}: 言語の選択を保存できませんでした。サーバーコンソールを確認してください。"
-preparing = "{target}の言語{locale}を準備しています..."
-personal-selected = "{plugin}: 個人言語を{locale}に変更しました。"
-english-fallback = "{plugin}: {locale}は利用できないため、英語（en_US）を使用します。"
+server-selected = "{prefix}&r &7› &7&7サーバー言語を{locale}に変更しました。"
+server-default-selected = "{prefix}&r &7› &7&7個人言語はサーバーの既定の言語に従うようになりました。"
+save-failed = "{prefix}&r &7› &7&c言語の選択を保存できませんでした。サーバーコンソールを確認してください。"
+preparing = "{prefix}&r &7› &7&7{target}の言語{locale}を準備しています..."
+personal-selected = "{prefix}&r &7› &7&7個人言語を{locale}に変更しました。"
+english-fallback = "{prefix}&r &7› &7&7{locale}は利用できないため、英語（en_US）を使用します。"
 
 [language.usage]
-volmit-selection = "使い方: /volmit plugins languages [locale]"
-selection = "使い方: /{command} language self [locale|reset] or server [locale]"
-editor = "使い方: /{command} language server edit [locale]"
+volmit-selection = "{prefix}&r &7› &7&7使い方: /volmit plugins languages [locale]"
+selection = "{prefix}&r &7› &7&7使い方: /{command} language self [locale|reset] or server [locale]"
+editor = "{prefix}&r &7› &7&7使い方: /{command} language server edit [locale]"
+
+
+[debug.error]
+missing-permission = "{prefix}&r &7› &7&c権限がありません: {permission}"
+already-preparing = "{prefix}&r &7› &7&c{prefix} の診断レポートはすでに作成中です。"
+already-preparing-short = "{prefix}&r &7› &7&c診断レポートはすでに作成中です。"
+schedule-failed = "{prefix}&r &7› &7&c診断レポートの作成をスケジュールできません。"
+provider-closed = "{prefix}&r &7› &7&c診断プロバイダーは終了しています。"
+closed-before-capture = "{prefix}&r &7› &7&cレポートのデータを収集する前に診断プロバイダーが終了しました。"
+writer-schedule-failed = "{prefix}&r &7› &7&c診断レポートの書き込みをスケジュールできません。"
+capture-failed = "{prefix}&r &7› &7&c診断レポートのデータを収集できません。サーバーコンソールを確認してください。"
+closed-before-write = "{prefix}&r &7› &7&cレポートを書き込む前に診断プロバイダーが終了しました。"
+write-failed = "{prefix}&r &7› &7&c診断レポートを書き込めません。サーバーコンソールを確認してください。"
+
+[debug]
+preparing = "{prefix}&r &7› &7&7{prefix} の診断レポートを作成しています..."
+saved = "{prefix}&r &7› &7&7{prefix} の診断レポートを {path} に保存しました。"
+
+[debug.upload]
+interrupted = "{prefix}&r &7› &7&7診断レポートのアップロードが中断されました。ローカルのレポートは保存されています。"
+failed = "{prefix}&r &7› &7&c診断レポートのアップロードに失敗しました。ローカルのレポートは保存されています。"
+completed = "{prefix}&r &7› &7&7VolmitSoftware - {prefix} - v{version} としてアップロードしました。"
+
+[debug.action]
+open = "開く: {url}"
+open-description = "アップロードした診断レポートを開きます。"
+copy-path = "ローカルパスをコピー"
+copy-path-description = "ローカルのレポートのパスをコピーします。"

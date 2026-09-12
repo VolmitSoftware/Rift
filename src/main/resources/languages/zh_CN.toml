@@ -6,7 +6,7 @@
 # /rift language server edit zh_CN
 #
 # === 前缀 ===
-# 前缀：{prefix}=全局 runtime.prefix 值。从某条消息中删除 {prefix}，即可只在该消息中隐藏前缀。
+# runtime.prefix 仅包含带格式的名称。{prefix} 插入名称；› 和空格在每条消息中单独编辑。
 #
 # === 格式 ===
 # 颜色：&0-&f、&k-&r、&#RRGGBB、&xRRGGBB、&x&R&R&G&G&B&B 和 [RRGGBB]。自定义格式仍可使用 MiniMessage。
@@ -33,24 +33,27 @@
 #   {permission}  权限节点
 #   {personal}  个人区域设置
 #   {player}  玩家名称
-#   {plugin}  插件名称
-#   {prefix}  全局 runtime.prefix 值。从某条消息中删除 {prefix}，即可只在该消息中隐藏前缀。
+#   {prefix}  runtime.prefix 仅包含带格式的名称。{prefix} 插入名称；› 和空格在每条消息中单独编辑。
 #   {reason}  原因或错误详情
 #   {seconds}  持续秒数
 #   {setting}  设置名称
 #   {target}  目标玩家、实体或值
 #   {title}  标题文本
 #   {type}  值或数据类型
-#   {usage}  命令用法文本
 #   {value}  当前值或新值
 #   {variables}  可用占位符
 #   {version}  版本
 #   {world}  世界名称
 
+#   {section}  编辑器分区
+#   {path}  本地报告路径
+#   {url}  报告网址
+
 [runtime]
-prefix = "&5&lRIFT&r &8›&r "
+prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+version = "显示 {prefix} 版本"
 root = "安全管理服务器世界"
 create = "创建和管理一个新世界"
 import = "导入现有的世界目录"
@@ -63,11 +66,11 @@ send = "将另一个玩家传送到装入器的世界"
 list = "已装入、管理、发现和隔离世界的清单"
 info = "显示一个世界的详细状态"
 generators = "显示管理世界已经使用的生成器标识符"
-config = "打开游戏 Rift 配置编辑器"
-language = "选择可用的 Rift 语言"
-status = "检查平台的能力和 Rift 状态"
-debug = "Rift诊断工具"
-debug_dump = "创建完整的Rift诊断报告"
+config = "打开游戏 {prefix} 配置编辑器"
+language = "选择可用的 {prefix} 语言"
+status = "检查平台的能力和 {prefix} 状态"
+debug = "{prefix}诊断工具"
+debug_dump = "创建完整的{prefix}诊断报告"
 autoload = "启动时是否改变管理的世界负载"
 protect = "保护或不保护受管理的世界"
 
@@ -86,34 +89,35 @@ upload = "启用公开上传时上传报告"
 sender = "命令发送者"
 
 [rift.message]
-permission_denied = "{prefix}&c需要吗? &f{permission}&c."
-unknown_command = "{prefix}&c未知的命令。 使用 &f/rift help&c."
-player_only = "{prefix}&c此命令需要玩家 。"
-operation_queued = "{prefix}&7队列 &f{operation}&7 (单位:千美元) &d{world}&7."
-operation_failed = "{prefix}&c{operation} 失败 &f{world}&c: {reason}"
-created = "{prefix}&a创建和管理 &f{world}&a."
-imported = "{prefix}&a进口和管理 &f{world}&a."
-loaded = "{prefix}&a已装入 &f{world}&a."
-unloaded = "{prefix}&a未装入 &f{world}&a."
-teleported = "{prefix}&a电传 &f{player}&a 改为: &f{world}&a."
-delete_confirm = "{prefix}&e运行 &f/rift delete {world}&e 又在内部 &f{seconds}s (韩语).&e 将其移入隔离区。"
-quarantined = "{prefix}&a已移动 &f{world}&a 检疫为: &f{id}&a."
-restored = "{prefix}&a已恢复 &f{world}&a 发件人 &f{id}&a."
-profile_updated = "{prefix}&a更新 &f{setting}&a (单位:千美元) &f{world}&a 改为: &f{value}&a."
-folia_limit = "{prefix}&e{operation} 无法使用 Folia 因为它的世界负荷/unload API没有执行."
-config_saved = "{prefix}&a配置已保存 。"
-config_opened = "{prefix}&a已打开完整的游戏内配置编辑器。&r"
-config_save_failed = "{prefix}&c配置无法保存。 请检查控制台 。"
-empty_list = "{prefix}&7未找到匹配的世界 。"
-player_offline = "{prefix}&c玩家不在线 : &f{player}"
-unknown_world = "{prefix}&c未知的世界 : &f{world}"
-section = "{prefix}&d{title} &8(&f{count}&8)"
-entry = "{prefix}&8- &f{name} &8| &7{detail}"
-detail = "{prefix}&8- &7{label}: &f{value}"
-info_title = "{prefix}&d{world}"
-status_title = "{prefix}&dRift {version} 状态"
-generator_format = "{prefix}&7Custom 格式 : &fPluginName[:生成者-id]."
-folia_status_note = "{prefix}&eFolia 支持 Rift'的读取,编辑,剖面,和电传传送功能;动态世界生命周期由平台API锁定."
+version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
+permission_denied = "{prefix}&r &7› &7&c需要吗? &f{permission}&7."
+unknown_command = "{prefix}&r &7› &7&c未知的命令。 使用 &f/rift help&7."
+player_only = "{prefix}&r &7› &7&c此命令需要玩家 。"
+operation_queued = "{prefix}&r &7› &7队列 &f{operation}&7 (单位:千美元) &d{world}&7."
+operation_failed = "{prefix}&r &7› &7&c{operation} 失败 &f{world}&7: {reason}"
+created = "{prefix}&r &7› &7创建和管理 &a{world}&7."
+imported = "{prefix}&r &7› &7进口和管理 &a{world}&7."
+loaded = "{prefix}&r &7› &7已装入 &a{world}&7."
+unloaded = "{prefix}&r &7› &7未装入 &a{world}&7."
+teleported = "{prefix}&r &7› &7电传 &a{player}&7 改为: &a{world}&7."
+delete_confirm = "{prefix}&r &7› &7运行 &e/rift delete {world}&7 又在内部 &e{seconds}s (韩语).&7 将其移入隔离区。"
+quarantined = "{prefix}&r &7› &7已移动 &a{world}&7 检疫为: &a{id}&7."
+restored = "{prefix}&r &7› &7已恢复 &a{world}&7 发件人 &a{id}&7."
+profile_updated = "{prefix}&r &7› &7更新 &a{setting}&7 (单位:千美元) &a{world}&7 改为: &a{value}&7."
+folia_limit = "{prefix}&r &7› &7{operation} 无法使用 Folia 因为它的世界负荷/unload API没有执行."
+config_saved = "{prefix}&r &7› &7&a配置已保存 。"
+config_opened = "{prefix}&r &7› &7已打开完整的游戏内配置编辑器。&r"
+config_save_failed = "{prefix}&r &7› &7&c配置无法保存。 请检查控制台 。"
+empty_list = "{prefix}&r &7› &7未找到匹配的世界 。"
+player_offline = "{prefix}&r &7› &7&c玩家不在线 : &f{player}"
+unknown_world = "{prefix}&r &7› &7&c未知的世界 : &f{world}"
+section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
+entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
+info_title = "{prefix}&r &7› &7&d{world}"
+status_title = "{prefix}&r &7› &7{prefix} {version} 状态"
+generator_format = "{prefix}&r &7› &7Custom 格式 : &fPluginName[:生成者-id]."
+folia_status_note = "{prefix}&r &7› &7Folia 支持 {prefix}'的读取,编辑,剖面,和电传传送功能;动态世界生命周期由平台API锁定."
 
 [rift.label]
 worlds = "世间"
@@ -145,35 +149,35 @@ quarantine_entries = "检疫条目"
 
 [rift.explain]
 loaded = "Bukkit 当前是否已在内存中启用此世界。"
-managed = "Rift 是否管理此世界的配置档案，并能恢复其生成器和启动设置。"
+managed = "{prefix} 是否管理此世界的配置档案，并能恢复其生成器和启动设置。"
 on_disk = "世界是否已加载，或存在包含 level.dat 的有效世界目录。"
 environment = "运行中的世界或管理档案所记录的 Bukkit 世界环境。"
-generator = "加载此受管理世界时，Rift 重新应用的生成器。void 是 Rift 内置的空世界生成器。"
+generator = "加载此受管理世界时，{prefix} 重新应用的生成器。void 是 {prefix} 内置的空世界生成器。"
 seed = "此世界记录的种子。更改此显示值不会重新生成已有地形。"
-autoload = "Rift 是否在服务器启动时自动加载此受管理世界。"
-protected = "受保护的管理世界不能移入 Rift 隔离区。"
-operation_active = "世界生命周期操作当前是否持有 Rift 的对应世界锁。"
+autoload = "{prefix} 是否在服务器启动时自动加载此受管理世界。"
+protected = "受保护的管理世界不能移入 {prefix} 隔离区。"
+operation_active = "世界生命周期操作当前是否持有 {prefix} 的对应世界锁。"
 server = "Bukkit 报告的当前服务器实现及版本。"
-java_runtime = "当前运行服务器的 Java 运行时。Rift 的字节码保持与 Java 17 兼容。"
-plugin_bytecode = "能够加载 Rift 已编译类的最旧 Java 运行时版本。"
-platform = "Rift 在运行时检测到的调度器和服务器 API 类型。"
+java_runtime = "当前运行服务器的 Java 运行时。{prefix} 的字节码保持与 Java 17 兼容。"
+plugin_bytecode = "能够加载 {prefix} 已编译类的最旧 Java 运行时版本。"
+platform = "{prefix} 在运行时检测到的调度器和服务器 API 类型。"
 dynamic_lifecycle = "此平台是否安全支持在运行时创建、加载、卸载、隔离和恢复世界。"
 world_container = "存放 Bukkit 世界文件夹的服务器目录。"
-writable = "操作系统当前是否允许 Rift 向世界存放目录内写入。"
+writable = "操作系统当前是否允许 {prefix} 向世界存放目录内写入。"
 locale = "plugins/Rift/languages 中当前使用的语言文件。缺失条目使用内置英语文本。"
-world_counts = "已加载数统计活跃 Bukkit 世界；受管理数统计 Rift 档案；缺失数统计既未加载、磁盘上也不存在对应世界的管理档案。"
-quarantine = "由 Rift delete 移至隔离区、可通过隔离 ID 恢复的世界。"
-world_entry = "已加载表示当前活跃；受管理表示有 Rift 档案；在磁盘上表示存在有效但未加载的世界文件夹。"
+world_counts = "已加载数统计活跃 Bukkit 世界；受管理数统计 {prefix} 档案；缺失数统计既未加载、磁盘上也不存在对应世界的管理档案。"
+quarantine = "由 {prefix} delete 移至隔离区、可通过隔离 ID 恢复的世界。"
+world_entry = "已加载表示当前活跃；受管理表示有 {prefix} 档案；在磁盘上表示存在有效但未加载的世界文件夹。"
 
 [rift.feedback]
-title = "&d&lRIFT"
+title = "{prefix}"
 world_subtitle = "&a{operation}&8: &f{world}"
 teleport_subtitle = "&a抵达 &f{world}"
 failure_title = "&c操作失败"
 failure_subtitle = "&7{operation}&8: &f{world}"
-action_world = "&dRift &8• &a{operation} &f{world}"
-action_teleport = "&dRift &8• &a传送到 &f{world}"
-action_failure = "&dRift &8• &c{operation} 失败 &f{world}"
+action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
+action_teleport = "{prefix}&r &7› &7&a传送到 &a{world}"
+action_failure = "{prefix}&r &7› &7&c{operation} 失败 &f{world}"
 
 [rift.gui]
 current = "&7当前 : &f{value}"
@@ -194,19 +198,19 @@ failure_feedback = "&d反馈失败"
 title_popups = "&d标题弹出"
 action_bar_popups = "&d动作栏弹出"
 sounds = "&d反馈声音"
-root_title = "Rift 配置"
-category_title = "Rift: {category}"
+root_title = "{prefix} 配置"
+category_title = "{prefix}: {category}"
 category_open = "&8单击以编辑本节中的每个设置"
 back = "&e回来"
 toggle = "&8点击切换"
 exact_number = "&8左边/right 调整; 按 Q 输入精确值"
 text = "&8单击在聊天中输入新值"
-prompt = "{prefix}&7键入新值 &f{setting}&7 在聊天时。"
-prompt_cancel = "{prefix}&7类型 &f取消( E)&7 返回而不改变它。"
-prompt_cancelled = "{prefix}&7配置输入已取消 。"
-prompt_timeout = "{prefix}&7配置输入超时 。"
-setting_saved = "{prefix}&d{setting} &8› &a新值: &f{after} &7原值: &f{before}&a。"
-setting_failed = "{prefix}&c无法更新 &f{setting}&c: {reason}"
+prompt = "{prefix}&r &7› &7键入新值 &f{setting}&7 在聊天时。"
+prompt_cancel = "{prefix}&r &7› &7类型 &f取消( E)&7 返回而不改变它。"
+prompt_cancelled = "{prefix}&r &7› &7配置输入已取消 。"
+prompt_timeout = "{prefix}&r &7› &7配置输入超时 。"
+setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7新值: &a{after} &7原值: &f{before}&7。"
+setting_failed = "{prefix}&r &7› &7&c无法更新 &f{setting}&7: {reason}"
 language = "&d语言语言语言"
 language_select = "&8点击以从可用语言中选择"
 lifecycle_sound = "&d世界生命周期音响"
@@ -252,18 +256,15 @@ optional = "此参数为可选项。"
 default = "未指定时默认为 \"{value}\"。"
 type = "此参数的类型为 {type}。"
 
-[director.runtime]
-usage = "用法: {usage}"
-
 [director.runtime.error]
-invalid_origin = "无法从此来源运行该命令。"
-unknown_parameter = "未知参数键: {key}"
-unexpected_argument = "意外参数 \"{argument}\"。可选参数必须使用键指定，例如 seed=123"
-unclosed_group = "参数 {key} 缺少闭合的 \"]\""
-conversion_failed = "无法将 \"{value}\" 转换为 {parameter} 所需的 {type}"
-default_parse_failed = "无法解析参数 {parameter} 的默认值"
-missing_argument = "缺少参数 \"{parameter}\" ({type})"
-execution_failed = "执行命令 {command} 失败: {reason}"
+invalid_origin = "{prefix}&r &7› &7&c无法从此来源运行该命令。"
+unknown_parameter = "{prefix}&r &7› &7&c未知参数键: {key}"
+unexpected_argument = "{prefix}&r &7› &7&c意外参数 \"{argument}\"。可选参数必须使用键指定，例如 seed=123"
+unclosed_group = "{prefix}&r &7› &7&c参数 {key} 缺少闭合的 \"]\""
+conversion_failed = "{prefix}&r &7› &7&c无法将 \"{value}\" 转换为 {parameter} 所需的 {type}"
+default_parse_failed = "{prefix}&r &7› &7&c无法解析参数 {parameter} 的默认值"
+missing_argument = "{prefix}&r &7› &7&c缺少参数 \"{parameter}\" ({type})"
+execution_failed = "{prefix}&r &7› &7&c执行命令 {command} 失败: {reason}"
 
 [language.menu]
 selected = "选中"
@@ -285,20 +286,21 @@ remove_personal_description = "移除你的个人语言选择。"
 no_controls = "你无权使用语言设置。"
 
 [language.editor]
-loading = "正在加载 {locale} 的消息..."
+title = "{prefix} › {section}"
+loading = "{prefix}&r &7› &7&7正在加载 {locale} 的消息..."
 
 [language.editor.category]
 open = "&8点击打开此分类。&r"
 message-count = "&7{count} 条消息&r"
 
 [language.editor.error]
-unable-to-edit = "无法编辑：{reason}"
-no-permission = "你没有权限编辑 {plugin} 的语言。"
+unable-to-edit = "{prefix}&r &7› &7&c无法编辑：{reason}"
+no-permission = "{prefix}&r &7› &7&c你没有权限编辑 {prefix} 的语言。"
 
 [language.editor.input]
-unable-to-save = "无法保存：{reason}"
-too-long = "输入最多可包含 {maximum} 个字符。"
-expired = "语言编辑器的输入时间已到期。"
+unable-to-save = "{prefix}&r &7› &7&7无法保存：{reason}"
+too-long = "{prefix}&r &7› &7&7输入最多可包含 {maximum} 个字符。"
+expired = "{prefix}&r &7› &7&7语言编辑器的输入时间已到期。"
 
 [language.editor.locale]
 open = "&8点击打开此语言。&r"
@@ -320,15 +322,15 @@ back = "&e返回&r"
 line = "第 {line} 行"
 
 [language.editor.prompt]
-variables = "变量: {variables}"
-value = "请在聊天中输入 {key} 的新值。"
-search = "搜索消息键或内容。输入 cancel 返回。"
-guidance = "使用 \\n 表示换行，\\\\ 表示反斜杠，或输入 cancel 返回。"
-current = "当前值： {value}"
+variables = "{prefix}&r &7› &7&7变量: {variables}"
+value = "{prefix}&r &7› &7&7请在聊天中输入 {key} 的新值。"
+search = "{prefix}&r &7› &7&7搜索消息键或内容。输入 cancel 返回。"
+guidance = "{prefix}&r &7› &7&7使用 \\n 表示换行，\\\\ 表示反斜杠，或输入 cancel 返回。"
+current = "{prefix}&r &7› &7&7当前值： {value}"
 
 [language.editor.saved]
-summary = "已保存 {locale}。语言选择保持不变。"
-change = "{key}：已将“{before}”改为“{after}”。"
+summary = "{prefix}&r &7› &7&7已保存 {locale}。语言选择保持不变。"
+change = "{prefix}&r &7› &7&7{key}：已将“{before}”改为“{after}”。"
 
 [language.editor.search]
 messages-lore = "点击搜索所有消息。"
@@ -346,26 +348,54 @@ none = "无"
 empty = "(空)"
 
 [language.error]
-unavailable-for-all = "语言 {locale} 并非适用于所有选中的插件。"
-stopping = "插件停止期间无法选择语言。"
-server-locale-required = "请选择 en_US 等语言代码作为服务器默认语言。"
-plugin-server-permission = "你没有权限更改 {plugin} 的服务器语言。"
-plugin-personal-permission = "你没有权限为 {plugin} 选择个人语言。"
-personal-player-only = "玩家必须在游戏中选择个人语言。"
-personal-permission = "你没有权限选择个人语言。"
-numeric-page = "请输入数字页码。"
-no-providers = "没有可用的 Volmit 语言提供程序。"
-editor-player-only = "请在游戏中打开语言编辑器。"
+unavailable-for-all = "{prefix}&r &7› &7&c语言 {locale} 并非适用于所有选中的插件。"
+stopping = "{prefix}&r &7› &7&c插件停止期间无法选择语言。"
+server-locale-required = "{prefix}&r &7› &7&c请选择 en_US 等语言代码作为服务器默认语言。"
+plugin-server-permission = "{prefix}&r &7› &7&c你没有权限更改 {prefix} 的服务器语言。"
+plugin-personal-permission = "{prefix}&r &7› &7&c你没有权限为 {prefix} 选择个人语言。"
+personal-player-only = "{prefix}&r &7› &7&c玩家必须在游戏中选择个人语言。"
+personal-permission = "{prefix}&r &7› &7&c你没有权限选择个人语言。"
+numeric-page = "{prefix}&r &7› &7&c请输入数字页码。"
+no-providers = "{prefix}&r &7› &7&c没有可用的 Volmit 语言提供程序。"
+editor-player-only = "{prefix}&r &7› &7&c请在游戏中打开语言编辑器。"
 
 [language.selection]
-server-selected = "{plugin}：服务器语言现在是 {locale}。"
-server-default-selected = "{plugin}：你的语言现在跟随服务器默认语言。"
-save-failed = "{plugin}：无法保存语言选择；请检查服务器控制台。"
-preparing = "正在为 {target} 准备语言 {locale}..."
-personal-selected = "{plugin}：你的语言现在是 {locale}。"
-english-fallback = "{plugin}：{locale} 不可用；将使用英语（en_US）。"
+server-selected = "{prefix}&r &7› &7&7{prefix}：服务器语言现在是 {locale}。"
+server-default-selected = "{prefix}&r &7› &7&7{prefix}：你的语言现在跟随服务器默认语言。"
+save-failed = "{prefix}&r &7› &7&c{prefix}：无法保存语言选择；请检查服务器控制台。"
+preparing = "{prefix}&r &7› &7&7正在为 {target} 准备语言 {locale}..."
+personal-selected = "{prefix}&r &7› &7&7{prefix}：你的语言现在是 {locale}。"
+english-fallback = "{prefix}&r &7› &7&7{prefix}：{locale} 不可用；将使用英语（en_US）。"
 
 [language.usage]
-volmit-selection = "用法: /volmit plugins languages [locale]"
-selection = "用法: /{command} language self [locale|reset] or server [locale]"
-editor = "用法: /{command} language server edit [locale]"
+volmit-selection = "{prefix}&r &7› &7&7用法: /volmit plugins languages [locale]"
+selection = "{prefix}&r &7› &7&7用法: /{command} language self [locale|reset] or server [locale]"
+editor = "{prefix}&r &7› &7&7用法: /{command} language server edit [locale]"
+
+
+[debug.error]
+missing-permission = "{prefix}&r &7› &7&c缺少权限：{permission}"
+already-preparing = "{prefix}&r &7› &7&c正在为 {prefix} 生成诊断报告。"
+already-preparing-short = "{prefix}&r &7› &7&c已有诊断报告正在生成。"
+schedule-failed = "{prefix}&r &7› &7&c无法调度诊断报告生成任务。"
+provider-closed = "{prefix}&r &7› &7&c诊断数据提供程序已关闭。"
+closed-before-capture = "{prefix}&r &7› &7&c诊断数据提供程序在收集报告数据前已关闭。"
+writer-schedule-failed = "{prefix}&r &7› &7&c无法调度诊断报告写入任务。"
+capture-failed = "{prefix}&r &7› &7&c无法收集诊断报告数据，请检查服务器控制台。"
+closed-before-write = "{prefix}&r &7› &7&c诊断数据提供程序在写入报告前已关闭。"
+write-failed = "{prefix}&r &7› &7&c无法写入诊断报告，请检查服务器控制台。"
+
+[debug]
+preparing = "{prefix}&r &7› &7&7正在准备 {prefix} 诊断报告..."
+saved = "{prefix}&r &7› &7&7已将 {prefix} 诊断报告保存到 {path}。"
+
+[debug.upload]
+interrupted = "{prefix}&r &7› &7&7诊断报告上传已中断，本地报告已保存。"
+failed = "{prefix}&r &7› &7&c诊断报告上传失败，本地报告已保存。"
+completed = "{prefix}&r &7› &7&7已上传为 VolmitSoftware - {prefix} - v{version}。"
+
+[debug.action]
+open = "打开：{url}"
+open-description = "打开已上传的诊断报告。"
+copy-path = "复制本地路径"
+copy-path-description = "复制本地报告的路径。"

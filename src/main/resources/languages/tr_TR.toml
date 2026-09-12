@@ -6,7 +6,7 @@
 # /rift language server edit tr_TR
 #
 # === Önek ===
-# Önek: {prefix}=genel runtime.prefix değeri. Yalnızca belirli bir iletide gizlemek için o iletiden {prefix} öğesini kaldırın.
+# runtime.prefix yalnızca biçimlendirilmiş adı içerir. {prefix} adı ekler; › ve boşluklar her mesajda düzenlenir.
 #
 # === Biçimlendirme ===
 # Renkler: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B ve [RRGGBB]. Özel biçimlendirme için MiniMessage da kullanılabilir.
@@ -33,24 +33,27 @@
 #   {permission}  izin düğümü
 #   {personal}  kişisel yerel ayar
 #   {player}  oyuncu adı
-#   {plugin}  Plugin name
-#   {prefix}  genel runtime.prefix değeri. Yalnızca belirli bir iletide gizlemek için o iletiden {prefix} öğesini kaldırın.
+#   {prefix}  runtime.prefix yalnızca biçimlendirilmiş adı içerir. {prefix} adı ekler; › ve boşluklar her mesajda düzenlenir.
 #   {reason}  neden veya hata ayrıntısı
 #   {seconds}  saniye cinsinden süre
 #   {setting}  ayar adı
 #   {target}  Hedef oyuncu, varlık veya değer
 #   {title}  başlık metni
 #   {type}  değer veya veri türü
-#   {usage}  komut kullanım metni
 #   {value}  geçerli veya yeni değer
 #   {variables}  geçerli yer tutucular
 #   {version}  sürüm
 #   {world}  dünya adı
 
+#   {section}  Düzenleyici bölümü
+#   {path}  Yerel rapor yolu
+#   {url}  Rapor URL adresi
+
 [runtime]
-prefix = "&5&lRIFT&r &8›&r "
+prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+version = "{prefix} sürümünü göster"
 root = "Sunucu dünyalarını güvenli bir şekilde yönetin"
 create = "Yeni bir dünya kurmak ve yönetmek"
 import = "Mevcut bir dünya rehberi ithal edin"
@@ -63,11 +66,11 @@ send = "Başka bir oyuncuyu yüklü bir dünyaya ışınla"
 list = "Liste yüklenen, yönetilen, keşfedildi ve karantinalı dünyalar"
 info = "Bir dünya için ayrıntılı bir devlet göster"
 generators = "Show jeneratör tanımlayıcıları zaten yönetilen dünyalar tarafından kullanılıyor"
-config = "In-game Rift yapılandırma editörü editörü"
-language = "Kullanılabilir bir Rift dili seçin"
-status = "Inspect platform yetenekleri ve Rift devlet devleti devlet devleti devlet devleti"
-debug = "Rift tanı araçları"
-debug_dump = "Kapsamlı bir Rift tanı raporu oluştur"
+config = "In-game {prefix} yapılandırma editörü editörü"
+language = "Kullanılabilir bir {prefix} dili seçin"
+status = "Inspect platform yetenekleri ve {prefix} devlet devleti devlet devleti devlet devleti"
+debug = "{prefix} tanı araçları"
+debug_dump = "Kapsamlı bir {prefix} tanı raporu oluştur"
 autoload = "Yönetilen bir dünyanın başlangıçta yüklenip yüklenmeyeceğini değiştir"
 protect = "Yönetilen bir dünyayı korumaya al veya korumasını kaldır"
 
@@ -86,34 +89,35 @@ upload = "Herkese açık yüklemeler etkinse raporu yükle"
 sender = "Komutan"
 
 [rift.message]
-permission_denied = "{prefix}&cİhtiyacınıza ihtiyacınız var &f{permission}&c."
-unknown_command = "{prefix}&cBilinmeyen komut kullanın. Use &f/rift help&c."
-player_only = "{prefix}&cBu komut bir oyuncu gerektirir."
-operation_queued = "{prefix}&7Queued &f{operation}&7 For for for for for for for for for for for for for for for &d{world}&7."
-operation_failed = "{prefix}&c{operation} Başarısızlık için başarısız oldu &f{world}&c: {reason}"
-created = "{prefix}&aOluşturun ve yönetilen &f{world}&a."
-imported = "{prefix}&aİthalat ve yönetilen &f{world}&a."
-loaded = "{prefix}&aLoaded Load &f{world}&a."
-unloaded = "{prefix}&aUnloaded &f{world}&a."
-teleported = "{prefix}&aTeleported &f{player}&a To to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to &f{world}&a."
-delete_confirm = "{prefix}&eRun Run Run Run &f/rift delete {world}&e Tekrar içeride &f{seconds}s&e Onu kurantine'ye taşımak için."
-quarantined = "{prefix}&aMoved &f{world}&a Kurantine’ye &f{id}&a."
-restored = "{prefix}&aGeri yükleme &f{world}&a From from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from &f{id}&a."
-profile_updated = "{prefix}&aGüncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme &f{setting}&a For for for for for for for for for for for for for for for &f{world}&a To to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to &f{value}&a."
-folia_limit = "{prefix}&e{operation} Mevcut değildir. Folia Çünkü onun dünya yükü/unload API uygulanmaz."
-config_saved = "{prefix}&aKurulum kurtarıldı."
-config_opened = "{prefix}&aEksiksiz oyun içi yapılandırma düzenleyicisi açıldı.&r"
-config_save_failed = "{prefix}&cKurulum kurtarılamaz. Konsolu kontrol edin."
-empty_list = "{prefix}&7Tanık dünyalar bulunamadı."
-player_offline = "{prefix}&cOyuncu online değil: &f{player}"
-unknown_world = "{prefix}&cBilinmeyen dünya: &f{world}"
-section = "{prefix}&d{title} &8(&f{count}&8)"
-entry = "{prefix}&8- &f{name} &8| &7{detail}"
-detail = "{prefix}&8- &7{label}: &f{value}"
-info_title = "{prefix}&d{world}"
-status_title = "{prefix}&dRift {version} Durum"
-generator_format = "{prefix}&7Özel biçim: &fPluginName[:generator-id]"
-folia_status_note = "{prefix}&eFolia, Rift’in okuma, düzenleyici, profil ve ışınlanma özelliklerini destekler; dinamik dünya yaşam döngüsü platform API’sine bağlıdır."
+version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
+permission_denied = "{prefix}&r &7› &7&cİhtiyacınıza ihtiyacınız var &f{permission}&7."
+unknown_command = "{prefix}&r &7› &7&cBilinmeyen komut kullanın. Use &f/rift help&7."
+player_only = "{prefix}&r &7› &7&cBu komut bir oyuncu gerektirir."
+operation_queued = "{prefix}&r &7› &7Queued &f{operation}&7 For for for for for for for for for for for for for for for &d{world}&7."
+operation_failed = "{prefix}&r &7› &7&c{operation} Başarısızlık için başarısız oldu &f{world}&7: {reason}"
+created = "{prefix}&r &7› &7Oluşturun ve yönetilen &a{world}&7."
+imported = "{prefix}&r &7› &7İthalat ve yönetilen &a{world}&7."
+loaded = "{prefix}&r &7› &7Loaded Load &a{world}&7."
+unloaded = "{prefix}&r &7› &7Unloaded &a{world}&7."
+teleported = "{prefix}&r &7› &7Teleported &a{player}&7 To to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to &a{world}&7."
+delete_confirm = "{prefix}&r &7› &7Run Run Run Run &e/rift delete {world}&7 Tekrar içeride &e{seconds}s&7 Onu kurantine'ye taşımak için."
+quarantined = "{prefix}&r &7› &7Moved &a{world}&7 Kurantine’ye &a{id}&7."
+restored = "{prefix}&r &7› &7Geri yükleme &a{world}&7 From from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from from &a{id}&7."
+profile_updated = "{prefix}&r &7› &7Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme Güncelleme &a{setting}&7 For for for for for for for for for for for for for for for &a{world}&7 To to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to to &a{value}&7."
+folia_limit = "{prefix}&r &7› &7{operation} Mevcut değildir. Folia Çünkü onun dünya yükü/unload API uygulanmaz."
+config_saved = "{prefix}&r &7› &7&aKurulum kurtarıldı."
+config_opened = "{prefix}&r &7› &7Eksiksiz oyun içi yapılandırma düzenleyicisi açıldı.&r"
+config_save_failed = "{prefix}&r &7› &7&cKurulum kurtarılamaz. Konsolu kontrol edin."
+empty_list = "{prefix}&r &7› &7Tanık dünyalar bulunamadı."
+player_offline = "{prefix}&r &7› &7&cOyuncu online değil: &f{player}"
+unknown_world = "{prefix}&r &7› &7&cBilinmeyen dünya: &f{world}"
+section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
+entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
+info_title = "{prefix}&r &7› &7&d{world}"
+status_title = "{prefix}&r &7› &7{prefix} {version} Durum"
+generator_format = "{prefix}&r &7› &7Özel biçim: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&r &7› &7Folia, {prefix}’in okuma, düzenleyici, profil ve ışınlanma özelliklerini destekler; dinamik dünya yaşam döngüsü platform API’sine bağlıdır."
 
 [rift.label]
 worlds = "Dünyalar"
@@ -145,35 +149,35 @@ quarantine_entries = "Quarantine girişleri"
 
 [rift.explain]
 loaded = "Bukkit'in bu dünyayı şu anda bellekte etkin tutup tutmadığını belirtir."
-managed = "Rift'in bu dünya için bir profile sahip olup olmadığını ve üretecini ve başlangıç ayarlarını geri yükleyip yükleyemeyeceğini belirtir."
+managed = "{prefix}'in bu dünya için bir profile sahip olup olmadığını ve üretecini ve başlangıç ayarlarını geri yükleyip yükleyemeyeceğini belirtir."
 on_disk = "Dünyanın yüklü olup olmadığını veya level.dat içeren geçerli bir dünya klasörüne sahip olup olmadığını belirtir."
 environment = "Etkin dünyada veya yönetilen profilde kayıtlı Bukkit dünya ortamı."
-generator = "Bu yönetilen dünya yüklendiğinde Rift'in yeniden uyguladığı üreteç. void, Rift'in yerleşik boş dünya üretecidir."
+generator = "Bu yönetilen dünya yüklendiğinde {prefix}'in yeniden uyguladığı üreteç. void, {prefix}'in yerleşik boş dünya üretecidir."
 seed = "Bu dünya için kayıtlı tohum. Görüntülenen bu değeri değiştirmek mevcut araziyi hiçbir zaman yeniden üretmez."
-autoload = "Rift'in bu yönetilen dünyayı sunucu başlatılırken otomatik olarak yükleyip yüklemediğini belirtir."
-protected = "Korunan yönetilen dünyalar Rift karantinasına taşınamaz."
-operation_active = "Bir yaşam döngüsü işleminin şu anda Rift'in dünyaya özel kilidini tutup tutmadığını belirtir."
+autoload = "{prefix}'in bu yönetilen dünyayı sunucu başlatılırken otomatik olarak yükleyip yüklemediğini belirtir."
+protected = "Korunan yönetilen dünyalar {prefix} karantinasına taşınamaz."
+operation_active = "Bir yaşam döngüsü işleminin şu anda {prefix}'in dünyaya özel kilidini tutup tutmadığını belirtir."
 server = "Bukkit tarafından bildirilen etkin sunucu uygulaması ve sürümü."
-java_runtime = "Sunucunun şu anda çalıştığı Java çalışma ortamı. Rift'in bayt kodu Java 17 ile uyumlu kalır."
-plugin_bytecode = "Rift'in derlenmiş sınıflarını yükleyebilen en eski Java çalışma ortamı."
-platform = "Rift'in çalışma sırasında algıladığı zamanlayıcı ve sunucu API ailesi."
+java_runtime = "Sunucunun şu anda çalıştığı Java çalışma ortamı. {prefix}'in bayt kodu Java 17 ile uyumlu kalır."
+plugin_bytecode = "{prefix}'in derlenmiş sınıflarını yükleyebilen en eski Java çalışma ortamı."
+platform = "{prefix}'in çalışma sırasında algıladığı zamanlayıcı ve sunucu API ailesi."
 dynamic_lifecycle = "Bu platformun çalışma sırasında dünya oluşturma, yükleme, bellekten çıkarma, karantinaya alma ve geri yükleme işlemlerini güvenle sunup sunmadığını belirtir."
 world_container = "Bukkit dünya klasörlerinin saklandığı sunucu dizini."
-writable = "İşletim sisteminin şu anda Rift'in dünyaları barındıran dizine yazmasına izin verip vermediğini belirtir."
+writable = "İşletim sisteminin şu anda {prefix}'in dünyaları barındıran dizine yazmasına izin verip vermediğini belirtir."
 locale = "plugins/Rift/languages altındaki etkin dil dosyası. Eksik girdiler yerleşik İngilizceyi kullanır."
-world_counts = "Yüklü, etkin Bukkit dünyalarını; yönetilen, Rift profillerini; eksik ise dünyaları ne yüklü ne de diskte bulunan yönetilen profilleri sayar."
-quarantine = "Rift'in silme işlemiyle kenara taşınan ve karantina kimliğiyle geri yüklenebilen dünyalar."
-world_entry = "Yüklü şu anda etkin olduğunu; yönetilen Rift'in bir profili olduğunu; diskte ise yüklenmemiş dünyaya ait geçerli bir klasör bulunduğunu belirtir."
+world_counts = "Yüklü, etkin Bukkit dünyalarını; yönetilen, {prefix} profillerini; eksik ise dünyaları ne yüklü ne de diskte bulunan yönetilen profilleri sayar."
+quarantine = "{prefix}'in silme işlemiyle kenara taşınan ve karantina kimliğiyle geri yüklenebilen dünyalar."
+world_entry = "Yüklü şu anda etkin olduğunu; yönetilen {prefix}'in bir profili olduğunu; diskte ise yüklenmemiş dünyaya ait geçerli bir klasör bulunduğunu belirtir."
 
 [rift.feedback]
-title = "&d&lRIFT"
+title = "{prefix}"
 world_subtitle = "&a{operation}&8: &f{world}"
 teleport_subtitle = "&aGelir içeri girdi &f{world}"
 failure_title = "&cOperasyon başarısız oldu"
 failure_subtitle = "&7{operation}&8: &f{world}"
-action_world = "&dRift &8• &a{operation} &f{world}"
-action_teleport = "&dRift &8• &aIşınlandığınız dünya: &f{world}"
-action_failure = "&dRift &8• &c{operation} başarısız oldu. Dünya: &f{world}"
+action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
+action_teleport = "{prefix}&r &7› &7&aIşınlandığınız dünya: &a{world}"
+action_failure = "{prefix}&r &7› &7&c{operation} başarısız oldu. Dünya: &f{world}"
 
 [rift.gui]
 current = "&7Şu anki: &f{value}"
@@ -194,19 +198,19 @@ failure_feedback = "&dBaşarısız geri bildirim"
 title_popups = "&dAdı popups"
 action_bar_popups = "&dEylem çubuğu bildirimleri"
 sounds = "&dGeri bildirim sesleri"
-root_title = "Rift Yapılandırma"
-category_title = "Rift: {category}"
+root_title = "{prefix} Yapılandırma"
+category_title = "{prefix}: {category}"
 category_open = "&8Bu bölümde her ayarı düzenlemek için tıklayın"
 back = "&eBack Back Back Back"
 toggle = "&8Toggle için tıklayın"
 exact_number = "&8Sol sol sol sol sol sol/right Setler; tam bir değere girmek için Q basın"
 text = "&8sohbette yeni bir değer girmek için tıklayın"
-prompt = "{prefix}&7Tip için yeni bir değer &f{setting}&7 sohbette."
-prompt_cancel = "{prefix}&7Tipi Tipi Tipi Tipi Tipi Tipi &fiptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal&7 Bunu değiştirmeden geri dönmek."
-prompt_cancelled = "{prefix}&7Kurulum girişi iptal edildi."
-prompt_timeout = "{prefix}&7Kurulum girişi zamanı çıktı."
-setting_saved = "{prefix}&d{setting} &8› &aYeni değer: &f{after} &7önceki değer: &f{before}&a."
-setting_failed = "{prefix}&cGüncellemeyi güncellemek mümkün olmayabilir &f{setting}&c: {reason}"
+prompt = "{prefix}&r &7› &7Tip için yeni bir değer &f{setting}&7 sohbette."
+prompt_cancel = "{prefix}&r &7› &7Tipi Tipi Tipi Tipi Tipi Tipi &fiptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal iptal&7 Bunu değiştirmeden geri dönmek."
+prompt_cancelled = "{prefix}&r &7› &7Kurulum girişi iptal edildi."
+prompt_timeout = "{prefix}&r &7› &7Kurulum girişi zamanı çıktı."
+setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7Yeni değer: &a{after} &7önceki değer: &f{before}&7."
+setting_failed = "{prefix}&r &7› &7&cGüncellemeyi güncellemek mümkün olmayabilir &f{setting}&7: {reason}"
 language = "&dDil yerele"
 language_select = "&8Kullanılabilir diller arasından seçmek için tıklayın"
 lifecycle_sound = "&dDünya hayat döngüsü ses"
@@ -252,18 +256,15 @@ optional = "Bu parametre isteğe bağlıdır."
 default = "Belirtilmezse varsayılan değer \"{value}\" olur."
 type = "Bu parametrenin türü {type}."
 
-[director.runtime]
-usage = "Kullanım: {usage}"
-
 [director.runtime.error]
-invalid_origin = "Bu komut bu kaynaktan çalıştırılamaz."
-unknown_parameter = "Bilinmeyen parametre anahtarı: {key}"
-unexpected_argument = "Beklenmeyen bağımsız değişken \"{argument}\". İsteğe bağlı parametreler anahtarla belirtilmelidir, ör. seed=123"
-unclosed_group = "{key} parametresi için kapanış \"]\" karakteri eksik"
-conversion_failed = "\"{value}\", {parameter} için {type} türüne dönüştürülemiyor"
-default_parse_failed = "{parameter} parametresinin varsayılan değeri ayrıştırılamıyor"
-missing_argument = "Eksik bağımsız değişken \"{parameter}\" ({type})"
-execution_failed = "{command} komutu çalıştırılamadı: {reason}"
+invalid_origin = "{prefix}&r &7› &7&cBu komut bu kaynaktan çalıştırılamaz."
+unknown_parameter = "{prefix}&r &7› &7&cBilinmeyen parametre anahtarı: {key}"
+unexpected_argument = "{prefix}&r &7› &7&cBeklenmeyen bağımsız değişken \"{argument}\". İsteğe bağlı parametreler anahtarla belirtilmelidir, ör. seed=123"
+unclosed_group = "{prefix}&r &7› &7&c{key} parametresi için kapanış \"]\" karakteri eksik"
+conversion_failed = "{prefix}&r &7› &7&c\"{value}\", {parameter} için {type} türüne dönüştürülemiyor"
+default_parse_failed = "{prefix}&r &7› &7&c{parameter} parametresinin varsayılan değeri ayrıştırılamıyor"
+missing_argument = "{prefix}&r &7› &7&cEksik bağımsız değişken \"{parameter}\" ({type})"
+execution_failed = "{prefix}&r &7› &7&c{command} komutu çalıştırılamadı: {reason}"
 
 [language.menu]
 selected = "Seçili"
@@ -285,20 +286,21 @@ remove_personal_description = "Kişisel dil seçiminizi kaldırın."
 no_controls = "Kullanabileceğiniz dil ayarı yok."
 
 [language.editor]
-loading = "{locale} mesajları yükleniyor..."
+title = "{prefix} › {section}"
+loading = "{prefix}&r &7› &7&7{locale} mesajları yükleniyor..."
 
 [language.editor.category]
 open = "&8Bu kategoriyi açmak için tıklayın.&r"
 message-count = "&7{count} mesaj&r"
 
 [language.editor.error]
-unable-to-edit = "Düzenlenemedi: {reason}"
-no-permission = "{plugin} dillerini düzenleme izniniz yok."
+unable-to-edit = "{prefix}&r &7› &7&cDüzenlenemedi: {reason}"
+no-permission = "{prefix}&r &7› &7&c{prefix} dillerini düzenleme izniniz yok."
 
 [language.editor.input]
-unable-to-save = "Kaydedilemedi: {reason}"
-too-long = "Girdi en fazla {maximum} karakter içerebilir."
-expired = "Dil düzenleyicisinin giriş süresi doldu."
+unable-to-save = "{prefix}&r &7› &7&7Kaydedilemedi: {reason}"
+too-long = "{prefix}&r &7› &7&7Girdi en fazla {maximum} karakter içerebilir."
+expired = "{prefix}&r &7› &7&7Dil düzenleyicisinin giriş süresi doldu."
 
 [language.editor.locale]
 open = "&8Bu dili açmak için tıklayın.&r"
@@ -320,15 +322,15 @@ back = "&eGeri&r"
 line = "Satır {line}"
 
 [language.editor.prompt]
-variables = "Değişkenler: {variables}"
-value = "Sohbete {key} için yeni bir değer yazın."
-search = "Mesaj anahtarı veya metni arayın. Geri dönmek için cancel yazın."
-guidance = "Yeni satır için \\n, ters eğik çizgi için \\\\ kullanın veya geri dönmek için cancel yazın."
-current = "Geçerli değer: {value}"
+variables = "{prefix}&r &7› &7&7Değişkenler: {variables}"
+value = "{prefix}&r &7› &7&7Sohbete {key} için yeni bir değer yazın."
+search = "{prefix}&r &7› &7&7Mesaj anahtarı veya metni arayın. Geri dönmek için cancel yazın."
+guidance = "{prefix}&r &7› &7&7Yeni satır için \\n, ters eğik çizgi için \\\\ kullanın veya geri dönmek için cancel yazın."
+current = "{prefix}&r &7› &7&7Geçerli değer: {value}"
 
 [language.editor.saved]
-summary = "{locale} kaydedildi. Dil seçimleri değişmedi."
-change = "{key}: “{before}” değeri “{after}” olarak değiştirildi."
+summary = "{prefix}&r &7› &7&7{locale} kaydedildi. Dil seçimleri değişmedi."
+change = "{prefix}&r &7› &7&7{key}: “{before}” değeri “{after}” olarak değiştirildi."
 
 [language.editor.search]
 messages-lore = "Tüm mesajları aramak için tıklayın."
@@ -346,26 +348,54 @@ none = "Yok"
 empty = "(boş)"
 
 [language.error]
-unavailable-for-all = "{locale} dili, seçilen eklentilerin tümünde kullanılamıyor."
-stopping = "Dil seçimi, eklenti durdurulduğunda kullanılamaz."
-server-locale-required = "Sunucunun varsayılan dili için en_US gibi bir dil kodu seçin."
-plugin-server-permission = "{plugin} için sunucu dilini değiştirme izniniz yok."
-plugin-personal-permission = "{plugin} için kendi dilinizi seçme izniniz yok."
-personal-player-only = "Oyuncu dili tercihleri oyunda seçilmelidir."
-personal-permission = "Dilinizi seçmek için izniniz yok."
-numeric-page = "Sayfa numarasını rakamla girin."
-no-providers = "Kullanılabilir Volmit dil sağlayıcısı yok."
-editor-player-only = "Oyundaki dil editörü açın."
+unavailable-for-all = "{prefix}&r &7› &7&c{locale} dili, seçilen eklentilerin tümünde kullanılamıyor."
+stopping = "{prefix}&r &7› &7&cDil seçimi, eklenti durdurulduğunda kullanılamaz."
+server-locale-required = "{prefix}&r &7› &7&cSunucunun varsayılan dili için en_US gibi bir dil kodu seçin."
+plugin-server-permission = "{prefix}&r &7› &7&c{prefix} için sunucu dilini değiştirme izniniz yok."
+plugin-personal-permission = "{prefix}&r &7› &7&c{prefix} için kendi dilinizi seçme izniniz yok."
+personal-player-only = "{prefix}&r &7› &7&cOyuncu dili tercihleri oyunda seçilmelidir."
+personal-permission = "{prefix}&r &7› &7&cDilinizi seçmek için izniniz yok."
+numeric-page = "{prefix}&r &7› &7&cSayfa numarasını rakamla girin."
+no-providers = "{prefix}&r &7› &7&cKullanılabilir Volmit dil sağlayıcısı yok."
+editor-player-only = "{prefix}&r &7› &7&cOyundaki dil editörü açın."
 
 [language.selection]
-server-selected = "{plugin}: sunucu dili şimdi {locale}."
-server-default-selected = "{plugin}: diliniz artık sunucunun varsayılan dilini kullanıyor."
-save-failed = "{plugin}: dil seçimi kaydedilemedi; sunucu konsolunu kontrol edin."
-preparing = "{target} için {locale} dili hazırlanıyor..."
-personal-selected = "{plugin}: Diliniz şimdi {locale}."
-english-fallback = "{plugin}: {locale} kullanılamıyor; İngilizce (en_US) kullanılıyor."
+server-selected = "{prefix}&r &7› &7&7sunucu dili şimdi {locale}."
+server-default-selected = "{prefix}&r &7› &7&7diliniz artık sunucunun varsayılan dilini kullanıyor."
+save-failed = "{prefix}&r &7› &7&cdil seçimi kaydedilemedi; sunucu konsolunu kontrol edin."
+preparing = "{prefix}&r &7› &7&7{target} için {locale} dili hazırlanıyor..."
+personal-selected = "{prefix}&r &7› &7&7Diliniz şimdi {locale}."
+english-fallback = "{prefix}&r &7› &7&7{locale} kullanılamıyor; İngilizce (en_US) kullanılıyor."
 
 [language.usage]
-volmit-selection = "Kullanım: /volmit plugins languages [locale]"
-selection = "Kullanım: /{command} language self [locale|reset] or server [locale]"
-editor = "Kullanım: /{command} language server edit [locale]"
+volmit-selection = "{prefix}&r &7› &7&7Kullanım: /volmit plugins languages [locale]"
+selection = "{prefix}&r &7› &7&7Kullanım: /{command} language self [locale|reset] or server [locale]"
+editor = "{prefix}&r &7› &7&7Kullanım: /{command} language server edit [locale]"
+
+
+[debug.error]
+missing-permission = "{prefix}&r &7› &7&cEksik izin: {permission}"
+already-preparing = "{prefix}&r &7› &7&c{prefix} için bir tanılama raporu zaten hazırlanıyor."
+already-preparing-short = "{prefix}&r &7› &7&cBir tanılama raporu zaten hazırlanıyor."
+schedule-failed = "{prefix}&r &7› &7&cTanılama raporunun hazırlanması zamanlanamadı."
+provider-closed = "{prefix}&r &7› &7&cTanılama sağlayıcısı kapalı."
+closed-before-capture = "{prefix}&r &7› &7&cRapor verileri toplanmadan önce tanılama sağlayıcısı kapandı."
+writer-schedule-failed = "{prefix}&r &7› &7&cTanılama raporunun yazılması zamanlanamadı."
+capture-failed = "{prefix}&r &7› &7&cTanılama raporu verileri toplanamadı; sunucu konsolunu kontrol edin."
+closed-before-write = "{prefix}&r &7› &7&cRapor yazılmadan önce tanılama sağlayıcısı kapandı."
+write-failed = "{prefix}&r &7› &7&cTanılama raporu yazılamadı; sunucu konsolunu kontrol edin."
+
+[debug]
+preparing = "{prefix}&r &7› &7&7{prefix} tanılama raporu hazırlanıyor..."
+saved = "{prefix}&r &7› &7&7{prefix} tanılama raporu {path} yoluna kaydedildi."
+
+[debug.upload]
+interrupted = "{prefix}&r &7› &7&7Tanılama raporu yüklemesi kesildi; yerel rapor kaydedildi."
+failed = "{prefix}&r &7› &7&cTanılama raporu yüklenemedi; yerel rapor kaydedildi."
+completed = "{prefix}&r &7› &7&7VolmitSoftware - {prefix} - v{version} adıyla yüklendi."
+
+[debug.action]
+open = "Aç: {url}"
+open-description = "Yüklenen tanılama raporunu açın."
+copy-path = "Yerel yolu kopyala"
+copy-path-description = "Yerel raporun yolunu kopyalayın."

@@ -6,7 +6,7 @@
 # /rift language server edit lt_LT
 #
 # === Priešdėlis ===
-# Priešdėlis: {prefix}=visuotinė runtime.prefix reikšmė. Pašalinkite {prefix} iš atskiro pranešimo, kad jame jo nerodytų.
+# runtime.prefix saugo tik suformatuotą pavadinimą. {prefix} įterpia pavadinimą; › ir tarpai keičiami kiekviename pranešime.
 #
 # === Formatavimas ===
 # Spalvos: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B ir [RRGGBB]. Pasirinktiniam formatavimui galima naudoti MiniMessage.
@@ -33,24 +33,27 @@
 #   {permission}  leidimo mazgas
 #   {personal}  asmeninė lokalė
 #   {player}  žaidėjo vardas
-#   {plugin}  Įskiepio pavadinimas
-#   {prefix}  visuotinė runtime.prefix reikšmė. Pašalinkite {prefix} iš atskiro pranešimo, kad jame jo nerodytų.
+#   {prefix}  runtime.prefix saugo tik suformatuotą pavadinimą. {prefix} įterpia pavadinimą; › ir tarpai keičiami kiekviename pranešime.
 #   {reason}  priežastis arba klaidos informacija
 #   {seconds}  trukmė sekundėmis
 #   {setting}  nustatymo pavadinimas
 #   {target}  Tikslinis žaidėjas, subjektas arba vertė
 #   {title}  antraštės tekstas
 #   {type}  reikšmės arba duomenų tipas
-#   {usage}  komandos naudojimo tekstas
 #   {value}  dabartinė arba nauja reikšmė
 #   {variables}  galimi vietos žymekliai
 #   {version}  versija
 #   {world}  pasaulio pavadinimas
 
+#   {section}  Redaktoriaus skiltis
+#   {path}  Vietinės ataskaitos kelias
+#   {url}  Ataskaitos URL
+
 [runtime]
-prefix = "&5&lRIFT&r &8›&r "
+prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+version = "Rodyti {prefix} versiją"
 root = "Tvarkyti serverio pasaulius saugiai"
 create = "Sukurti ir valdyti naują pasaulį"
 import = "Importuoti esamą pasaulio katalogą"
@@ -63,11 +66,11 @@ send = "Teleportuoti kitą žaidėją į pakrautą pasaulį"
 list = "Sąrašas pakrautų, tvarkomų, atrastų ir karantine laikomų pasaulių"
 info = "Rodyti išsamią būseną vienam pasauliui"
 generators = "Rodyti generatoriaus identifikatorius, kuriuos jau naudoja valdomi pasauliai"
-config = "Atverti į žaidimą Rift konfigūracijos rengyklė"
-language = "Pasirinkite galimą Rift kalbą"
-status = "Patikrinti platformos galimybes ir Rift Būsena"
-debug = "Rift diagnostikos įrankiai"
-debug_dump = "Sukurti išsamią Rift diagnostikos ataskaitą"
+config = "Atverti į žaidimą {prefix} konfigūracijos rengyklė"
+language = "Pasirinkite galimą {prefix} kalbą"
+status = "Patikrinti platformos galimybes ir {prefix} Būsena"
+debug = "{prefix} diagnostikos įrankiai"
+debug_dump = "Sukurti išsamią {prefix} diagnostikos ataskaitą"
 autoload = "Pakeisti ar paleidžiant valdomą pasaulio apkrovas"
 protect = "Apsaugoti arba neapsaugoti valdomą pasaulį"
 
@@ -86,34 +89,35 @@ upload = "Įkelti ataskaitą, kai viešas įkėlimas įjungtas"
 sender = "Komandų siuntėjas"
 
 [rift.message]
-permission_denied = "{prefix}&cTau reikia &f{permission}&c."
-unknown_command = "{prefix}&cNežinoma komanda. Naudojimas &f/rift help&c."
-player_only = "{prefix}&cŠiai komandai reikia žaidėjo."
-operation_queued = "{prefix}&7Eilutė &f{operation}&7 yra &d{world}&7."
-operation_failed = "{prefix}&c{operation} nepavyko &f{world}&c: {reason}"
-created = "{prefix}&aSukurta ir valdoma &f{world}&a."
-imported = "{prefix}&aImportuojama ir valdoma &f{world}&a."
-loaded = "{prefix}&aĮkelta &f{world}&a."
-unloaded = "{prefix}&aNeįkelta &f{world}&a."
-teleported = "{prefix}&aTeleportuotas &f{player}&a iki &f{world}&a."
-delete_confirm = "{prefix}&eVykdyti &f/rift delete {world}&e vėl per &f{seconds}uo&e perkelti jį į karantiną."
-quarantined = "{prefix}&aPerkelta &f{world}&a į karantiną, &f{id}&a."
-restored = "{prefix}&aAtstatyta &f{world}&a nuo &f{id}&a."
-profile_updated = "{prefix}&aAtnaujinta &f{setting}&a yra &f{world}&a iki &f{value}&a."
-folia_limit = "{prefix}&e{operation} yra nepasiekiamas Folia nes jos pasaulinė apkrova/unload API nėra įgyvendinama."
-config_saved = "{prefix}&aKonfigūracija išsaugota."
-config_opened = "{prefix}&aAtidarytas visas žaidimo konfigūracijos redaktorius.&r"
-config_save_failed = "{prefix}&cKonfigūracijos nepavyko išsaugoti. Patikrinkite konsolę."
-empty_list = "{prefix}&7Nebuvo rasta tinkamų pasaulių."
-player_offline = "{prefix}&cŽaidėjas nėra internete: &f{player}"
-unknown_world = "{prefix}&cNežinomas pasaulis: &f{world}"
-section = "{prefix}&d{title} &8(&f{count}&8)"
-entry = "{prefix}&8- &f{name} &8| &7{detail}"
-detail = "{prefix}&8- &7{label}: &f{value}"
-info_title = "{prefix}&d{world}"
-status_title = "{prefix}&dRift {version} Būsena"
-generator_format = "{prefix}&7Custom formatas: &fPluginName[: generator- id]"
-folia_status_note = "{prefix}&eFolia Palaiko Riftskaityti, redaktorius, profilis, ir teleporto funkcijos; dinaminis pasaulio gyvavimo ciklas yra sudaryta iš platformos API."
+version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
+permission_denied = "{prefix}&r &7› &7&cTau reikia &f{permission}&7."
+unknown_command = "{prefix}&r &7› &7&cNežinoma komanda. Naudojimas &f/rift help&7."
+player_only = "{prefix}&r &7› &7&cŠiai komandai reikia žaidėjo."
+operation_queued = "{prefix}&r &7› &7Eilutė &f{operation}&7 yra &d{world}&7."
+operation_failed = "{prefix}&r &7› &7&c{operation} nepavyko &f{world}&7: {reason}"
+created = "{prefix}&r &7› &7Sukurta ir valdoma &a{world}&7."
+imported = "{prefix}&r &7› &7Importuojama ir valdoma &a{world}&7."
+loaded = "{prefix}&r &7› &7Įkelta &a{world}&7."
+unloaded = "{prefix}&r &7› &7Neįkelta &a{world}&7."
+teleported = "{prefix}&r &7› &7Teleportuotas &a{player}&7 iki &a{world}&7."
+delete_confirm = "{prefix}&r &7› &7Vykdyti &e/rift delete {world}&7 vėl per &e{seconds}uo&7 perkelti jį į karantiną."
+quarantined = "{prefix}&r &7› &7Perkelta &a{world}&7 į karantiną, &a{id}&7."
+restored = "{prefix}&r &7› &7Atstatyta &a{world}&7 nuo &a{id}&7."
+profile_updated = "{prefix}&r &7› &7Atnaujinta &a{setting}&7 yra &a{world}&7 iki &a{value}&7."
+folia_limit = "{prefix}&r &7› &7{operation} yra nepasiekiamas Folia nes jos pasaulinė apkrova/unload API nėra įgyvendinama."
+config_saved = "{prefix}&r &7› &7&aKonfigūracija išsaugota."
+config_opened = "{prefix}&r &7› &7Atidarytas visas žaidimo konfigūracijos redaktorius.&r"
+config_save_failed = "{prefix}&r &7› &7&cKonfigūracijos nepavyko išsaugoti. Patikrinkite konsolę."
+empty_list = "{prefix}&r &7› &7Nebuvo rasta tinkamų pasaulių."
+player_offline = "{prefix}&r &7› &7&cŽaidėjas nėra internete: &f{player}"
+unknown_world = "{prefix}&r &7› &7&cNežinomas pasaulis: &f{world}"
+section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
+entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
+detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
+info_title = "{prefix}&r &7› &7&d{world}"
+status_title = "{prefix}&r &7› &7{prefix} {version} Būsena"
+generator_format = "{prefix}&r &7› &7Custom formatas: &fPluginName[: generator- id]"
+folia_status_note = "{prefix}&r &7› &7Folia Palaiko {prefix}skaityti, redaktorius, profilis, ir teleporto funkcijos; dinaminis pasaulio gyvavimo ciklas yra sudaryta iš platformos API."
 
 [rift.label]
 worlds = "Pasauliai"
@@ -145,35 +149,35 @@ quarantine_entries = "Karantino įrašai"
 
 [rift.explain]
 loaded = "Nurodo, ar Bukkit šiuo metu laiko šį pasaulį aktyvų atmintyje."
-managed = "Nurodo, ar Rift turi šio pasaulio profilį ir gali atkurti jo generatoriaus bei paleidimo nustatymus."
+managed = "Nurodo, ar {prefix} turi šio pasaulio profilį ir gali atkurti jo generatoriaus bei paleidimo nustatymus."
 on_disk = "Nurodo, ar pasaulis įkeltas, arba ar yra tinkamas jo aplankas su level.dat failu."
 environment = "Bukkit pasaulio aplinka, įrašyta aktyviame pasaulyje arba valdomame profilyje."
-generator = "Generatorius, kurį Rift vėl pritaiko įkeliant šį valdomą pasaulį. void yra integruotas Rift tuščio pasaulio generatorius."
+generator = "Generatorius, kurį {prefix} vėl pritaiko įkeliant šį valdomą pasaulį. void yra integruotas {prefix} tuščio pasaulio generatorius."
 seed = "Šiam pasauliui įrašyta sėkla. Pakeitus šią rodomą reikšmę, esamas reljefas niekada negeneruojamas iš naujo."
-autoload = "Nurodo, ar Rift automatiškai įkelia šį valdomą pasaulį paleidžiant serverį."
-protected = "Apsaugotų valdomų pasaulių negalima perkelti į Rift karantiną."
-operation_active = "Nurodo, ar gyvavimo ciklo operacija šiuo metu laiko Rift užraktą, skirtą šiam pasauliui."
+autoload = "Nurodo, ar {prefix} automatiškai įkelia šį valdomą pasaulį paleidžiant serverį."
+protected = "Apsaugotų valdomų pasaulių negalima perkelti į {prefix} karantiną."
+operation_active = "Nurodo, ar gyvavimo ciklo operacija šiuo metu laiko {prefix} užraktą, skirtą šiam pasauliui."
 server = "Bukkit pateikiamas aktyvaus serverio įgyvendinimas ir versija."
-java_runtime = "Java vykdymo aplinka, kurioje šiuo metu veikia serveris. Rift baitinis kodas išlieka suderinamas su Java 17."
-plugin_bytecode = "Seniausia Java vykdymo aplinka, galinti įkelti sukompiliuotas Rift klases."
-platform = "Planuoklio ir serverio API šeima, kurią Rift aptiko vykdymo metu."
+java_runtime = "Java vykdymo aplinka, kurioje šiuo metu veikia serveris. {prefix} baitinis kodas išlieka suderinamas su Java 17."
+plugin_bytecode = "Seniausia Java vykdymo aplinka, galinti įkelti sukompiliuotas {prefix} klases."
+platform = "Planuoklio ir serverio API šeima, kurią {prefix} aptiko vykdymo metu."
 dynamic_lifecycle = "Nurodo, ar platforma saugiai leidžia vykdymo metu kurti, įkelti, iškelti pasaulius, perkelti juos į karantiną ir atkurti."
 world_container = "Serverio katalogas, kuriame saugomi Bukkit pasaulių aplankai."
-writable = "Nurodo, ar operacinė sistema šiuo metu leidžia Rift rašyti pasaulių aplankus talpinančiame kataloge."
+writable = "Nurodo, ar operacinė sistema šiuo metu leidžia {prefix} rašyti pasaulių aplankus talpinančiame kataloge."
 locale = "Aktyvus kalbos failas aplanke plugins/Rift/languages. Trūkstamiems įrašams naudojama integruota anglų kalba."
-world_counts = "Įkelti reiškia aktyvių Bukkit pasaulių skaičių; valdomi reiškia Rift profilių skaičių; trūkstami reiškia valdomus profilius, kurių pasauliai nei įkelti, nei yra diske."
-quarantine = "Pasauliai, kuriuos Rift šalinimo funkcija perkėlė atskirai ir kuriuos galima atkurti pagal karantino id."
-world_entry = "Įkeltas reiškia aktyvų dabar; valdomas reiškia, kad Rift turi profilį; diske reiškia, kad yra tinkamas neįkelto pasaulio aplankas."
+world_counts = "Įkelti reiškia aktyvių Bukkit pasaulių skaičių; valdomi reiškia {prefix} profilių skaičių; trūkstami reiškia valdomus profilius, kurių pasauliai nei įkelti, nei yra diske."
+quarantine = "Pasauliai, kuriuos {prefix} šalinimo funkcija perkėlė atskirai ir kuriuos galima atkurti pagal karantino id."
+world_entry = "Įkeltas reiškia aktyvų dabar; valdomas reiškia, kad {prefix} turi profilį; diske reiškia, kad yra tinkamas neįkelto pasaulio aplankas."
 
 [rift.feedback]
-title = "&d&lRIFT"
+title = "{prefix}"
 world_subtitle = "&a{operation}&8: &f{world}"
 teleport_subtitle = "&aAtvyko į &f{world}"
 failure_title = "&cOperacija nepavyko"
 failure_subtitle = "&7{operation}&8: &f{world}"
-action_world = "&dRift &8• &a{operation} &f{world}"
-action_teleport = "&dRift &8• &aTeleportuotas į &f{world}"
-action_failure = "&dRift &8• &c{operation} nepavyko &f{world}"
+action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
+action_teleport = "{prefix}&r &7› &7&aTeleportuotas į &a{world}"
+action_failure = "{prefix}&r &7› &7&c{operation} nepavyko &f{world}"
 
 [rift.gui]
 current = "&7Dabartinis: &f{value}"
@@ -194,19 +198,19 @@ failure_feedback = "&dNepakankama grįžtamoji informacija"
 title_popups = "&dAntraštės iššokantieji"
 action_bar_popups = "&dOperacijų- juostos iššokantieji"
 sounds = "&dAtsiliepimų garsai"
-root_title = "Rift Konfigūracija"
-category_title = "Rift: {category}"
+root_title = "{prefix} Konfigūracija"
+category_title = "{prefix}: {category}"
 category_open = "&8Spustelėkite norėdami redaguoti kiekvieną nustatymą šiame skyriuje"
 back = "&eAtgal"
 toggle = "&8Spustelėkite norėdami perjungti"
 exact_number = "&8Kairė/right koreguoja; paspauskite Q įvesti tikslią reikšmę"
 text = "&8Spustelėkite norėdami įvesti naują reikšmę pokalbyje"
-prompt = "{prefix}&7Įveskite naują reikšmę &f{setting}&7 Pokalbyje."
-prompt_cancel = "{prefix}&7Tipas &fAtšaukti&7 grįžti nekeičiant jo."
-prompt_cancelled = "{prefix}&7Konfigūravimo įvestis atšauktas."
-prompt_timeout = "{prefix}&7Konfigūravimo įvesties laikas baigėsi."
-setting_saved = "{prefix}&d{setting} &8› &aPakeista į &f{after} &7iš &f{before}&a."
-setting_failed = "{prefix}&cNepavyko atnaujinti &f{setting}&c: {reason}"
+prompt = "{prefix}&r &7› &7Įveskite naują reikšmę &f{setting}&7 Pokalbyje."
+prompt_cancel = "{prefix}&r &7› &7Tipas &fAtšaukti&7 grįžti nekeičiant jo."
+prompt_cancelled = "{prefix}&r &7› &7Konfigūravimo įvestis atšauktas."
+prompt_timeout = "{prefix}&r &7› &7Konfigūravimo įvesties laikas baigėsi."
+setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7Pakeista į &a{after} &7iš &f{before}&7."
+setting_failed = "{prefix}&r &7› &7&cNepavyko atnaujinti &f{setting}&7: {reason}"
 language = "&dKalba locale"
 language_select = "&8Spustelėkite norėdami pasirinkti iš galimų kalbų"
 lifecycle_sound = "&dGarso lygis visame pasaulyje"
@@ -252,18 +256,15 @@ optional = "Šis parametras yra neprivalomas."
 default = "Jei nenurodyta, numatytoji reikšmė yra \"{value}\"."
 type = "Šio parametro tipas yra {type}."
 
-[director.runtime]
-usage = "Naudojimas: {usage}"
-
 [director.runtime.error]
-invalid_origin = "Šios komandos negalima vykdyti iš šio šaltinio."
-unknown_parameter = "Nežinomas parametro raktas: {key}"
-unexpected_argument = "Netikėtas argumentas \"{argument}\". Pasirenkami parametrai turi būti nurodyti su raktu, pvz. seed=123"
-unclosed_group = "Trūksta uždarančio \"]\" parametrui {key}"
-conversion_failed = "Reikšmės \"{value}\" nepavyko konvertuoti į {type} parametrui {parameter}"
-default_parse_failed = "Nepavyko nuskaityti parametro {parameter} numatytosios reikšmės"
-missing_argument = "Trūksta argumento \"{parameter}\" ({type})"
-execution_failed = "Nepavyko įvykdyti komandos {command}: {reason}"
+invalid_origin = "{prefix}&r &7› &7&cŠios komandos negalima vykdyti iš šio šaltinio."
+unknown_parameter = "{prefix}&r &7› &7&cNežinomas parametro raktas: {key}"
+unexpected_argument = "{prefix}&r &7› &7&cNetikėtas argumentas \"{argument}\". Pasirenkami parametrai turi būti nurodyti su raktu, pvz. seed=123"
+unclosed_group = "{prefix}&r &7› &7&cTrūksta uždarančio \"]\" parametrui {key}"
+conversion_failed = "{prefix}&r &7› &7&cReikšmės \"{value}\" nepavyko konvertuoti į {type} parametrui {parameter}"
+default_parse_failed = "{prefix}&r &7› &7&cNepavyko nuskaityti parametro {parameter} numatytosios reikšmės"
+missing_argument = "{prefix}&r &7› &7&cTrūksta argumento \"{parameter}\" ({type})"
+execution_failed = "{prefix}&r &7› &7&cNepavyko įvykdyti komandos {command}: {reason}"
 
 [language.menu]
 selected = "pasirinkta"
@@ -285,20 +286,21 @@ remove_personal_description = "Pašalinkite asmeninį kalbos pasirinkimą."
 no_controls = "Jums nepasiekiami kalbos nustatymai."
 
 [language.editor]
-loading = "Įkeliami kalbos {locale} pranešimai..."
+title = "{prefix} › {section}"
+loading = "{prefix}&r &7› &7&7Įkeliami kalbos {locale} pranešimai..."
 
 [language.editor.category]
 open = "&8Spustelėkite norėdami atverti šią kategoriją.&r"
 message-count = "&7{count} pranešimai&r"
 
 [language.editor.error]
-unable-to-edit = "Nepavyko redaguoti: {reason}"
-no-permission = "Neturite leidimo redaguoti papildinio {plugin} kalbų."
+unable-to-edit = "{prefix}&r &7› &7&cNepavyko redaguoti: {reason}"
+no-permission = "{prefix}&r &7› &7&cNeturite leidimo redaguoti papildinio {prefix} kalbų."
 
 [language.editor.input]
-unable-to-save = "Nepavyko išsaugoti: {reason}"
-too-long = "Įvestyje gali būti ne daugiau kaip {maximum} simbolių."
-expired = "Baigėsi kalbos rengyklės įvesties laikas."
+unable-to-save = "{prefix}&r &7› &7&7Nepavyko išsaugoti: {reason}"
+too-long = "{prefix}&r &7› &7&7Įvestyje gali būti ne daugiau kaip {maximum} simbolių."
+expired = "{prefix}&r &7› &7&7Baigėsi kalbos rengyklės įvesties laikas."
 
 [language.editor.locale]
 open = "&8Spauskite norėdami atverti šią kalbą.&r"
@@ -320,15 +322,15 @@ back = "&eAtgal&r"
 line = "Eilutė {line}"
 
 [language.editor.prompt]
-variables = "Kintamieji: {variables}"
-value = "Pokalbyje įveskite naują rakto {key} reikšmę."
-search = "Ieškokite pranešimo rakto arba teksto. Norėdami grįžti, įveskite cancel."
-guidance = "Naudokite \\n naujai eilutei, \\\\ atvirkštiniam pasvirajam brūkšniui arba įveskite cancel, kad grįžtumėte."
-current = "Dabartinė reikšmė: {value}"
+variables = "{prefix}&r &7› &7&7Kintamieji: {variables}"
+value = "{prefix}&r &7› &7&7Pokalbyje įveskite naują rakto {key} reikšmę."
+search = "{prefix}&r &7› &7&7Ieškokite pranešimo rakto arba teksto. Norėdami grįžti, įveskite cancel."
+guidance = "{prefix}&r &7› &7&7Naudokite \\n naujai eilutei, \\\\ atvirkštiniam pasvirajam brūkšniui arba įveskite cancel, kad grįžtumėte."
+current = "{prefix}&r &7› &7&7Dabartinė reikšmė: {value}"
 
 [language.editor.saved]
-summary = "{locale} išsaugota. Kalbų pasirinkimai nepakeisti."
-change = "{key}: „{before}“ pakeista į „{after}“."
+summary = "{prefix}&r &7› &7&7{locale} išsaugota. Kalbų pasirinkimai nepakeisti."
+change = "{prefix}&r &7› &7&7{key}: „{before}“ pakeista į „{after}“."
 
 [language.editor.search]
 messages-lore = "Spustelėkite norėdami ieškoti visuose pranešimuose."
@@ -346,26 +348,54 @@ none = "Nėra"
 empty = "(tuščia)"
 
 [language.error]
-unavailable-for-all = "Kalba {locale} prieinama ne visiems pasirinktiems papildiniams."
-stopping = "Stabdant papildinį kalbos pasirinkimas nepasiekiamas."
-server-locale-required = "Pasirinkite numatytosios serverio kalbos kodą, pavyzdžiui, en_US."
-plugin-server-permission = "Neturite leidimo keisti papildinio {plugin} serverio kalbos."
-plugin-personal-permission = "Neturite leidimo pasirinkti savo kalbos papildiniui {plugin}."
-personal-player-only = "Žaidžiant turi būti pasirinkti žaidėjų kalbos nustatymai."
-personal-permission = "Jūs neturite leidimo pasirinkti savo kalbą."
-numeric-page = "Įveskite puslapio numerį."
-no-providers = "Nėra prieinamų Volmit kalbų teikėjų."
-editor-player-only = "Atverti kalbos rengyklę žaidime."
+unavailable-for-all = "{prefix}&r &7› &7&cKalba {locale} prieinama ne visiems pasirinktiems papildiniams."
+stopping = "{prefix}&r &7› &7&cStabdant papildinį kalbos pasirinkimas nepasiekiamas."
+server-locale-required = "{prefix}&r &7› &7&cPasirinkite numatytosios serverio kalbos kodą, pavyzdžiui, en_US."
+plugin-server-permission = "{prefix}&r &7› &7&cNeturite leidimo keisti papildinio {prefix} serverio kalbos."
+plugin-personal-permission = "{prefix}&r &7› &7&cNeturite leidimo pasirinkti savo kalbos papildiniui {prefix}."
+personal-player-only = "{prefix}&r &7› &7&cŽaidžiant turi būti pasirinkti žaidėjų kalbos nustatymai."
+personal-permission = "{prefix}&r &7› &7&cJūs neturite leidimo pasirinkti savo kalbą."
+numeric-page = "{prefix}&r &7› &7&cĮveskite puslapio numerį."
+no-providers = "{prefix}&r &7› &7&cNėra prieinamų Volmit kalbų teikėjų."
+editor-player-only = "{prefix}&r &7› &7&cAtverti kalbos rengyklę žaidime."
 
 [language.selection]
-server-selected = "{plugin}: serverio kalba yra dabar {locale}."
-server-default-selected = "{plugin}: jūsų kalba dabar atitinka numatytąją serverio kalbą."
-save-failed = "{plugin}: nepavyko išsaugoti kalbos pasirinkimo; patikrinkite serverio konsolę."
-preparing = "Ruošiama kalba {locale} papildiniui {target}..."
-personal-selected = "{plugin}: dabar jūsų kalba {locale}."
-english-fallback = "{plugin}: {locale} neprieinama; naudojama anglų kalba (en_US)."
+server-selected = "{prefix}&r &7› &7&7serverio kalba yra dabar {locale}."
+server-default-selected = "{prefix}&r &7› &7&7jūsų kalba dabar atitinka numatytąją serverio kalbą."
+save-failed = "{prefix}&r &7› &7&cnepavyko išsaugoti kalbos pasirinkimo; patikrinkite serverio konsolę."
+preparing = "{prefix}&r &7› &7&7Ruošiama kalba {locale} papildiniui {target}..."
+personal-selected = "{prefix}&r &7› &7&7dabar jūsų kalba {locale}."
+english-fallback = "{prefix}&r &7› &7&7{locale} neprieinama; naudojama anglų kalba (en_US)."
 
 [language.usage]
-volmit-selection = "Naudojimas: /volmit plugins languages [locale]"
-selection = "Naudojimas: /{command} language self [locale|reset] or server [locale]"
-editor = "Naudojimas: /{command} language server edit [locale]"
+volmit-selection = "{prefix}&r &7› &7&7Naudojimas: /volmit plugins languages [locale]"
+selection = "{prefix}&r &7› &7&7Naudojimas: /{command} language self [locale|reset] or server [locale]"
+editor = "{prefix}&r &7› &7&7Naudojimas: /{command} language server edit [locale]"
+
+
+[debug.error]
+missing-permission = "{prefix}&r &7› &7&cTrūksta leidimo: {permission}"
+already-preparing = "{prefix}&r &7› &7&cĮskiepio {prefix} diagnostikos ataskaita jau rengiama."
+already-preparing-short = "{prefix}&r &7› &7&cDiagnostikos ataskaita jau rengiama."
+schedule-failed = "{prefix}&r &7› &7&cNepavyko suplanuoti diagnostikos ataskaitos rengimo."
+provider-closed = "{prefix}&r &7› &7&cDiagnostikos duomenų teikėjas uždarytas."
+closed-before-capture = "{prefix}&r &7› &7&cDiagnostikos duomenų teikėjas buvo uždarytas prieš surenkant ataskaitos duomenis."
+writer-schedule-failed = "{prefix}&r &7› &7&cNepavyko suplanuoti diagnostikos ataskaitos rašymo."
+capture-failed = "{prefix}&r &7› &7&cNepavyko surinkti diagnostikos ataskaitos duomenų; patikrinkite serverio konsolę."
+closed-before-write = "{prefix}&r &7› &7&cDiagnostikos duomenų teikėjas buvo uždarytas prieš įrašant ataskaitą."
+write-failed = "{prefix}&r &7› &7&cNepavyko įrašyti diagnostikos ataskaitos; patikrinkite serverio konsolę."
+
+[debug]
+preparing = "{prefix}&r &7› &7&7Rengiama įskiepio {prefix} diagnostikos ataskaita..."
+saved = "{prefix}&r &7› &7&7Įskiepio {prefix} diagnostikos ataskaita išsaugota: {path}."
+
+[debug.upload]
+interrupted = "{prefix}&r &7› &7&7Diagnostikos ataskaitos įkėlimas nutrauktas; vietinė ataskaita išsaugota."
+failed = "{prefix}&r &7› &7&cNepavyko įkelti diagnostikos ataskaitos; vietinė ataskaita išsaugota."
+completed = "{prefix}&r &7› &7&7Įkelta pavadinimu VolmitSoftware - {prefix} - v{version}."
+
+[debug.action]
+open = "Atidaryti: {url}"
+open-description = "Atidaryti įkeltą diagnostikos ataskaitą."
+copy-path = "Kopijuoti vietinį kelią"
+copy-path-description = "Kopijuoti vietinės ataskaitos kelią."

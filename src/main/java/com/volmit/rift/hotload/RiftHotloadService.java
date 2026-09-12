@@ -60,7 +60,7 @@ public final class RiftHotloadService implements AutoCloseable {
                 this::isManagedFile,
                 this::knownFiles,
                 RiftHotloadService::read,
-                ConfigFileSupport::normalize
+                content -> content == null ? null : ConfigFileSupport.normalize(content)
         );
     }
 
@@ -190,8 +190,8 @@ public final class RiftHotloadService implements AutoCloseable {
                 return false;
             }
         }
-        if (sameFile(file, language.file())) {
-            return language.reloadSnapshot(snapshot.normalizedContent());
+        if (language.isLanguageFile(file)) {
+            return language.reloadSnapshot(file, snapshot.normalizedContent());
         }
         if (profiles.isProfileFile(file)) {
             return profiles.reloadSnapshot(file, snapshot.normalizedContent());
@@ -207,15 +207,15 @@ public final class RiftHotloadService implements AutoCloseable {
         engine.configure(
                 current.getHotReloadPollMillis(),
                 current.getHotReloadCooldownMillis(),
-                List.of(config.file(), language.file()),
-                List.of(profiles.directory(), trash.directory())
+                List.of(config.file()),
+                List.of(language.directory(), profiles.directory(), trash.directory())
         );
     }
 
     private Collection<File> knownFiles() {
         Set<File> files = new LinkedHashSet<>();
         files.add(config.file());
-        files.add(language.file());
+        files.addAll(language.files());
         files.addAll(profiles.files());
         files.addAll(trash.files());
         return files;
@@ -223,7 +223,7 @@ public final class RiftHotloadService implements AutoCloseable {
 
     private boolean isManagedFile(File file) {
         return sameFile(file, config.file())
-                || sameFile(file, language.file())
+                || language.isLanguageFile(file)
                 || profiles.isProfileFile(file)
                 || trash.isTrashFile(file);
     }

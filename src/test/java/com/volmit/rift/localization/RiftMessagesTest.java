@@ -30,7 +30,7 @@ final class RiftMessagesTest {
                 "rift.gui.category.diagnostics",
                 "language.menu.edit_messages",
                 "language.menu.use_server_default",
-                "director.runtime.usage"
+                "director.runtime.error.missing_argument"
         );
         assertThat(catalog.byId()).doesNotContainKeys(
                 "rift.command.doctor",
@@ -57,7 +57,7 @@ final class RiftMessagesTest {
         assertThat(TomlLanguageParser.parseText(toml).keySet())
                 .containsExactlyInAnyOrderElementsOf(RiftMessages.catalog().ids());
         assertThat(toml)
-                .contains("[runtime]", "prefix = \"&5&lRIFT&r &8›&r \"", "{world}", "{permission}",
+                .contains("[runtime]", "prefix = \"<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>\"", "{world}", "{permission}",
                         "{before}  previous value", "{after}  new value")
                 .doesNotContain("messages:");
     }

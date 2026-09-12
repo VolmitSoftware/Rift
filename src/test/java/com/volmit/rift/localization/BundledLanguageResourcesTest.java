@@ -53,7 +53,7 @@ final class BundledLanguageResourcesTest {
     @Test
     void everyRemoteLocaleIsCompleteValidAndMeaningfullyTranslated() throws Exception {
         MessageCatalog catalog = RiftMessages.catalog();
-        assertThat(catalog.keys()).hasSize(255);
+        assertThat(catalog.keys()).hasSize(276);
         Set<String> expectedPlaceholders = catalog.keys().stream()
                 .flatMap(key -> key.placeholders().stream())
                 .collect(Collectors.toSet());
@@ -67,14 +67,17 @@ final class BundledLanguageResourcesTest {
 
             assertThat(content)
                     .describedAs("sectioned TOML in %s", resource)
-                    .contains("[runtime]", "[rift.command]", "[rift.message]", "[director.runtime]")
+                    .contains("[runtime]", "[rift.command]", "[rift.message]", "[director.runtime.error]")
                     .doesNotContain("messages:", "prefix:");
             assertThat(messages.keySet())
                     .describedAs("catalog coverage in %s", resource)
                     .containsExactlyInAnyOrderElementsOf(catalog.ids());
             assertThat(messages.get("runtime.prefix"))
                     .describedAs("global prefix in %s", resource)
-                    .isEqualTo("&5&lRIFT&r &8›&r ");
+                    .isEqualTo("<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>");
+            assertThat(messages.get("rift.message.version"))
+                    .describedAs("version line in %s", resource)
+                    .isEqualTo("<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>");
             assertThat(placeholders(header))
                     .describedAs("placeholder reference in %s", resource)
                     .containsExactlyInAnyOrderElementsOf(expectedPlaceholders);

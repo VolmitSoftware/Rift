@@ -47,6 +47,11 @@ public final class RiftCommands {
         debug = new RiftDebugCommands(plugin);
     }
 
+    @Director(name = "version", hidden = true, description = "Show the Rift version", descriptionKey = "rift.command.version")
+    public void version(@Param(name = "sender", contextual = true) CommandSender sender) {
+        debug.version(sender);
+    }
+
     @Director(name = "create", description = "Create and manage a new world", descriptionKey = "rift.command.create")
     public void create(
             @Param(name = "name", description = "World name", descriptionKey = "rift.parameter.name") String name,
