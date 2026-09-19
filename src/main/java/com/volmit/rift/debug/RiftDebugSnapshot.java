@@ -91,6 +91,15 @@ record RiftDebugSnapshot(
             String configuredDirectory,
             String detectedDirectory,
             String storageLayout,
+            String difficultyPolicy,
+            String pvpPolicy,
+            Map<String, String> gameRules,
+            String spawnPolicy,
+            String borderPolicy,
+            String accessPermission,
+            String accessDeniedMessage,
+            String respawnWorld,
+            List<String> tags,
             boolean operationActive
     ) {
     }

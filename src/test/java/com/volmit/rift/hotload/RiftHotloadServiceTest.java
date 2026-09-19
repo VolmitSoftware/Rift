@@ -74,7 +74,8 @@ final class RiftHotloadServiceTest {
             MessageArgs arguments = MessageArgs.builder().untrusted("world", "test").build();
             assertThat(language.text(player, RiftMessages.CREATED, arguments).plain()).startsWith("PERSONAL");
             try (RiftHotloadService hotload = new RiftHotloadService(plugin, config, language,
-                    profiles, trash, mock(WorldInventory.class))) {
+                    profiles, trash, mock(WorldInventory.class), () -> {
+                    })) {
                 hotload.start();
                 Files.delete(french);
                 long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);

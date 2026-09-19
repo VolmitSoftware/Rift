@@ -46,7 +46,7 @@ final class RiftDebugReport {
 
         section(report, "Rift");
         value(report, "Version", snapshot.riftVersion());
-        value(report, "Java bytecode target", 17);
+        value(report, "Java bytecode target", 25);
         value(report, "Platform mode", snapshot.platform());
         value(report, "Dynamic world lifecycle", snapshot.dynamicWorldLifecycle());
         value(report, "Configuration loaded", snapshot.config() != null);
@@ -165,6 +165,15 @@ final class RiftDebugReport {
                     .append(" | configuredDirectory=").append(sanitize(world.configuredDirectory().isBlank() ? "automatic" : world.configuredDirectory()))
                     .append(" | detectedDirectory=").append(sanitize(world.detectedDirectory().isBlank() ? "not detected" : world.detectedDirectory()))
                     .append(" | storageLayout=").append(sanitize(world.storageLayout()))
+                    .append(" | difficultyPolicy=").append(sanitize(world.difficultyPolicy()))
+                    .append(" | pvpPolicy=").append(sanitize(world.pvpPolicy()))
+                    .append(" | gameRules=").append(sanitize(world.gameRules().toString()))
+                    .append(" | spawnPolicy=").append(sanitize(world.spawnPolicy()))
+                    .append(" | borderPolicy=").append(sanitize(world.borderPolicy()))
+                    .append(" | accessPermission=").append(sanitize(world.accessPermission().isBlank() ? "none" : world.accessPermission()))
+                    .append(" | accessDeniedMessage=").append(sanitize(world.accessDeniedMessage().isBlank() ? "default" : world.accessDeniedMessage()))
+                    .append(" | respawnWorld=").append(sanitize(world.respawnWorld().isBlank() ? "default" : world.respawnWorld()))
+                    .append(" | tags=").append(sanitize(world.tags().toString()))
                     .append(" | operationActive=").append(world.operationActive())
                     .append('\n');
             appendWorldFiles(report, world, worldContainer);

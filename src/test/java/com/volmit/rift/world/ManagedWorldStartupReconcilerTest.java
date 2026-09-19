@@ -63,7 +63,7 @@ final class ManagedWorldStartupReconcilerTest {
     void preservesProfileWhenAStorageEntryExistsButIsNotAValidWorld() throws Exception {
         TestContext context = context(false);
         context.profiles().save(profile("testing100"));
-        Files.createDirectories(temporaryDirectory.resolve("server/testing100"));
+        Files.createDirectories(temporaryDirectory.resolve("server/world/dimensions/rift/testing100"));
 
         assertThat(context.reconciler().reconcile()).isEmpty();
 
@@ -103,9 +103,8 @@ final class ManagedWorldStartupReconcilerTest {
         TestContext context = context(false);
         WorldProfile profile = profile("testing100");
         context.profiles().save(profile);
-        Path world = temporaryDirectory.resolve("server/testing100");
-        Files.createDirectories(world);
-        Files.createFile(world.resolve("level.dat"));
+        Path world = temporaryDirectory.resolve("server/world/dimensions/rift/testing100");
+        Files.createDirectories(world.resolve("region"));
 
         assertThat(context.reconciler().reconcile()).containsExactly(profile);
         assertThat(context.profiles().find("testing100")).isPresent();

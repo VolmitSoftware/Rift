@@ -35,9 +35,9 @@ final class RiftWorldIdentityTest {
         when(world.getName()).thenReturn("Testing");
         when(world.getKey()).thenReturn(NamespacedKey.minecraft("testing"));
         WorldProfileStore profiles = mock(WorldProfileStore.class);
-        when(profiles.find("Testing")).thenReturn(Optional.empty());
+        when(profiles.find("testing")).thenReturn(Optional.empty());
 
         assertThat(RiftWorldIdentity.isRiftWorld(world)).isFalse();
-        assertThat(RiftWorldIdentity.logicalName(world, profiles)).isEqualTo("Testing");
+        assertThat(RiftWorldIdentity.logicalName(world, profiles)).isEqualTo("testing");
     }
 }

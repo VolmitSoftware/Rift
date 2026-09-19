@@ -15,13 +15,10 @@ final class WorldDirectoryResolverTest {
     Path temporaryDirectory;
 
     @Test
-    void resolvesLegacyAndModernDimensionLayouts() throws Exception {
+    void resolvesCurrentPaperDimensionLayouts() throws Exception {
         Path primary = temporaryDirectory.resolve("world");
         Files.createDirectories(primary);
         Files.createFile(primary.resolve("level.dat"));
-        Path legacy = temporaryDirectory.resolve("legacy");
-        Files.createDirectories(legacy);
-        Files.createFile(legacy.resolve("level.dat"));
         Path dimension = primary.resolve("dimensions/minecraft/testing");
         Files.createDirectories(dimension.resolve("region"));
 
@@ -31,7 +28,6 @@ final class WorldDirectoryResolverTest {
                 new WorldNamePolicy(temporaryDirectory)
         );
 
-        assertThat(resolver.require("legacy")).isEqualTo(legacy.toAbsolutePath().normalize());
         assertThat(resolver.require("testing")).isEqualTo(dimension.toAbsolutePath().normalize());
         WorldProfile profile = new WorldProfile();
         profile.setName("testing");
@@ -40,7 +36,7 @@ final class WorldDirectoryResolverTest {
         assertThat(resolver.require(profile)).isEqualTo(dimension.toAbsolutePath().normalize());
         assertThat(resolver.relative(dimension, "testing")).isEqualTo("world/dimensions/minecraft/testing");
         assertThat(resolver.discover()).extracting(WorldDirectoryResolver.DiscoveredWorld::name)
-                .contains("world", "legacy", "testing");
+                .containsExactly("testing");
     }
 
     @Test
@@ -112,12 +108,12 @@ final class WorldDirectoryResolverTest {
                 .isInstanceOf(IOException.class)
                 .hasMessageContaining("does not match");
 
-        Path lowercaseLegacy = temporaryDirectory.resolve("testing");
-        Files.createDirectories(lowercaseLegacy);
-        Files.createFile(lowercaseLegacy.resolve("level.dat"));
-        assertThatThrownBy(() -> resolver.relative(lowercaseLegacy, "Testing"))
+        Path standalone = temporaryDirectory.resolve("testing");
+        Files.createDirectories(standalone);
+        Files.createFile(standalone.resolve("level.dat"));
+        assertThatThrownBy(() -> resolver.relative(standalone, "Testing"))
                 .isInstanceOf(IOException.class)
-                .hasMessageContaining("does not match");
+                .hasMessageContaining("dimension storage layout");
     }
 
     @Test
@@ -142,7 +138,7 @@ final class WorldDirectoryResolverTest {
         assertThat(resolver.isRiftDimension(testing, "Testing")).isTrue();
         assertThat(resolver.isDefinitelyMissing(profile)).isFalse();
         assertThat(resolver.discover()).extracting(WorldDirectoryResolver.DiscoveredWorld::name)
-                .containsExactly("testing", "world");
+                .containsExactly("testing");
     }
 
     @Test
@@ -173,7 +169,7 @@ final class WorldDirectoryResolverTest {
         Path primary = temporaryDirectory.resolve("world");
         Files.createDirectories(primary);
         Files.createFile(primary.resolve("level.dat"));
-        Files.createDirectories(temporaryDirectory.resolve("incomplete"));
+        Files.createDirectories(primary.resolve("dimensions/rift/incomplete"));
         WorldDirectoryResolver resolver = new WorldDirectoryResolver(
                 temporaryDirectory,
                 primary,
@@ -195,9 +191,8 @@ final class WorldDirectoryResolverTest {
         Path primary = temporaryDirectory.resolve("world");
         Files.createDirectories(primary);
         Files.createFile(primary.resolve("level.dat"));
-        Path alternate = temporaryDirectory.resolve("testing");
-        Files.createDirectories(alternate);
-        Files.createFile(alternate.resolve("level.dat"));
+        Path alternate = primary.resolve("dimensions/rift/testing");
+        Files.createDirectories(alternate.resolve("region"));
         WorldDirectoryResolver resolver = new WorldDirectoryResolver(
                 temporaryDirectory,
                 primary,

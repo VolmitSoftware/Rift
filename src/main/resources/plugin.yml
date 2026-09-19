@@ -7,7 +7,7 @@ authors:
   - Vatuu
 website: https://volmit.com
 api-version: '${apiVersion}'
-description: Safe, version-flexible world lifecycle management
+description: Safe world lifecycle management for Paper 26.x and newer
 load: POSTWORLD
 folia-supported: true
 
@@ -32,6 +32,8 @@ permissions:
       rift.unload: true
       rift.delete: true
       rift.restore: true
+      rift.unmanage: true
+      rift.check: true
       rift.teleport: true
       rift.teleport.others: true
       rift.list: true
@@ -41,6 +43,8 @@ permissions:
       rift.language.self: true
       rift.status: true
       rift.debug: true
+      rift.policy: true
+      rift.access.bypass: true
   rift.create:
     description: Allows creating managed worlds
     default: op
@@ -58,6 +62,12 @@ permissions:
     default: op
   rift.restore:
     description: Allows restoring quarantined worlds
+    default: op
+  rift.unmanage:
+    description: Allows stopping management of a world without changing its files
+    default: op
+  rift.check:
+    description: Allows running a read-only world preflight check
     default: op
   rift.teleport:
     description: Allows teleporting to a loaded world
@@ -85,4 +95,10 @@ permissions:
     default: op
   rift.debug:
     description: Allows creating local and optionally public Rift diagnostic reports
+    default: op
+  rift.policy:
+    description: Allows inspecting and changing per-world policies
+    default: op
+  rift.access.bypass:
+    description: Bypasses per-world access permission policies
     default: op

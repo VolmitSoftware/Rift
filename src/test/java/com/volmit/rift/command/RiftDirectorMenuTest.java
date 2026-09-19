@@ -15,13 +15,21 @@ final class RiftDirectorMenuTest {
         List<String> entries = IntStream.range(0, 16)
                 .mapToObj(index -> "entry-" + index)
                 .toList();
-        DirectorMiniMenu.ContentMenu menu = RiftCommands.listMenu("Worlds", entries, "empty", 2);
+        DirectorMiniMenu.ContentMenu menu = RiftCommands.filteredMenu("Worlds", "/rift list", "public", true, entries, "empty", 2);
 
-        assertThat(menu.command()).isEqualTo("/rift list");
+        assertThat(menu.command()).isEqualTo("/rift list tag=public group=true");
         assertThat(menu.parentCommand()).isEqualTo("/rift");
         assertThat(menu.page()).isEqualTo(new DirectorMiniMenu.ContentPage(2, 2, 15, 16, 16));
         assertThat(DirectorMiniMenu.renderContent(menu, RiftCommandService.theme(), DirectorTextResolver.ENGLISH))
-                .anyMatch(line -> line.contains("/rift list page=1"));
+                .anyMatch(line -> line.contains("/rift list tag=public group=true page=1"));
+    }
+
+    @Test
+    void checkAllKeepsTheFilterAndGroupingWhenPaging() {
+        List<String> entries = IntStream.range(0, 16).mapToObj(index -> "world-" + index).toList();
+        DirectorMiniMenu.ContentMenu menu = RiftCommands.filteredMenu("Checks", "/rift check-all", "PUBLIC", false, entries, "empty", 1);
+        assertThat(DirectorMiniMenu.renderContent(menu, RiftCommandService.theme(), DirectorTextResolver.ENGLISH))
+                .anyMatch(line -> line.contains("/rift check-all tag=public group=false page=2"));
     }
 
     @Test

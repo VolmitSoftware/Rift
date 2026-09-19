@@ -47,8 +47,12 @@ final class RiftCommandContractTest {
         RiftCommandService service = new RiftCommandService(plugin);
         DirectorMiniMenu.DirectorHelpPage root = DirectorMiniMenu.resolveHelp(service.director(), List.of()).orElseThrow();
         DirectorMiniMenu.DirectorHelpPage debug = DirectorMiniMenu.resolveHelp(service.director(), List.of("debug")).orElseThrow();
+        DirectorMiniMenu.DirectorHelpPage policy = DirectorMiniMenu.resolveHelp(service.director(), List.of("policy")).orElseThrow();
         assertThat(root.entries()).noneMatch(node -> node.getDescriptor().getName().equals("version"));
         assertThat(debug.entries()).anyMatch(node -> node.getDescriptor().getName().equals("version"));
+        assertThat(policy.entries()).extracting(node -> node.getDescriptor().getName())
+                .contains("show", "difficulty", "pvp", "gamerule", "spawn", "border", "border-center", "border-warning",
+                        "border-damage", "access", "respawn", "tag");
 
         RemoteConsoleCommandSender sender = mock(RemoteConsoleCommandSender.class);
         when(sender.hasPermission(anyString())).thenReturn(true);
@@ -59,8 +63,8 @@ final class RiftCommandContractTest {
                 clearInvocations(sender);
                 assertThat(service.onCommand(sender, command, "rift", arguments)).isTrue();
                 ArgumentCaptor<String> output = ArgumentCaptor.forClass(String.class);
-                verify(sender).sendMessage(output.capture());
-                assertThat(output.getValue()).isEqualTo("PORTAL v2.7.4");
+                verify(sender).sendRichMessage(output.capture());
+                assertThat(output.getValue()).isEqualTo("<gradient:#6F2DBD:#D16BA5>PORTAL v2.7.4");
             }
         }
     }
@@ -85,6 +89,8 @@ final class RiftCommandContractTest {
         Method list = RiftCommands.class.getDeclaredMethod(
                 "list",
                 int.class,
+                String.class,
+                boolean.class,
                 CommandSender.class
         );
         Method status = RiftCommands.class.getDeclaredMethod(
@@ -96,14 +102,28 @@ final class RiftCommandContractTest {
                 int.class,
                 CommandSender.class
         );
+        Method unmanage = RiftCommands.class.getDeclaredMethod(
+                "unmanage",
+                String.class,
+                CommandSender.class
+        );
+        Method check = RiftCommands.class.getDeclaredMethod(
+                "check",
+                String.class,
+                int.class,
+                CommandSender.class
+        );
 
         assertThat(command.name()).isEqualTo("tp");
         assertThat(command.aliases()).containsExactly("teleport");
         assertThat(language.getAnnotation(Director.class).name()).isEqualTo("language");
         assertThat(RiftDebugCommands.class.getAnnotation(Director.class).name()).isEqualTo("debug");
+        assertThat(RiftPolicyCommands.class.getAnnotation(Director.class).name()).isEqualTo("policy");
         assertThat(debugDump.getAnnotation(Director.class).name()).isEqualTo("dump");
         assertThat(status.getAnnotation(Director.class).name()).isEqualTo("status");
         assertThat(status.getAnnotation(Director.class).aliases()).doesNotContain("doctor");
+        assertThat(unmanage.getAnnotation(Director.class).name()).isEqualTo("unmanage");
+        assertThat(check.getAnnotation(Director.class).name()).isEqualTo("check");
         Param page = list.getParameters()[0].getAnnotation(Param.class);
         assertThat(page.name()).isEqualTo("page");
         assertThat(page.defaultValue()).isEqualTo("1");
@@ -112,6 +132,9 @@ final class RiftCommandContractTest {
         assertThat(generatorPage.name()).isEqualTo("page");
         assertThat(generatorPage.defaultValue()).isEqualTo("1");
         assertThat(generatorPage.descriptionKey()).isEqualTo("rift.parameter.page");
+        Param checkPage = check.getParameters()[1].getAnnotation(Param.class);
+        assertThat(checkPage.name()).isEqualTo("page");
+        assertThat(checkPage.defaultValue()).isEqualTo("1");
         Param upload = debugDump.getParameters()[0].getAnnotation(Param.class);
         assertThat(upload.defaultValue()).isEqualTo("true");
         assertThat(upload.descriptionKey()).isEqualTo("rift.parameter.upload");

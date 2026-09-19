@@ -30,23 +30,18 @@ public final class RiftWorldIdentity {
         if (logicalName == null || logicalName.isBlank()) {
             return null;
         }
-        NamespacedKey expected = key(logicalName);
-        for (World world : Bukkit.getWorlds()) {
-            if (expected.equals(worldKey(world))) {
-                return world;
-            }
+        World riftWorld = Bukkit.getWorld(key(logicalName));
+        if (riftWorld != null) {
+            return riftWorld;
         }
-        return Bukkit.getWorld(logicalName);
+        return Bukkit.getWorld(NamespacedKey.minecraft(logicalName.toLowerCase(Locale.ROOT)));
     }
 
     public static Optional<WorldProfile> profile(World world, WorldProfileStore profiles) {
         Objects.requireNonNull(world, "world");
         Objects.requireNonNull(profiles, "profiles");
         NamespacedKey key = worldKey(world);
-        if (isRiftKey(key)) {
-            return profiles.find(key.getKey());
-        }
-        return profiles.find(world.getName());
+        return profiles.find(key.getKey());
     }
 
     public static String logicalName(World world, WorldProfileStore profiles) {
@@ -54,7 +49,7 @@ public final class RiftWorldIdentity {
                 .map(WorldProfile::getName)
                 .orElseGet(() -> {
                     NamespacedKey key = worldKey(world);
-                    return isRiftKey(key) ? key.getKey() : world.getName();
+                    return key.getKey();
                 });
     }
 

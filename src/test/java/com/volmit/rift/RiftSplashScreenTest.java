@@ -12,7 +12,7 @@ final class RiftSplashScreenTest {
     @Test
     void presentsTheCanonicalIdentityAndRuntimeFields() {
         String[] details = RiftSplashScreen.details(
-                "2.0.0-1.20.1-26.2",
+                "2.0.0-26.x",
                 "Paper 26.2",
                 "25",
                 "2026-09-03"
@@ -24,9 +24,9 @@ final class RiftSplashScreenTest {
         assertThat(visible).containsExactly(
                 "",
                 "Rift, Extremely Simple & Reliable World Manager",
-                "Version: 2.0.0-1.20.1-26.2",
+                "Version: 2.0.0-26.x",
                 "By: VolmitSoftware (Arcane Arts) | VolmitSoftware.com",
-                "Server: Paper 26.2 | MC Support: 1.20.1 - 26.x",
+                "Server: Paper 26.2 | MC Support: 26.x+",
                 "Java: 25 | Date: 2026-09-03"
         );
     }

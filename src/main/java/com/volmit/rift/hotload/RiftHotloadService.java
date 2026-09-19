@@ -32,6 +32,7 @@ public final class RiftHotloadService implements AutoCloseable {
     private final WorldProfileStore profiles;
     private final TrashStore trash;
     private final WorldInventory inventory;
+    private final Runnable profileChanged;
     private final ConfigHotloadEngine engine;
     private final AtomicBoolean running = new AtomicBoolean();
     private final AtomicLong generation = new AtomicLong();
@@ -48,7 +49,8 @@ public final class RiftHotloadService implements AutoCloseable {
             RiftLocalization language,
             WorldProfileStore profiles,
             TrashStore trash,
-            WorldInventory inventory
+            WorldInventory inventory,
+            Runnable profileChanged
     ) {
         this.plugin = Objects.requireNonNull(plugin, "plugin");
         this.config = Objects.requireNonNull(config, "config");
@@ -56,6 +58,7 @@ public final class RiftHotloadService implements AutoCloseable {
         this.profiles = Objects.requireNonNull(profiles, "profiles");
         this.trash = Objects.requireNonNull(trash, "trash");
         this.inventory = Objects.requireNonNull(inventory, "inventory");
+        this.profileChanged = Objects.requireNonNull(profileChanged, "profileChanged");
         this.engine = new ConfigHotloadEngine(
                 this::isManagedFile,
                 this::knownFiles,
@@ -194,7 +197,11 @@ public final class RiftHotloadService implements AutoCloseable {
             return language.reloadSnapshot(file, snapshot.normalizedContent());
         }
         if (profiles.isProfileFile(file)) {
-            return profiles.reloadSnapshot(file, snapshot.normalizedContent());
+            boolean reloaded = profiles.reloadSnapshot(file, snapshot.normalizedContent());
+            if (reloaded) {
+                profileChanged.run();
+            }
+            return reloaded;
         }
         if (trash.isTrashFile(file)) {
             return trash.reloadSnapshot(file, snapshot.normalizedContent());

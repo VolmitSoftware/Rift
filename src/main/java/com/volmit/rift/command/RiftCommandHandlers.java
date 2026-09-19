@@ -52,6 +52,18 @@ public final class RiftCommandHandlers {
         }
     }
 
+    public static final class WorldTag extends StringHandler {
+        @Override
+        protected Set<String> values() {
+            Set<String> values = new LinkedHashSet<>();
+            values.add("all");
+            for (WorldProfile profile : Rift.get().profiles().all()) {
+                values.addAll(profile.getTags());
+            }
+            return values;
+        }
+    }
+
     public static final class TrashId extends StringHandler {
         @Override
         protected Set<String> values() {

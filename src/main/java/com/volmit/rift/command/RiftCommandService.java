@@ -224,6 +224,8 @@ public final class RiftCommandService implements CommandExecutor, TabCompleter {
         permissions.put("status", "rift.status");
         permissions.put("autoload", "rift.config");
         permissions.put("protect", "rift.config");
+        permissions.put("policy", "rift.policy");
+        permissions.put("check-all", "rift.check");
         return Map.copyOf(permissions);
     }
 

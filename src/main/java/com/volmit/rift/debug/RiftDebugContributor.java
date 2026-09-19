@@ -64,7 +64,7 @@ public final class RiftDebugContributor implements DebugDumpContributor {
             World loadedWorld = RiftWorldIdentity.findLoaded(world.name());
             Path detectedDirectory = loadedWorld == null
                     ? plugin.worldInventory().discoveredDirectory(world.name()).orElse(null)
-                    : loadedWorld.getWorldFolder().toPath().toAbsolutePath().normalize();
+                    : loadedWorld.getWorldPath().toAbsolutePath().normalize();
             if (detectedDirectory == null && profile.isPresent() && !profile.get().getDirectory().isBlank()) {
                 detectedDirectory = plugin.paths().worldContainer().resolve(profile.get().getDirectory()).normalize();
             }
@@ -80,6 +80,15 @@ public final class RiftDebugContributor implements DebugDumpContributor {
                     profile.map(WorldProfile::getDirectory).orElse(""),
                     detectedRelative,
                     storageLayout(detectedRelative),
+                    profile.map(WorldProfile::getDifficulty).orElse("unmanaged"),
+                    profile.map(WorldProfile::getPvp).orElse("unmanaged"),
+                    profile.map(WorldProfile::getGameRules).orElse(Map.of()),
+                    profile.map(RiftDebugContributor::spawnPolicy).orElse("unmanaged"),
+                    profile.map(RiftDebugContributor::borderPolicy).orElse("unmanaged"),
+                    profile.map(WorldProfile::getAccessPermission).orElse(""),
+                    profile.map(WorldProfile::getAccessDeniedMessage).orElse(""),
+                    profile.map(WorldProfile::getRespawnWorld).orElse(""),
+                    profile.map(WorldProfile::getTags).orElse(List.of()),
                     plugin.lifecycle().isBusy(world.name())
             ));
         }
@@ -118,7 +127,7 @@ public final class RiftDebugContributor implements DebugDumpContributor {
                 Map.copyOf(worldsByEnvironment),
                 tickRates(),
                 averageTickMillis(),
-                plugin.capabilities().isFolia() ? "Folia" : "Bukkit/Paper/Spigot",
+                plugin.capabilities().isFolia() ? "Folia" : "Paper",
                 plugin.capabilities().supportsDynamicWorldLifecycle(),
                 new RiftDebugSnapshot.HotReloadState(
                         hotReload.running(),
@@ -154,6 +163,26 @@ public final class RiftDebugContributor implements DebugDumpContributor {
         );
     }
 
+    private static String spawnPolicy(WorldProfile profile) {
+        if (!profile.isCustomSpawn()) {
+            return "INHERIT";
+        }
+        return profile.getSpawnX() + "," + profile.getSpawnY() + "," + profile.getSpawnZ()
+                + " yaw=" + profile.getSpawnYaw();
+    }
+
+    private static String borderPolicy(WorldProfile profile) {
+        if (!profile.isManagedBorder()) {
+            return "INHERIT";
+        }
+        return "size=" + profile.getBorderSize()
+                + " center=" + profile.getBorderCenterX() + "," + profile.getBorderCenterZ()
+                + " warningDistance=" + profile.getBorderWarningDistance()
+                + " warningTime=" + profile.getBorderWarningTime()
+                + " damage=" + profile.getBorderDamageAmount()
+                + " buffer=" + profile.getBorderDamageBuffer();
+    }
+
     private static String relativeWorldDirectory(Path directory, Path worldContainer) {
         if (directory == null) {
             return "";
@@ -171,9 +200,6 @@ public final class RiftDebugContributor implements DebugDumpContributor {
             return "not detected";
         }
         String normalized = relativeDirectory.replace('\\', '/');
-        if (!normalized.contains("/")) {
-            return "standalone world folder";
-        }
         String lowercase = normalized.toLowerCase(Locale.ROOT);
         if (lowercase.contains("/dimensions/rift/")) {
             return "Rift namespaced dimension";
@@ -184,7 +210,7 @@ public final class RiftDebugContributor implements DebugDumpContributor {
         if (lowercase.contains("/dimensions/")) {
             return "other namespaced dimension";
         }
-        return "server-managed world folder";
+        return "unrecognized Paper dimension storage";
     }
 
     private Path codeSource() {
@@ -202,12 +228,12 @@ public final class RiftDebugContributor implements DebugDumpContributor {
 
     private static String tickRates() {
         try {
-            Object value = Bukkit.getServer().getClass().getMethod("getTPS").invoke(Bukkit.getServer());
-            if (!(value instanceof double[] rates) || rates.length < 3) {
+            double[] rates = Bukkit.getTPS();
+            if (rates.length < 3) {
                 return "unavailable";
             }
             return String.format(Locale.ROOT, "%.2f, %.2f, %.2f", rates[0], rates[1], rates[2]);
-        } catch (ReflectiveOperationException | RuntimeException exception) {
+        } catch (RuntimeException exception) {
             return "unavailable";
         }
     }
@@ -220,12 +246,8 @@ public final class RiftDebugContributor implements DebugDumpContributor {
 
     private static String averageTickMillis() {
         try {
-            Object value = Bukkit.getServer().getClass().getMethod("getAverageTickTime").invoke(Bukkit.getServer());
-            if (!(value instanceof Number milliseconds)) {
-                return "unavailable";
-            }
-            return String.format(Locale.ROOT, "%.3f ms", milliseconds.doubleValue());
-        } catch (ReflectiveOperationException | RuntimeException exception) {
+            return String.format(Locale.ROOT, "%.3f ms", Bukkit.getAverageTickTime());
+        } catch (RuntimeException exception) {
             return "unavailable";
         }
     }

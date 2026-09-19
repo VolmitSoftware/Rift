@@ -24,9 +24,11 @@ import com.volmit.rift.storage.WorldProfileStore;
 import com.volmit.rift.world.PlatformCapabilities;
 import com.volmit.rift.world.WorldInventory;
 import com.volmit.rift.world.WorldLifecycleService;
+import com.volmit.rift.world.WorldPolicyService;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
@@ -45,6 +47,7 @@ public final class Rift extends JavaPlugin implements ReloadAware {
     private PlatformCapabilities capabilities;
     private WorldInventory worldInventory;
     private WorldLifecycleService lifecycle;
+    private WorldPolicyService worldPolicies;
     private RiftFeedbackService feedback;
     private BukkitDebugDump debugDump;
     private BukkitLanguageSwitcher languageSwitcher;
@@ -63,7 +66,10 @@ public final class Rift extends JavaPlugin implements ReloadAware {
         instance = this;
         stopped.set(false);
         try {
-            paths = new RiftPaths(getDataFolder(), getServer().getWorldContainer());
+            Path levelDirectory = getServer().getLevelDirectory().toAbsolutePath().normalize();
+            Path worldContainer = Objects.requireNonNull(levelDirectory.getParent(),
+                    "Paper level directory has no parent");
+            paths = new RiftPaths(getDataFolder(), worldContainer.toFile());
             config = new RiftConfigManager(this, paths.configFile());
             if (!config.loadInitial()) {
                 throw new IllegalStateException("Rift could not establish a valid config.toml");
@@ -76,15 +82,14 @@ public final class Rift extends JavaPlugin implements ReloadAware {
             metrics = new RiftMetricsService(this);
             metrics.install(config.get().isBstatsEnabled());
             names = new WorldNamePolicy(paths.worldContainer());
-            if (getServer().getWorlds().isEmpty()) {
-                throw new IllegalStateException("Bukkit exposed no primary world at POSTWORLD startup");
-            }
             directories = new WorldDirectoryResolver(
                     paths.worldContainer(),
-                    getServer().getWorlds().get(0).getWorldFolder().toPath(),
+                    levelDirectory,
                     names
             );
             profiles = new WorldProfileStore(this, paths.profilesDirectory(), names);
+            worldPolicies = new WorldPolicyService(this, language, names, profiles);
+            profiles.setValidator(worldPolicies::validateProfile);
             if (!profiles.loadAll()) {
                 throw new IllegalStateException("Rift could not establish valid world profile storage");
             }
@@ -94,6 +99,7 @@ public final class Rift extends JavaPlugin implements ReloadAware {
             worldInventory = new WorldInventory(this, directories, profiles);
             worldInventory.refreshDiskSnapshot();
             feedback = new RiftFeedbackService(this, config, language);
+            getServer().getPluginManager().registerEvents(worldPolicies, this);
             lifecycle = new WorldLifecycleService(
                     this,
                     config,
@@ -105,9 +111,18 @@ public final class Rift extends JavaPlugin implements ReloadAware {
                     trash,
                     capabilities,
                     worldInventory,
-                    feedback
+                    feedback,
+                    worldPolicies
             );
-            hotload = new RiftHotloadService(this, config, language, profiles, trash, worldInventory);
+            hotload = new RiftHotloadService(
+                    this,
+                    config,
+                    language,
+                    profiles,
+                    trash,
+                    worldInventory,
+                    worldPolicies::applyAll
+            );
             configMenu = new RiftConfigMenu(this, config, language, hotload);
             getServer().getPluginManager().registerEvents(configMenu, this);
             languageSwitcher = BukkitLanguageSwitcher.register(
@@ -140,6 +155,7 @@ public final class Rift extends JavaPlugin implements ReloadAware {
             commands = new RiftCommandService(this);
             commands.register();
             lifecycle.loadManagedAtStartup();
+            worldPolicies.applyAll();
             hotload.start();
             long startupMillis = (System.nanoTime() - startedNanos) / 1_000_000L;
             if (config.get().isSplashScreen()) {
@@ -192,6 +208,10 @@ public final class Rift extends JavaPlugin implements ReloadAware {
 
     public WorldLifecycleService lifecycle() {
         return lifecycle;
+    }
+
+    public WorldPolicyService worldPolicies() {
+        return worldPolicies;
     }
 
     public BukkitDebugDump debugDump() {
@@ -280,6 +300,6 @@ public final class Rift extends JavaPlugin implements ReloadAware {
     }
 
     private String schedulerName() {
-        return capabilities.isFolia() ? "Folia region" : "Bukkit main-thread";
+        return capabilities.isFolia() ? "Folia region" : "Paper main-thread";
     }
 }

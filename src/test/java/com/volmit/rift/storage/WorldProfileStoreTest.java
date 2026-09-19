@@ -8,6 +8,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -113,6 +117,78 @@ final class WorldProfileStoreTest {
                 .isEqualTo("world/dimensions/minecraft/testing");
     }
 
+    @Test
+    void persistsAndReloadsWorldPolicies() throws Exception {
+        Path worldContainer = temporaryDirectory.resolve("server");
+        Path profileDirectory = temporaryDirectory.resolve("plugins/Rift/worlds");
+        WorldProfileStore store = store(worldContainer, profileDirectory);
+        assertThat(store.loadAll()).isTrue();
+        WorldProfile profile = profile("policy-world");
+        store.save(profile("lobby"));
+        profile.setDifficulty("hard");
+        profile.setPvp("deny");
+        profile.setGameRules(Map.of("keepInventory", "true", "randomTickSpeed", "0"));
+        profile.setCustomSpawn(true);
+        profile.setSpawnX(12.5D);
+        profile.setSpawnY(80.0D);
+        profile.setSpawnZ(-4.5D);
+        profile.setManagedBorder(true);
+        profile.setBorderSize(2_000.0D);
+        profile.setAccessPermission("rift.world.policy-world");
+        profile.setAccessDeniedMessage("No entry to {world}");
+        profile.setRespawnWorld("lobby");
+        profile.setTags(List.of("event", "private"));
+
+        store.save(profile);
+        WorldProfileStore reloaded = store(worldContainer, profileDirectory);
+
+        assertThat(reloaded.loadAll()).isTrue();
+        WorldProfile stored = reloaded.find("policy-world").orElseThrow();
+        assertThat(stored.getDifficulty()).isEqualTo("HARD");
+        assertThat(stored.getPvp()).isEqualTo("DENY");
+        assertThat(stored.getGameRules()).containsEntry("keepInventory", "true");
+        assertThat(stored.isCustomSpawn()).isTrue();
+        assertThat(stored.isManagedBorder()).isTrue();
+        assertThat(stored.getBorderSize()).isEqualTo(2_000.0D);
+        assertThat(stored.getAccessPermission()).isEqualTo("rift.world.policy-world");
+        assertThat(stored.getAccessDeniedMessage()).isEqualTo("No entry to {world}");
+        assertThat(stored.getRespawnWorld()).isEqualTo("lobby");
+        assertThat(stored.getTags()).containsExactly("event", "private");
+    }
+
+    @Test
+    void rejectedPolicyUpdatePreservesLastValidProfile() throws Exception {
+        Path worldContainer = temporaryDirectory.resolve("server");
+        Path profileDirectory = temporaryDirectory.resolve("plugins/Rift/worlds");
+        WorldProfileStore store = store(worldContainer, profileDirectory);
+        store.setValidator(profile -> !profile.getGameRules().containsKey("invalid"));
+        assertThat(store.loadAll()).isTrue();
+        store.save(profile("testing"));
+
+        assertThatThrownBy(() -> store.update("testing", candidate -> candidate.setGameRules(Map.of("invalid", "true"))))
+                .isInstanceOf(IllegalArgumentException.class);
+        assertThat(store.find("testing").orElseThrow().getGameRules()).isEmpty();
+    }
+
+    @Test
+    void concurrentPolicyUpdatesRetainBothMutations() throws Exception {
+        Path worldContainer = temporaryDirectory.resolve("server");
+        Path profileDirectory = temporaryDirectory.resolve("plugins/Rift/worlds");
+        WorldProfileStore store = store(worldContainer, profileDirectory);
+        assertThat(store.loadAll()).isTrue();
+        store.save(profile("testing"));
+
+        CompletableFuture<Void> difficulty = CompletableFuture.runAsync(() -> updateUnchecked(
+                store, "testing", candidate -> candidate.setDifficulty("HARD")));
+        CompletableFuture<Void> pvp = CompletableFuture.runAsync(() -> updateUnchecked(
+                store, "testing", candidate -> candidate.setPvp("DENY")));
+        CompletableFuture.allOf(difficulty, pvp).join();
+
+        WorldProfile updated = store.find("testing").orElseThrow();
+        assertThat(updated.getDifficulty()).isEqualTo("HARD");
+        assertThat(updated.getPvp()).isEqualTo("DENY");
+    }
+
     private WorldProfileStore store(Path worldContainer, Path profileDirectory) {
         Plugin plugin = mock(Plugin.class);
         when(plugin.getLogger()).thenReturn(Logger.getLogger("WorldProfileStoreTest"));
@@ -127,5 +203,17 @@ final class WorldProfileStoreTest {
         WorldProfile profile = new WorldProfile();
         profile.setName(name);
         return profile;
+    }
+
+    private static void updateUnchecked(
+            WorldProfileStore store,
+            String name,
+            Consumer<WorldProfile> mutation
+    ) {
+        try {
+            store.update(name, mutation);
+        } catch (IOException exception) {
+            throw new IllegalStateException(exception);
+        }
     }
 }

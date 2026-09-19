@@ -1,5 +1,3 @@
-import org.gradle.api.attributes.Usage
-import org.gradle.api.attributes.java.TargetJvmVersion
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.WriteProperties
 import org.gradle.jvm.toolchain.JavaLanguageVersion
@@ -10,9 +8,9 @@ plugins {
 }
 
 group = 'com.volmit.rift'
-version = '2.0.0-1.20.1-26.2'
+version = '2.0.0-26.x'
 
-String apiVersion = '1.20'
+String apiVersion = '26.1'
 String mainClass = 'com.volmit.rift.Rift'
 String relocatedLibraryPackage = 'com.volmit.rift.libs'
 String volmLibCoordinate = providers.gradleProperty('volmLibCoordinate')
@@ -42,32 +40,12 @@ java {
 
 repositories {
     mavenCentral()
-    maven { url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots/') }
     maven { url = uri('https://repo.papermc.io/repository/maven-public/') }
     maven { url = uri('https://jitpack.io') }
 }
 
-configurations {
-    currentPaperCompatibility {
-        canBeConsumed = false
-        canBeResolved = true
-        attributes {
-            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_API))
-            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25)
-        }
-    }
-    currentSpigotCompatibility {
-        canBeConsumed = false
-        canBeResolved = true
-        attributes {
-            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_API))
-            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25)
-        }
-    }
-}
-
 dependencies {
-    compileOnly('org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT')
+    compileOnly('io.papermc.paper:paper-api:26.2.build.121-stable')
 
     implementation(volmLibCoordinate) {
         changing = true
@@ -80,14 +58,11 @@ dependencies {
     implementation('net.kyori:adventure-text-serializer-legacy:4.26.1')
     implementation('net.kyori:adventure-text-serializer-plain:4.26.1')
 
-    currentPaperCompatibility('io.papermc.paper:paper-api:26.2.build.121-stable')
-    currentSpigotCompatibility('org.spigotmc:spigot-api:26.2-R0.1-SNAPSHOT')
-
     testImplementation('org.junit.jupiter:junit-jupiter:5.11.4')
     testRuntimeOnly('org.junit.platform:junit-platform-launcher:1.11.4')
     testImplementation('org.assertj:assertj-core:3.26.3')
     testImplementation('org.mockito:mockito-core:5.14.2')
-    testImplementation('org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT')
+    testImplementation('io.papermc.paper:paper-api:26.2.build.121-stable')
 }
 
 tasks.withType(Test).configureEach {
@@ -97,7 +72,7 @@ tasks.withType(Test).configureEach {
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.add('-parameters')
     options.encoding = 'UTF-8'
-    options.release.set(17)
+    options.release.set(25)
 }
 
 tasks.named('processResources').configure {
@@ -144,34 +119,7 @@ tasks.named('test').configure {
     }
 }
 
-tasks.register('compileCurrentSpigotCompatibility', JavaCompile) {
-    source = sourceSets.main.java
-    classpath = configurations.currentSpigotCompatibility + files(sourceSets.main.compileClasspath.filter { File dependency ->
-        !dependency.name.startsWith('spigot-api-')
-    })
-    destinationDirectory.set(layout.buildDirectory.dir('classes/java/currentSpigotCompatibility'))
-    options.compilerArgs.add('-parameters')
-    options.encoding = 'UTF-8'
-    options.release.set(17)
-}
-
-tasks.register('compileCurrentPaperCompatibility', JavaCompile) {
-    source = sourceSets.main.java
-    classpath = configurations.currentPaperCompatibility + files(sourceSets.main.compileClasspath.filter { File dependency ->
-        !dependency.name.startsWith('spigot-api-')
-    })
-    destinationDirectory.set(layout.buildDirectory.dir('classes/java/currentPaperCompatibility'))
-    options.compilerArgs.add('-parameters')
-    options.encoding = 'UTF-8'
-    options.release.set(17)
-}
-
-tasks.named('check').configure {
-    dependsOn(tasks.named('compileCurrentPaperCompatibility'))
-    dependsOn(tasks.named('compileCurrentSpigotCompatibility'))
-}
-
-tasks.register('verifyJava17Artifact') {
+tasks.register('verifyJava25Artifact') {
     dependsOn(tasks.named('shadowJar'))
     inputs.file(tasks.named('shadowJar').flatMap { it.archiveFile })
     doLast {
@@ -227,8 +175,8 @@ tasks.register('verifyJava17Artifact') {
         if (pluginMetadataCount != 1) {
             throw new GradleException("Expected one plugin.yml, found ${pluginMetadataCount}")
         }
-        if (maximumClassMajor > 61) {
-            throw new GradleException("Shaded artifact contains class major ${maximumClassMajor}; Java 17 allows at most 61")
+        if (maximumClassMajor > 69) {
+            throw new GradleException("Shaded artifact contains class major ${maximumClassMajor}; Java 25 allows at most 69")
         }
         if (!bStatsMetricsClassPresent) {
             throw new GradleException('Shaded artifact does not contain the package-isolated bStats Metrics class')
@@ -250,7 +198,7 @@ tasks.register('verifyJava17Artifact') {
 }
 
 tasks.named('check').configure {
-    dependsOn(tasks.named('verifyJava17Artifact'))
+    dependsOn(tasks.named('verifyJava25Artifact'))
 }
 
 tasks.register('buildSwiftSwamp', Copy) {

@@ -1,6 +1,7 @@
 package com.volmit.rift.storage;
 
 import art.arcane.volmlib.util.config.TomlCodec;
+import art.arcane.volmlib.util.config.ConfigJson;
 import art.arcane.volmlib.util.io.AtomicFileIO;
 import org.bukkit.plugin.Plugin;
 
@@ -22,11 +23,14 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public final class WorldProfileStore {
     private static final String SOURCE_TAG = "Rift world";
@@ -38,6 +42,7 @@ public final class WorldProfileStore {
     private final File directory;
     private final WorldNamePolicy names;
     private final ConcurrentMap<String, WorldProfile> profiles = new ConcurrentHashMap<>();
+    private Predicate<WorldProfile> validator = profile -> true;
 
     public WorldProfileStore(Plugin plugin, File directory, WorldNamePolicy names) {
         this.plugin = Objects.requireNonNull(plugin, "plugin");
@@ -76,6 +81,12 @@ public final class WorldProfileStore {
         if (!valid) {
             return false;
         }
+        try {
+            validateRespawnTargets(loaded);
+        } catch (IllegalArgumentException exception) {
+            plugin.getLogger().log(Level.SEVERE, "Rejected world profiles with invalid respawn destinations", exception);
+            return false;
+        }
         profiles.clear();
         profiles.putAll(loaded);
         return valid;
@@ -88,6 +99,10 @@ public final class WorldProfileStore {
         String fileName = file.getName();
         String expectedName = fileName.substring(0, fileName.length() - ".toml".length());
         if (!file.exists()) {
+            if (isReferenced(expectedName)) {
+                plugin.getLogger().severe("Rejected removal of referenced world profile " + expectedName);
+                return false;
+            }
             profiles.remove(expectedName.toLowerCase(Locale.ROOT));
             return true;
         }
@@ -105,6 +120,10 @@ public final class WorldProfileStore {
         if (raw == null) {
             String fileName = file.getName();
             String expectedName = fileName.substring(0, fileName.length() - ".toml".length());
+            if (isReferenced(expectedName)) {
+                plugin.getLogger().severe("Rejected removal of referenced world profile " + expectedName);
+                return false;
+            }
             profiles.remove(expectedName.toLowerCase(Locale.ROOT));
             return true;
         }
@@ -117,19 +136,35 @@ public final class WorldProfileStore {
 
     public synchronized void save(WorldProfile profile) throws IOException {
         WorldProfile normalized = Objects.requireNonNull(profile, "profile").normalize(names);
+        validatePolicy(normalized);
+        validateRespawnTarget(normalized, profiles);
         File file = file(normalized.getName());
         AtomicFileIO.writeString(file.toPath(), TomlCodec.toToml(normalized, SOURCE_TAG));
         profiles.put(normalized.key(), normalized);
     }
 
+    public synchronized WorldProfile update(String name, Consumer<WorldProfile> mutation) throws IOException {
+        WorldProfile existing = find(name).orElseThrow(() -> new IOException("world is not managed"));
+        WorldProfile candidate = ConfigJson.fromJson(ConfigJson.toJson(existing, false), WorldProfile.class);
+        mutation.accept(candidate);
+        save(candidate);
+        return candidate;
+    }
+
+    public synchronized void setValidator(Predicate<WorldProfile> validator) {
+        this.validator = Objects.requireNonNull(validator, "validator");
+    }
+
     public synchronized void delete(String name) throws IOException {
         String validName = names.requireValid(name);
+        requireNotReferenced(validName);
         Files.deleteIfExists(file(validName).toPath());
         profiles.remove(validName.toLowerCase(Locale.ROOT));
     }
 
     public synchronized Optional<File> retire(String name) throws IOException {
         String validName = names.requireValid(name);
+        requireNotReferenced(validName);
         Path source = file(validName).toPath();
         if (profileFileIsMissing(source)) {
             profiles.remove(validName.toLowerCase(Locale.ROOT));
@@ -206,6 +241,7 @@ public final class WorldProfileStore {
             throw new IOException("Profile parser returned null");
         }
         profile.normalize(names);
+        validatePolicy(profile);
         String expectedName = file.getName().substring(0, file.getName().length() - ".toml".length());
         if (!expectedName.equals(profile.getName())) {
             throw new IOException("Profile name must match its filename exactly: " + file.getName());
@@ -215,6 +251,12 @@ public final class WorldProfileStore {
 
     private File file(String name) {
         return new File(directory, names.requireValid(name) + ".toml");
+    }
+
+    private void validatePolicy(WorldProfile profile) {
+        if (!validator.test(profile)) {
+            throw new IllegalArgumentException("World policy validation failed for " + profile.getName());
+        }
     }
 
     private void prepareDirectory() throws IOException {
@@ -265,7 +307,44 @@ public final class WorldProfileStore {
             plugin.getLogger().severe("Rejected case-colliding world profile " + source + " for " + profile.getName());
             return false;
         }
+        try {
+            validateRespawnTarget(profile, profiles);
+        } catch (IllegalArgumentException exception) {
+            plugin.getLogger().log(Level.SEVERE, "Rejected world profile with invalid respawn destination " + source, exception);
+            return false;
+        }
         profiles.put(profile.key(), profile);
         return true;
+    }
+
+    private void requireNotReferenced(String name) throws IOException {
+        if (isReferenced(name)) {
+            throw new IOException("world is a respawn destination for another managed profile: " + name);
+        }
+    }
+
+    private boolean isReferenced(String name) {
+        for (WorldProfile profile : profiles.values()) {
+            if (!profile.getName().equalsIgnoreCase(name) && profile.getRespawnWorld().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void validateRespawnTargets(Map<String, WorldProfile> candidates) {
+        for (WorldProfile profile : candidates.values()) {
+            validateRespawnTarget(profile, candidates);
+        }
+    }
+
+    private static void validateRespawnTarget(WorldProfile profile, Map<String, WorldProfile> candidates) {
+        String target = profile.getRespawnWorld();
+        if (target.isBlank() || profile.getName().equalsIgnoreCase(target)) {
+            return;
+        }
+        if (!candidates.containsKey(target.toLowerCase(Locale.ROOT))) {
+            throw new IllegalArgumentException("Unknown respawn world " + target + " for " + profile.getName());
+        }
     }
 }

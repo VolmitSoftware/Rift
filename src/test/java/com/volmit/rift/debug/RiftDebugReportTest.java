@@ -15,11 +15,11 @@ final class RiftDebugReportTest {
     void createsADetailedSanitizedReport() {
         RiftDebugSnapshot snapshot = new RiftDebugSnapshot(
                 Instant.parse("2026-08-28T12:00:00Z"),
-                "2.0.0-1.20.1-26.2",
+                "2.0.0-26.x",
                 "Paper\nInjected",
-                "1.21.11",
-                "1.21.11-R0.1-SNAPSHOT",
-                "1.21.11",
+                "26.2",
+                "26.2-R0.1-SNAPSHOT",
+                "26.2",
                 true,
                 2,
                 100,
@@ -36,7 +36,7 @@ final class RiftDebugReportTest {
                 Map.of("NORMAL", 2, "NETHER", 1),
                 "20.00, 20.00, 20.00",
                 "4.200 ms",
-                "Bukkit/Paper/Spigot",
+                "Paper",
                 true,
                 new RiftDebugSnapshot.HotReloadState(true, 3, 10, 9, 1, 1_777_000_000_000L, 1_777_000_000_000L, "test failure"),
                 true,
@@ -52,12 +52,15 @@ final class RiftDebugReportTest {
                 "player",
                 new RiftConfig().normalize(),
                 List.of(new RiftDebugSnapshot.PluginState(
-                        "Rift", "2.0.0-1.20.1-26.2", true, "com.volmit.rift.Rift", List.of("VolmitSoftware"),
-                        "POSTWORLD", "1.20", List.of("VolmLib"), List.of("PlaceholderAPI")
+                        "Rift", "2.0.0-26.x", true, "com.volmit.rift.Rift", List.of("VolmitSoftware"),
+                        "POSTWORLD", "26.1", List.of("VolmLib"), List.of("PlaceholderAPI")
                 )),
                 List.of(new RiftDebugSnapshot.WorldState(
                         "world", true, true, true, true, false, "NORMAL", "NORMAL", "void\nInjected",
-                        1234L, "world", "world", "standalone world folder", false
+                        1234L, "world/dimensions/minecraft/overworld", "world/dimensions/minecraft/overworld",
+                        "Minecraft namespaced dimension", "HARD", "DENY", Map.of("minecraft:keep_inventory", "true"),
+                        "1.5,80.0,1.5 yaw=0.0", "size=500.0", "rift.world.world", "No entry", "lobby",
+                        List.of("private"), false
                 )),
                 List.of(),
                 Path.of("."),
@@ -68,13 +71,16 @@ final class RiftDebugReportTest {
         String report = RiftDebugReport.create(snapshot);
 
         assertThat(report)
-                .contains("Version: 2.0.0-1.20.1-26.2")
+                .contains("Version: 2.0.0-26.x")
                 .contains("Format: 3")
+                .contains("Java bytecode target: 25")
                 .contains("Implementation: Paper Injected")
-                .contains("Minecraft version: 1.21.11")
+                .contains("Minecraft version: 26.2")
                 .contains("Pending scheduler tasks: 12")
                 .contains("generator=void Injected")
-                .contains("storageLayout=standalone world folder")
+                .contains("storageLayout=Minecraft namespaced dimension")
+                .contains("difficultyPolicy=HARD")
+                .contains("gameRules={minecraft:keep_inventory=true}")
                 .contains("level.dat=false")
                 .contains("main=com.volmit.rift.Rift")
                 .contains("Hot reload failures: 1")

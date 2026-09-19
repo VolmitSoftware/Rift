@@ -11,9 +11,11 @@ import com.volmit.rift.localization.RiftLocalization;
 import com.volmit.rift.localization.RiftMessages;
 import com.volmit.rift.storage.TrashEntry;
 import com.volmit.rift.world.PlatformCapabilities;
+import com.volmit.rift.world.WorldCheck;
 import com.volmit.rift.world.WorldInventory;
 import com.volmit.rift.world.WorldLifecycleService;
 import com.volmit.rift.world.WorldSnapshot;
+import com.volmit.rift.world.WorldTagSelector;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldType;
@@ -25,6 +27,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Director(name = "rift", aliases = {"rft"}, description = "Manage server worlds safely", descriptionKey = "rift.command.root")
@@ -37,6 +40,7 @@ public final class RiftCommands {
     private final WorldInventory inventory;
     private final PlatformCapabilities capabilities;
     private RiftDebugCommands debug;
+    private RiftPolicyCommands policy;
 
     public RiftCommands(Rift plugin) {
         this.plugin = plugin;
@@ -45,6 +49,7 @@ public final class RiftCommands {
         this.inventory = plugin.worldInventory();
         this.capabilities = plugin.capabilities();
         debug = new RiftDebugCommands(plugin);
+        policy = new RiftPolicyCommands(plugin);
     }
 
     @Director(name = "version", hidden = true, description = "Show the Rift version", descriptionKey = "rift.command.version")
@@ -120,6 +125,16 @@ public final class RiftCommands {
         }
     }
 
+    @Director(name = "unmanage", description = "Stop managing a world without touching its files", descriptionKey = "rift.command.unmanage")
+    public void unmanage(
+            @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.name", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        if (allowed(sender, "rift.unmanage")) {
+            lifecycle.unmanage(sender, name);
+        }
+    }
+
     @Director(name = "tp", aliases = {"teleport"}, description = "Teleport to a loaded world", descriptionKey = "rift.command.teleport")
     public void teleport(
             @Param(name = "world", description = "Loaded world", descriptionKey = "rift.parameter.name", customHandler = RiftCommandHandlers.LoadedWorld.class) String world,
@@ -157,27 +172,33 @@ public final class RiftCommands {
     @Director(name = "list", description = "List every world state", descriptionKey = "rift.command.list")
     public void list(
             @Param(name = "page", description = "Result page number", descriptionKey = "rift.parameter.page", defaultValue = "1") int page,
+            @Param(name = "tag", description = "Filter by an operator tag, or all", descriptionKey = "rift.parameter.tag_filter", defaultValue = "all", customHandler = RiftCommandHandlers.WorldTag.class) String tag,
+            @Param(name = "group", description = "Group matching worlds by operator tag", descriptionKey = "rift.parameter.tag_group", defaultValue = "false") boolean group,
             @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
     ) {
         if (!allowed(sender, "rift.list")) {
             return;
         }
-        List<WorldSnapshot> snapshots = inventory.snapshots();
-        List<TrashEntry> trashEntries = plugin.trash().all();
-        List<String> entries = new ArrayList<>(snapshots.size() + trashEntries.size() + 2);
-        if (!snapshots.isEmpty()) {
-            entries.add(menuSection(sender, RiftMessages.LABEL_WORLDS, snapshots.size()));
+        String filter = validTag(sender, tag);
+        if (filter == null) {
+            return;
         }
-        for (WorldSnapshot snapshot : snapshots) {
-            String state = label(sender, snapshot.loaded()
-                    ? RiftMessages.LABEL_LOADED
-                    : snapshot.presentOnDisk() ? RiftMessages.LABEL_ON_DISK : RiftMessages.LABEL_MISSING);
-            String detail = snapshot.managed()
-                    ? state + " | " + label(sender, RiftMessages.LABEL_MANAGED)
-                    + " | " + label(sender, RiftMessages.LABEL_AUTOLOAD) + '=' + snapshot.autoLoad()
-                    + " | " + label(sender, RiftMessages.LABEL_PROTECTED) + '=' + snapshot.protectedWorld()
-                    : state;
-            entries.add(menuEntry(sender, snapshot.name(), detail, RiftMessages.EXPLAIN_WORLD_ENTRY));
+        WorldTagSelector selector = new WorldTagSelector(plugin.profiles().all());
+        List<WorldSnapshot> snapshots = selector.select(inventory.snapshots(), filter);
+        List<TrashEntry> trashEntries = filter.equals("all") ? plugin.trash().all() : List.of();
+        List<String> entries = new ArrayList<>(snapshots.size() + trashEntries.size() + 2);
+        if (group) {
+            for (Map.Entry<String, List<WorldSnapshot>> section : selector.group(snapshots, filter).entrySet()) {
+                entries.add(tagSection(sender, section.getKey(), section.getValue().size()));
+                for (WorldSnapshot snapshot : section.getValue()) {
+                    entries.add(worldEntry(sender, snapshot, selector));
+                }
+            }
+        } else if (!snapshots.isEmpty()) {
+            entries.add(menuSection(sender, RiftMessages.LABEL_WORLDS, snapshots.size()));
+            for (WorldSnapshot snapshot : snapshots) {
+                entries.add(worldEntry(sender, snapshot, selector));
+            }
         }
         if (!trashEntries.isEmpty()) {
             entries.add(menuSection(sender, RiftMessages.LABEL_QUARANTINE, trashEntries.size()));
@@ -187,13 +208,51 @@ public final class RiftCommands {
         }
         deliverMenu(
                 sender,
-                listMenu(
+                filteredMenu(
                         language.textWithoutPrefix(sender, RiftMessages.LABEL_WORLDS, MessageArgs.empty()).plain(),
+                        "/rift list", filter, group,
                         entries,
                         language.textWithoutPrefix(sender, RiftMessages.EMPTY_LIST, MessageArgs.empty()).miniMessage(),
                         page
                 )
         );
+    }
+
+    @Director(name = "check-all", description = "Check every matching world without changing it", descriptionKey = "rift.command.check_all")
+    public void checkAll(
+            @Param(name = "page", description = "Result page number", descriptionKey = "rift.parameter.page", defaultValue = "1") int page,
+            @Param(name = "tag", description = "Filter by an operator tag, or all", descriptionKey = "rift.parameter.tag_filter", defaultValue = "all", customHandler = RiftCommandHandlers.WorldTag.class) String tag,
+            @Param(name = "group", description = "Group matching worlds by operator tag", descriptionKey = "rift.parameter.tag_group", defaultValue = "false") boolean group,
+            @Param(name = "sender", contextual = true) CommandSender sender
+    ) {
+        if (!allowed(sender, "rift.check")) {
+            return;
+        }
+        String filter = validTag(sender, tag);
+        if (filter == null) {
+            return;
+        }
+        WorldTagSelector selector = new WorldTagSelector(plugin.profiles().all());
+        List<WorldSnapshot> selected = selector.select(inventory.snapshots(), filter);
+        lifecycle.checkAll(sender, selected, results -> {
+            List<String> entries = new ArrayList<>();
+            Map<String, List<WorldSnapshot>> groups = group
+                    ? selector.group(selected, filter) : Map.of("", selected);
+            for (Map.Entry<String, List<WorldSnapshot>> section : groups.entrySet()) {
+                if (group) {
+                    entries.add(tagSection(sender, section.getKey(), section.getValue().size()));
+                }
+                for (WorldSnapshot snapshot : section.getValue()) {
+                    WorldCheck result = results.get(snapshot.name());
+                    String state = label(sender, result != null && result.ready()
+                            ? RiftMessages.LABEL_READY : RiftMessages.LABEL_REVIEW_REQUIRED);
+                    entries.add(menuEntry(sender, snapshot.name(), state, RiftMessages.EXPLAIN_CHECK_RESULT));
+                }
+            }
+            deliverMenu(sender, filteredMenu(label(sender, RiftMessages.LABEL_CHECK_RESULT),
+                    "/rift check-all", filter, group, entries,
+                    language.textWithoutPrefix(sender, RiftMessages.EMPTY_LIST, MessageArgs.empty()).miniMessage(), page));
+        });
     }
 
     @Director(name = "info", description = "Show detailed state for one world", descriptionKey = "rift.command.info")
@@ -223,6 +282,18 @@ public final class RiftCommands {
             detail(sender, RiftMessages.LABEL_PROTECTED, snapshot.protectedWorld());
         }
         detail(sender, RiftMessages.LABEL_OPERATION_ACTIVE, lifecycle.isBusy(snapshot.name()));
+    }
+
+    @Director(name = "check", description = "Run a read-only world preflight check", descriptionKey = "rift.command.check")
+    public void check(
+            @Param(name = "name", description = "World name", descriptionKey = "rift.parameter.name", customHandler = RiftCommandHandlers.KnownWorld.class) String name,
+            @Param(name = "page", description = "Result page number", descriptionKey = "rift.parameter.page", defaultValue = "1") int page,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        if (!allowed(sender, "rift.check")) {
+            return;
+        }
+        lifecycle.check(sender, name, result -> deliverCheck(sender, result, page));
     }
 
     @Director(name = "generators", description = "Show configured generator identifiers", descriptionKey = "rift.command.generators")
@@ -295,9 +366,9 @@ public final class RiftCommands {
         List<String> entries = new ArrayList<>();
         entries.add(menuDetail(sender, RiftMessages.LABEL_SERVER, Bukkit.getName() + " " + Bukkit.getVersion()));
         entries.add(menuDetail(sender, RiftMessages.LABEL_JAVA_RUNTIME, System.getProperty("java.version")));
-        entries.add(menuDetail(sender, RiftMessages.LABEL_PLUGIN_BYTECODE, "17"));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_PLUGIN_BYTECODE, "25"));
         entries.add(menuDetail(sender, RiftMessages.LABEL_PLATFORM,
-                capabilities.isFolia() ? "Folia" : "Bukkit/Paper/Spigot"));
+                capabilities.isFolia() ? "Folia" : "Paper"));
         entries.add(menuDetail(sender, RiftMessages.LABEL_DYNAMIC_LIFECYCLE,
                 capabilities.supportsDynamicWorldLifecycle()));
         entries.add(menuDetail(sender, RiftMessages.LABEL_WORLD_CONTAINER, plugin.paths().worldContainer()));
@@ -355,6 +426,69 @@ public final class RiftCommands {
         return false;
     }
 
+    private String validTag(CommandSender sender, String tag) {
+        try {
+            return WorldTagSelector.normalize(tag);
+        } catch (IllegalArgumentException exception) {
+            language.send(sender, RiftMessages.OPERATION_FAILED, MessageArgs.builder()
+                    .untrusted("operation", "tag")
+                    .untrusted("world", tag)
+                    .untrusted("reason", exception.getMessage()).build());
+            return null;
+        }
+    }
+
+    private String tagSection(CommandSender sender, String tag, int count) {
+        return language.textWithoutPrefix(sender, RiftMessages.SECTION, MessageArgs.builder()
+                .untrusted("title", label(sender, RiftMessages.LABEL_POLICY_TAGS) + ": "
+                        + (tag.isEmpty() ? label(sender, RiftMessages.LABEL_NONE) : tag))
+                .untrusted("count", count).build()).miniMessage();
+    }
+
+    private String worldEntry(CommandSender sender, WorldSnapshot snapshot, WorldTagSelector selector) {
+        String state = label(sender, snapshot.loaded() ? RiftMessages.LABEL_LOADED
+                : snapshot.presentOnDisk() ? RiftMessages.LABEL_ON_DISK : RiftMessages.LABEL_MISSING);
+        String detail = snapshot.managed()
+                ? state + " | " + label(sender, RiftMessages.LABEL_MANAGED)
+                + " | " + label(sender, RiftMessages.LABEL_AUTOLOAD) + '=' + snapshot.autoLoad()
+                + " | " + label(sender, RiftMessages.LABEL_PROTECTED) + '=' + snapshot.protectedWorld()
+                : state;
+        List<String> tags = selector.tags(snapshot.name());
+        if (!tags.isEmpty()) {
+            detail += " | " + label(sender, RiftMessages.LABEL_POLICY_TAGS) + '=' + String.join(", ", tags);
+        }
+        return menuEntry(sender, snapshot.name(), detail, RiftMessages.EXPLAIN_WORLD_ENTRY);
+    }
+
+    static DirectorMiniMenu.ContentMenu filteredMenu(String title, String command, String tag, boolean group,
+                                                    List<String> entries, String emptyLine, int page) {
+        return new DirectorMiniMenu.ContentMenu(title,
+                command + " tag=" + WorldTagSelector.normalize(tag) + " group=" + group,
+                "/rift", entries, emptyLine, page, LIST_PAGE_SIZE);
+    }
+
+    private void deliverCheck(CommandSender sender, WorldCheck result, int page) {
+        List<String> entries = new ArrayList<>();
+        entries.add(menuDetail(sender, RiftMessages.LABEL_WORLD_KEY, result.key()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_STORAGE_PATH, result.storagePath()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_STORAGE_LAYOUT, result.storageLayout()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_LOADED, result.loaded()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_MANAGED, result.managed()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_ON_DISK, result.presentOnDisk()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_ENVIRONMENT, result.environment()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_GENERATOR, result.generator()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_GENERATOR_STATUS,
+                label(sender, result.generatorAvailable() ? RiftMessages.LABEL_AVAILABLE : RiftMessages.LABEL_UNAVAILABLE)));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_PLAYERS, result.players()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_PRIMARY_WORLD, result.primaryWorld()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_PROTECTED, result.protectedWorld()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_OPERATION_ACTIVE, result.operationActive()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_WRITABLE, result.writable()));
+        entries.add(menuDetail(sender, RiftMessages.LABEL_CHECK_RESULT,
+                label(sender, result.ready() ? RiftMessages.LABEL_READY : RiftMessages.LABEL_REVIEW_REQUIRED)));
+        deliverMenu(sender, checkMenu(result.name(), entries, page));
+    }
+
     private void detail(CommandSender sender, TextKey label, Object value) {
         ComponentText message = language.text(sender, RiftMessages.DETAIL, MessageArgs.builder()
                 .trusted("label", language.text(sender, label).legacy())
@@ -390,11 +524,6 @@ public final class RiftCommands {
         DirectorMiniMenu.deliverContent(sender, menu, RiftCommandService.theme(), language.directorResolver());
     }
 
-    static DirectorMiniMenu.ContentMenu listMenu(String title, List<String> entries, String emptyLine, int page) {
-        return new DirectorMiniMenu.ContentMenu(
-                title, "/rift list", "/rift", entries, emptyLine, page, LIST_PAGE_SIZE);
-    }
-
     static DirectorMiniMenu.ContentMenu statusMenu(String title, List<String> entries) {
         return new DirectorMiniMenu.ContentMenu(
                 title, "/rift status", "/rift", entries, "", 1, DirectorMiniMenu.MAX_ENTRIES_PER_PAGE);
@@ -403,6 +532,11 @@ public final class RiftCommands {
     static DirectorMiniMenu.ContentMenu generatorMenu(String title, List<String> entries, int page) {
         return new DirectorMiniMenu.ContentMenu(
                 title, "/rift generators", "/rift", entries, "", page, LIST_PAGE_SIZE);
+    }
+
+    static DirectorMiniMenu.ContentMenu checkMenu(String title, List<String> entries, int page) {
+        return new DirectorMiniMenu.ContentMenu(
+                title, "/rift check " + title, "/rift", entries, "", page, LIST_PAGE_SIZE);
     }
 
     private static TextKey explanation(TextKey label) {
@@ -425,6 +559,13 @@ public final class RiftCommands {
         if (label.equals(RiftMessages.LABEL_LOCALE)) return RiftMessages.EXPLAIN_LOCALE;
         if (label.equals(RiftMessages.LABEL_WORLD_COUNTS)) return RiftMessages.EXPLAIN_WORLD_COUNTS;
         if (label.equals(RiftMessages.LABEL_QUARANTINE_ENTRIES)) return RiftMessages.EXPLAIN_QUARANTINE;
+        if (label.equals(RiftMessages.LABEL_WORLD_KEY)) return RiftMessages.EXPLAIN_WORLD_KEY;
+        if (label.equals(RiftMessages.LABEL_STORAGE_PATH)) return RiftMessages.EXPLAIN_STORAGE_PATH;
+        if (label.equals(RiftMessages.LABEL_STORAGE_LAYOUT)) return RiftMessages.EXPLAIN_STORAGE_LAYOUT;
+        if (label.equals(RiftMessages.LABEL_PLAYERS)) return RiftMessages.EXPLAIN_PLAYERS;
+        if (label.equals(RiftMessages.LABEL_GENERATOR_STATUS)) return RiftMessages.EXPLAIN_GENERATOR_STATUS;
+        if (label.equals(RiftMessages.LABEL_PRIMARY_WORLD)) return RiftMessages.EXPLAIN_PRIMARY_WORLD;
+        if (label.equals(RiftMessages.LABEL_CHECK_RESULT)) return RiftMessages.EXPLAIN_CHECK_RESULT;
         return RiftMessages.EXPLAIN_WORLD_ENTRY;
     }
 

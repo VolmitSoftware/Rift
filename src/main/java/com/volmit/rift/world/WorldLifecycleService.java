@@ -35,9 +35,11 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalLong;
@@ -61,6 +63,7 @@ public final class WorldLifecycleService {
     private final PlatformCapabilities capabilities;
     private final WorldInventory inventory;
     private final RiftFeedbackService feedback;
+    private final WorldPolicyService policies;
     private final RiftWorldCreatorFactory worldCreators;
     private final WorldOperationLocks locks = new WorldOperationLocks();
     private final DeleteConfirmationService confirmations = new DeleteConfirmationService();
@@ -77,7 +80,8 @@ public final class WorldLifecycleService {
             TrashStore trash,
             PlatformCapabilities capabilities,
             WorldInventory inventory,
-            RiftFeedbackService feedback
+            RiftFeedbackService feedback,
+            WorldPolicyService policies
     ) {
         this.plugin = Objects.requireNonNull(plugin, "plugin");
         this.config = Objects.requireNonNull(config, "config");
@@ -90,7 +94,8 @@ public final class WorldLifecycleService {
         this.capabilities = Objects.requireNonNull(capabilities, "capabilities");
         this.inventory = Objects.requireNonNull(inventory, "inventory");
         this.feedback = Objects.requireNonNull(feedback, "feedback");
-        this.worldCreators = new RiftWorldCreatorFactory(capabilities, directories);
+        this.policies = Objects.requireNonNull(policies, "policies");
+        this.worldCreators = new RiftWorldCreatorFactory(directories);
         this.teleports = new TeleportService(plugin);
     }
 
@@ -158,6 +163,7 @@ public final class WorldLifecycleService {
             }
             try {
                 profiles.save(profileFromWorld(validName, world, generator, type, true));
+                policies.apply(world);
             } catch (IOException exception) {
                 Bukkit.unloadWorld(world, true);
                 throw exception;
@@ -189,6 +195,7 @@ public final class WorldLifecycleService {
             }
             try {
                 profiles.save(profileFromWorld(validName, world, generator, WorldType.NORMAL, autoLoad));
+                policies.apply(world);
             } catch (IOException exception) {
                 if (loadedHere) {
                     Bukkit.unloadWorld(world, true);
@@ -269,6 +276,53 @@ public final class WorldLifecycleService {
         queueDynamic(sender, entry.getWorldName(), "restore", () -> restore(sender, entry));
     }
 
+    public void unmanage(CommandSender sender, String name) {
+        WorldProfile profile = profiles.find(name).orElse(null);
+        if (profile == null) {
+            fail(sender, "unmanage", Objects.requireNonNullElse(name, ""), new IOException("world is not managed"));
+            return;
+        }
+        if (profile.isProtectedWorld()) {
+            fail(sender, "unmanage", profile.getName(), new IOException("world profile is protected from unmanage"));
+            return;
+        }
+        boolean loaded = RiftWorldIdentity.findLoaded(profile.getName()) != null;
+        queueIo(sender, profile.getName(), "unmanage", () -> {
+            WorldProfile active = profiles.find(profile.getName())
+                    .orElseThrow(() -> new IOException("world is no longer managed"));
+            if (active.isProtectedWorld()) {
+                throw new IOException("world profile is protected from unmanage");
+            }
+            if (profiles.retire(active.getName()).isEmpty()) {
+                throw new IOException("managed profile file does not exist");
+            }
+            policies.forget(active.getName());
+            language.send(sender, loaded ? RiftMessages.UNMANAGED_LOADED : RiftMessages.UNMANAGED_UNLOADED,
+                    worldArg(active.getName()));
+            feedback.world(sender, "Unmanaged", active.getName());
+        });
+    }
+
+    public void check(CommandSender sender, String name, Consumer<WorldCheck> completion) {
+        try {
+            completion.accept(inspect(name));
+        } catch (Throwable exception) {
+            fail(sender, "check", Objects.requireNonNullElse(name, ""), exception);
+        }
+    }
+
+    public void checkAll(CommandSender sender, List<WorldSnapshot> worlds, Consumer<Map<String, WorldCheck>> completion) {
+        Map<String, WorldCheck> results = new LinkedHashMap<>();
+        for (WorldSnapshot snapshot : worlds) {
+            try {
+                results.put(snapshot.name(), inspect(snapshot));
+            } catch (IOException | RuntimeException exception) {
+                fail(sender, "check", snapshot.name(), exception);
+            }
+        }
+        completion.accept(Collections.unmodifiableMap(results));
+    }
+
     public void setAutoLoad(CommandSender sender, String name, boolean enabled) {
         updateProfile(sender, name, "auto-load", profile -> profile.setAutoLoad(enabled), String.valueOf(enabled));
     }
@@ -321,13 +375,70 @@ public final class WorldLifecycleService {
         confirmations.clear();
     }
 
+    private WorldCheck inspect(String name) throws IOException {
+        String validName = names.requireValid(name);
+        WorldSnapshot snapshot = inventory.find(validName)
+                .orElseThrow(() -> new IOException("world is not loaded, managed, or present on disk"));
+        return inspect(snapshot);
+    }
+
+    private WorldCheck inspect(WorldSnapshot snapshot) throws IOException {
+        World world = RiftWorldIdentity.findLoaded(snapshot.name());
+        WorldProfile profile = profiles.find(snapshot.name()).orElse(null);
+        Path storagePath = resolveStoragePath(snapshot, world, profile);
+        String worldKey = world == null
+                ? directories.worldKey(storagePath, snapshot.name()).toString()
+                : world.getKey().toString();
+        String generator = snapshot.generator().isBlank() ? "vanilla" : snapshot.generator();
+        boolean generatorAvailable = generatorAvailable(generator);
+        boolean writable = Files.isDirectory(storagePath, LinkOption.NOFOLLOW_LINKS)
+                && Files.isWritable(storagePath);
+        boolean primaryWorld = isPrimaryFamily(snapshot.name());
+        boolean operationActive = isBusy(snapshot.name());
+        boolean ready = snapshot.presentOnDisk()
+                && generatorAvailable
+                && writable
+                && !operationActive;
+        return new WorldCheck(
+                snapshot.name(),
+                worldKey,
+                storagePath,
+                directories.storageLayout(storagePath),
+                snapshot.loaded(),
+                snapshot.managed(),
+                snapshot.presentOnDisk(),
+                snapshot.autoLoad(),
+                snapshot.protectedWorld(),
+                primaryWorld,
+                operationActive,
+                world == null ? 0 : world.getPlayers().size(),
+                snapshot.environment(),
+                generator,
+                generatorAvailable,
+                writable,
+                ready
+        );
+    }
+
+    private Path resolveStoragePath(WorldSnapshot snapshot, World world, WorldProfile profile) throws IOException {
+        if (world != null) {
+            return world.getWorldPath().toAbsolutePath().normalize();
+        }
+        if (profile != null) {
+            Optional<Path> stored = directories.find(profile);
+            return stored.isPresent() ? stored.get() : directories.restoreTarget(profile);
+        }
+        return inventory.discoveredDirectory(snapshot.name())
+                .orElseThrow(() -> new IOException("world storage path could not be resolved"));
+    }
+
     private void quarantine(CommandSender sender, String name) throws Exception {
         WorldProfile profile = profiles.find(name).orElseThrow(() -> new IOException("only managed worlds can be quarantined"));
         requireMutable(profile, "delete");
         World loaded = RiftWorldIdentity.findLoaded(profile.getName());
         Path source = loaded == null
                 ? directories.require(profile)
-                : loaded.getWorldFolder().toPath().toAbsolutePath().normalize();
+                : loaded.getWorldPath().toAbsolutePath().normalize();
         WorldProfile storedProfile = copyProfile(profile);
         storedProfile.setDirectory(directories.relative(source, profile.getName()));
         if (loaded != null) {
@@ -346,6 +457,7 @@ public final class WorldLifecycleService {
             trash.save(entry);
             manifestSaved = true;
             profiles.delete(profile.getName());
+            policies.forget(profile.getName());
         } catch (Throwable failure) {
             boolean rolledBack = rollbackMove(destination, source, "quarantine " + profile.getName());
             if (rolledBack) {
@@ -421,10 +533,7 @@ public final class WorldLifecycleService {
             String value
     ) {
         queueIo(sender, name, setting, () -> {
-            WorldProfile existing = profiles.find(name).orElseThrow(() -> new IOException("world is not managed"));
-            WorldProfile candidate = ConfigJson.fromJson(ConfigJson.toJson(existing, false), WorldProfile.class);
-            mutation.accept(candidate);
-            profiles.save(candidate);
+            WorldProfile candidate = profiles.update(name, mutation);
             language.send(sender, RiftMessages.PROFILE_UPDATED, MessageArgs.builder()
                     .untrusted("setting", setting)
                     .untrusted("world", candidate.getName())
@@ -444,6 +553,7 @@ public final class WorldLifecycleService {
         World world = creator.createWorld();
         if (world != null) {
             persistDirectory(profile, world);
+            policies.apply(world);
         }
         return world;
     }
@@ -456,18 +566,16 @@ public final class WorldLifecycleService {
             boolean autoLoad
     ) throws IOException {
         WorldProfile profile = WorldProfile.fromWorld(logicalName, world, generator, type, autoLoad);
-        profile.setDirectory(directories.relative(world.getWorldFolder().toPath(), logicalName));
+        profile.setDirectory(directories.relative(world.getWorldPath(), logicalName));
         return profile;
     }
 
     private void persistDirectory(WorldProfile profile, World world) throws IOException {
-        String directory = directories.relative(world.getWorldFolder().toPath(), profile.getName());
+        String directory = directories.relative(world.getWorldPath(), profile.getName());
         if (directory.equals(profile.getDirectory())) {
             return;
         }
-        WorldProfile candidate = copyProfile(profile);
-        candidate.setDirectory(directory);
-        profiles.save(candidate);
+        profiles.update(profile.getName(), candidate -> candidate.setDirectory(directory));
     }
 
     private static WorldProfile copyProfile(WorldProfile profile) {
@@ -565,6 +673,16 @@ public final class WorldLifecycleService {
         if (generatorPlugin == null || !generatorPlugin.isEnabled()) {
             throw new IOException("generator plugin is not enabled: " + owner);
         }
+    }
+
+    private boolean generatorAvailable(String generator) {
+        if (isVanilla(generator) || isVoid(generator)) {
+            return true;
+        }
+        String value = generator.trim();
+        String owner = value.contains(":") ? value.substring(0, value.indexOf(':')) : value;
+        Plugin generatorPlugin = Bukkit.getPluginManager().getPlugin(owner);
+        return generatorPlugin != null && generatorPlugin.isEnabled();
     }
 
     private static boolean isVanilla(String generator) {

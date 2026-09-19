@@ -58,7 +58,7 @@ public final class RiftSplashScreen {
                 "Rift, Extremely Simple & Reliable World Manager",
                 "Version: " + version,
                 "By: VolmitSoftware (Arcane Arts) | VolmitSoftware.com",
-                "Server: " + server + " | MC Support: 1.20.1 - 26.x",
+                "Server: " + server + " | MC Support: 26.x+",
                 "Java: " + javaVersion + " | Date: " + date
         };
     }

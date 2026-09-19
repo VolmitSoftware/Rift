@@ -36,6 +36,21 @@ public final class RiftMessages {
     public static final TextKey COMMAND_DEBUG_DUMP = key("rift.command.debug_dump", "Create a comprehensive {prefix} diagnostic report");
     public static final TextKey COMMAND_AUTOLOAD = key("rift.command.autoload", "Change whether a managed world loads during startup");
     public static final TextKey COMMAND_PROTECT = key("rift.command.protect", "Protect or unprotect a managed world");
+    public static final TextKey COMMAND_CHECK = key("rift.command.check", "Run a read-only world preflight check");
+    public static final TextKey COMMAND_CHECK_ALL = key("rift.command.check_all", "Check every matching world without changing it");
+    public static final TextKey COMMAND_UNMANAGE = key("rift.command.unmanage", "Stop managing a world without touching its files");
+    public static final TextKey COMMAND_POLICY = key("rift.command.policy", "Inspect and edit policies for each managed world");
+    public static final TextKey COMMAND_POLICY_SHOW = key("rift.command.policy_show", "Show the active policies for a managed world");
+    public static final TextKey COMMAND_POLICY_DIFFICULTY = key("rift.command.policy_difficulty", "Set the world difficulty or inherit the server value");
+    public static final TextKey COMMAND_POLICY_PVP = key("rift.command.policy_pvp", "Allow or deny PvP, or inherit the server value");
+    public static final TextKey COMMAND_POLICY_GAMERULE = key("rift.command.policy_gamerule", "Set a game rule or stop managing it");
+    public static final TextKey COMMAND_POLICY_SPAWN = key("rift.command.policy_spawn", "Set this world's spawn to your current safe location");
+    public static final TextKey COMMAND_POLICY_SPAWN_CLEAR = key("rift.command.policy_spawn_clear", "Stop managing this world's spawn");
+    public static final TextKey COMMAND_POLICY_BORDER = key("rift.command.policy_border", "Configure this world's managed border");
+    public static final TextKey COMMAND_POLICY_BORDER_CLEAR = key("rift.command.policy_border_clear", "Reset this world's border and stop managing it");
+    public static final TextKey COMMAND_POLICY_ACCESS = key("rift.command.policy_access", "Require a permission to enter this world, or clear the requirement");
+    public static final TextKey COMMAND_POLICY_RESPAWN = key("rift.command.policy_respawn", "Route deaths in this world to another managed world or the server default");
+    public static final TextKey COMMAND_POLICY_TAG = key("rift.command.policy_tag", "Add or remove an operator tag");
 
     public static final TextKey PARAM_NAME = key("rift.parameter.name", "World name");
     public static final TextKey PARAM_ENVIRONMENT = key("rift.parameter.environment", "NORMAL, NETHER, THE_END, or CUSTOM");
@@ -49,6 +64,25 @@ public final class RiftMessages {
     public static final TextKey PARAM_PAGE = key("rift.parameter.page", "Result page number");
     public static final TextKey PARAM_UPLOAD = key("rift.parameter.upload", "Upload the report when public uploads are enabled");
     public static final TextKey PARAM_SENDER = key("rift.parameter.sender", "Command sender");
+    public static final TextKey PARAM_MANAGED_WORLD = key("rift.parameter.managed_world", "Managed world name");
+    public static final TextKey PARAM_POLICY_DIFFICULTY = key("rift.parameter.policy_difficulty", "PEACEFUL, EASY, NORMAL, HARD, or INHERIT");
+    public static final TextKey PARAM_POLICY_PVP = key("rift.parameter.policy_pvp", "ALLOW, DENY, or INHERIT");
+    public static final TextKey PARAM_GAME_RULE = key("rift.parameter.game_rule", "Minecraft game rule name");
+    public static final TextKey PARAM_GAME_RULE_VALUE = key("rift.parameter.game_rule_value", "Game rule value or INHERIT");
+    public static final TextKey PARAM_BORDER_SIZE = key("rift.parameter.border_size", "Border diameter in blocks");
+    public static final TextKey PARAM_BORDER_CENTER_X = key("rift.parameter.border_center_x", "Border center X coordinate");
+    public static final TextKey PARAM_BORDER_CENTER_Z = key("rift.parameter.border_center_z", "Border center Z coordinate");
+    public static final TextKey PARAM_BORDER_WARNING_DISTANCE = key("rift.parameter.border_warning_distance", "Warning distance in blocks");
+    public static final TextKey PARAM_BORDER_WARNING_TIME = key("rift.parameter.border_warning_time", "Warning time in seconds");
+    public static final TextKey PARAM_BORDER_DAMAGE = key("rift.parameter.border_damage", "Damage per block outside the border");
+    public static final TextKey PARAM_BORDER_BUFFER = key("rift.parameter.border_buffer", "Safe distance outside the border");
+    public static final TextKey PARAM_ACCESS_PERMISSION = key("rift.parameter.access_permission", "Permission node, or clear");
+    public static final TextKey PARAM_ACCESS_DENIED_MESSAGE = key("rift.parameter.access_denied_message", "Optional message shown when access is denied");
+    public static final TextKey PARAM_RESPAWN_DESTINATION = key("rift.parameter.respawn_destination", "Managed world name, or default");
+    public static final TextKey PARAM_POLICY_TAG = key("rift.parameter.policy_tag", "Operator tag name");
+    public static final TextKey PARAM_TAG_ENABLED = key("rift.parameter.tag_enabled", "true adds the tag; false removes it");
+    public static final TextKey PARAM_TAG_FILTER = key("rift.parameter.tag_filter", "Filter by an operator tag, or all");
+    public static final TextKey PARAM_TAG_GROUP = key("rift.parameter.tag_group", "Group matching worlds by operator tag");
 
     public static final TextKey PERMISSION_DENIED = prefixed("rift.message.permission_denied", "&cYou need &f{permission}&7.");
     public static final TextKey UNKNOWN_COMMAND = prefixed("rift.message.unknown_command", "&cUnknown command. Use &f/rift help&7.");
@@ -64,6 +98,8 @@ public final class RiftMessages {
     public static final TextKey QUARANTINED = prefixed("rift.message.quarantined", "Moved &a{world}&7 into quarantine as &a{id}&7.");
     public static final TextKey RESTORED = prefixed("rift.message.restored", "Restored &a{world}&7 from &a{id}&7.");
     public static final TextKey PROFILE_UPDATED = prefixed("rift.message.profile_updated", "Updated &a{setting}&7 for &a{world}&7 to &a{value}&7.");
+    public static final TextKey UNMANAGED_LOADED = key("rift.message.unmanaged_loaded", CHAT_PREFIX + "Stopped managing &a{world}&7 without changing its files. The world remains loaded until another plugin or the server unloads it.");
+    public static final TextKey UNMANAGED_UNLOADED = key("rift.message.unmanaged_unloaded", CHAT_PREFIX + "Stopped managing &a{world}&7 without changing its files. {prefix} will no longer load it during startup.");
     public static final TextKey FOLIA_LIMIT = prefixed("rift.message.folia_limit", "{operation} is unavailable on Folia because its world load/unload API is not implemented.");
     public static final TextKey CONFIG_SAVED = prefixed("rift.message.config_saved", "&aConfiguration saved.");
     public static final TextKey CONFIG_OPENED = prefixed("rift.message.config_opened", "Opened the complete in-game configuration editor.&r");
@@ -78,6 +114,7 @@ public final class RiftMessages {
     public static final TextKey STATUS_TITLE = prefixed("rift.message.status_title", "{prefix} {version} Status");
     public static final TextKey GENERATOR_FORMAT = prefixed("rift.message.generator_format", "Custom format: &fPluginName[:generator-id]");
     public static final TextKey FOLIA_STATUS_NOTE = prefixed("rift.message.folia_status_note", "Folia supports {prefix}'s read, editor, profile, and teleport features; dynamic world lifecycle is gated by the platform API.");
+    public static final TextKey POLICY_ACCESS_DENIED = prefixed("rift.message.policy_access_denied", "&cYou cannot enter &f{world}&7. You need &f{permission}&7.");
     public static final TextKey LABEL_WORLDS = key("rift.label.worlds", "Worlds");
     public static final TextKey LABEL_QUARANTINE = key("rift.label.quarantine", "Quarantine");
     public static final TextKey LABEL_LOADED = key("rift.label.loaded", "Loaded");
@@ -104,6 +141,25 @@ public final class RiftMessages {
     public static final TextKey LABEL_LOCALE = key("rift.label.locale", "Locale");
     public static final TextKey LABEL_WORLD_COUNTS = key("rift.label.world_counts", "Worlds");
     public static final TextKey LABEL_QUARANTINE_ENTRIES = key("rift.label.quarantine_entries", "Quarantine entries");
+    public static final TextKey LABEL_WORLD_KEY = key("rift.label.world_key", "World key");
+    public static final TextKey LABEL_STORAGE_PATH = key("rift.label.storage_path", "Storage path");
+    public static final TextKey LABEL_STORAGE_LAYOUT = key("rift.label.storage_layout", "Storage layout");
+    public static final TextKey LABEL_PLAYERS = key("rift.label.players", "Players");
+    public static final TextKey LABEL_GENERATOR_STATUS = key("rift.label.generator_status", "Generator status");
+    public static final TextKey LABEL_PRIMARY_WORLD = key("rift.label.primary_world", "Primary world");
+    public static final TextKey LABEL_CHECK_RESULT = key("rift.label.check_result", "Check result");
+    public static final TextKey LABEL_READY = key("rift.label.ready", "ready");
+    public static final TextKey LABEL_REVIEW_REQUIRED = key("rift.label.review_required", "review required");
+    public static final TextKey LABEL_POLICY_DIFFICULTY = key("rift.label.policy_difficulty", "Difficulty");
+    public static final TextKey LABEL_POLICY_PVP = key("rift.label.policy_pvp", "PvP");
+    public static final TextKey LABEL_POLICY_GAME_RULES = key("rift.label.policy_game_rules", "Game rules");
+    public static final TextKey LABEL_POLICY_CUSTOM_SPAWN = key("rift.label.policy_custom_spawn", "Custom spawn");
+    public static final TextKey LABEL_POLICY_MANAGED_BORDER = key("rift.label.policy_managed_border", "Managed border");
+    public static final TextKey LABEL_POLICY_ACCESS_PERMISSION = key("rift.label.policy_access_permission", "Access permission");
+    public static final TextKey LABEL_POLICY_RESPAWN_WORLD = key("rift.label.policy_respawn_world", "Respawn world");
+    public static final TextKey LABEL_POLICY_TAGS = key("rift.label.policy_tags", "Tags");
+    public static final TextKey LABEL_NONE = key("rift.label.none", "none");
+    public static final TextKey LABEL_SERVER_DEFAULT = key("rift.label.server_default", "server default");
 
     public static final TextKey EXPLAIN_LOADED = key("rift.explain.loaded", "Whether Bukkit currently has this world active in memory.");
     public static final TextKey EXPLAIN_MANAGED = key("rift.explain.managed", "Whether {prefix} owns a profile for this world and can restore its generator and startup settings.");
@@ -115,7 +171,7 @@ public final class RiftMessages {
     public static final TextKey EXPLAIN_PROTECTED = key("rift.explain.protected", "Protected managed worlds cannot be moved into {prefix} quarantine.");
     public static final TextKey EXPLAIN_OPERATION_ACTIVE = key("rift.explain.operation_active", "Whether a lifecycle operation currently holds {prefix}'s per-world lock.");
     public static final TextKey EXPLAIN_SERVER = key("rift.explain.server", "The active server implementation and version reported by Bukkit.");
-    public static final TextKey EXPLAIN_JAVA_RUNTIME = key("rift.explain.java_runtime", "The Java runtime currently hosting the server. {prefix}'s bytecode remains compatible with Java 17.");
+    public static final TextKey EXPLAIN_JAVA_RUNTIME = key("rift.explain.java_runtime", "The Java runtime currently hosting the server. {prefix} requires Java 25.");
     public static final TextKey EXPLAIN_PLUGIN_BYTECODE = key("rift.explain.plugin_bytecode", "The oldest Java runtime capable of loading {prefix}'s compiled classes.");
     public static final TextKey EXPLAIN_PLATFORM = key("rift.explain.platform", "The scheduler and server API family {prefix} detected at runtime.");
     public static final TextKey EXPLAIN_DYNAMIC_LIFECYCLE = key("rift.explain.dynamic_lifecycle", "Whether this platform safely exposes runtime world create, load, unload, quarantine, and restore operations.");
@@ -125,6 +181,13 @@ public final class RiftMessages {
     public static final TextKey EXPLAIN_WORLD_COUNTS = key("rift.explain.world_counts", "Loaded counts active Bukkit worlds; managed counts {prefix} profiles; missing counts managed profiles that are neither loaded nor present on disk.");
     public static final TextKey EXPLAIN_QUARANTINE = key("rift.explain.quarantine", "Worlds moved aside by {prefix} delete and available to restore by quarantine id.");
     public static final TextKey EXPLAIN_WORLD_ENTRY = key("rift.explain.world_entry", "Loaded means active now; managed means {prefix} has a profile; on disk means a valid unloaded world folder exists.");
+    public static final TextKey EXPLAIN_WORLD_KEY = key("rift.explain.world_key", "The canonical Paper identifier for this world.");
+    public static final TextKey EXPLAIN_STORAGE_PATH = key("rift.explain.storage_path", "The exact resolved directory storing this world's files.");
+    public static final TextKey EXPLAIN_STORAGE_LAYOUT = key("rift.explain.storage_layout", "The namespace that owns this world's dimension directory.");
+    public static final TextKey EXPLAIN_PLAYERS = key("rift.explain.players", "The number of players currently inside this loaded world.");
+    public static final TextKey EXPLAIN_GENERATOR_STATUS = key("rift.explain.generator_status", "Whether the configured generator is built in or its provider is available.");
+    public static final TextKey EXPLAIN_PRIMARY_WORLD = key("rift.explain.primary_world", "Whether this is a primary server world that cannot be unmanaged or unloaded.");
+    public static final TextKey EXPLAIN_CHECK_RESULT = key("rift.explain.check_result", "A summary of detected lifecycle blockers and warnings.");
 
     public static final TextKey FEEDBACK_TITLE = key("rift.feedback.title", "{prefix}");
     public static final TextKey FEEDBACK_WORLD_SUBTITLE = key("rift.feedback.world_subtitle", "&a{operation}&8: &f{world}");
@@ -187,25 +250,39 @@ public final class RiftMessages {
             PREFIX, VERSION, COMMAND_ROOT, COMMAND_CREATE, COMMAND_IMPORT, COMMAND_LOAD, COMMAND_UNLOAD, COMMAND_DELETE,
             COMMAND_RESTORE, COMMAND_TELEPORT, COMMAND_SEND, COMMAND_LIST, COMMAND_INFO, COMMAND_GENERATORS,
             COMMAND_CONFIG, COMMAND_LANGUAGE, COMMAND_STATUS, COMMAND_DEBUG, COMMAND_DEBUG_DUMP, COMMAND_VERSION,
-            COMMAND_AUTOLOAD, COMMAND_PROTECT,
+            COMMAND_AUTOLOAD, COMMAND_PROTECT, COMMAND_CHECK, COMMAND_CHECK_ALL, COMMAND_UNMANAGE,
+            COMMAND_POLICY, COMMAND_POLICY_SHOW, COMMAND_POLICY_DIFFICULTY, COMMAND_POLICY_PVP,
+            COMMAND_POLICY_GAMERULE, COMMAND_POLICY_SPAWN, COMMAND_POLICY_SPAWN_CLEAR, COMMAND_POLICY_BORDER,
+            COMMAND_POLICY_BORDER_CLEAR, COMMAND_POLICY_ACCESS, COMMAND_POLICY_RESPAWN, COMMAND_POLICY_TAG,
             PARAM_NAME, PARAM_ENVIRONMENT, PARAM_GENERATOR, PARAM_SEED, PARAM_TYPE, PARAM_SAVE, PARAM_ID,
-            PARAM_PLAYER, PARAM_ENABLED, PARAM_PAGE, PARAM_UPLOAD, PARAM_SENDER,
+            PARAM_PLAYER, PARAM_ENABLED, PARAM_PAGE, PARAM_UPLOAD, PARAM_SENDER, PARAM_MANAGED_WORLD,
+            PARAM_POLICY_DIFFICULTY, PARAM_POLICY_PVP, PARAM_GAME_RULE, PARAM_GAME_RULE_VALUE,
+            PARAM_BORDER_SIZE, PARAM_BORDER_CENTER_X, PARAM_BORDER_CENTER_Z, PARAM_BORDER_WARNING_DISTANCE,
+            PARAM_BORDER_WARNING_TIME, PARAM_BORDER_DAMAGE, PARAM_BORDER_BUFFER, PARAM_ACCESS_PERMISSION,
+            PARAM_ACCESS_DENIED_MESSAGE, PARAM_RESPAWN_DESTINATION, PARAM_POLICY_TAG, PARAM_TAG_ENABLED, PARAM_TAG_FILTER, PARAM_TAG_GROUP,
             PERMISSION_DENIED, UNKNOWN_COMMAND, PLAYER_ONLY,
             OPERATION_QUEUED, OPERATION_FAILED, CREATED, IMPORTED, LOADED, UNLOADED, TELEPORTED,
-            DELETE_CONFIRM, QUARANTINED, RESTORED, PROFILE_UPDATED,
+            DELETE_CONFIRM, QUARANTINED, RESTORED, PROFILE_UPDATED, UNMANAGED_LOADED, UNMANAGED_UNLOADED,
             FOLIA_LIMIT, CONFIG_SAVED, CONFIG_OPENED, CONFIG_SAVE_FAILED, EMPTY_LIST, PLAYER_OFFLINE,
             UNKNOWN_WORLD, SECTION,
-            ENTRY, DETAIL, INFO_TITLE, STATUS_TITLE, GENERATOR_FORMAT, FOLIA_STATUS_NOTE, LABEL_WORLDS,
+            ENTRY, DETAIL, INFO_TITLE, STATUS_TITLE, GENERATOR_FORMAT, FOLIA_STATUS_NOTE, POLICY_ACCESS_DENIED, LABEL_WORLDS,
             LABEL_QUARANTINE, LABEL_LOADED, LABEL_MANAGED, LABEL_ON_DISK, LABEL_MISSING, LABEL_ENVIRONMENT,
             LABEL_GENERATOR, LABEL_SEED, LABEL_AUTOLOAD, LABEL_PROTECTED, LABEL_OPERATION_ACTIVE,
             LABEL_WORLD_TYPES, LABEL_CONFIGURED_GENERATORS, LABEL_AVAILABLE, LABEL_UNAVAILABLE, LABEL_SERVER,
             LABEL_JAVA_RUNTIME, LABEL_PLUGIN_BYTECODE, LABEL_PLATFORM, LABEL_DYNAMIC_LIFECYCLE,
             LABEL_WORLD_CONTAINER, LABEL_WRITABLE, LABEL_LOCALE, LABEL_WORLD_COUNTS, LABEL_QUARANTINE_ENTRIES,
+            LABEL_WORLD_KEY, LABEL_STORAGE_PATH, LABEL_STORAGE_LAYOUT, LABEL_PLAYERS, LABEL_GENERATOR_STATUS,
+            LABEL_PRIMARY_WORLD, LABEL_CHECK_RESULT, LABEL_READY, LABEL_REVIEW_REQUIRED,
+            LABEL_POLICY_DIFFICULTY, LABEL_POLICY_PVP, LABEL_POLICY_GAME_RULES, LABEL_POLICY_CUSTOM_SPAWN,
+            LABEL_POLICY_MANAGED_BORDER, LABEL_POLICY_ACCESS_PERMISSION, LABEL_POLICY_RESPAWN_WORLD,
+            LABEL_POLICY_TAGS, LABEL_NONE, LABEL_SERVER_DEFAULT,
             EXPLAIN_LOADED, EXPLAIN_MANAGED, EXPLAIN_ON_DISK, EXPLAIN_ENVIRONMENT, EXPLAIN_GENERATOR,
             EXPLAIN_SEED, EXPLAIN_AUTOLOAD, EXPLAIN_PROTECTED, EXPLAIN_OPERATION_ACTIVE, EXPLAIN_SERVER,
             EXPLAIN_JAVA_RUNTIME, EXPLAIN_PLUGIN_BYTECODE, EXPLAIN_PLATFORM, EXPLAIN_DYNAMIC_LIFECYCLE,
             EXPLAIN_WORLD_CONTAINER, EXPLAIN_WRITABLE, EXPLAIN_LOCALE, EXPLAIN_WORLD_COUNTS,
-            EXPLAIN_QUARANTINE, EXPLAIN_WORLD_ENTRY, FEEDBACK_TITLE, FEEDBACK_WORLD_SUBTITLE,
+            EXPLAIN_QUARANTINE, EXPLAIN_WORLD_ENTRY, EXPLAIN_WORLD_KEY, EXPLAIN_STORAGE_PATH,
+            EXPLAIN_STORAGE_LAYOUT, EXPLAIN_PLAYERS, EXPLAIN_GENERATOR_STATUS, EXPLAIN_PRIMARY_WORLD,
+            EXPLAIN_CHECK_RESULT, FEEDBACK_TITLE, FEEDBACK_WORLD_SUBTITLE,
             FEEDBACK_TELEPORT_SUBTITLE, FEEDBACK_FAILURE_TITLE, FEEDBACK_FAILURE_SUBTITLE,
             FEEDBACK_ACTION_WORLD, FEEDBACK_ACTION_TELEPORT, FEEDBACK_ACTION_FAILURE,
             GUI_CURRENT,
