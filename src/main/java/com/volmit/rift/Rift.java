@@ -26,6 +26,7 @@ import com.volmit.rift.world.PlatformCapabilities;
 import com.volmit.rift.world.WorldInventory;
 import com.volmit.rift.world.WorldLifecycleService;
 import com.volmit.rift.world.WorldPolicyService;
+import io.github.slimjar.app.builder.SpigotApplicationBuilder;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -57,6 +58,12 @@ public final class Rift extends JavaPlugin implements ReloadAware {
     private RiftConfigMenu configMenu;
     private RiftWorldPolicyMenu policyMenu;
     private RiftCommandService commands;
+
+    public Rift() {
+        getLogger().info("Loading libraries...");
+        new SpigotApplicationBuilder(this).build();
+        getLogger().info("Libraries loaded.");
+    }
 
     public static Rift get() {
         return Objects.requireNonNull(instance, "Rift is not enabled");

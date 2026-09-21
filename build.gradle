@@ -2,10 +2,25 @@ import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.WriteProperties
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url = uri('https://jitpack.io') }
+    }
+    dependencies {
+        classpath('com.github.VolmitSoftware.VolmLib:packaging:master-SNAPSHOT')
+    }
+}
+
 plugins {
     id 'java-library'
     id 'com.gradleup.shadow' version '9.0.0-rc3'
+    id 'de.crazydev22.slimjar' version '2.1.9'
 }
+
+apply plugin: 'art.arcane.volmit-packaging'
+
+tasks.named('slimJar').get()
 
 group = 'com.volmit.rift'
 version = '2.0.0-26.x'
@@ -44,6 +59,14 @@ repositories {
     maven { url = uri('https://jitpack.io') }
 }
 
+configurations {
+    runtimeLibraryTest {
+        canBeConsumed = false
+        canBeResolved = true
+        extendsFrom(configurations.slimApi)
+    }
+}
+
 dependencies {
     compileOnly('io.papermc.paper:paper-api:26.2.build.121-stable')
 
@@ -51,12 +74,15 @@ dependencies {
         changing = true
         transitive = false
     }
-    implementation('com.google.code.gson:gson:2.10.1')
-    implementation('com.moandjiezana.toml:toml4j:0.7.2')
-    implementation('net.kyori:adventure-api:4.26.1')
-    implementation('net.kyori:adventure-text-minimessage:4.26.1')
-    implementation('net.kyori:adventure-text-serializer-legacy:4.26.1')
-    implementation('net.kyori:adventure-text-serializer-plain:4.26.1')
+    implementation('de.crazydev22.slimjar.helper:spigot:2.1.9')
+    slimApi('com.google.code.gson:gson:2.10.1')
+    slimApi('com.moandjiezana.toml:toml4j:0.7.2')
+    slimApi('net.kyori:adventure-api:4.26.1')
+    slimApi('net.kyori:adventure-text-minimessage:4.26.1')
+    slimApi('net.kyori:adventure-text-serializer-legacy:4.26.1')
+    slimApi('net.kyori:adventure-text-serializer-plain:4.26.1')
+    slimApi('net.kyori:adventure-text-serializer-gson:4.26.1')
+    slimApi('net.kyori:adventure-text-serializer-json:4.26.1')
 
     testImplementation('org.junit.jupiter:junit-jupiter:5.11.4')
     testRuntimeOnly('org.junit.platform:junit-platform-launcher:1.11.4')
@@ -95,9 +121,19 @@ tasks.named('jar').configure {
     enabled = false
 }
 
+slimJar {
+    relocate('com.google.gson', "${relocatedLibraryPackage}.gson")
+    relocate('com.moandjiezana.toml', "${relocatedLibraryPackage}.toml")
+    relocate('net.kyori', "${relocatedLibraryPackage}.kyori")
+}
+
 tasks.named('shadowJar').configure {
     archiveClassifier.set('')
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    minimize {
+        exclude(dependency('de.crazydev22.slimjar.helper:.*:.*'))
+    }
+    relocate('io.github.slimjar', "${relocatedLibraryPackage}.slimjar")
     relocate('art.arcane.volmlib', "${relocatedLibraryPackage}.volmlib")
     relocate('com.google.gson', "${relocatedLibraryPackage}.gson")
     relocate('com.moandjiezana.toml', "${relocatedLibraryPackage}.toml")
@@ -113,10 +149,24 @@ tasks.named('build').configure {
 tasks.named('test').configure {
     useJUnitPlatform()
     dependsOn(tasks.named('shadowJar'))
+    dependsOn(tasks.named('runtimeLibraryTestJar'))
+    inputs.file(tasks.named('shadowJar').flatMap { it.archiveFile })
+    inputs.file(tasks.named('runtimeLibraryTestJar').flatMap { it.archiveFile })
     doFirst {
         systemProperty('rift.runtimeJar', tasks.named('shadowJar').get().archiveFile.get().asFile.absolutePath)
+        systemProperty('rift.runtimeTestLibraries', tasks.named('runtimeLibraryTestJar').get().archiveFile.get().asFile.absolutePath)
         systemProperty('rift.projectDir', layout.projectDirectory.asFile.absolutePath)
     }
+}
+
+tasks.register('runtimeLibraryTestJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    archiveFileName.set('runtime-libraries.jar')
+    destinationDirectory.set(layout.buildDirectory.dir('test-libraries'))
+    configurations = [project.configurations.runtimeLibraryTest]
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    relocate('com.google.gson', "${relocatedLibraryPackage}.gson")
+    relocate('com.moandjiezana.toml', "${relocatedLibraryPackage}.toml")
+    relocate('net.kyori', "${relocatedLibraryPackage}.kyori")
 }
 
 tasks.register('verifyJava25Artifact') {
@@ -132,10 +182,20 @@ tasks.register('verifyJava25Artifact') {
         Set<String> bundledLanguages = new TreeSet<>()
         Properties languageManifest = null
         try {
+            if (archive.getEntry('slimjar.dat') == null
+                    || archive.getEntry('slimjar-resolutions.dat') == null
+                    || archive.getEntry('com/volmit/rift/libs/slimjar/app/builder/SpigotApplicationBuilder.class') == null) {
+                throw new GradleException('Runtime artifact is missing its dependency bootstrap')
+            }
             Enumeration<? extends java.util.zip.ZipEntry> entries = archive.entries()
             while (entries.hasMoreElements()) {
                 java.util.zip.ZipEntry entry = entries.nextElement()
                 String path = entry.name
+                if (path.startsWith('com/volmit/rift/libs/gson/')
+                        || path.startsWith('com/volmit/rift/libs/toml/')
+                        || path.startsWith('com/volmit/rift/libs/kyori/')) {
+                    throw new GradleException("Runtime-downloaded library is bundled in shaded artifact: ${path}")
+                }
                 if (path == 'plugin.yml') {
                     pluginMetadataCount++
                 }
@@ -223,6 +283,23 @@ tasks.register('buildSwiftSwamp') {
     group = 'development'
     description = 'Verifies and stages Rift.jar in the local BUILDS output directory.'
     dependsOn(tasks.named('stageBuild'))
+}
+
+pluginPackaging {
+    artifacts {
+        create('distribution') {
+            taskName = 'shadowJar'
+            maximumBytes = 1500000
+            prunePrefixes = ['com/volmit/rift/libs/volmlib/']
+            requiredEntries = ['plugin.yml', 'com/volmit/rift/Rift.class']
+            shrinkRules = [file('packaging/shrink.pro')]
+            shrinkRelocations = [
+                'com.google.gson': "${relocatedLibraryPackage}.gson",
+                'com.moandjiezana.toml': "${relocatedLibraryPackage}.toml",
+                'net.kyori': "${relocatedLibraryPackage}.kyori"
+            ]
+        }
+    }
 }
 
 configurations.configureEach {
