@@ -1,0 +1,2 @@
+-keepclassmembers class com.volmit.rift.storage.WorldProfile { <fields>; }
+-keepclassmembers class com.volmit.rift.storage.TrashEntry { <fields>; }

@@ -9,7 +9,6 @@ import com.volmit.rift.localization.RiftMessages;
 import com.volmit.rift.storage.WorldNamePolicy;
 import com.volmit.rift.storage.WorldProfile;
 import com.volmit.rift.storage.WorldProfileStore;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
@@ -600,7 +599,7 @@ public final class WorldPolicyService implements Listener {
                             .untrusted("permission", profile.getAccessPermission()).build()).plain()
                     : profile.getAccessDeniedMessage().replace("{world}", profile.getName())
                             .replace("{permission}", profile.getAccessPermission());
-            player.kick(Component.text(message));
+            player.kickPlayer(message);
         });
     }
 
@@ -635,7 +634,7 @@ public final class WorldPolicyService implements Listener {
             String message = profile.getAccessDeniedMessage()
                     .replace("{world}", profile.getName())
                     .replace("{permission}", profile.getAccessPermission());
-            player.sendMessage(Component.text(message));
+            player.sendPlainMessage(message);
         });
     }
 

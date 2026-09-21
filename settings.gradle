@@ -38,6 +38,7 @@ File localVolmLibDirectory = resolveLocalVolmLibDirectory()
 if (useLocalVolmLib && localVolmLibDirectory != null) {
     includeBuild(localVolmLibDirectory) {
         dependencySubstitution {
+            substitute(module('com.github.VolmitSoftware.VolmLib:packaging')).using(project(':packaging'))
             substitute(module('com.github.VolmitSoftware:VolmLib')).using(project(':shared'))
             substitute(module('com.github.VolmitSoftware.VolmLib:shared')).using(project(':shared'))
             substitute(module('com.github.VolmitSoftware.VolmLib:volmlib-shared')).using(project(':shared'))

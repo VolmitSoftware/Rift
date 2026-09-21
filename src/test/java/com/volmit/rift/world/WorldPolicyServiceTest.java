@@ -8,7 +8,6 @@ import com.volmit.rift.localization.RiftMessages;
 import com.volmit.rift.storage.WorldNamePolicy;
 import com.volmit.rift.storage.WorldProfile;
 import com.volmit.rift.storage.WorldProfileStore;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
@@ -102,8 +101,8 @@ final class WorldPolicyServiceTest {
             context.entity.removeFirst().run();
 
             verify(context.player, never()).teleportAsync(any());
-            verify(context.player, never()).kick(any(Component.class));
-            verify(context.player, never()).sendMessage(any(Component.class));
+            verify(context.player, never()).kickPlayer(anyString());
+            verify(context.player, never()).sendPlainMessage(anyString());
         }
     }
 
@@ -114,7 +113,7 @@ final class WorldPolicyServiceTest {
 
             context.entity.removeFirst().run();
 
-            verify(context.player).kick(Component.text("Denied private: rift.private"));
+            verify(context.player).kickPlayer("Denied private: rift.private");
         }
     }
 
@@ -128,7 +127,7 @@ final class WorldPolicyServiceTest {
             context.drainEntityTasks();
 
             verify(context.player).teleportAsync(any());
-            verify(context.player).kick(Component.text("Denied private: rift.private"));
+            verify(context.player).kickPlayer("Denied private: rift.private");
         }
     }
 
@@ -145,7 +144,7 @@ final class WorldPolicyServiceTest {
             teleport.complete(false);
             context.drainEntityTasks();
 
-            verify(context.player, never()).kick(any(Component.class));
+            verify(context.player, never()).kickPlayer(anyString());
         }
     }
 
@@ -158,7 +157,7 @@ final class WorldPolicyServiceTest {
             context.service.afterRespawn(event);
             context.drainEntityTasks();
 
-            verify(context.player).kick(Component.text("Denied private: rift.private"));
+            verify(context.player).kickPlayer("Denied private: rift.private");
         }
     }
 
@@ -172,7 +171,7 @@ final class WorldPolicyServiceTest {
             verify(context.player, never()).hasPermission(anyString());
             assertThat(context.entity).hasSize(1);
             context.drainEntityTasks();
-            verify(context.player).kick(Component.text("Denied private: rift.private"));
+            verify(context.player).kickPlayer("Denied private: rift.private");
         }
     }
 
