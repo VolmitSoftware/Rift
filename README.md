@@ -10,7 +10,7 @@ Rift `2.0.0-26.x` is a Paper world lifecycle manager built around safe names, re
 - Create worlds with `rift:<key>` identities under `dimensions/rift/<key>` and import existing Paper dimensions without back-port storage fallbacks.
 - Move confirmed deletions into a world-container quarantine and restore them by id.
 - Protect selected worlds and always protect the primary world family.
-- Enforce hot-reloadable per-world difficulty, PvP, game rules, safe spawn, borders, entry permissions, respawn routing, and operator tags through `/rift policy`.
+- Enforce hot-reloadable per-world difficulty, PvP, game rules, safe spawn, borders, entry permissions, respawn routing, and operator tags through `/rift policy`; edit them in the 54-slot `/rift policy edit` menu or the configuration dashboard's World Policies shortcut.
 - Hot-reload configuration, the selected TOML language file under `plugins/Rift/languages/`, and world profiles while retaining the last valid state; the shared picker exposes English plus 17 repository translations and materializes only a locale explicitly selected or opened for editing.
 - Keep formatting under operator control with `runtime.prefix` and an optional `{prefix}` token on each prefixed message, so the prefix can be hidden globally or message by message.
 - Create built-in void worlds with a safe spawn platform and `THE_VOID` biome.
@@ -31,9 +31,9 @@ The build runs on JDK 25 and emits Java 25 class files:
 ./gradlew clean build
 ```
 
-On Windows, use `gradlew.bat clean build`. The shaded artifact is written under `build/libs/`.
+On Windows, use `gradlew.bat clean build`. The shaded artifact is written under `build/libs/`; after tests and artifact verification pass, the build also stages `C:\VolmitSoftware\BUILDS\Rift.jar`.
 
-Use `gradlew.bat buildSwiftSwamp` to run the verification gates and copy the current shaded artifact to `C:\VolmitSoftware\BUILDS\Rift.jar`, matching the other VolmitSoftware plugin builds.
+`gradlew.bat buildSwiftSwamp` runs the same verified staging workflow. Failed verification leaves the previously staged jar unchanged.
 
 The build uses the local `../VolmLib` composite when available. Set `-PuseLocalVolmLib=false` to resolve the configured remote VolmLib coordinate intentionally.
 

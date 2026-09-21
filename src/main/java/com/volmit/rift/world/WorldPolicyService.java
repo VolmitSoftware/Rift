@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.GameRule;
 import org.bukkit.GameRules;
+import org.bukkit.FeatureFlag;
 import org.bukkit.Location;
 import org.bukkit.Registry;
 import org.bukkit.World;
@@ -36,8 +37,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.logging.Level;
 
 public final class WorldPolicyService implements Listener {
@@ -112,19 +116,19 @@ public final class WorldPolicyService implements Listener {
                 profile.getTags().isEmpty() ? label(sender, RiftMessages.LABEL_NONE) : String.join(", ", profile.getTags()));
     }
 
-    public void setDifficulty(CommandSender sender, String name, String value) {
+    public CompletableFuture<Boolean> setDifficulty(CommandSender sender, String name, String value) {
         String normalized = normalizeChoice(value, "difficulty", "INHERIT", "PEACEFUL", "EASY", "NORMAL", "HARD");
-        update(sender, name, label(sender, RiftMessages.LABEL_POLICY_DIFFICULTY),
-                profile -> profile.setDifficulty(normalized), normalized, false);
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_DIFFICULTY),
+                profile -> profile.setDifficulty(normalized), WorldProfile::getDifficulty, false);
     }
 
-    public void setPvp(CommandSender sender, String name, String value) {
+    public CompletableFuture<Boolean> setPvp(CommandSender sender, String name, String value) {
         String normalized = normalizeChoice(value, "PvP policy", "INHERIT", "ALLOW", "DENY");
-        update(sender, name, label(sender, RiftMessages.LABEL_POLICY_PVP),
-                profile -> profile.setPvp(normalized), normalized, false);
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_PVP),
+                profile -> profile.setPvp(normalized), WorldProfile::getPvp, false);
     }
 
-    public void setGameRule(CommandSender sender, String name, String ruleName, String value) {
+    public CompletableFuture<Boolean> setGameRule(CommandSender sender, String name, String ruleName, String value) {
         String normalizedRule = Objects.requireNonNullElse(ruleName, "").trim();
         GameRule<?> rule = resolveGameRule(normalizedRule);
         if (rule == null) {
@@ -135,22 +139,116 @@ public final class WorldPolicyService implements Listener {
         }
         String key = Registry.GAME_RULE.getKeyOrThrow(rule).toString();
         if (value.equalsIgnoreCase("inherit")) {
-            update(sender, name, label(sender, RiftMessages.LABEL_POLICY_GAME_RULES) + " " + key, profile -> {
+            return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_GAME_RULES) + " " + key, profile -> {
                 Map<String, String> rules = profile.getGameRules();
                 rules.remove(key);
                 profile.setGameRules(rules);
-            }, "INHERIT", false);
-            return;
+            }, saved -> "INHERIT", false);
         }
         String normalizedValue = validateGameRuleValue(rule, value);
-        update(sender, name, label(sender, RiftMessages.LABEL_POLICY_GAME_RULES) + " " + key, profile -> {
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_GAME_RULES) + " " + key, profile -> {
             Map<String, String> rules = profile.getGameRules();
             rules.put(key, normalizedValue);
             profile.setGameRules(rules);
-        }, normalizedValue, false);
+        }, saved -> saved.getGameRules().get(key), false);
     }
 
-    public void setSpawn(CommandSender sender, String name, Player player) {
+    public CompletableFuture<Boolean> adjustGameRule(CommandSender sender, String name, GameRule<?> rule, long amount) {
+        if (rule.equals(GameRules.PVP)) {
+            throw new IllegalArgumentException("Use the dedicated PvP policy");
+        }
+        String key = Registry.GAME_RULE.getKeyOrThrow(rule).toString();
+        CompletableFuture<Boolean> result = new CompletableFuture<>();
+        if (!FoliaScheduler.runGlobal(plugin, () -> {
+            try {
+                World world = RiftWorldIdentity.findLoaded(name);
+                if (!supportsGameRule(rule, world == null ? Set.of(FeatureFlag.VANILLA) : world.getFeatureFlags())) {
+                    throw new IllegalArgumentException("Game rule is not enabled by this world's feature flags: " + key);
+                }
+                String baseline = String.valueOf(world == null ? rule.getDefaultValue() : world.getGameRuleValue(rule));
+                update(sender, name, key, profile -> {
+                    Map<String, String> rules = profile.getGameRules();
+                    rules.put(key, adjustedRuleValue(rule, rules.getOrDefault(key, baseline), amount));
+                    profile.setGameRules(rules);
+                }, saved -> saved.getGameRules().get(key), false).thenAccept(result::complete);
+            } catch (RuntimeException exception) {
+                fail(sender, key, name, exception);
+                result.complete(false);
+            }
+        })) {
+            fail(sender, key, name, new IOException("scheduler rejected game rule adjustment"));
+            result.complete(false);
+        }
+        return result;
+    }
+
+    public CompletableFuture<GameRuleSnapshot> gameRuleValues(String name) {
+        CompletableFuture<GameRuleSnapshot> result = new CompletableFuture<>();
+        if (!FoliaScheduler.runGlobal(plugin, () -> {
+            try {
+                World world = RiftWorldIdentity.findLoaded(name);
+                Set<FeatureFlag> features = world == null ? Set.of(FeatureFlag.VANILLA) : world.getFeatureFlags();
+                result.complete(new GameRuleSnapshot(world != null, collectGameRuleValues(Registry.GAME_RULE, features,
+                        rule -> String.valueOf(world == null ? rule.getDefaultValue() : world.getGameRuleValue(rule)))));
+            } catch (RuntimeException exception) {
+                result.completeExceptionally(exception);
+            }
+        })) {
+            result.completeExceptionally(new IOException("scheduler rejected game rule inspection"));
+        }
+        return result;
+    }
+
+    static Map<String, String> collectGameRuleValues(Iterable<GameRule<?>> rules, Set<FeatureFlag> features,
+                                                    Function<GameRule<?>, String> reader) {
+        Map<String, String> values = new LinkedHashMap<>();
+        for (GameRule<?> rule : rules) {
+            if (supportsGameRule(rule, features)) {
+                values.put(rule.getKey().toString(), reader.apply(rule));
+            }
+        }
+        return Map.copyOf(values);
+    }
+
+    private static boolean supportsGameRule(GameRule<?> rule, Set<FeatureFlag> features) {
+        return features.containsAll(rule.requiredFeatures());
+    }
+
+    public CompletableFuture<Location> spawnLocation(String name) {
+        CompletableFuture<Location> result = new CompletableFuture<>();
+        if (!FoliaScheduler.runGlobal(plugin, () -> {
+            try {
+                World world = RiftWorldIdentity.findLoaded(name);
+                result.complete(world == null ? null : world.getSpawnLocation());
+            } catch (RuntimeException exception) {
+                result.completeExceptionally(exception);
+            }
+        })) {
+            result.completeExceptionally(new IOException("scheduler rejected spawn inspection"));
+        }
+        return result;
+    }
+
+    public CompletableFuture<Boolean> adjustBorder(CommandSender sender, String name, WorldBorderSetting setting, double steps, boolean reset) {
+        return update(sender, name, setting.name(), profile -> setting.adjust(profile, steps, reset),
+                saved -> Double.toString(setting.read(saved)), false);
+    }
+
+    public CompletableFuture<Boolean> toggleBorder(CommandSender sender, String name) {
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_MANAGED_BORDER),
+                profile -> profile.setManagedBorder(!profile.isManagedBorder()), saved -> Boolean.toString(saved.isManagedBorder()), true);
+    }
+
+    static String adjustedRuleValue(GameRule<?> rule, String current, long amount) {
+        if (rule.getType().equals(Boolean.class)) {
+            return Boolean.toString(!Boolean.parseBoolean(current));
+        }
+        long base = Integer.parseInt(current);
+        long bounded = Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, base + Math.max(-Integer.MAX_VALUE, Math.min(Integer.MAX_VALUE, amount))));
+        return Long.toString(bounded);
+    }
+
+    public CompletableFuture<Boolean> setSpawn(CommandSender sender, String name, Player player) {
         String validName = names.requireValid(name);
         World world = RiftWorldIdentity.findLoaded(validName);
         if (world == null || !world.equals(player.getWorld())) {
@@ -158,90 +256,127 @@ public final class WorldPolicyService implements Listener {
         }
         Location location = player.getLocation();
         requireSafeSpawn(location);
-        update(sender, validName, label(sender, RiftMessages.LABEL_POLICY_CUSTOM_SPAWN), profile -> {
+        return saveSpawn(sender, validName, location);
+    }
+
+    public CompletableFuture<Boolean> setSpawnCoordinates(Player player, String name, double x, double y, double z, float yaw) {
+        String validName = names.requireValid(name);
+        if (!Double.isFinite(x) || !Double.isFinite(y) || !Double.isFinite(z) || !Float.isFinite(yaw)
+                || Math.abs(x) > 29_999_984 || Math.abs(z) > 29_999_984) {
+            throw new IllegalArgumentException("Spawn coordinates must be finite and within world limits");
+        }
+        World world = RiftWorldIdentity.findLoaded(validName);
+        if (world == null) {
+            throw new IllegalArgumentException("Load the target world before setting its spawn");
+        }
+        if (y < world.getMinHeight() + 1.0D || y >= world.getMaxHeight() - 1.0D) {
+            throw new IllegalArgumentException("Spawn must be inside the world's build height");
+        }
+        Location location = new Location(world, x, y, z, yaw, 0);
+        CompletableFuture<Boolean> result = new CompletableFuture<>();
+        if (!FoliaScheduler.runRegion(plugin, location, () -> {
+            try {
+                if (!world.isChunkLoaded(location.getBlockX() >> 4, location.getBlockZ() >> 4)) {
+                    throw new IllegalArgumentException("Visit the spawn area before entering its coordinates");
+                }
+                requireSafeSpawn(location);
+                saveSpawn(player, validName, location).thenAccept(result::complete);
+            } catch (RuntimeException exception) {
+                fail(player, "spawn", validName, exception);
+                result.complete(false);
+            }
+        })) {
+            fail(player, "spawn", validName, new IOException("scheduler rejected spawn validation"));
+            result.complete(false);
+        }
+        return result;
+    }
+
+    private CompletableFuture<Boolean> saveSpawn(CommandSender sender, String validName, Location location) {
+        return update(sender, validName, label(sender, RiftMessages.LABEL_POLICY_CUSTOM_SPAWN), profile -> {
             profile.setCustomSpawn(true);
             profile.setSpawnX(location.getX());
             profile.setSpawnY(location.getY());
             profile.setSpawnZ(location.getZ());
             profile.setSpawnYaw(location.getYaw());
-        }, formatLocation(location), false);
+        }, saved -> formatLocation(location), false);
     }
 
-    public void clearSpawn(CommandSender sender, String name) {
-        update(sender, name, label(sender, RiftMessages.LABEL_POLICY_CUSTOM_SPAWN),
-                profile -> profile.setCustomSpawn(false), "INHERIT", false);
+    public CompletableFuture<Boolean> clearSpawn(CommandSender sender, String name) {
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_CUSTOM_SPAWN),
+                profile -> profile.setCustomSpawn(false), saved -> "INHERIT", false);
     }
 
-    public void setBorder(CommandSender sender, String name, double size) {
-        update(sender, name, label(sender, RiftMessages.LABEL_POLICY_MANAGED_BORDER), profile -> {
+    public CompletableFuture<Boolean> setBorder(CommandSender sender, String name, double size) {
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_MANAGED_BORDER), profile -> {
             profile.setManagedBorder(true);
             profile.setBorderSize(size);
-        }, Double.toString(size), false);
+        }, saved -> Double.toString(saved.getBorderSize()), false);
     }
 
-    public void setBorderCenter(CommandSender sender, String name, double centerX, double centerZ) {
-        update(sender, name, label(sender, RiftMessages.LABEL_POLICY_MANAGED_BORDER), profile -> {
+    public CompletableFuture<Boolean> setBorderCenter(CommandSender sender, String name, double centerX, double centerZ) {
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_MANAGED_BORDER), profile -> {
             profile.setManagedBorder(true);
             profile.setBorderCenterX(centerX);
             profile.setBorderCenterZ(centerZ);
-        }, centerX + ", " + centerZ, false);
+        }, saved -> saved.getBorderCenterX() + ", " + saved.getBorderCenterZ(), false);
     }
 
-    public void setBorderWarning(CommandSender sender, String name, int warningDistance, int warningTime) {
-        update(sender, name, label(sender, RiftMessages.LABEL_POLICY_MANAGED_BORDER), profile -> {
+    public CompletableFuture<Boolean> setBorderWarning(CommandSender sender, String name, int warningDistance, int warningTime) {
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_MANAGED_BORDER), profile -> {
             profile.setManagedBorder(true);
             profile.setBorderWarningDistance(warningDistance);
             profile.setBorderWarningTime(warningTime);
-        }, warningDistance + " blocks / " + warningTime + " seconds", false);
+        }, saved -> saved.getBorderWarningDistance() + " blocks / " + saved.getBorderWarningTime() + " seconds", false);
     }
 
-    public void setBorderDamage(CommandSender sender, String name, double damageAmount, double damageBuffer) {
-        update(sender, name, label(sender, RiftMessages.LABEL_POLICY_MANAGED_BORDER), profile -> {
+    public CompletableFuture<Boolean> setBorderDamage(CommandSender sender, String name, double damageAmount, double damageBuffer) {
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_MANAGED_BORDER), profile -> {
             profile.setManagedBorder(true);
             profile.setBorderDamageAmount(damageAmount);
             profile.setBorderDamageBuffer(damageBuffer);
-        }, damageAmount + " damage / " + damageBuffer + " buffer", false);
+        }, saved -> saved.getBorderDamageAmount() + " damage / " + saved.getBorderDamageBuffer() + " buffer", false);
     }
 
-    public void clearBorder(CommandSender sender, String name) {
-        update(sender, name, label(sender, RiftMessages.LABEL_POLICY_MANAGED_BORDER),
-                profile -> profile.setManagedBorder(false), "INHERIT", true);
+    public CompletableFuture<Boolean> clearBorder(CommandSender sender, String name) {
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_MANAGED_BORDER),
+                profile -> profile.setManagedBorder(false), saved -> "INHERIT", true);
     }
 
-    public void setAccess(CommandSender sender, String name, String permission, String deniedMessage) {
+    public CompletableFuture<Boolean> setAccess(CommandSender sender, String name, String permission, String deniedMessage) {
         String value = permission.equalsIgnoreCase("clear") || permission.equalsIgnoreCase("none")
                 ? ""
                 : permission;
-        update(sender, name, label(sender, RiftMessages.LABEL_POLICY_ACCESS_PERMISSION), profile -> {
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_ACCESS_PERMISSION), profile -> {
             profile.setAccessPermission(value);
             profile.setAccessDeniedMessage(value.isBlank() || "default".equalsIgnoreCase(deniedMessage)
                     ? "" : Objects.requireNonNullElse(deniedMessage, ""));
         },
-                value.isBlank() ? label(sender, RiftMessages.LABEL_NONE) : value, false);
+                saved -> saved.getAccessPermission().isBlank() ? label(sender, RiftMessages.LABEL_NONE) : saved.getAccessPermission(), false);
     }
 
-    public void setRespawn(CommandSender sender, String name, String destination) {
+    public CompletableFuture<Boolean> setRespawn(CommandSender sender, String name, String destination) {
         String value = destination.equalsIgnoreCase("clear") || destination.equalsIgnoreCase("default")
                 ? ""
                 : names.requireValid(destination);
         if (!value.isBlank() && profiles.find(value).isEmpty()) {
             throw new IllegalArgumentException("Respawn destination is not managed: " + value);
         }
-        update(sender, name, label(sender, RiftMessages.LABEL_POLICY_RESPAWN_WORLD),
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_RESPAWN_WORLD),
                 profile -> profile.setRespawnWorld(value),
-                value.isBlank() ? label(sender, RiftMessages.LABEL_SERVER_DEFAULT) : value, false);
+                saved -> saved.getRespawnWorld().isBlank() ? label(sender, RiftMessages.LABEL_SERVER_DEFAULT) : saved.getRespawnWorld(), false);
     }
 
-    public void setTag(CommandSender sender, String name, String tag, boolean enabled) {
+    public CompletableFuture<Boolean> setTag(CommandSender sender, String name, String tag, boolean enabled) {
         String normalized = Objects.requireNonNullElse(tag, "").trim().toLowerCase(Locale.ROOT);
-        update(sender, name, label(sender, RiftMessages.LABEL_POLICY_TAGS) + " " + normalized, profile -> {
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_TAGS) + " " + normalized, profile -> {
             List<String> tags = new ArrayList<>(profile.getTags());
             tags.remove(normalized);
             if (enabled) {
                 tags.add(normalized);
             }
             profile.setTags(tags);
-        }, String.valueOf(enabled), false);
+        }, saved -> String.valueOf(enabled), false);
     }
 
     public void forget(String worldName) {
@@ -371,21 +506,41 @@ public final class WorldPolicyService implements Listener {
         appliedBorders.put(key, Boolean.TRUE);
     }
 
-    private void update(
+    public CompletableFuture<Boolean> setAccessPermission(CommandSender sender, String name, String permission) {
+        String value = permission.equalsIgnoreCase("clear") ? "" : permission;
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_ACCESS_PERMISSION),
+                profile -> profile.setAccessPermission(value), WorldProfile::getAccessPermission, false);
+    }
+
+    public CompletableFuture<Boolean> setAccessDenial(CommandSender sender, String name, String message) {
+        String value = message.equalsIgnoreCase("clear") ? "" : message;
+        return update(sender, name, label(sender, RiftMessages.GUI_POLICY_DENIAL),
+                profile -> profile.setAccessDeniedMessage(value), WorldProfile::getAccessDeniedMessage, false);
+    }
+
+    public CompletableFuture<Boolean> setTags(CommandSender sender, String name, List<String> tags) {
+        List<String> values = List.copyOf(tags);
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_TAGS),
+                profile -> profile.setTags(values), saved -> String.join(", ", saved.getTags()), false);
+    }
+
+    private CompletableFuture<Boolean> update(
             CommandSender sender,
             String name,
             String setting,
             Consumer<WorldProfile> mutation,
-            String value,
+            Function<WorldProfile, String> value,
             boolean resetBorder
     ) {
         String validName = names.requireValid(name);
+        CompletableFuture<Boolean> result = new CompletableFuture<>();
         if (!FoliaScheduler.runAsync(plugin, () -> {
             try {
                 WorldProfile candidate = profiles.update(validName, mutation);
                 if (!FoliaScheduler.runGlobal(plugin, () -> {
                     WorldProfile current = profiles.find(candidate.getName()).orElse(null);
                     if (current == null) {
+                        result.complete(false);
                         return;
                     }
                     World world = RiftWorldIdentity.findLoaded(candidate.getName());
@@ -395,19 +550,24 @@ public final class WorldPolicyService implements Listener {
                         }
                         if (!apply(world, current)) {
                             fail(sender, setting, candidate.getName(), new IOException("policy was saved but Paper rejected runtime activation"));
+                            result.complete(false);
                             return;
                         }
                     }
-                    deliverUpdated(sender, setting, candidate.getName(), value);
+                    deliverUpdated(sender, setting, candidate.getName(), value.apply(candidate));
+                    result.complete(true);
                 })) {
                     throw new IOException("scheduler rejected policy activation");
                 }
             } catch (Throwable exception) {
                 fail(sender, setting, validName, exception);
+                result.complete(false);
             }
         })) {
             fail(sender, setting, validName, new IOException("scheduler rejected policy persistence"));
+            result.complete(false);
         }
+        return result;
     }
 
     private void evacuateRestrictedJoin(Player player) {
@@ -578,5 +738,11 @@ public final class WorldPolicyService implements Listener {
 
     private static String formatLocation(Location location) {
         return String.format(Locale.ROOT, "%.2f, %.2f, %.2f", location.getX(), location.getY(), location.getZ());
+    }
+
+    public record GameRuleSnapshot(boolean loaded, Map<String, String> values) {
+        public GameRuleSnapshot {
+            values = Map.copyOf(values);
+        }
     }
 }

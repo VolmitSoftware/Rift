@@ -49,10 +49,13 @@
 #   {path}  Paikallisen raportin polku
 #   {url}  Raportin URL-osoite
 
+#   {step}  numeroarvojen muutosaskel
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_edit = "Avaa maailman sääntöeditori"
 check_all = "Tarkista kaikki vastaavat maailmat muuttamatta niitä"
 version = "Näytä {prefix}-versio"
 root = "Hallitse palvelinmaailmoja turvallisesti"
@@ -246,7 +249,41 @@ action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
 action_teleport = "{prefix}&r &7› &7&aTelesiirretty &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} epäonnistui &f{world}"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} on jo olemassa. Tarkista se komennolla &f/rift info {world}&e tai valitse toinen nimi."
+
 [rift.gui]
+policy_native_default = "&7Pelin oletusarvo: &f{value}"
+policy_inherited = "&7Käytäntö: INHERIT"
+policy_unloaded = "&7Maailma ei ole ladattu: perityt arvot näyttävät pelin oletukset"
+policy_default = "&7Oletus: &f{value}"
+policy_number = "&7Vasen: +{step}; oikea: -{step}; vaihto: x10"
+policy_select = "&7Valitse käytettävissä oleva arvo napsauttamalla"
+policy_selected = "&aValittu"
+policy_apply = "&aOta syntymiskoordinaatit käyttöön"
+policy_here = "&dKäytä nykyistä sijaintiani"
+policy_draft = "&7Luonnos: &f{value}"
+policy_enabled = "&dHallittu"
+policy_x = "&dX-koordinaatti"
+policy_y = "&dY-koordinaatti"
+policy_z = "&dZ-koordinaatti"
+policy_yaw = "&dKatselusuunta"
+policy_border_size = "&dRajan halkaisija"
+policy_warning_distance = "&dVaroitusetäisyys (lohkoa)"
+policy_warning_time = "&dVaroitusaika (sekuntia)"
+policy_damage_amount = "&dVahinko lohkoa kohden"
+policy_damage_buffer = "&dVahinkopuskuri (lohkoa)"
+policy_title = "&dMaailman säännöt"
+policy_reset = "&7Palauta oletuskäytäntö painamalla Q"
+policy_spawn = "&7Säädä koordinaatit ja ota turvallinen syntymispiste käyttöön"
+policy_center = "&dRajan keskipiste (x z)"
+policy_warning = "&dRajavaroitus (lohkot sekunnit)"
+policy_damage = "&dRajavahinko (määrä turvaetäisyys)"
+policy_denial = "&dPääsyn estoviesti"
+policy_tags = "&7Syötä pilkuin erotetut tunnisteet tai clear"
+policy_clear = "&7Palauta oletus syöttämällä clear"
+policy_previous = "&eEdellinen sivu"
+policy_next = "&eSeuraava sivu"
 current = "&7Nykyinen: &f{value}"
 autoload = "&dAutomaattisesti ohjatut maailmat"
 delete = "&dSalli maailmankaranteeni"

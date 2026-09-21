@@ -76,7 +76,10 @@ public final class RiftConfigMenu implements Listener {
 
     public void open(Player player) {
         if (!FoliaScheduler.runEntity(plugin, player,
-                () -> LanguageAudience.run(player.getUniqueId(), () -> openRootOwned(player)))) {
+                () -> {
+                    plugin.policyMenu().cancelPrompt(player.getUniqueId());
+                    LanguageAudience.run(player.getUniqueId(), () -> openRootOwned(player));
+                })) {
             language.send(player, RiftMessages.CONFIG_SAVE_FAILED);
         }
     }
@@ -84,6 +87,10 @@ public final class RiftConfigMenu implements Listener {
     public void shutdown() {
         prompts.clear();
         writer.shutdownNow();
+    }
+
+    public void cancelPrompt(UUID playerId) {
+        prompts.remove(playerId);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -116,6 +123,10 @@ public final class RiftConfigMenu implements Listener {
             return;
         }
         if (holder.category() == null) {
+            if (slot == 31) {
+                plugin.policyMenu().open(player, "all");
+                return;
+            }
             Category category = categoryAt(slot);
             if (category != null) {
                 if (category == Category.LANGUAGES) {
@@ -183,6 +194,10 @@ public final class RiftConfigMenu implements Listener {
         Category[] categories = Category.values();
         for (int index = 0; index < categories.length; index++) {
             inventory.setItem(CATEGORY_SLOTS[index], categoryItem(categories[index]));
+        }
+        if (player.hasPermission("rift.policy") || player.hasPermission("rift.admin")) {
+            inventory.setItem(31, item(Material.GRASS_BLOCK, language.text(RiftMessages.GUI_POLICY_TITLE).legacy(),
+                    List.of(language.text(RiftMessages.GUI_CATEGORY_OPEN).legacy())));
         }
         navigation(inventory, false);
         player.openInventory(inventory);

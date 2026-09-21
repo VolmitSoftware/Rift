@@ -588,6 +588,31 @@ final class RiftLocalizationTest {
         }
     }
 
+    @Test
+    void everyRepositoryLocaleTranslatesPolicyEditorControls() throws Exception {
+        RiftLocalization localization = localization(new RiftConfig().normalize());
+        assertThat(localization.loadInitial()).isTrue();
+        List<TextKey> controls = List.of(RiftMessages.COMMAND_POLICY_EDIT, RiftMessages.GUI_POLICY_TITLE,
+                RiftMessages.GUI_POLICY_RESET, RiftMessages.GUI_POLICY_SPAWN, RiftMessages.GUI_POLICY_CENTER,
+                RiftMessages.GUI_POLICY_WARNING, RiftMessages.GUI_POLICY_DAMAGE, RiftMessages.GUI_POLICY_DENIAL,
+                RiftMessages.GUI_POLICY_TAGS, RiftMessages.GUI_POLICY_CLEAR, RiftMessages.GUI_POLICY_PREVIOUS,
+                RiftMessages.GUI_POLICY_NEXT);
+        for (String locale : VolmitLocales.all()) {
+            if (locale.equals("en_US")) {
+                continue;
+            }
+            String content = Files.readString(Path.of("src/main/resources/languages", locale + ".toml"));
+            Files.writeString(localization.file(locale).toPath(), content);
+            localization.install(localization.prepareSnapshot(locale, content));
+            for (TextKey control : controls) {
+                assertThat(localization.text(control).plain())
+                        .describedAs("%s in %s", control.id(), locale)
+                        .isNotBlank()
+                        .isNotEqualTo(control.english().replaceAll("&[0-9a-fk-or]", ""));
+            }
+        }
+    }
+
     private List<Style> characterStyles(ComponentText text) {
         ArrayList<Style> styles = new ArrayList<>();
         collectStyles(MiniMessage.miniMessage().deserialize(text.miniMessage()), Style.empty(), styles);

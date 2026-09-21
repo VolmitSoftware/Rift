@@ -49,10 +49,16 @@
 #   {path}  Yerel rapor yolu
 #   {url}  Rapor URL adresi
 
+#   {step}  Tıklama başına değişim miktarı
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} zaten var. İncelemek için &f/rift info {world}&e kullan veya başka bir ad seç."
+
 [rift.command]
+policy_edit = "Dünya ilkesi düzenleyicisini aç"
 check_all = "Eşleşen tüm dünyaları değiştirmeden kontrol et"
 version = "{prefix} sürümünü göster"
 root = "Sunucu dünyalarını güvenli bir şekilde yönetin"
@@ -251,6 +257,37 @@ action_teleport = "{prefix}&r &7› &7&aIşınlandığınız dünya: &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} başarısız oldu. Dünya: &f{world}"
 
 [rift.gui]
+policy_native_default = "&7Oyun varsayılanı: &f{value}"
+policy_inherited = "&7İlke: INHERIT"
+policy_unloaded = "&7Dünya yüklü değil: devralınan değerler oyun varsayılanlarını gösterir"
+policy_default = "&7Varsayılan: &f{value}"
+policy_number = "&7Sol: +{step}; sağ: -{step}; Shift: x10"
+policy_select = "&7Mevcut değerlerden seçmek için tıkla"
+policy_selected = "&aSeçili"
+policy_apply = "&aDoğma koordinatlarını uygula"
+policy_here = "&dMevcut konumumu kullan"
+policy_draft = "&7Taslak: &f{value}"
+policy_enabled = "&dYönetiliyor"
+policy_x = "&dX koordinatı"
+policy_y = "&dY koordinatı"
+policy_z = "&dZ koordinatı"
+policy_yaw = "&dDönüş açısı"
+policy_border_size = "&dSınır çapı"
+policy_warning_distance = "&dUyarı mesafesi (blok)"
+policy_warning_time = "&dUyarı süresi (saniye)"
+policy_damage_amount = "&dBlok başına hasar"
+policy_damage_buffer = "&dHasar tamponu (blok)"
+policy_title = "&dDünya ilkeleri"
+policy_reset = "&7Varsayılan ilkeyi geri yüklemek için Q tuşuna bas"
+policy_spawn = "&7Koordinatları ayarla, sonra güvenli doğma noktasını uygula"
+policy_center = "&dSınır merkezi (x z)"
+policy_warning = "&dSınır uyarısı (blok saniye)"
+policy_damage = "&dSınır hasarı (miktar tampon)"
+policy_denial = "&dErişim reddi mesajı"
+policy_tags = "&7Virgülle ayrılmış etiketler veya clear gir"
+policy_clear = "&7Varsayılanı geri yüklemek için clear gir"
+policy_previous = "&eÖnceki sayfa"
+policy_next = "&eSonraki sayfa"
 current = "&7Şu anki: &f{value}"
 autoload = "&dYönetilen dünyaları otomatik yükle"
 delete = "&dDünya karantinasına izin ver"

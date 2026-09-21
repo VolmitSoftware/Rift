@@ -49,10 +49,13 @@
 #   {path}  Ruta local del informe
 #   {url}  URL del informe
 
+#   {step}  incremento de los cambios numéricos
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_edit = "Abrir el editor de políticas del mundo"
 check_all = "Comprobar todos los mundos coincidentes sin modificarlos"
 version = "Mostrar la versión de {prefix}"
 root = "Gestionar mundos del servidor de forma segura"
@@ -246,7 +249,41 @@ action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
 action_teleport = "{prefix}&r &7› &7&aTeleportado a &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} fallado &f{world}"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} ya existe. Usa &f/rift info {world}&e para inspeccionarlo o elige otro nombre."
+
 [rift.gui]
+policy_native_default = "&7Valor nativo predeterminado: &f{value}"
+policy_inherited = "&7Política: INHERIT"
+policy_unloaded = "&7Mundo descargado: los valores heredados muestran los predeterminados nativos"
+policy_default = "&7Predeterminado: &f{value}"
+policy_number = "&7Izquierda: +{step}; derecha: -{step}; Mayús: x10"
+policy_select = "&7Haz clic para elegir entre los valores disponibles"
+policy_selected = "&aSeleccionado"
+policy_apply = "&aAplicar coordenadas de aparición"
+policy_here = "&dUsar mi posición actual"
+policy_draft = "&7Borrador: &f{value}"
+policy_enabled = "&dGestionado"
+policy_x = "&dCoordenada X"
+policy_y = "&dCoordenada Y"
+policy_z = "&dCoordenada Z"
+policy_yaw = "&dOrientación horizontal"
+policy_border_size = "&dDiámetro del borde"
+policy_warning_distance = "&dDistancia de aviso (bloques)"
+policy_warning_time = "&dTiempo de aviso (segundos)"
+policy_damage_amount = "&dDaño por bloque"
+policy_damage_buffer = "&dMargen sin daño (bloques)"
+policy_title = "&dPolíticas del mundo"
+policy_reset = "&7Pulsa Q para restaurar la política predeterminada"
+policy_spawn = "&7Ajusta las coordenadas y aplica la aparición segura"
+policy_center = "&dCentro del borde (x z)"
+policy_warning = "&dAviso del borde (bloques segundos)"
+policy_damage = "&dDaño del borde (cantidad margen)"
+policy_denial = "&dMensaje de acceso denegado"
+policy_tags = "&7Introduce etiquetas separadas por comas, o clear"
+policy_clear = "&7Introduce clear para restaurar el valor predeterminado"
+policy_previous = "&ePágina anterior"
+policy_next = "&ePágina siguiente"
 current = "&7Corriente: &f{value}"
 autoload = "&dMundos gestionados de carga automática"
 delete = "&dPermitir la cuarentena mundial"

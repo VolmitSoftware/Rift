@@ -49,10 +49,16 @@
 #   {path}  ローカルレポートのパス
 #   {url}  レポートのURL
 
+#   {step}  クリックごとの増減量
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} は既に存在します。&f/rift info {world}&e で確認するか、別の名前を選んでください。"
+
 [rift.command]
+policy_edit = "ワールド設定エディターを開く"
 check_all = "一致するすべてのワールドを変更せずに確認する"
 version = "{prefix} のバージョンを表示"
 root = "サーバの世界を安全に管理"
@@ -247,6 +253,37 @@ action_teleport = "{prefix}&r &7› &7&aテレポートへ &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} 失敗しました &f{world}"
 
 [rift.gui]
+policy_native_default = "&7ゲームの既定値: &f{value}"
+policy_inherited = "&7ポリシー: INHERIT"
+policy_unloaded = "&7ワールド未読み込み: 継承値にはゲームの既定値を表示"
+policy_default = "&7既定値: &f{value}"
+policy_number = "&7左: +{step}; 右: -{step}; Shift: x10"
+policy_select = "&7クリックして利用可能な値から選択"
+policy_selected = "&a選択中"
+policy_apply = "&aスポーン座標を適用"
+policy_here = "&d現在位置を使用"
+policy_draft = "&7下書き: &f{value}"
+policy_enabled = "&d管理する"
+policy_x = "&dX座標"
+policy_y = "&dY座標"
+policy_z = "&dZ座標"
+policy_yaw = "&d向き"
+policy_border_size = "&d境界の直径"
+policy_warning_distance = "&d警告距離 (ブロック)"
+policy_warning_time = "&d警告時間 (秒)"
+policy_damage_amount = "&dブロックごとのダメージ"
+policy_damage_buffer = "&dダメージ猶予距離 (ブロック)"
+policy_title = "&dワールド設定"
+policy_reset = "&7Qキーで既定のポリシーに戻す"
+policy_spawn = "&7座標を調整してから安全なスポーンを適用"
+policy_center = "&d境界の中心 (x z)"
+policy_warning = "&d境界の警告 (ブロック数 秒数)"
+policy_damage = "&d境界ダメージ (量 猶予距離)"
+policy_denial = "&dアクセス拒否メッセージ"
+policy_tags = "&7カンマ区切りのタグ、または clear を入力"
+policy_clear = "&7初期設定に戻すには clear を入力"
+policy_previous = "&e前のページ"
+policy_next = "&e次のページ"
 current = "&7現在の: &f{value}"
 autoload = "&d自動ロード管理された世界"
 delete = "&d世界の検疫を許可する"

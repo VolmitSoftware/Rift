@@ -30,6 +30,21 @@ public final class RiftPolicyCommands {
         }
     }
 
+    @Director(name = "edit", description = "Open the world-policy editor", descriptionKey = "rift.command.policy_edit")
+    public void edit(
+            @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.managed_world", defaultValue = "all", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        if (!allowed(sender)) {
+            return;
+        }
+        if (sender instanceof Player player) {
+            plugin.policyMenu().open(player, name);
+        } else {
+            plugin.language().send(sender, RiftMessages.PLAYER_ONLY);
+        }
+    }
+
     @Director(name = "difficulty", description = "Set PEACEFUL, EASY, NORMAL, HARD, or INHERIT", descriptionKey = "rift.command.policy_difficulty")
     public void difficulty(
             @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.managed_world", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,

@@ -49,10 +49,16 @@
 #   {path}  נתיב הדוח המקומי
 #   {url}  כתובת הדוח
 
+#   {step}  גודל השינוי בכל לחיצה
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} כבר קיים. השתמשו ב־&f/rift info {world}&e לבדיקה, או בחרו שם אחר."
+
 [rift.command]
+policy_edit = "פתיחת עורך מדיניות העולם"
 check_all = "בדיקת כל העולמות התואמים בלי לשנות אותם"
 version = "הצגת הגרסה של {prefix}"
 root = "לנהל את עולמות השרתים בבטחה"
@@ -247,6 +253,37 @@ action_teleport = "{prefix}&r &7› &7&aנשלחה ל &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} נכשלת &f{world}"
 
 [rift.gui]
+policy_native_default = "&7ברירת המחדל המקורית: &f{value}"
+policy_inherited = "&7מדיניות: INHERIT"
+policy_unloaded = "&7העולם אינו טעון: ערכים בירושה מציגים את ברירות המחדל המקוריות"
+policy_default = "&7ברירת מחדל: &f{value}"
+policy_number = "&7שמאל: +{step}; ימין: -{step}; Shift: x10"
+policy_select = "&7לחצו לבחירה מתוך הערכים הזמינים"
+policy_selected = "&aנבחר"
+policy_apply = "&aהחלת קואורדינטות ההופעה"
+policy_here = "&dשימוש במיקום הנוכחי שלי"
+policy_draft = "&7טיוטה: &f{value}"
+policy_enabled = "&dמנוהל"
+policy_x = "&dקואורדינטת X"
+policy_y = "&dקואורדינטת Y"
+policy_z = "&dקואורדינטת Z"
+policy_yaw = "&dזווית סיבוב"
+policy_border_size = "&dקוטר הגבול"
+policy_warning_distance = "&dמרחק אזהרה (בלוקים)"
+policy_warning_time = "&dזמן אזהרה (שניות)"
+policy_damage_amount = "&dנזק לכל בלוק"
+policy_damage_buffer = "&dמרווח נזק (בלוקים)"
+policy_title = "&dמדיניות עולם"
+policy_reset = "&7לחצו Q לשחזור מדיניות ברירת המחדל"
+policy_spawn = "&7התאימו את הקואורדינטות ואז החילו נקודת הופעה בטוחה"
+policy_center = "&dמרכז הגבול (x z)"
+policy_warning = "&dאזהרת גבול (בלוקים שניות)"
+policy_damage = "&dנזק גבול (כמות מרווח)"
+policy_denial = "&dהודעת סירוב כניסה"
+policy_tags = "&7הזינו תגיות מופרדות בפסיקים או clear"
+policy_clear = "&7הזינו clear לשחזור ברירת המחדל"
+policy_previous = "&eהעמוד הקודם"
+policy_next = "&eהעמוד הבא"
 current = "&7המונחים: &f{value}"
 autoload = "&dעולמות מנוהלים על ידי Auto-load"
 delete = "&dתנו לעולם quarantine"

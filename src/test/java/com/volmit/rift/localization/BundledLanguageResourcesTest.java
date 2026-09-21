@@ -53,7 +53,7 @@ final class BundledLanguageResourcesTest {
     @Test
     void everyRemoteLocaleIsCompleteValidAndMeaningfullyTranslated() throws Exception {
         MessageCatalog catalog = RiftMessages.catalog();
-        assertThat(catalog.keys()).hasSize(339);
+        assertThat(catalog.keys()).hasSize(372);
         Set<String> expectedPlaceholders = catalog.keys().stream()
                 .flatMap(key -> key.placeholders().stream())
                 .collect(Collectors.toSet());

@@ -49,10 +49,16 @@
 #   {path}  Vietinės ataskaitos kelias
 #   {url}  Ataskaitos URL
 
+#   {step}  Pakeitimo dydis vienu spustelėjimu
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} jau yra. Patikrinkite su &f/rift info {world}&e arba pasirinkite kitą vardą."
+
 [rift.command]
+policy_edit = "Atverti pasaulio taisyklių redaktorių"
 check_all = "Patikrinti visus atitinkančius pasaulius jų nekeičiant"
 version = "Rodyti {prefix} versiją"
 root = "Tvarkyti serverio pasaulius saugiai"
@@ -247,6 +253,37 @@ action_teleport = "{prefix}&r &7› &7&aTeleportuotas į &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} nepavyko &f{world}"
 
 [rift.gui]
+policy_native_default = "&7Žaidimo numatytoji reikšmė: &f{value}"
+policy_inherited = "&7Taisyklė: INHERIT"
+policy_unloaded = "&7Pasaulis neįkeltas: paveldėtoms reikšmėms rodomos žaidimo numatytosios reikšmės"
+policy_default = "&7Numatyta: &f{value}"
+policy_number = "&7Kairė: +{step}; dešinė: -{step}; Shift: x10"
+policy_select = "&7Spustelėkite ir pasirinkite galimą reikšmę"
+policy_selected = "&aPasirinkta"
+policy_apply = "&aPritaikyti atsiradimo koordinates"
+policy_here = "&dNaudoti dabartinę mano vietą"
+policy_draft = "&7Juodraštis: &f{value}"
+policy_enabled = "&dValdoma"
+policy_x = "&dX koordinatė"
+policy_y = "&dY koordinatė"
+policy_z = "&dZ koordinatė"
+policy_yaw = "&dPosūkio kampas"
+policy_border_size = "&dRibos skersmuo"
+policy_warning_distance = "&dĮspėjimo atstumas (blokai)"
+policy_warning_time = "&dĮspėjimo laikas (sekundės)"
+policy_damage_amount = "&dŽala vienam blokui"
+policy_damage_buffer = "&dŽalos saugus atstumas (blokai)"
+policy_title = "&dPasaulio taisyklės"
+policy_reset = "&7Spauskite Q numatytajai taisyklei atkurti"
+policy_spawn = "&7Pakeiskite koordinates ir pritaikykite saugų atsiradimo tašką"
+policy_center = "&dRibos centras (x z)"
+policy_warning = "&dRibos įspėjimas (blokai sekundės)"
+policy_damage = "&dRibos žala (kiekis saugus atstumas)"
+policy_denial = "&dPrieigos draudimo pranešimas"
+policy_tags = "&7Įveskite kableliais atskirtas žymas arba clear"
+policy_clear = "&7Įveskite clear numatytajai reikšmei atkurti"
+policy_previous = "&eAnkstesnis puslapis"
+policy_next = "&eKitas puslapis"
 current = "&7Dabartinis: &f{value}"
 autoload = "&dAutomatiškai įkelti valdomus pasaulius"
 delete = "&dLeisti pasaulio karantinui"

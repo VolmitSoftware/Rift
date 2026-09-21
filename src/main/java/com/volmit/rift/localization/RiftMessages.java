@@ -246,7 +246,51 @@ public final class RiftMessages {
     public static final TextKey GUI_TITLE_STAY = key("rift.gui.title_stay", "&dTitle stay ticks");
     public static final TextKey GUI_TITLE_FADE_OUT = key("rift.gui.title_fade_out", "&dTitle fade-out ticks");
 
+    public static final TextKey COMMAND_POLICY_EDIT = key("rift.command.policy_edit", "Open the world-policy editor");
+    public static final TextKey GUI_POLICY_TITLE = key("rift.gui.policy_title", "&dWorld policies");
+    public static final TextKey GUI_POLICY_RESET = key("rift.gui.policy_reset", "&7Press Q to restore the default policy");
+    public static final TextKey GUI_POLICY_SPAWN = key("rift.gui.policy_spawn", "&7Adjust the coordinates, then apply the safe spawn");
+    public static final TextKey GUI_POLICY_CENTER = key("rift.gui.policy_center", "&dBorder center (x z)");
+    public static final TextKey GUI_POLICY_WARNING = key("rift.gui.policy_warning", "&dBorder warning (blocks seconds)");
+    public static final TextKey GUI_POLICY_DAMAGE = key("rift.gui.policy_damage", "&dBorder damage (amount buffer)");
+    public static final TextKey GUI_POLICY_DENIAL = key("rift.gui.policy_denial", "&dAccess denial message");
+    public static final TextKey GUI_POLICY_TAGS = key("rift.gui.policy_tags", "&7Enter comma-separated tags, or clear");
+    public static final TextKey GUI_POLICY_CLEAR = key("rift.gui.policy_clear", "&7Enter clear to restore the default");
+    public static final TextKey GUI_POLICY_PREVIOUS = key("rift.gui.policy_previous", "&ePrevious page");
+    public static final TextKey GUI_POLICY_NEXT = key("rift.gui.policy_next", "&eNext page");
+    public static final TextKey GUI_POLICY_DEFAULT = key("rift.gui.policy_default", "&7Default: &f{value}");
+    public static final TextKey GUI_POLICY_NATIVE_DEFAULT = key("rift.gui.policy_native_default", "&7Native default: &f{value}");
+    public static final TextKey GUI_POLICY_INHERITED = key("rift.gui.policy_inherited", "&7Policy: INHERIT");
+    public static final TextKey GUI_POLICY_UNLOADED = key("rift.gui.policy_unloaded", "&7World unloaded: inherited values show native defaults");
+    public static final TextKey GUI_POLICY_NUMBER = key("rift.gui.policy_number", "&7Left: +{step}; right: -{step}; shift: x10");
+    public static final TextKey GUI_POLICY_SELECT = key("rift.gui.policy_select", "&7Click to choose from the available values");
+    public static final TextKey GUI_POLICY_SELECTED = key("rift.gui.policy_selected", "&aSelected");
+    public static final TextKey GUI_POLICY_APPLY = key("rift.gui.policy_apply", "&aApply spawn coordinates");
+    public static final TextKey GUI_POLICY_HERE = key("rift.gui.policy_here", "&dUse my current position");
+    public static final TextKey GUI_POLICY_DRAFT = key("rift.gui.policy_draft", "&7Draft: &f{value}");
+    public static final TextKey GUI_POLICY_ENABLED = key("rift.gui.policy_enabled", "&dManaged");
+    public static final TextKey GUI_POLICY_X = key("rift.gui.policy_x", "&dX coordinate");
+    public static final TextKey GUI_POLICY_Y = key("rift.gui.policy_y", "&dY coordinate");
+    public static final TextKey GUI_POLICY_Z = key("rift.gui.policy_z", "&dZ coordinate");
+    public static final TextKey GUI_POLICY_YAW = key("rift.gui.policy_yaw", "&dYaw");
+    public static final TextKey GUI_POLICY_BORDER_SIZE = key("rift.gui.policy_border_size", "&dBorder diameter");
+    public static final TextKey GUI_POLICY_WARNING_DISTANCE = key("rift.gui.policy_warning_distance", "&dWarning distance (blocks)");
+    public static final TextKey GUI_POLICY_WARNING_TIME = key("rift.gui.policy_warning_time", "&dWarning time (seconds)");
+    public static final TextKey GUI_POLICY_DAMAGE_AMOUNT = key("rift.gui.policy_damage_amount", "&dDamage per block");
+    public static final TextKey GUI_POLICY_DAMAGE_BUFFER = key("rift.gui.policy_damage_buffer", "&dDamage buffer (blocks)");
+
+    public static final TextKey WORLD_ALREADY_EXISTS = key("rift.world.already_exists", CHAT_PREFIX + "&e{world} already exists. Use &f/rift info {world}&e to inspect it, or choose another name.");
+
     private static final List<TextKey> KEYS = List.of(
+            WORLD_ALREADY_EXISTS,
+            COMMAND_POLICY_EDIT, GUI_POLICY_TITLE, GUI_POLICY_RESET, GUI_POLICY_SPAWN,
+            GUI_POLICY_CENTER, GUI_POLICY_WARNING, GUI_POLICY_DAMAGE, GUI_POLICY_DENIAL,
+            GUI_POLICY_TAGS, GUI_POLICY_CLEAR, GUI_POLICY_PREVIOUS, GUI_POLICY_NEXT,
+            GUI_POLICY_DEFAULT, GUI_POLICY_NUMBER, GUI_POLICY_SELECT, GUI_POLICY_SELECTED,
+            GUI_POLICY_NATIVE_DEFAULT, GUI_POLICY_INHERITED, GUI_POLICY_UNLOADED,
+            GUI_POLICY_APPLY, GUI_POLICY_HERE, GUI_POLICY_DRAFT, GUI_POLICY_ENABLED,
+            GUI_POLICY_X, GUI_POLICY_Y, GUI_POLICY_Z, GUI_POLICY_YAW, GUI_POLICY_BORDER_SIZE,
+            GUI_POLICY_WARNING_DISTANCE, GUI_POLICY_WARNING_TIME, GUI_POLICY_DAMAGE_AMOUNT, GUI_POLICY_DAMAGE_BUFFER,
             PREFIX, VERSION, COMMAND_ROOT, COMMAND_CREATE, COMMAND_IMPORT, COMMAND_LOAD, COMMAND_UNLOAD, COMMAND_DELETE,
             COMMAND_RESTORE, COMMAND_TELEPORT, COMMAND_SEND, COMMAND_LIST, COMMAND_INFO, COMMAND_GENERATORS,
             COMMAND_CONFIG, COMMAND_LANGUAGE, COMMAND_STATUS, COMMAND_DEBUG, COMMAND_DEBUG_DUMP, COMMAND_VERSION,

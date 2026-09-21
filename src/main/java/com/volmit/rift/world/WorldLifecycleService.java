@@ -146,7 +146,8 @@ public final class WorldLifecycleService {
             if (RiftWorldIdentity.findLoaded(validName) != null
                     || directories.exists(validName)
                     || profiles.find(validName).isPresent()) {
-                throw new IOException("a world, directory, or profile with that name already exists");
+                language.send(sender, RiftMessages.WORLD_ALREADY_EXISTS, worldArg(validName));
+                return;
             }
             requireGenerator(generator);
             OptionalLong seed = parseSeed(seedText);

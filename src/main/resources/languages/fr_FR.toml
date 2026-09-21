@@ -49,10 +49,13 @@
 #   {path}  Chemin du rapport local
 #   {url}  URL du rapport
 
+#   {step}  pas des modifications numériques
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_edit = "Ouvrir l’éditeur des règles du monde"
 check_all = "Vérifier tous les mondes correspondants sans les modifier"
 version = "Afficher la version de {prefix}"
 root = "Gérer les mondes des serveurs en toute sécurité"
@@ -246,7 +249,41 @@ action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
 action_teleport = "{prefix}&r &7› &7&aTéléporté à &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} échoué pour &f{world}"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} existe déjà. Utilisez &f/rift info {world}&e pour l’inspecter ou choisissez un autre nom."
+
 [rift.gui]
+policy_native_default = "&7Valeur native par défaut: &f{value}"
+policy_inherited = "&7Règle: INHERIT"
+policy_unloaded = "&7Monde déchargé : les valeurs héritées affichent les valeurs natives par défaut"
+policy_default = "&7Par défaut: &f{value}"
+policy_number = "&7Gauche: +{step}; droite: -{step}; Maj: x10"
+policy_select = "&7Cliquez pour choisir parmi les valeurs disponibles"
+policy_selected = "&aSélectionné"
+policy_apply = "&aAppliquer les coordonnées d’apparition"
+policy_here = "&dUtiliser ma position actuelle"
+policy_draft = "&7Brouillon: &f{value}"
+policy_enabled = "&dGéré"
+policy_x = "&dCoordonnée X"
+policy_y = "&dCoordonnée Y"
+policy_z = "&dCoordonnée Z"
+policy_yaw = "&dOrientation horizontale"
+policy_border_size = "&dDiamètre de la bordure"
+policy_warning_distance = "&dDistance d’avertissement (blocs)"
+policy_warning_time = "&dDurée d’avertissement (secondes)"
+policy_damage_amount = "&dDégâts par bloc"
+policy_damage_buffer = "&dMarge sans dégâts (blocs)"
+policy_title = "&dRègles du monde"
+policy_reset = "&7Appuyez sur Q pour rétablir la règle par défaut"
+policy_spawn = "&7Ajustez les coordonnées, puis appliquez le point sûr"
+policy_center = "&dCentre de la bordure (x z)"
+policy_warning = "&dAvertissement de bordure (blocs secondes)"
+policy_damage = "&dDégâts de bordure (quantité marge)"
+policy_denial = "&dMessage de refus d’accès"
+policy_tags = "&7Saisissez des étiquettes séparées par des virgules, ou clear"
+policy_clear = "&7Saisissez clear pour rétablir la valeur par défaut"
+policy_previous = "&ePage précédente"
+policy_next = "&ePage suivante"
 current = "&7Actuellement & #160;: &f{value}"
 autoload = "&dLes mondes gérés par charge automatique"
 delete = "&dAutoriser la quarantaine mondiale"

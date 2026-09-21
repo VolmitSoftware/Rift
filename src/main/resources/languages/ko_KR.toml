@@ -49,10 +49,16 @@
 #   {path}  로컬 보고서 경로
 #   {url}  보고서 URL
 
+#   {step}  클릭당 변경량
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world}은(는) 이미 존재합니다. &f/rift info {world}&e로 확인하거나 다른 이름을 선택하세요."
+
 [rift.command]
+policy_edit = "월드 정책 편집기 열기"
 check_all = "일치하는 모든 월드를 변경 없이 검사"
 version = "{prefix} 버전 표시"
 root = "서버 세계를 안전하게 관리"
@@ -247,6 +253,37 @@ action_teleport = "{prefix}&r &7› &7&a텔레포트 &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} 실패한 &f{world}"
 
 [rift.gui]
+policy_native_default = "&7게임 기본값: &f{value}"
+policy_inherited = "&7정책: INHERIT"
+policy_unloaded = "&7월드가 로드되지 않음: 상속된 값은 게임 기본값으로 표시"
+policy_default = "&7기본값: &f{value}"
+policy_number = "&7왼쪽: +{step}; 오른쪽: -{step}; Shift: x10"
+policy_select = "&7클릭하여 사용 가능한 값 선택"
+policy_selected = "&a선택됨"
+policy_apply = "&a스폰 좌표 적용"
+policy_here = "&d현재 위치 사용"
+policy_draft = "&7초안: &f{value}"
+policy_enabled = "&d관리됨"
+policy_x = "&dX 좌표"
+policy_y = "&dY 좌표"
+policy_z = "&dZ 좌표"
+policy_yaw = "&d방향"
+policy_border_size = "&d경계 지름"
+policy_warning_distance = "&d경고 거리 (블록)"
+policy_warning_time = "&d경고 시간 (초)"
+policy_damage_amount = "&d블록당 피해"
+policy_damage_buffer = "&d피해 완충 거리 (블록)"
+policy_title = "&d월드 정책"
+policy_reset = "&7Q를 눌러 기본 정책 복원"
+policy_spawn = "&7좌표를 조정한 다음 안전한 스폰 적용"
+policy_center = "&d경계 중심 (x z)"
+policy_warning = "&d경계 경고 (블록 초)"
+policy_damage = "&d경계 피해 (피해량 완충 거리)"
+policy_denial = "&d접근 거부 메시지"
+policy_tags = "&7쉼표로 구분한 태그 또는 clear 입력"
+policy_clear = "&7기본값을 복원하려면 clear 입력"
+policy_previous = "&e이전 페이지"
+policy_next = "&e다음 페이지"
 current = "&7현재: &f{value}"
 autoload = "&dAuto-load 관리 세계"
 delete = "&d세계 quarantine 허용"

@@ -26,6 +26,8 @@ import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
@@ -43,6 +45,16 @@ import static org.mockito.Mockito.when;
 final class WorldPolicyServiceTest {
     @TempDir
     Path temporaryDirectory;
+
+    @Test
+    void ruleSnapshotRetainsOnlyExplicitSupportedValuesAndCopiesItsInput() {
+        Map<String, String> available = new LinkedHashMap<>();
+        available.put("minecraft:advance_time", "true");
+        WorldPolicyService.GameRuleSnapshot snapshot = new WorldPolicyService.GameRuleSnapshot(true, available);
+        available.put("minecraft:max_minecart_speed", "8");
+        assertThat(snapshot.loaded()).isTrue();
+        assertThat(snapshot.values()).containsExactlyEntriesOf(Map.of("minecraft:advance_time", "true"));
+    }
 
     @Test
     void queuedActivationUsesTheLatestProfile() throws Exception {

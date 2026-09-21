@@ -12,6 +12,7 @@ import com.volmit.rift.config.RiftConfigManager;
 import com.volmit.rift.debug.RiftDebugContributor;
 import com.volmit.rift.feedback.RiftFeedbackService;
 import com.volmit.rift.gui.RiftConfigMenu;
+import com.volmit.rift.gui.RiftWorldPolicyMenu;
 import com.volmit.rift.hotload.RiftHotloadService;
 import com.volmit.rift.localization.RiftLocalization;
 import com.volmit.rift.localization.RiftMessages;
@@ -54,6 +55,7 @@ public final class Rift extends JavaPlugin implements ReloadAware {
     private RiftMetricsService metrics;
     private RiftHotloadService hotload;
     private RiftConfigMenu configMenu;
+    private RiftWorldPolicyMenu policyMenu;
     private RiftCommandService commands;
 
     public static Rift get() {
@@ -125,6 +127,8 @@ public final class Rift extends JavaPlugin implements ReloadAware {
             );
             configMenu = new RiftConfigMenu(this, config, language, hotload);
             getServer().getPluginManager().registerEvents(configMenu, this);
+            policyMenu = new RiftWorldPolicyMenu(this);
+            getServer().getPluginManager().registerEvents(policyMenu, this);
             languageSwitcher = BukkitLanguageSwitcher.register(
                     this,
                     language.selections(),
@@ -226,6 +230,10 @@ public final class Rift extends JavaPlugin implements ReloadAware {
         return configMenu;
     }
 
+    public RiftWorldPolicyMenu policyMenu() {
+        return policyMenu;
+    }
+
     public RiftHotloadService hotload() {
         return hotload;
     }
@@ -252,6 +260,9 @@ public final class Rift extends JavaPlugin implements ReloadAware {
         }
         if (configMenu != null) {
             configMenu.shutdown();
+        }
+        if (policyMenu != null) {
+            policyMenu.shutdown();
         }
         if (debugDump != null) {
             debugDump.close();

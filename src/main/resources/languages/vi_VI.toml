@@ -49,10 +49,16 @@
 #   {path}  Đường dẫn báo cáo cục bộ
 #   {url}  URL báo cáo
 
+#   {step}  Mức thay đổi mỗi lần nhấp
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} đã tồn tại. Dùng &f/rift info {world}&e để kiểm tra hoặc chọn tên khác."
+
 [rift.command]
+policy_edit = "Mở trình sửa chính sách thế giới"
 check_all = "Kiểm tra tất cả thế giới phù hợp mà không thay đổi chúng"
 version = "Hiển thị phiên bản {prefix}"
 root = "Quản lý thế giới máy phục vụ an toàn"
@@ -251,6 +257,37 @@ action_teleport = "{prefix}&r &7› &7&aChuyển tới &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} bị lỗi &f{world}"
 
 [rift.gui]
+policy_native_default = "&7Mặc định của trò chơi: &f{value}"
+policy_inherited = "&7Chính sách: INHERIT"
+policy_unloaded = "&7Thế giới chưa tải: giá trị kế thừa hiển thị mặc định của trò chơi"
+policy_default = "&7Mặc định: &f{value}"
+policy_number = "&7Trái: +{step}; phải: -{step}; Shift: x10"
+policy_select = "&7Nhấp để chọn từ các giá trị có sẵn"
+policy_selected = "&aĐã chọn"
+policy_apply = "&aÁp dụng tọa độ xuất hiện"
+policy_here = "&dDùng vị trí hiện tại của tôi"
+policy_draft = "&7Bản nháp: &f{value}"
+policy_enabled = "&dĐược quản lý"
+policy_x = "&dTọa độ X"
+policy_y = "&dTọa độ Y"
+policy_z = "&dTọa độ Z"
+policy_yaw = "&dGóc xoay"
+policy_border_size = "&dĐường kính biên giới"
+policy_warning_distance = "&dKhoảng cách cảnh báo (khối)"
+policy_warning_time = "&dThời gian cảnh báo (giây)"
+policy_damage_amount = "&dSát thương mỗi khối"
+policy_damage_buffer = "&dKhoảng đệm sát thương (khối)"
+policy_title = "&dChính sách thế giới"
+policy_reset = "&7Nhấn Q để khôi phục chính sách mặc định"
+policy_spawn = "&7Điều chỉnh tọa độ rồi áp dụng điểm xuất hiện an toàn"
+policy_center = "&dTâm biên giới (x z)"
+policy_warning = "&dCảnh báo biên giới (khối giây)"
+policy_damage = "&dSát thương biên giới (mức khoảng đệm)"
+policy_denial = "&dThông báo từ chối truy cập"
+policy_tags = "&7Nhập các nhãn phân cách bằng dấu phẩy, hoặc clear"
+policy_clear = "&7Nhập clear để khôi phục mặc định"
+policy_previous = "&eTrang trước"
+policy_next = "&eTrang sau"
 current = "&7& Hiện có: &f{value}"
 autoload = "&dTải tự động lên các thế giới"
 delete = "&dCho phép việc cách ly thế giới"

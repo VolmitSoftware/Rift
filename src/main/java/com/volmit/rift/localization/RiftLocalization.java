@@ -941,6 +941,7 @@ public final class RiftLocalization implements AutoCloseable {
                         Map.entry("seconds", "duration"),
                         Map.entry("section", "editor section"),
                         Map.entry("setting", "setting"),
+                        Map.entry("step", "numeric change per click"),
                         Map.entry("target", "selection target"),
                         Map.entry("title", "section title"),
                         Map.entry("type", "value type"),

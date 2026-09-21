@@ -49,10 +49,13 @@
 #   {path}  Lokaler Berichtspfad
 #   {url}  Berichts-URL
 
+#   {step}  Schrittweite numerischer Änderungen
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_edit = "Weltregel-Editor öffnen"
 check_all = "Alle passenden Welten prüfen, ohne sie zu verändern"
 version = "{prefix}-Version anzeigen"
 root = "Serverwelten sicher verwalten"
@@ -246,7 +249,41 @@ action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
 action_teleport = "{prefix}&r &7› &7&aTeleportiert nach &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} gescheitert für &f{world}"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} existiert bereits. Mit &f/rift info {world}&e prüfen oder einen anderen Namen wählen."
+
 [rift.gui]
+policy_native_default = "&7Nativer Standard: &f{value}"
+policy_inherited = "&7Regel: INHERIT"
+policy_unloaded = "&7Welt entladen: geerbte Werte zeigen native Standards"
+policy_default = "&7Standard: &f{value}"
+policy_number = "&7Links: +{step}; rechts: -{step}; Umschalt: x10"
+policy_select = "&7Klicken, um einen verfügbaren Wert auszuwählen"
+policy_selected = "&aAusgewählt"
+policy_apply = "&aSpawnkoordinaten anwenden"
+policy_here = "&dMeine aktuelle Position verwenden"
+policy_draft = "&7Entwurf: &f{value}"
+policy_enabled = "&dVerwaltet"
+policy_x = "&dX-Koordinate"
+policy_y = "&dY-Koordinate"
+policy_z = "&dZ-Koordinate"
+policy_yaw = "&dBlickrichtung"
+policy_border_size = "&dGrenzdurchmesser"
+policy_warning_distance = "&dWarnabstand (Blöcke)"
+policy_warning_time = "&dWarnzeit (Sekunden)"
+policy_damage_amount = "&dSchaden pro Block"
+policy_damage_buffer = "&dSchadenspuffer (Blöcke)"
+policy_title = "&dWeltregeln"
+policy_reset = "&7Q drücken, um die Standardregel wiederherzustellen"
+policy_spawn = "&7Koordinaten anpassen und den sicheren Spawn anwenden"
+policy_center = "&dGrenzmittelpunkt (x z)"
+policy_warning = "&dGrenzwarnung (Blöcke Sekunden)"
+policy_damage = "&dGrenzschaden (Menge Puffer)"
+policy_denial = "&dNachricht bei verweigertem Zugang"
+policy_tags = "&7Kommagetrennte Tags oder clear eingeben"
+policy_clear = "&7clear eingeben, um den Standard wiederherzustellen"
+policy_previous = "&eVorherige Seite"
+policy_next = "&eNächste Seite"
 current = "&7Aktuell: &f{value}"
 autoload = "&dAuto-Load Managed Worlds"
 delete = "&dWeltquarantäne zulassen"

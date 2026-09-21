@@ -49,10 +49,13 @@
 #   {path}  Lokaal rapportpad
 #   {url}  Rapport-URL
 
+#   {step}  stapgrootte van numerieke wijzigingen
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_edit = "Wereldbeleidseditor openen"
 check_all = "Alle overeenkomende werelden controleren zonder ze te wijzigen"
 version = "Toon de versie van {prefix}"
 root = "Serverwerelden veilig beheren"
@@ -250,7 +253,41 @@ action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
 action_teleport = "{prefix}&r &7› &7&aTeleporteren naar &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} mislukt voor &f{world}"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} bestaat al. Gebruik &f/rift info {world}&e om deze te bekijken of kies een andere naam."
+
 [rift.gui]
+policy_native_default = "&7Oorspronkelijke standaard: &f{value}"
+policy_inherited = "&7Beleid: INHERIT"
+policy_unloaded = "&7Wereld niet geladen: overgenomen waarden tonen oorspronkelijke standaarden"
+policy_default = "&7Standaard: &f{value}"
+policy_number = "&7Links: +{step}; rechts: -{step}; shift: x10"
+policy_select = "&7Klik om uit de beschikbare waarden te kiezen"
+policy_selected = "&aGeselecteerd"
+policy_apply = "&aSpawncoördinaten toepassen"
+policy_here = "&dMijn huidige positie gebruiken"
+policy_draft = "&7Concept: &f{value}"
+policy_enabled = "&dBeheerd"
+policy_x = "&dX-coördinaat"
+policy_y = "&dY-coördinaat"
+policy_z = "&dZ-coördinaat"
+policy_yaw = "&dKijkrichting"
+policy_border_size = "&dGrensdiameter"
+policy_warning_distance = "&dWaarschuwingsafstand (blokken)"
+policy_warning_time = "&dWaarschuwingstijd (seconden)"
+policy_damage_amount = "&dSchade per blok"
+policy_damage_buffer = "&dSchadebuffer (blokken)"
+policy_title = "&dWereldbeleid"
+policy_reset = "&7Druk op Q om het standaardbeleid te herstellen"
+policy_spawn = "&7Pas de coördinaten aan en stel het veilige spawnpunt in"
+policy_center = "&dGrensmiddelpunt (x z)"
+policy_warning = "&dGrenswaarschuwing (blokken seconden)"
+policy_damage = "&dGrensschade (hoeveelheid buffer)"
+policy_denial = "&dBericht bij geweigerde toegang"
+policy_tags = "&7Voer kommagescheiden tags in, of clear"
+policy_clear = "&7Voer clear in om de standaard te herstellen"
+policy_previous = "&eVorige pagina"
+policy_next = "&eVolgende pagina"
 current = "&7Huidig: &f{value}"
 autoload = "&dGemanagede werelden automatisch laden"
 delete = "&dWereldse quarantaine toestaan"

@@ -107,7 +107,7 @@ tasks.named('shadowJar').configure {
 }
 
 tasks.named('build').configure {
-    dependsOn(tasks.named('shadowJar'))
+    dependsOn('stageBuild')
 }
 
 tasks.named('test').configure {
@@ -127,6 +127,7 @@ tasks.register('verifyJava25Artifact') {
         java.util.zip.ZipFile archive = new java.util.zip.ZipFile(artifact)
         int pluginMetadataCount = 0
         int maximumClassMajor = 0
+        int mainClassMajor = 0
         boolean bStatsMetricsClassPresent = false
         Set<String> bundledLanguages = new TreeSet<>()
         Properties languageManifest = null
@@ -164,6 +165,9 @@ tasks.register('verifyJava25Artifact') {
                             throw new GradleException("Invalid class header in shaded artifact: ${path}")
                         }
                         maximumClassMajor = Math.max(maximumClassMajor, major)
+                        if (path == mainClass.replace('.', '/') + '.class') {
+                            mainClassMajor = major
+                        }
                     } finally {
                         input.close()
                     }
@@ -177,6 +181,9 @@ tasks.register('verifyJava25Artifact') {
         }
         if (maximumClassMajor > 69) {
             throw new GradleException("Shaded artifact contains class major ${maximumClassMajor}; Java 25 allows at most 69")
+        }
+        if (mainClassMajor != 69) {
+            throw new GradleException("Rift's entry point must target Java 25 (class major 69), found ${mainClassMajor}")
         }
         if (!bStatsMetricsClassPresent) {
             throw new GradleException('Shaded artifact does not contain the package-isolated bStats Metrics class')
@@ -201,15 +208,21 @@ tasks.named('check').configure {
     dependsOn(tasks.named('verifyJava25Artifact'))
 }
 
-tasks.register('buildSwiftSwamp', Copy) {
+tasks.register('stageBuild', Copy) {
     group = 'development'
-    description = 'Builds and deploys Rift to the local BUILDS output directory.'
+    description = 'Verifies and stages Rift.jar in the local BUILDS output directory.'
     outputs.upToDateWhen { false }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     dependsOn(tasks.named('check'), tasks.named('shadowJar'))
     from(tasks.named('shadowJar').flatMap { it.archiveFile })
-    into(file('C://VolmitSoftware/BUILDS'))
+    into(file('../BUILDS'))
     rename { String ignored -> 'Rift.jar' }
+}
+
+tasks.register('buildSwiftSwamp') {
+    group = 'development'
+    description = 'Verifies and stages Rift.jar in the local BUILDS output directory.'
+    dependsOn(tasks.named('stageBuild'))
 }
 
 configurations.configureEach {

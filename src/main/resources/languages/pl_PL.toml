@@ -49,10 +49,13 @@
 #   {path}  Ścieżka lokalnego raportu
 #   {url}  Adres URL raportu
 
+#   {step}  krok zmiany wartości liczbowej
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_edit = "Otwórz edytor zasad świata"
 check_all = "Sprawdź wszystkie pasujące światy bez ich zmieniania"
 version = "Pokaż wersję {prefix}"
 root = "Zarządzanie światami serwerów bezpiecznie"
@@ -250,7 +253,41 @@ action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
 action_teleport = "{prefix}&r &7› &7&aTeleportowane do &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} nie udało się dla &f{world}"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} już istnieje. Użyj &f/rift info {world}&e, aby go sprawdzić, lub wybierz inną nazwę."
+
 [rift.gui]
+policy_native_default = "&7Natywna wartość domyślna: &f{value}"
+policy_inherited = "&7Reguła: INHERIT"
+policy_unloaded = "&7Świat niezaładowany: dziedziczone wartości pokazują natywne ustawienia domyślne"
+policy_default = "&7Domyślnie: &f{value}"
+policy_number = "&7Lewy: +{step}; prawy: -{step}; shift: x10"
+policy_select = "&7Kliknij, aby wybrać jedną z dostępnych wartości"
+policy_selected = "&aWybrano"
+policy_apply = "&aZastosuj współrzędne odrodzenia"
+policy_here = "&dUżyj mojej bieżącej pozycji"
+policy_draft = "&7Wersja robocza: &f{value}"
+policy_enabled = "&dZarządzane"
+policy_x = "&dWspółrzędna X"
+policy_y = "&dWspółrzędna Y"
+policy_z = "&dWspółrzędna Z"
+policy_yaw = "&dKierunek patrzenia"
+policy_border_size = "&dŚrednica granicy"
+policy_warning_distance = "&dOdległość ostrzeżenia (bloki)"
+policy_warning_time = "&dCzas ostrzeżenia (sekundy)"
+policy_damage_amount = "&dObrażenia na blok"
+policy_damage_buffer = "&dBufor obrażeń (bloki)"
+policy_title = "&dZasady świata"
+policy_reset = "&7Naciśnij Q, aby przywrócić domyślną regułę"
+policy_spawn = "&7Dostosuj współrzędne i zastosuj bezpieczny punkt odrodzenia"
+policy_center = "&dŚrodek granicy (x z)"
+policy_warning = "&dOstrzeżenie granicy (bloki sekundy)"
+policy_damage = "&dObrażenia granicy (wartość bufor)"
+policy_denial = "&dWiadomość odmowy dostępu"
+policy_tags = "&7Wpisz znaczniki oddzielone przecinkami lub clear"
+policy_clear = "&7Wpisz clear, aby przywrócić wartość domyślną"
+policy_previous = "&ePoprzednia strona"
+policy_next = "&eNastępna strona"
 current = "&7Bieżące: &f{value}"
 autoload = "&dAutomatyczne ładowanie zarządzanych światów"
 delete = "&dPozwolić na kwarantannę na świecie"

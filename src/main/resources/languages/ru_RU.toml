@@ -49,10 +49,16 @@
 #   {path}  Путь к локальному отчёту
 #   {url}  URL отчёта
 
+#   {step}  Шаг изменения при нажатии
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} уже существует. Используйте &f/rift info {world}&e для проверки или выберите другое имя."
+
 [rift.command]
+policy_edit = "Открыть редактор правил мира"
 check_all = "Проверить все подходящие миры, не изменяя их"
 version = "Показать версию {prefix}"
 root = "Безопасное управление серверными мирами"
@@ -251,6 +257,37 @@ action_teleport = "{prefix}&r &7› &7&aТелепортирован в &a{world
 action_failure = "{prefix}&r &7› &7&c{operation} Неудавшийся для &f{world}"
 
 [rift.gui]
+policy_native_default = "&7Стандартное значение игры: &f{value}"
+policy_inherited = "&7Правило: INHERIT"
+policy_unloaded = "&7Мир не загружен: для наследуемых значений показаны стандартные значения игры"
+policy_default = "&7По умолчанию: &f{value}"
+policy_number = "&7Левая: +{step}; правая: -{step}; Shift: x10"
+policy_select = "&7Нажмите для выбора доступного значения"
+policy_selected = "&aВыбрано"
+policy_apply = "&aПрименить координаты появления"
+policy_here = "&dИспользовать мою текущую позицию"
+policy_draft = "&7Черновик: &f{value}"
+policy_enabled = "&dУправление"
+policy_x = "&dКоордината X"
+policy_y = "&dКоордината Y"
+policy_z = "&dКоордината Z"
+policy_yaw = "&dУгол поворота"
+policy_border_size = "&dДиаметр границы"
+policy_warning_distance = "&dРасстояние предупреждения (блоки)"
+policy_warning_time = "&dВремя предупреждения (секунды)"
+policy_damage_amount = "&dУрон за блок"
+policy_damage_buffer = "&dБуфер урона (блоки)"
+policy_title = "&dПравила мира"
+policy_reset = "&7Нажмите Q для восстановления правила по умолчанию"
+policy_spawn = "&7Настройте координаты и примените безопасную точку появления"
+policy_center = "&dЦентр границы (x z)"
+policy_warning = "&dПредупреждение границы (блоки секунды)"
+policy_damage = "&dУрон границы (величина буфер)"
+policy_denial = "&dСообщение об отказе в доступе"
+policy_tags = "&7Введите метки через запятую или clear"
+policy_clear = "&7Введите clear для восстановления значения по умолчанию"
+policy_previous = "&eПредыдущая страница"
+policy_next = "&eСледующая страница"
 current = "&7Текущее: &f{value}"
 autoload = "&dАвтозагрузка управляемых миров"
 delete = "&dРазрешить мировой карантин"

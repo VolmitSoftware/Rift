@@ -49,10 +49,13 @@
 #   {path}  Caminho do relatório local
 #   {url}  URL do relatório
 
+#   {step}  incremento das alterações numéricas
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_edit = "Abrir o editor de regras do mundo"
 check_all = "Verificar todos os mundos correspondentes sem os alterar"
 version = "Mostrar a versão do {prefix}"
 root = "Gerenciar mundos de servidor com segurança"
@@ -250,7 +253,41 @@ action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
 action_teleport = "{prefix}&r &7› &7&aTeletransportado para &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} falhou por &f{world}"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} já existe. Use &f/rift info {world}&e para o inspecionar ou escolha outro nome."
+
 [rift.gui]
+policy_native_default = "&7Valor nativo predefinido: &f{value}"
+policy_inherited = "&7Regra: INHERIT"
+policy_unloaded = "&7Mundo descarregado: os valores herdados mostram as predefinições nativas"
+policy_default = "&7Predefinição: &f{value}"
+policy_number = "&7Esquerdo: +{step}; direito: -{step}; shift: x10"
+policy_select = "&7Clique para escolher entre os valores disponíveis"
+policy_selected = "&aSelecionado"
+policy_apply = "&aAplicar coordenadas de aparecimento"
+policy_here = "&dUsar a minha posição atual"
+policy_draft = "&7Rascunho: &f{value}"
+policy_enabled = "&dGerido"
+policy_x = "&dCoordenada X"
+policy_y = "&dCoordenada Y"
+policy_z = "&dCoordenada Z"
+policy_yaw = "&dOrientação horizontal"
+policy_border_size = "&dDiâmetro da fronteira"
+policy_warning_distance = "&dDistância de aviso (blocos)"
+policy_warning_time = "&dTempo de aviso (segundos)"
+policy_damage_amount = "&dDano por bloco"
+policy_damage_buffer = "&dMargem sem dano (blocos)"
+policy_title = "&dRegras do mundo"
+policy_reset = "&7Prima Q para repor a regra predefinida"
+policy_spawn = "&7Ajuste as coordenadas e aplique o ponto seguro"
+policy_center = "&dCentro da fronteira (x z)"
+policy_warning = "&dAviso da fronteira (blocos segundos)"
+policy_damage = "&dDano da fronteira (quantidade margem)"
+policy_denial = "&dMensagem de acesso negado"
+policy_tags = "&7Introduza etiquetas separadas por vírgulas, ou clear"
+policy_clear = "&7Introduza clear para repor o valor predefinido"
+policy_previous = "&ePágina anterior"
+policy_next = "&ePágina seguinte"
 current = "&7Atual: &f{value}"
 autoload = "&dCarregar automaticamente mundos gerenciados"
 delete = "&dPermitir a quarentena mundial"

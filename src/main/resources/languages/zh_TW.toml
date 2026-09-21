@@ -49,10 +49,16 @@
 #   {path}  本機報告路徑
 #   {url}  報告網址
 
+#   {step}  每次點擊的調整量
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} 已存在。使用 &f/rift info {world}&e 檢查，或選擇其他名稱。"
+
 [rift.command]
+policy_edit = "開啟世界策略編輯器"
 check_all = "檢查所有符合條件的世界，不進行變更"
 version = "顯示 {prefix} 版本"
 root = "安全管理伺服器世界"
@@ -251,6 +257,37 @@ action_teleport = "{prefix}&r &7› &7&a傳送到 &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} 失敗 &f{world}"
 
 [rift.gui]
+policy_native_default = "&7遊戲預設值: &f{value}"
+policy_inherited = "&7策略: INHERIT"
+policy_unloaded = "&7世界未載入：繼承值顯示為遊戲預設值"
+policy_default = "&7預設值: &f{value}"
+policy_number = "&7左鍵: +{step}; 右鍵: -{step}; Shift: x10"
+policy_select = "&7點擊從可用值中選擇"
+policy_selected = "&a已選擇"
+policy_apply = "&a套用出生點座標"
+policy_here = "&d使用我的目前位置"
+policy_draft = "&7草稿: &f{value}"
+policy_enabled = "&d託管"
+policy_x = "&dX 座標"
+policy_y = "&dY 座標"
+policy_z = "&dZ 座標"
+policy_yaw = "&d偏航角"
+policy_border_size = "&d邊界直徑"
+policy_warning_distance = "&d警告距離 (方塊)"
+policy_warning_time = "&d警告時間 (秒)"
+policy_damage_amount = "&d每方塊傷害"
+policy_damage_buffer = "&d傷害緩衝距離 (方塊)"
+policy_title = "&d世界策略"
+policy_reset = "&7按 Q 還原預設策略"
+policy_spawn = "&7調整座標後套用安全出生點"
+policy_center = "&d邊界中心 (x z)"
+policy_warning = "&d邊界警告 (方塊 秒)"
+policy_damage = "&d邊界傷害 (傷害量 緩衝距離)"
+policy_denial = "&d拒絕存取訊息"
+policy_tags = "&7輸入以逗號分隔的標籤，或輸入 clear"
+policy_clear = "&7輸入 clear 還原預設值"
+policy_previous = "&e上一頁"
+policy_next = "&e下一頁"
 current = "&7當前 : &f{value}"
 autoload = "&d自動裝入管理的世界"
 delete = "&d允許世界隔離"

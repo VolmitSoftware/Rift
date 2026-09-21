@@ -49,10 +49,13 @@
 #   {path}  Percorso del rapporto locale
 #   {url}  URL del rapporto
 
+#   {step}  incremento delle modifiche numeriche
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_edit = "Apri l’editor delle regole del mondo"
 check_all = "Controlla tutti i mondi corrispondenti senza modificarli"
 version = "Mostra la versione di {prefix}"
 root = "Gestire i mondi server in modo sicuro"
@@ -246,7 +249,41 @@ action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
 action_teleport = "{prefix}&r &7› &7&aTeletrasporto a &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} fallito per &f{world}"
 
+[rift.world]
+already_exists = "{prefix}&r &7› &7&e{world} esiste già. Usa &f/rift info {world}&e per esaminarlo o scegli un altro nome."
+
 [rift.gui]
+policy_native_default = "&7Valore nativo predefinito: &f{value}"
+policy_inherited = "&7Regola: INHERIT"
+policy_unloaded = "&7Mondo non caricato: i valori ereditati mostrano i valori nativi predefiniti"
+policy_default = "&7Predefinito: &f{value}"
+policy_number = "&7Sinistro: +{step}; destro: -{step}; Maiusc: x10"
+policy_select = "&7Clicca per scegliere tra i valori disponibili"
+policy_selected = "&aSelezionato"
+policy_apply = "&aApplica coordinate di generazione"
+policy_here = "&dUsa la mia posizione attuale"
+policy_draft = "&7Bozza: &f{value}"
+policy_enabled = "&dGestito"
+policy_x = "&dCoordinata X"
+policy_y = "&dCoordinata Y"
+policy_z = "&dCoordinata Z"
+policy_yaw = "&dOrientamento orizzontale"
+policy_border_size = "&dDiametro del confine"
+policy_warning_distance = "&dDistanza di avviso (blocchi)"
+policy_warning_time = "&dTempo di avviso (secondi)"
+policy_damage_amount = "&dDanno per blocco"
+policy_damage_buffer = "&dMargine senza danno (blocchi)"
+policy_title = "&dRegole del mondo"
+policy_reset = "&7Premi Q per ripristinare la regola predefinita"
+policy_spawn = "&7Regola le coordinate e applica il punto sicuro"
+policy_center = "&dCentro del confine (x z)"
+policy_warning = "&dAvviso del confine (blocchi secondi)"
+policy_damage = "&dDanno del confine (quantità margine)"
+policy_denial = "&dMessaggio di accesso negato"
+policy_tags = "&7Inserisci etichette separate da virgole, oppure clear"
+policy_clear = "&7Inserisci clear per ripristinare il valore predefinito"
+policy_previous = "&ePagina precedente"
+policy_next = "&ePagina successiva"
 current = "&7Corrente: &f{value}"
 autoload = "&dAuto-carica mondi gestiti"
 delete = "&dConsentire la quarantena mondiale"
