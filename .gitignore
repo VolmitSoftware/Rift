@@ -6,3 +6,5 @@
 build/
 
 .codegraph/
+
+.DS_Store
