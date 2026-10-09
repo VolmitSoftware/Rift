@@ -23,7 +23,7 @@ apply plugin: 'art.arcane.volmit-packaging'
 tasks.named('slimJar').get()
 
 group = 'com.volmit.rift'
-version = '2.0.0-26.x'
+version = '2.0.1-26.x'
 
 String apiVersion = '26.1'
 String mainClass = 'com.volmit.rift.Rift'
@@ -266,6 +266,23 @@ tasks.register('verifyJava25Artifact') {
 
 tasks.named('check').configure {
     dependsOn(tasks.named('verifyJava25Artifact'))
+}
+
+tasks.register('buildPsychoLT', Copy) {
+    group = 'development'
+    description = 'Builds, verifies, and deploys Rift to the managed Minecraft test-server dropins.'
+    outputs.upToDateWhen { false }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn(tasks.named('check'), tasks.named('shadowJar'))
+    from(tasks.named('shadowJar').flatMap { it.archiveFile })
+    into(layout.projectDirectory.dir('../../[Minecraft Server]/consumers/plugin-consumers/dropins/plugins'))
+    rename { String ignored -> 'Rift.jar' }
+    doLast {
+        project.copy {
+            from(tasks.named('shadowJar').flatMap { it.archiveFile })
+            into(layout.projectDirectory.dir('../PluginOuts'))
+        }
+    }
 }
 
 tasks.register('stageBuild', Copy) {
