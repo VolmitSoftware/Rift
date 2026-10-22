@@ -51,10 +51,22 @@
 
 #   {step}  numeroarvojen muutosaskel
 
+#   {limit}  pelaajien enimmäismäärä
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_player_limit = "Rajoita saapuvien pelaajien määrää; 0 on rajaton"
+policy_travel_entry = "Hallitse maailmojen välisiä saapumisia; DENY estää, INHERIT ei muuta niitä"
+policy_travel_exit = "Hallitse maailmojen välisiä lähtöjä; DENY estää matkat, ei uudelleensyntymistä tai kirjautumisen palautusta"
+policy_first_join = "Valitse ladatun hallitun maailman syntymäpiste ensiliittymisille tästä maailmasta; default käyttää kirjautumiskohdetta"
+policy_login = "Valitse ladatun hallitun maailman syntymäpiste kirjautumisille tästä maailmasta; default säilyttää palvelimen sijainnin"
+policy_game_mode = "Aseta pelitila maailmaan tullessa, kirjautuessa ja uudelleensyntyessä; INHERIT poistaa pakotuksen"
+policy_flight = "Hallitse lentämistä selviytymis- ja seikkailutilassa; INHERIT vapauttaa {prefix}in lentoasetuksen"
+policy_weather = "Lukitse selkeä sää, sade tai ukkonen; INHERIT sallii sään vaihtumisen jälleen"
+policy_natural_animals = "DENY estää eläinten luonnollisen syntymisen; ALLOW noudattaa muita rajoituksia"
+policy_natural_monsters = "DENY estää hirviöiden luonnollisen syntymisen; ALLOW noudattaa muita rajoituksia"
 policy_edit = "Avaa maailman sääntöeditori"
 check_all = "Tarkista kaikki vastaavat maailmat muuttamatta niitä"
 version = "Näytä {prefix}-versio"
@@ -94,6 +106,9 @@ policy_respawn = "Ohjaa tässä maailmassa kuolleet toiseen hallittuun maailmaan
 policy_tag = "Lisää tai poista operaattoritunniste"
 
 [rift.parameter]
+player_limit = "Pelaajien enimmäismäärä, tai 0 ilman rajaa"
+policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR tai INHERIT"
+policy_weather = "CLEAR, RAIN, THUNDER tai INHERIT"
 tag_filter = "Suodata ylläpitäjän tunnisteella tai valitse all"
 tag_group = "Ryhmittele vastaavat maailmat ylläpitäjän tunnisteen mukaan"
 name = "Maailmannimi"
@@ -127,6 +142,9 @@ policy_tag = "Operaattoritunnisteen nimi"
 tag_enabled = "true lisää tunnisteen; false poistaa sen"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&c{world} on täynnä (raja: {limit})."
+policy_travel_denied = "{prefix}&r &7› &7&cMaailman {world} käytäntö estää maailmojen välisen matkan."
+policy_placement_failed = "Missään sallitussa maailmassa ei ole tilaa. Ota yhteys ylläpitoon."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&cTarvitset &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&cTuntematon komento. &f/rift help&7."
@@ -162,6 +180,16 @@ unmanaged_loaded = "{prefix}&r &7› &7Maailman &a{world}&7 hallinta lopetettiin
 unmanaged_unloaded = "{prefix}&r &7› &7Maailman &a{world}&7 hallinta lopetettiin muuttamatta sen tiedostoja. {prefix} ei enää lataa sitä palvelimen käynnistyessä."
 
 [rift.label]
+policy_player_limit = "Pelaajaraja"
+policy_travel_entry = "Maailmaan siirtyminen"
+policy_travel_exit = "Maailmasta poistuminen"
+policy_first_join_world = "Ensimmäisen liittymisen kohde"
+policy_login_world = "Kirjautumiskohde"
+policy_game_mode = "Pelitila"
+policy_flight = "Lentäminen"
+policy_weather = "Sää"
+policy_natural_animals = "Eläinten luonnollinen syntyminen"
+policy_natural_monsters = "Hirviöiden luonnollinen syntyminen"
 worlds = "Maailmat"
 quarantine = "Karanteeni"
 loaded = "Ladattu"
@@ -220,7 +248,7 @@ autoload = "Lataako {prefix} tämän hallitun maailman automaattisesti palvelime
 protected = "Suojattuja hallittuja maailmoja ei voi siirtää {prefix}in karanteeniin."
 operation_active = "Pitääkö jokin elinkaaritoiminto parhaillaan hallussaan {prefix}in maailmakohtaista lukkoa."
 server = "Bukkitin ilmoittama käytössä oleva palvelintoteutus ja versio."
-java_runtime = "Palvelinta tällä hetkellä suorittava Java-ajoympäristö. {prefix} vaatii Java 25:n."
+java_runtime = "Palvelinta tällä hetkellä suorittava Java-ajoympäristö. {prefix} vaatii Java 25:n tai uudemman."
 plugin_bytecode = "Vanhin Java-ajoympäristö, joka pystyy lataamaan {prefix}in käännetyt luokat."
 platform = "{prefix}in ajon aikana tunnistama ajoitin- ja palvelinrajapintaperhe."
 dynamic_lifecycle = "Tarjoaako alusta turvalliset ajonaikaiset toiminnot maailmojen luomiseen, lataamiseen, purkamiseen, karanteeniin siirtämiseen ja palauttamiseen."
@@ -253,6 +281,7 @@ action_failure = "{prefix}&r &7› &7&c{operation} epäonnistui &f{world}"
 already_exists = "{prefix}&r &7› &7&e{world} on jo olemassa. Tarkista se komennolla &f/rift info {world}&e tai valitse toinen nimi."
 
 [rift.gui]
+updates = "&dPäivitysilmoitukset"
 policy_native_default = "&7Pelin oletusarvo: &f{value}"
 policy_inherited = "&7Käytäntö: INHERIT"
 policy_unloaded = "&7Maailma ei ole ladattu: perityt arvot näyttävät pelin oletukset"

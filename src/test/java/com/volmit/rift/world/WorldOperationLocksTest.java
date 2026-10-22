@@ -12,8 +12,10 @@ final class WorldOperationLocksTest {
         assertThat(locks.acquire("Sky")).isTrue();
         assertThat(locks.acquire("sky")).isFalse();
         assertThat(locks.isActive("SKY")).isTrue();
+        assertThat(locks.activeCount()).isEqualTo(1);
 
         locks.release("sKy");
+        assertThat(locks.activeCount()).isZero();
 
         assertThat(locks.acquire("sky")).isTrue();
     }

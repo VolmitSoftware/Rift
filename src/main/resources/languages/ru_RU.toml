@@ -51,6 +51,8 @@
 
 #   {step}  Шаг изменения при нажатии
 
+#   {limit}  максимальное число игроков
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
@@ -58,6 +60,16 @@ prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 already_exists = "{prefix}&r &7› &7&e{world} уже существует. Используйте &f/rift info {world}&e для проверки или выберите другое имя."
 
 [rift.command]
+policy_player_limit = "Ограничить число входящих игроков; 0 означает без ограничений"
+policy_travel_entry = "Управлять входом между мирами; DENY запрещает, INHERIT не меняет поведение"
+policy_travel_exit = "Управлять выходом между мирами; DENY запрещает перемещения, но не возрождение или восстановление входа"
+policy_first_join = "Выбрать спавн загруженного управляемого мира для первых входов из этого мира; default использует место входа"
+policy_login = "Выбрать спавн загруженного управляемого мира для входов из этого мира; default сохраняет позицию сервера"
+policy_game_mode = "Задать режим игры при входе в мир, подключении и возрождении; INHERIT отключает принудительную установку"
+policy_flight = "Управлять полётом в выживании и приключении; INHERIT снимает настройку полёта {prefix}"
+policy_weather = "Закрепить ясную погоду, дождь или грозу; INHERIT снова разрешает смену погоды"
+policy_natural_animals = "DENY запрещает естественное появление животных; ALLOW учитывает другие ограничения"
+policy_natural_monsters = "DENY запрещает естественное появление монстров; ALLOW учитывает другие ограничения"
 policy_edit = "Открыть редактор правил мира"
 check_all = "Проверить все подходящие миры, не изменяя их"
 version = "Показать версию {prefix}"
@@ -98,6 +110,9 @@ policy_respawn = "Перенаправлять возрождение после
 policy_tag = "Добавить или удалить операторский тег"
 
 [rift.parameter]
+player_limit = "Максимум игроков, либо 0 без ограничений"
+policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR или INHERIT"
+policy_weather = "CLEAR, RAIN, THUNDER или INHERIT"
 tag_filter = "Фильтр по тегу оператора или all"
 tag_group = "Группировать подходящие миры по тегу оператора"
 name = "Всемирное имя"
@@ -132,6 +147,9 @@ policy_tag = "Название операторского тега"
 tag_enabled = "true добавляет тег; false удаляет его"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&cМир {world} заполнен (лимит: {limit})."
+policy_travel_denied = "{prefix}&r &7› &7&cПравило мира {world} запрещает перемещение между мирами."
+policy_placement_failed = "В доступных мирах нет места. Обратитесь к администратору."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&cТебе нужно &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&cНеизвестная команда. &f/rift help&7."
@@ -168,6 +186,16 @@ unmanaged_unloaded = "{prefix}&r &7› &7Управление миром &a{worl
 policy_access_denied = "{prefix}&r &7› &7&cВам нельзя входить в &f{world}&7. Требуется разрешение &f{permission}&7."
 
 [rift.label]
+policy_player_limit = "Лимит игроков"
+policy_travel_entry = "Вход между мирами"
+policy_travel_exit = "Выход между мирами"
+policy_first_join_world = "Место первого входа"
+policy_login_world = "Место входа"
+policy_game_mode = "Режим игры"
+policy_flight = "Полёт"
+policy_weather = "Погода"
+policy_natural_animals = "Естественное появление животных"
+policy_natural_monsters = "Естественное появление монстров"
 worlds = "Миры"
 quarantine = "карантин"
 loaded = "загруженный"
@@ -227,7 +255,7 @@ autoload = "Показывает, загружает ли {prefix} этот уп
 protected = "Защищённые управляемые миры нельзя переместить в карантин {prefix}."
 operation_active = "Показывает, удерживает ли сейчас операция жизненного цикла блокировку {prefix} для этого мира."
 server = "Текущая реализация и версия сервера по данным Bukkit."
-java_runtime = "Среда выполнения Java, в которой сейчас работает сервер. {prefix} требует Java 25."
+java_runtime = "Среда выполнения Java, в которой сейчас работает сервер. {prefix} требует Java 25 или новее."
 plugin_bytecode = "Самая старая версия среды Java, способная загрузить скомпилированные классы {prefix}."
 platform = "Планировщик и семейство серверного API, обнаруженные {prefix} во время работы."
 dynamic_lifecycle = "Показывает, позволяет ли платформа безопасно создавать, загружать, выгружать, изолировать и восстанавливать миры во время работы."
@@ -257,6 +285,7 @@ action_teleport = "{prefix}&r &7› &7&aТелепортирован в &a{world
 action_failure = "{prefix}&r &7› &7&c{operation} Неудавшийся для &f{world}"
 
 [rift.gui]
+updates = "&dУведомления об обновлениях"
 policy_native_default = "&7Стандартное значение игры: &f{value}"
 policy_inherited = "&7Правило: INHERIT"
 policy_unloaded = "&7Мир не загружен: для наследуемых значений показаны стандартные значения игры"

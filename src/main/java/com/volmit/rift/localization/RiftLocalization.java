@@ -927,6 +927,7 @@ public final class RiftLocalization implements AutoCloseable {
                         Map.entry("key", "parameter key"),
                         Map.entry("label", "display label"),
                         Map.entry("line", "line number"),
+                        Map.entry("limit", "maximum players admitted to a world"),
                         Map.entry("locale", "locale"),
                         Map.entry("maximum", "maximum input length"),
                         Map.entry("name", "entry name"),

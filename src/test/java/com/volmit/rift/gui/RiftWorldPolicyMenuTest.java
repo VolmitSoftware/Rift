@@ -3,6 +3,7 @@ package com.volmit.rift.gui;
 import art.arcane.volmlib.util.scheduling.FoliaScheduler;
 import com.volmit.rift.Rift;
 import com.volmit.rift.localization.RiftLocalization;
+import com.volmit.rift.storage.WorldProfile;
 import com.volmit.rift.world.WorldPolicyService;
 import com.volmit.rift.world.WorldPolicyService.GameRuleSnapshot;
 import org.bukkit.entity.Player;
@@ -20,8 +21,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -33,6 +36,8 @@ import java.util.function.Supplier;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
@@ -71,6 +76,134 @@ final class RiftWorldPolicyMenuTest {
         assertThat(RiftWorldPolicyMenu.reset(ClickType.DROP)).isTrue();
         assertThat(RiftWorldPolicyMenu.reset(ClickType.CONTROL_DROP)).isTrue();
         assertThat(RiftWorldPolicyMenu.supported(ClickType.NUMBER_KEY)).isFalse();
+    }
+
+    @Test
+    void expandedPoliciesUseChoiceScreensAndInheritDefaults() throws Exception {
+        RiftWorldPolicyMenu menu = new RiftWorldPolicyMenu(plugin());
+        Method textInput = nested("Field").getDeclaredMethod("textInput");
+        Method value = nested("Field").getDeclaredMethod("value", WorldProfile.class, RiftWorldPolicyMenu.class);
+        Method description = nested("Field").getDeclaredMethod("description");
+        textInput.setAccessible(true);
+        value.setAccessible(true);
+        description.setAccessible(true);
+        for (String name : List.of("GAME_MODE", "FLIGHT", "WEATHER", "NATURAL_ANIMALS", "NATURAL_MONSTERS", "TRAVEL_ENTRY", "TRAVEL_EXIT")) {
+            Object field = policyField(name);
+            assertThat(textInput.invoke(field)).isEqualTo(false);
+            assertThat(value.invoke(field, new WorldProfile(), menu)).isEqualTo("INHERIT");
+            assertThat(description.invoke(field)).isNotNull();
+            assertThat(Arrays.stream(nested("View").getEnumConstants()).map(Object::toString)).contains(name);
+        }
+        assertThat(value.invoke(policyField("PLAYER_LIMIT"), new WorldProfile(), menu)).isEqualTo("0");
+        for (String name : List.of("PLAYER_LIMIT", "FIRST_JOIN", "LOGIN")) {
+            Object field = policyField(name);
+            assertThat(textInput.invoke(field)).isEqualTo(false);
+            assertThat(description.invoke(field)).isNotNull();
+        }
+        int[] slots = RiftConfigMenu.settingSlots(nested("Field").getEnumConstants().length + 1);
+        assertThat(slots).containsExactly(10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 28, 29, 30, 31, 32, 33);
+    }
+
+    @Test
+    void descriptionsWrapWordsAndWideTranslationsWithoutLosingColor() {
+        String sentence = "Control survival/adventure flight; INHERIT releases the managed flight setting";
+        List<String> lines = RiftWorldPolicyMenu.descriptionLore(sentence);
+        assertThat(lines).containsExactly("§7Control survival/adventure flight; INHERIT", "§7releases the managed flight setting");
+        String chinese = "动物自然生成".repeat(8);
+        List<String> translated = RiftWorldPolicyMenu.descriptionLore(chinese);
+        assertThat(translated).hasSize(2).allSatisfy(line -> {
+            assertThat(line).startsWith("§7");
+            assertThat(line.substring(2).codePointCount(0, line.length() - 2)).isLessThanOrEqualTo(24);
+        });
+        assertThat(String.join("", translated).replace("§7", "")).isEqualTo(chinese);
+    }
+
+    @Test
+    void expandedChoiceControlsCallTheirOwnPolicySetters() throws Exception {
+        Rift plugin = plugin();
+        Player player = player();
+        RiftWorldPolicyMenu menu = new RiftWorldPolicyMenu(plugin);
+        Method choice = RiftWorldPolicyMenu.class.getDeclaredMethod("changeChoice", Player.class, String.class, nested("Field"), String.class);
+        choice.setAccessible(true);
+        choice.invoke(menu, player, "example", policyField("GAME_MODE"), "CREATIVE");
+        choice.invoke(menu, player, "example", policyField("FLIGHT"), "ALLOW");
+        choice.invoke(menu, player, "example", policyField("WEATHER"), "CLEAR");
+        choice.invoke(menu, player, "example", policyField("NATURAL_ANIMALS"), "DENY");
+        choice.invoke(menu, player, "example", policyField("NATURAL_MONSTERS"), "DENY");
+        choice.invoke(menu, player, "example", policyField("TRAVEL_ENTRY"), "DENY");
+        choice.invoke(menu, player, "example", policyField("TRAVEL_EXIT"), "ALLOW");
+        verify(plugin.worldPolicies()).setGameMode(player, "example", "CREATIVE");
+        verify(plugin.worldPolicies()).setFlight(player, "example", "ALLOW");
+        verify(plugin.worldPolicies()).setWeather(player, "example", "CLEAR");
+        verify(plugin.worldPolicies()).setNaturalAnimals(player, "example", "DENY");
+        verify(plugin.worldPolicies()).setNaturalMonsters(player, "example", "DENY");
+        verify(plugin.worldPolicies()).setTravelEntry(player, "example", "DENY");
+        verify(plugin.worldPolicies()).setTravelExit(player, "example", "ALLOW");
+    }
+
+    @Test
+    void expandedPolicyResetsAlwaysSelectInherit() throws Exception {
+        Rift plugin = plugin();
+        Player player = player();
+        RiftWorldPolicyMenu menu = new RiftWorldPolicyMenu(plugin);
+        Method reset = RiftWorldPolicyMenu.class.getDeclaredMethod("resetField", Player.class, String.class, nested("Field"));
+        reset.setAccessible(true);
+        for (String name : List.of("GAME_MODE", "FLIGHT", "WEATHER", "NATURAL_ANIMALS", "NATURAL_MONSTERS", "TRAVEL_ENTRY", "TRAVEL_EXIT")) {
+            reset.invoke(menu, player, "example", policyField(name));
+        }
+        verify(plugin.worldPolicies()).setGameMode(player, "example", "INHERIT");
+        verify(plugin.worldPolicies()).setFlight(player, "example", "INHERIT");
+        verify(plugin.worldPolicies()).setWeather(player, "example", "INHERIT");
+        verify(plugin.worldPolicies()).setNaturalAnimals(player, "example", "INHERIT");
+        verify(plugin.worldPolicies()).setNaturalMonsters(player, "example", "INHERIT");
+        verify(plugin.worldPolicies()).setTravelEntry(player, "example", "INHERIT");
+        verify(plugin.worldPolicies()).setTravelExit(player, "example", "INHERIT");
+    }
+
+    @Test
+    void playerLimitClicksAdjustDirectlyWithoutTextInputOrAChoiceScreen() throws Exception {
+        Rift plugin = plugin();
+        Player player = player();
+        when(player.hasPermission("rift.policy")).thenReturn(true);
+        when(plugin.worldPolicies().adjustPlayerLimit(eq(player), eq("example"), anyLong(), anyBoolean()))
+                .thenReturn(new CompletableFuture<>());
+        RiftWorldPolicyMenu menu = new RiftWorldPolicyMenu(plugin);
+        Method click = RiftWorldPolicyMenu.class.getDeclaredMethod("fieldClick", Player.class, nested("Page"), nested("Field"), ClickType.class);
+        click.setAccessible(true);
+        for (ClickType type : List.of(ClickType.LEFT, ClickType.RIGHT, ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT, ClickType.DROP)) {
+            click.invoke(menu, player, page(), policyField("PLAYER_LIMIT"), type);
+        }
+        verify(plugin.worldPolicies()).adjustPlayerLimit(player, "example", 1L, false);
+        verify(plugin.worldPolicies()).adjustPlayerLimit(player, "example", -1L, false);
+        verify(plugin.worldPolicies()).adjustPlayerLimit(player, "example", 10L, false);
+        verify(plugin.worldPolicies()).adjustPlayerLimit(player, "example", -10L, false);
+        verify(plugin.worldPolicies()).adjustPlayerLimit(player, "example", 0L, true);
+        assertThat(map(menu, "prompts")).isEmpty();
+    }
+
+    @Test
+    void placementPickersSelectAndResetTheirOwnDestinations() throws Exception {
+        Rift plugin = plugin();
+        Player player = player();
+        RiftWorldPolicyMenu menu = new RiftWorldPolicyMenu(plugin);
+        Constructor<?> constructor = nested("Page").getDeclaredConstructors()[0];
+        constructor.setAccessible(true);
+        Method destination = RiftWorldPolicyMenu.class.getDeclaredMethod("destination", WorldProfile.class, nested("View"));
+        Method select = RiftWorldPolicyMenu.class.getDeclaredMethod("changeDestination", Player.class, nested("Page"), String.class);
+        Method reset = RiftWorldPolicyMenu.class.getDeclaredMethod("resetField", Player.class, String.class, nested("Field"));
+        destination.setAccessible(true);
+        select.setAccessible(true);
+        reset.setAccessible(true);
+        for (String name : List.of("FIRST_JOIN", "LOGIN")) {
+            Object view = Arrays.stream(nested("View").getEnumConstants()).filter(value -> value.toString().equals(name)).findFirst().orElseThrow();
+            assertThat(destination.invoke(null, new WorldProfile(), view)).isEqualTo("");
+            select.invoke(menu, player, constructor.newInstance("example", view, 0), "lobby");
+            reset.invoke(menu, player, "example", policyField(name));
+        }
+        verify(plugin.worldPolicies()).setFirstJoin(player, "example", "lobby");
+        verify(plugin.worldPolicies()).setLogin(player, "example", "lobby");
+        verify(plugin.worldPolicies()).setFirstJoin(player, "example", "default");
+        verify(plugin.worldPolicies()).setLogin(player, "example", "default");
     }
 
     @Test
@@ -225,6 +358,10 @@ final class RiftWorldPolicyMenuTest {
 
     private static Class<?> nested(String name) throws ClassNotFoundException {
         return Class.forName(RiftWorldPolicyMenu.class.getName() + '$' + name);
+    }
+
+    private static Object policyField(String name) throws ClassNotFoundException {
+        return Arrays.stream(nested("Field").getEnumConstants()).filter(value -> value.toString().equals(name)).findFirst().orElseThrow();
     }
 
     @SuppressWarnings("unchecked")

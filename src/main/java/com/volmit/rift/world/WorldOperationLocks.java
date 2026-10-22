@@ -19,6 +19,10 @@ public final class WorldOperationLocks {
         return active.contains(key(worldName));
     }
 
+    public int activeCount() {
+        return active.size();
+    }
+
     private static String key(String worldName) {
         return worldName == null ? "" : worldName.toLowerCase(Locale.ROOT);
     }

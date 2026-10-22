@@ -51,10 +51,22 @@
 
 #   {step}  Schrittweite numerischer Änderungen
 
+#   {limit}  maximale Spielerzahl
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_player_limit = "Spielerzahl beim Eintritt begrenzen; 0 bedeutet unbegrenzt"
+policy_travel_entry = "Weltenübergreifenden Eintritt steuern; DENY sperrt ihn, INHERIT lässt ihn unverändert"
+policy_travel_exit = "Weltenübergreifenden Austritt steuern; DENY sperrt Reisen, nicht Respawn oder Anmelderettung"
+policy_first_join = "Geladenen verwalteten Spawn für erste Beitritte aus dieser Welt wählen; default nutzt das Anmeldeziel"
+policy_login = "Geladenen verwalteten Spawn für Anmeldungen aus dieser Welt wählen; default behält die Serverposition"
+policy_game_mode = "Spielmodus beim Betreten, Anmelden und Wiedererscheinen setzen; INHERIT hebt die Vorgabe auf"
+policy_flight = "Fliegen im Überlebens- und Abenteuermodus steuern; INHERIT hebt die Flugeinstellung von {prefix} auf"
+policy_weather = "Klares Wetter, Regen oder Gewitter festhalten; INHERIT erlaubt wieder Wetterwechsel"
+policy_natural_animals = "DENY blockiert natürliche Tier-Spawns; ALLOW beachtet andere Spawn-Beschränkungen"
+policy_natural_monsters = "DENY blockiert natürliche Monster-Spawns; ALLOW beachtet andere Spawn-Beschränkungen"
 policy_edit = "Weltregel-Editor öffnen"
 check_all = "Alle passenden Welten prüfen, ohne sie zu verändern"
 version = "{prefix}-Version anzeigen"
@@ -94,6 +106,9 @@ policy_respawn = "Respawns aus dieser Welt in eine andere verwaltete Welt oder z
 policy_tag = "Ein Operator-Tag hinzufügen oder entfernen"
 
 [rift.parameter]
+player_limit = "Maximale Spielerzahl oder 0 für unbegrenzt"
+policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR oder INHERIT"
+policy_weather = "CLEAR, RAIN, THUNDER oder INHERIT"
 tag_filter = "Nach einem Operator-Tag filtern oder all verwenden"
 tag_group = "Passende Welten nach Operator-Tag gruppieren"
 name = "Weltname"
@@ -127,6 +142,9 @@ policy_tag = "Name des Operator-Tags"
 tag_enabled = "true fügt das Tag hinzu; false entfernt es"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&c{world} ist voll (Limit: {limit})."
+policy_travel_denied = "{prefix}&r &7› &7&cDie Richtlinie für {world} blockiert weltenübergreifende Reisen."
+policy_placement_failed = "Keine zugängliche Welt hat Platz. Bitte wende dich an die Serveradministration."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&cSie brauchen &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&cUnbekannter Befehl &f/rift help&7."
@@ -162,6 +180,16 @@ unmanaged_loaded = "{prefix}&r &7› &7Verwaltung von &a{world}&7 beendet, ohne 
 unmanaged_unloaded = "{prefix}&r &7› &7Verwaltung von &a{world}&7 beendet, ohne die Dateien zu verändern. {prefix} lädt sie beim Start nicht mehr."
 
 [rift.label]
+policy_player_limit = "Spielerlimit"
+policy_travel_entry = "Weltenübergreifender Eintritt"
+policy_travel_exit = "Weltenübergreifender Austritt"
+policy_first_join_world = "Ziel beim ersten Beitritt"
+policy_login_world = "Anmeldeziel"
+policy_game_mode = "Spielmodus"
+policy_flight = "Fliegen"
+policy_weather = "Wetter"
+policy_natural_animals = "Natürliche Tier-Spawns"
+policy_natural_monsters = "Natürliche Monster-Spawns"
 worlds = "Welten"
 quarantine = "Quarantäne"
 loaded = "Beladen"
@@ -220,7 +248,7 @@ autoload = "Gibt an, ob {prefix} diese verwaltete Welt beim Serverstart automati
 protected = "Geschützte verwaltete Welten können nicht in {prefix}s Quarantäne verschoben werden."
 operation_active = "Gibt an, ob ein Lebenszyklusvorgang derzeit {prefix}s Sperre für diese einzelne Welt hält."
 server = "Die von Bukkit gemeldete aktive Serverimplementierung und deren Version."
-java_runtime = "Die Java-Laufzeitumgebung, die derzeit den Server ausführt. {prefix} erfordert Java 25."
+java_runtime = "Die Java-Laufzeitumgebung, die derzeit den Server ausführt. {prefix} erfordert Java 25 oder neuer."
 plugin_bytecode = "Die älteste Java-Laufzeitumgebung, die {prefix}s kompilierte Klassen laden kann."
 platform = "Der Scheduler und die Server-API-Familie, die {prefix} zur Laufzeit erkannt hat."
 dynamic_lifecycle = "Gibt an, ob diese Plattform das sichere Erstellen, Laden, Entladen, Verschieben in Quarantäne und Wiederherstellen von Welten zur Laufzeit ermöglicht."
@@ -253,6 +281,7 @@ action_failure = "{prefix}&r &7› &7&c{operation} gescheitert für &f{world}"
 already_exists = "{prefix}&r &7› &7&e{world} existiert bereits. Mit &f/rift info {world}&e prüfen oder einen anderen Namen wählen."
 
 [rift.gui]
+updates = "&dUpdate-Benachrichtigungen"
 policy_native_default = "&7Nativer Standard: &f{value}"
 policy_inherited = "&7Regel: INHERIT"
 policy_unloaded = "&7Welt entladen: geerbte Werte zeigen native Standards"

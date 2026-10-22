@@ -11,6 +11,8 @@ public final class RiftConfig {
     private static final Pattern SOUND_KEY = Pattern.compile("(?:[a-z0-9_.-]+:)?[a-z0-9_./-]+");
     @ConfigDoc("Locale identifier selecting languages/<locale>.toml; missing repository translations download when selected.")
     private String language = "en_US";
+    @ConfigDoc("Check GitHub releases and join the shared Volmit update notice. No updates are installed.")
+    private boolean updateNotifications = true;
     @ConfigDoc("Milliseconds between filesystem hot-reload polls.")
     private long hotReloadPollMillis = 1_000L;
     @ConfigDoc("Milliseconds used to combine rapid file changes into one reload.")
@@ -77,6 +79,8 @@ public final class RiftConfig {
         return this;
     }
 
+    public boolean isUpdateNotifications() { return updateNotifications; }
+    public void setUpdateNotifications(boolean value) { updateNotifications = value; }
     public String getLanguage() { return language; }
     public void setLanguage(String language) { this.language = language; }
     public long getHotReloadPollMillis() { return hotReloadPollMillis; }

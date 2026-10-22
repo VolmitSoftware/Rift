@@ -372,6 +372,10 @@ public final class WorldLifecycleService {
         return locks.isActive(worldName);
     }
 
+    public int activeOperationCount() {
+        return locks.activeCount();
+    }
+
     public void close() {
         confirmations.clear();
     }

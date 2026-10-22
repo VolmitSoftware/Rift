@@ -12,6 +12,24 @@ import java.util.logging.Logger;
 import static org.assertj.core.api.Assertions.assertThat;
 
 final class RiftConfigManagerTest {
+    @Test
+    void updateNotificationsDefaultOnAndNotifyAfterCommittedOptOut() {
+        List<RiftConfig> activations = new ArrayList<>();
+        RiftConfigManager manager = new RiftConfigManager(new RiftConfigManager.Options(
+                temporaryDirectory.resolve("updates.toml").toFile(), ConfigIo.SILENT,
+                Logger.getLogger("updates"), activations::add));
+        assertThat(manager.loadInitial()).isTrue();
+        assertThat(manager.get().isUpdateNotifications()).isTrue();
+        assertThat(manager.update(config -> {
+            config.setUpdateNotifications(false);
+            return config;
+        })).isTrue();
+        assertThat(manager.get().isUpdateNotifications()).isFalse();
+        assertThat(activations.getLast().isUpdateNotifications()).isFalse();
+        assertThat(manager.reload()).isTrue();
+        assertThat(manager.get().isUpdateNotifications()).isFalse();
+    }
+
     @TempDir
     Path temporaryDirectory;
 

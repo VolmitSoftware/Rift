@@ -60,6 +60,7 @@ final class RiftDebugReport {
         value(report, "Hot reload last successful poll", instant(snapshot.hotReload().lastSuccessfulPollEpochMillis()));
         value(report, "Hot reload last failure", snapshot.hotReload().lastFailure().isBlank() ? "none" : snapshot.hotReload().lastFailure());
         value(report, "bStats runtime active", snapshot.metricsRunning());
+        value(report, "PlaceholderAPI expansion registered", snapshot.placeholdersRegistered());
         value(report, "Debug upload enabled", snapshot.config().isDebugUploadEnabled());
         value(report, "World container writable", snapshot.worldContainerWritable());
         value(report, "Active locale", snapshot.activeLocale());
@@ -167,6 +168,16 @@ final class RiftDebugReport {
                     .append(" | storageLayout=").append(sanitize(world.storageLayout()))
                     .append(" | difficultyPolicy=").append(sanitize(world.difficultyPolicy()))
                     .append(" | pvpPolicy=").append(sanitize(world.pvpPolicy()))
+                    .append(" | gameModePolicy=").append(sanitize(world.gameModePolicy()))
+                    .append(" | flightPolicy=").append(sanitize(world.flightPolicy()))
+                    .append(" | weatherPolicy=").append(sanitize(world.weatherPolicy()))
+                    .append(" | naturalAnimalsPolicy=").append(sanitize(world.naturalAnimalsPolicy()))
+                    .append(" | naturalMonstersPolicy=").append(sanitize(world.naturalMonstersPolicy()))
+                    .append(" | playerLimit=").append(world.playerLimit())
+                    .append(" | travelEntry=").append(sanitize(world.travelEntry()))
+                    .append(" | travelExit=").append(sanitize(world.travelExit()))
+                    .append(" | firstJoinWorld=").append(sanitize(world.firstJoinWorld().isBlank() ? "default" : world.firstJoinWorld()))
+                    .append(" | loginWorld=").append(sanitize(world.loginWorld().isBlank() ? "default" : world.loginWorld()))
                     .append(" | gameRules=").append(sanitize(world.gameRules().toString()))
                     .append(" | spawnPolicy=").append(sanitize(world.spawnPolicy()))
                     .append(" | borderPolicy=").append(sanitize(world.borderPolicy()))

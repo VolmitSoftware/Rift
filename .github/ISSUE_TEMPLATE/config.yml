@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Help and questions
+    url: https://volmitsoftware.com/discord
+    about: Ask setup and configuration questions on the Volmit Discord.
+  - name: "Rift documentation"
+    url: https://docs.volmitsoftware.com/rift
+    about: Installation, commands, permissions, and configuration.

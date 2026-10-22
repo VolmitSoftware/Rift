@@ -51,6 +51,8 @@
 
 #   {step}  Tıklama başına değişim miktarı
 
+#   {limit}  en fazla oyuncu sayısı
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
@@ -58,6 +60,16 @@ prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 already_exists = "{prefix}&r &7› &7&e{world} zaten var. İncelemek için &f/rift info {world}&e kullan veya başka bir ad seç."
 
 [rift.command]
+policy_player_limit = "Giren oyuncuları sınırla; 0 sınırsız demektir"
+policy_travel_entry = "Dünyalar arası girişi yönet; DENY engeller, INHERIT değiştirmez"
+policy_travel_exit = "Dünyalar arası çıkışı yönet; DENY yolculuğu engeller, yeniden doğmayı veya giriş kurtarmasını değil"
+policy_first_join = "Bu dünyadan ilk katılımlar için yüklü yönetilen bir dünyanın doğma noktasını seç; default giriş hedefini kullanır"
+policy_login = "Bu dünyadan girişler için yüklü yönetilen bir dünyanın doğma noktasını seç; default sunucu konumunu korur"
+policy_game_mode = "Dünyaya girişte, bağlanırken ve yeniden doğarken oyun modunu ayarla; INHERIT zorlamayı durdurur"
+policy_flight = "Hayatta kalma ve macera modlarında uçuşu yönet; INHERIT, {prefix} uçuş ayarını serbest bırakır"
+policy_weather = "Açık hava, yağmur veya fırtınayı sabitle; INHERIT hava değişimlerine yeniden izin verir"
+policy_natural_animals = "DENY doğal hayvan doğumlarını engeller; ALLOW diğer kısıtlamalara uyar"
+policy_natural_monsters = "DENY doğal canavar doğumlarını engeller; ALLOW diğer kısıtlamalara uyar"
 policy_edit = "Dünya ilkesi düzenleyicisini aç"
 check_all = "Eşleşen tüm dünyaları değiştirmeden kontrol et"
 version = "{prefix} sürümünü göster"
@@ -98,6 +110,9 @@ policy_respawn = "Bu dünyadaki ölümleri başka bir yönetilen dünyaya veya s
 policy_tag = "Bir operatör etiketi ekle veya kaldır"
 
 [rift.parameter]
+player_limit = "En fazla oyuncu sayısı veya sınırsız için 0"
+policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR veya INHERIT"
+policy_weather = "CLEAR, RAIN, THUNDER veya INHERIT"
 tag_filter = "Operatör etiketine göre filtrele veya all kullan"
 tag_group = "Eşleşen dünyaları operatör etiketine göre grupla"
 name = "Dünya adı"
@@ -132,6 +147,9 @@ policy_tag = "Operatör etiketi adı"
 tag_enabled = "true etiketi ekler; false etiketi kaldırır"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&c{world} dolu (sınır: {limit})."
+policy_travel_denied = "{prefix}&r &7› &7&c{world} politikası dünyalar arası yolculuğu engelliyor."
+policy_placement_failed = "Erişilebilir dünyalarda yer yok. Sunucu yöneticisine başvurun."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&cİhtiyacınıza ihtiyacınız var &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&cBilinmeyen komut kullanın. Use &f/rift help&7."
@@ -168,6 +186,16 @@ unmanaged_unloaded = "{prefix}&r &7› &7Dosyaları değiştirilmeden &a{world}&
 policy_access_denied = "{prefix}&r &7› &7&c&f{world}&7 dünyasına giremezsin. &f{permission}&7 iznine ihtiyacın var."
 
 [rift.label]
+policy_player_limit = "Oyuncu sınırı"
+policy_travel_entry = "Dünyalar arası giriş"
+policy_travel_exit = "Dünyalar arası çıkış"
+policy_first_join_world = "İlk katılım hedefi"
+policy_login_world = "Giriş hedefi"
+policy_game_mode = "Oyun modu"
+policy_flight = "Uçuş"
+policy_weather = "Hava durumu"
+policy_natural_animals = "Doğal hayvan doğumları"
+policy_natural_monsters = "Doğal canavar doğumları"
 worlds = "Dünyalar"
 quarantine = "Quarantine"
 loaded = "Loaded Load"
@@ -227,7 +255,7 @@ autoload = "{prefix}'in bu yönetilen dünyayı sunucu başlatılırken otomatik
 protected = "Korunan yönetilen dünyalar {prefix} karantinasına taşınamaz."
 operation_active = "Bir yaşam döngüsü işleminin şu anda {prefix}'in dünyaya özel kilidini tutup tutmadığını belirtir."
 server = "Bukkit tarafından bildirilen etkin sunucu uygulaması ve sürümü."
-java_runtime = "Şu anda sunucuyu çalıştıran Java çalışma zamanı. {prefix}, Java 25 gerektirir."
+java_runtime = "Şu anda sunucuyu çalıştıran Java çalışma zamanı. {prefix}, Java 25 veya üstünü gerektirir."
 plugin_bytecode = "{prefix}'in derlenmiş sınıflarını yükleyebilen en eski Java çalışma ortamı."
 platform = "{prefix}'in çalışma sırasında algıladığı zamanlayıcı ve sunucu API ailesi."
 dynamic_lifecycle = "Bu platformun çalışma sırasında dünya oluşturma, yükleme, bellekten çıkarma, karantinaya alma ve geri yükleme işlemlerini güvenle sunup sunmadığını belirtir."
@@ -257,6 +285,7 @@ action_teleport = "{prefix}&r &7› &7&aIşınlandığınız dünya: &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} başarısız oldu. Dünya: &f{world}"
 
 [rift.gui]
+updates = "&dGüncelleme bildirimleri"
 policy_native_default = "&7Oyun varsayılanı: &f{value}"
 policy_inherited = "&7İlke: INHERIT"
 policy_unloaded = "&7Dünya yüklü değil: devralınan değerler oyun varsayılanlarını gösterir"

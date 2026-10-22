@@ -52,7 +52,7 @@ final class RiftLocalizationTest {
         assertThat(localization.loadInitial()).isTrue();
         assertThat(languages.resolve("en_US.toml")).isRegularFile();
         assertThat(localization.file().getName()).isEqualTo("en_US.toml");
-        assertThat(localization.remoteCatalogReference()).contains("main");
+        assertThat(localization.remoteCatalogReference()).contains("368610464d97f1be33c802e8c7ac72db2997905a");
         assertThat(localization.hasRemoteCatalogLocale("fr_FR")).isTrue();
         assertThat(localization.hasRemoteCatalogLocale("en_US")).isFalse();
         assertThat(localization.availableLocales()).containsExactlyElementsOf(
@@ -596,7 +596,12 @@ final class RiftLocalizationTest {
                 RiftMessages.GUI_POLICY_RESET, RiftMessages.GUI_POLICY_SPAWN, RiftMessages.GUI_POLICY_CENTER,
                 RiftMessages.GUI_POLICY_WARNING, RiftMessages.GUI_POLICY_DAMAGE, RiftMessages.GUI_POLICY_DENIAL,
                 RiftMessages.GUI_POLICY_TAGS, RiftMessages.GUI_POLICY_CLEAR, RiftMessages.GUI_POLICY_PREVIOUS,
-                RiftMessages.GUI_POLICY_NEXT);
+                RiftMessages.GUI_POLICY_NEXT, RiftMessages.COMMAND_POLICY_GAME_MODE, RiftMessages.COMMAND_POLICY_FLIGHT,
+                RiftMessages.COMMAND_POLICY_WEATHER, RiftMessages.COMMAND_POLICY_NATURAL_ANIMALS,
+                RiftMessages.COMMAND_POLICY_NATURAL_MONSTERS, RiftMessages.PARAM_POLICY_GAME_MODE,
+                RiftMessages.PARAM_POLICY_WEATHER, RiftMessages.LABEL_POLICY_GAME_MODE,
+                RiftMessages.LABEL_POLICY_FLIGHT, RiftMessages.LABEL_POLICY_WEATHER,
+                RiftMessages.LABEL_POLICY_NATURAL_ANIMALS, RiftMessages.LABEL_POLICY_NATURAL_MONSTERS);
         for (String locale : VolmitLocales.all()) {
             if (locale.equals("en_US")) {
                 continue;

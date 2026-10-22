@@ -43,6 +43,25 @@ final class RuntimeJarTest {
     }
 
     @Test
+    void placeholderServiceLoadsWithoutOptionalApi() throws Exception {
+        Path artifact = Path.of(Objects.requireNonNull(System.getProperty("rift.runtimeJar")));
+        ClassLoader withoutPlaceholders = new ClassLoader(RuntimeJarTest.class.getClassLoader()) {
+            @Override
+            protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+                if (name.startsWith("me.clip.placeholderapi.")) {
+                    throw new ClassNotFoundException(name);
+                }
+                return super.loadClass(name, resolve);
+            }
+        };
+        try (RuntimeLoader optionalLoader = new RuntimeLoader(new URL[]{artifact.toUri().toURL()}, withoutPlaceholders)) {
+            Class<?> service = Class.forName(PLUGIN_PACKAGE + "placeholder.RiftPlaceholderService", true, optionalLoader);
+            assertThat(service.getDeclaredMethods()).isNotEmpty();
+            assertThat(service.getDeclaredConstructors()).hasSize(1);
+        }
+    }
+
+    @Test
     void packagedAdventureLoadsSerializers() throws Exception {
         Class<?> textType = loader.loadClass(LIBRARY_PACKAGE + "volmlib.util.plugin.ComponentText");
         Object text = textType.getMethod("markup", String.class).invoke(null, "<red>Rift</red>");

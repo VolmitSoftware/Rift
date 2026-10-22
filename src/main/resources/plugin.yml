@@ -7,9 +7,10 @@ authors:
   - Vatuu
 website: https://volmit.com
 api-version: '${apiVersion}'
-description: Safe world lifecycle management for Paper 26.x and newer
+description: Safe world lifecycle management for Paper 26.1 through 26.3 on Java 25 or newer
 load: POSTWORLD
 folia-supported: true
+softdepend: [PlaceholderAPI]
 
 commands:
   rift:
@@ -18,6 +19,9 @@ commands:
     aliases: [rft]
 
 permissions:
+  rift.update:
+    description: View Rift updates in shared Volmit notifications and reports
+    default: op
   rift.command:
     description: Allows access to the Rift command root
     default: true
@@ -102,3 +106,9 @@ permissions:
   rift.access.bypass:
     description: Bypasses per-world access permission policies
     default: op
+  rift.limit.bypass:
+    description: Bypasses world player limits; occupants still count toward the limit
+    default: false
+  rift.travel.bypass:
+    description: Bypasses cross-world entry and departure restrictions
+    default: false

@@ -51,6 +51,8 @@
 
 #   {step}  Mức thay đổi mỗi lần nhấp
 
+#   {limit}  số người chơi tối đa
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
@@ -58,6 +60,16 @@ prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 already_exists = "{prefix}&r &7› &7&e{world} đã tồn tại. Dùng &f/rift info {world}&e để kiểm tra hoặc chọn tên khác."
 
 [rift.command]
+policy_player_limit = "Giới hạn người chơi đi vào; 0 là không giới hạn"
+policy_travel_entry = "Kiểm soát việc vào giữa các thế giới; DENY chặn, INHERIT giữ nguyên"
+policy_travel_exit = "Kiểm soát việc rời giữa các thế giới; DENY chặn di chuyển, không chặn hồi sinh hay khôi phục khi đăng nhập"
+policy_first_join = "Chọn điểm xuất hiện của thế giới được quản lý đã tải cho lần đầu vào từ thế giới này; default dùng đích đăng nhập"
+policy_login = "Chọn điểm xuất hiện của thế giới được quản lý đã tải khi đăng nhập từ thế giới này; default giữ vị trí máy chủ"
+policy_game_mode = "Đặt chế độ chơi khi vào thế giới, đăng nhập và hồi sinh; INHERIT ngừng ép chế độ"
+policy_flight = "Điều khiển khả năng bay trong chế độ sinh tồn và phiêu lưu; INHERIT bỏ thiết lập bay của {prefix}"
+policy_weather = "Cố định trời quang, mưa hoặc giông; INHERIT cho phép thời tiết thay đổi trở lại"
+policy_natural_animals = "DENY chặn động vật xuất hiện tự nhiên; ALLOW vẫn tuân theo các giới hạn khác"
+policy_natural_monsters = "DENY chặn quái vật xuất hiện tự nhiên; ALLOW vẫn tuân theo các giới hạn khác"
 policy_edit = "Mở trình sửa chính sách thế giới"
 check_all = "Kiểm tra tất cả thế giới phù hợp mà không thay đổi chúng"
 version = "Hiển thị phiên bản {prefix}"
@@ -98,6 +110,9 @@ policy_respawn = "Chuyển nơi hồi sinh sau khi chết trong thế giới nà
 policy_tag = "Thêm hoặc xóa thẻ quản trị"
 
 [rift.parameter]
+player_limit = "Số người chơi tối đa, hoặc 0 để không giới hạn"
+policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR hoặc INHERIT"
+policy_weather = "CLEAR, RAIN, THUNDER hoặc INHERIT"
 tag_filter = "Lọc theo nhãn quản trị viên hoặc dùng all"
 tag_group = "Nhóm các thế giới phù hợp theo nhãn quản trị viên"
 name = "Tên thế giới"
@@ -132,6 +147,9 @@ policy_tag = "Tên thẻ quản trị"
 tag_enabled = "true thêm thẻ; false xóa thẻ"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&c{world} đã đầy (giới hạn: {limit})."
+policy_travel_denied = "{prefix}&r &7› &7&cChính sách của {world} chặn di chuyển giữa các thế giới."
+policy_placement_failed = "Không có chỗ trong thế giới nào được phép vào. Hãy liên hệ quản trị viên."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&cAnh cần &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&cLệnh lạ. Dùng &f/rift help&7."
@@ -168,6 +186,16 @@ unmanaged_unloaded = "{prefix}&r &7› &7Đã dừng quản lý &a{world}&7 mà 
 policy_access_denied = "{prefix}&r &7› &7&cBạn không thể vào &f{world}&7. Bạn cần quyền &f{permission}&7."
 
 [rift.label]
+policy_player_limit = "Giới hạn người chơi"
+policy_travel_entry = "Vào giữa các thế giới"
+policy_travel_exit = "Rời giữa các thế giới"
+policy_first_join_world = "Đích vào lần đầu"
+policy_login_world = "Đích đăng nhập"
+policy_game_mode = "Chế độ chơi"
+policy_flight = "Bay"
+policy_weather = "Thời tiết"
+policy_natural_animals = "Động vật xuất hiện tự nhiên"
+policy_natural_monsters = "Quái vật xuất hiện tự nhiên"
 worlds = "Thế giới"
 quarantine = "Cách ly"
 loaded = "Đã nạp"
@@ -227,7 +255,7 @@ autoload = "Cho biết {prefix} có tự động tải thế giới được qu�
 protected = "Không thể chuyển thế giới được quản lý có bảo vệ vào vùng cách ly {prefix}."
 operation_active = "Cho biết một thao tác vòng đời thế giới hiện có đang giữ khóa riêng cho thế giới của {prefix} hay không."
 server = "Bản triển khai và phiên bản máy chủ đang chạy do Bukkit báo cáo."
-java_runtime = "Môi trường chạy Java hiện đang vận hành máy chủ. {prefix} yêu cầu Java 25."
+java_runtime = "Môi trường chạy Java hiện đang vận hành máy chủ. {prefix} yêu cầu Java 25 trở lên."
 plugin_bytecode = "Phiên bản Java cũ nhất có thể tải các lớp đã biên dịch của {prefix}."
 platform = "Bộ lập lịch và họ API máy chủ mà {prefix} phát hiện khi chạy."
 dynamic_lifecycle = "Cho biết nền tảng có hỗ trợ an toàn việc tạo, tải, dỡ tải, cách ly và khôi phục thế giới khi đang chạy hay không."
@@ -257,6 +285,7 @@ action_teleport = "{prefix}&r &7› &7&aChuyển tới &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} bị lỗi &f{world}"
 
 [rift.gui]
+updates = "&dThông báo cập nhật"
 policy_native_default = "&7Mặc định của trò chơi: &f{value}"
 policy_inherited = "&7Chính sách: INHERIT"
 policy_unloaded = "&7Thế giới chưa tải: giá trị kế thừa hiển thị mặc định của trò chơi"

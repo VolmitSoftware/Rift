@@ -3,6 +3,7 @@ package com.volmit.rift.gui;
 import art.arcane.volmlib.util.localization.LanguageAudience;
 import art.arcane.volmlib.util.localization.MessageArgs;
 import art.arcane.volmlib.util.localization.TextKey;
+import art.arcane.volmlib.util.plugin.LegacyLoreLayout;
 import art.arcane.volmlib.util.scheduling.FoliaScheduler;
 import com.volmit.rift.Rift;
 import com.volmit.rift.localization.RiftMessages;
@@ -255,7 +256,14 @@ public final class RiftWorldPolicyMenu implements Listener {
                 case RULES -> rules(holder, page, profile, effectiveRules);
                 case DIFFICULTY -> choices(holder, page, profile.getDifficulty(), List.of("INHERIT", "PEACEFUL", "EASY", "NORMAL", "HARD"));
                 case PVP -> choices(holder, page, profile.getPvp(), List.of("INHERIT", "ALLOW", "DENY"));
-                case RESPAWN -> worlds(holder, page, profile);
+                case GAME_MODE -> choices(holder, page, profile.getGameMode(), List.of("INHERIT", "SURVIVAL", "CREATIVE", "ADVENTURE", "SPECTATOR"));
+                case FLIGHT -> choices(holder, page, profile.getFlight(), List.of("INHERIT", "ALLOW", "DENY"));
+                case WEATHER -> choices(holder, page, profile.getWeather(), List.of("INHERIT", "CLEAR", "RAIN", "THUNDER"));
+                case NATURAL_ANIMALS -> choices(holder, page, profile.getNaturalAnimals(), List.of("INHERIT", "ALLOW", "DENY"));
+                case NATURAL_MONSTERS -> choices(holder, page, profile.getNaturalMonsters(), List.of("INHERIT", "ALLOW", "DENY"));
+                case TRAVEL_ENTRY -> choices(holder, page, profile.getTravelEntry(), List.of("INHERIT", "ALLOW", "DENY"));
+                case TRAVEL_EXIT -> choices(holder, page, profile.getTravelExit(), List.of("INHERIT", "ALLOW", "DENY"));
+                case RESPAWN, FIRST_JOIN, LOGIN -> worlds(holder, page, profile);
                 case BORDER -> border(holder, page, profile);
                 case SPAWN -> spawn(holder, page, profile, player);
             }
@@ -266,10 +274,14 @@ public final class RiftWorldPolicyMenu implements Listener {
     private void worlds(Holder holder, Page page, WorldProfile profile) {
         List<WorldProfile> worlds = new ArrayList<>(plugin.profiles().all());
         worlds.sort(Comparator.comparing(WorldProfile::getName, String.CASE_INSENSITIVE_ORDER));
+        String selected = profile == null ? "" : destination(profile, page.view());
         if (profile != null) {
-            button(holder, 4, Material.RED_BED, text(RiftMessages.LABEL_SERVER_DEFAULT),
-                    values(emptyDefault(profile.getRespawnWorld()), text(RiftMessages.LABEL_SERVER_DEFAULT)),
-                    (target, click) -> save(target, page, () -> policies.setRespawn(target, page.world(), "default")));
+            List<String> lore = destinationLore(page, selected);
+            if (selected.isEmpty()) {
+                lore.add(text(RiftMessages.GUI_POLICY_SELECTED));
+            }
+            button(holder, 4, Material.RED_BED, text(RiftMessages.LABEL_SERVER_DEFAULT), lore,
+                    (target, click) -> save(target, page, () -> changeDestination(target, page, "default")));
         }
         if (worlds.isEmpty()) {
             holder.inventory.setItem(22, item(Material.PAPER, text(RiftMessages.EMPTY_LIST), List.of()));
@@ -279,8 +291,8 @@ public final class RiftWorldPolicyMenu implements Listener {
         for (int i = offset; i < Math.min(offset + PAGE_SIZE, worlds.size()); i++) {
             String name = worlds.get(i).getName();
             List<String> lore = profile == null ? List.of(text(RiftMessages.GUI_CATEGORY_OPEN))
-                    : values(emptyDefault(profile.getRespawnWorld()), text(RiftMessages.LABEL_SERVER_DEFAULT));
-            if (profile != null && name.equalsIgnoreCase(profile.getRespawnWorld())) {
+                    : destinationLore(page, selected);
+            if (profile != null && name.equalsIgnoreCase(selected)) {
                 lore.add(text(RiftMessages.GUI_POLICY_SELECTED));
             }
             button(holder, contentSlot(i - offset), Material.GRASS_BLOCK, "§d" + name,
@@ -288,11 +300,40 @@ public final class RiftWorldPolicyMenu implements Listener {
                         if (profile == null) {
                             show(target, new Page(name, View.ROOT, 0));
                         } else {
-                            save(target, page, () -> policies.setRespawn(target, page.world(), name));
+                            save(target, page, () -> changeDestination(target, page, reset(click) ? "default" : name));
                         }
                     });
         }
         pagination(holder, page, offset, worlds.size());
+    }
+
+    private List<String> destinationLore(Page page, String selected) {
+        List<String> lore = values(emptyDefault(selected), text(RiftMessages.LABEL_SERVER_DEFAULT));
+        TextKey description = Field.valueOf(page.view().name()).description();
+        if (description != null) {
+            lore.addAll(descriptionLore(text(description)));
+        }
+        lore.add(text(RiftMessages.GUI_POLICY_SELECT));
+        lore.add(text(RiftMessages.GUI_POLICY_RESET));
+        return lore;
+    }
+
+    private static String destination(WorldProfile profile, View view) {
+        return switch (view) {
+            case RESPAWN -> profile.getRespawnWorld();
+            case FIRST_JOIN -> profile.getFirstJoinWorld();
+            case LOGIN -> profile.getLoginWorld();
+            default -> throw new IllegalArgumentException("This policy does not select a destination");
+        };
+    }
+
+    private CompletableFuture<Boolean> changeDestination(Player player, Page page, String destination) {
+        return switch (page.view()) {
+            case RESPAWN -> policies.setRespawn(player, page.world(), destination);
+            case FIRST_JOIN -> policies.setFirstJoin(player, page.world(), destination);
+            case LOGIN -> policies.setLogin(player, page.world(), destination);
+            default -> throw new IllegalArgumentException("This policy does not select a destination");
+        };
     }
 
     private void fields(Holder holder, Page page, WorldProfile profile) {
@@ -301,7 +342,11 @@ public final class RiftWorldPolicyMenu implements Listener {
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
             List<String> lore = values(field.value(profile, this), field.defaultValue(this));
-            lore.add(text(field.textInput() ? RiftMessages.GUI_TEXT : RiftMessages.GUI_POLICY_SELECT));
+            if (field.description() != null) {
+                lore.addAll(descriptionLore(text(field.description())));
+            }
+            lore.add(field == Field.PLAYER_LIMIT ? numberHint(1)
+                    : text(field.textInput() ? RiftMessages.GUI_TEXT : RiftMessages.GUI_POLICY_SELECT));
             if (field.textInput()) {
                 lore.add(text(field == Field.TAGS ? RiftMessages.GUI_POLICY_TAGS : RiftMessages.GUI_POLICY_CLEAR));
             }
@@ -317,6 +362,8 @@ public final class RiftWorldPolicyMenu implements Listener {
     private void fieldClick(Player player, Page page, Field field, ClickType click) {
         if (reset(click)) {
             save(player, page, () -> resetField(player, page.world(), field));
+        } else if (field == Field.PLAYER_LIMIT) {
+            save(player, page, () -> policies.adjustPlayerLimit(player, page.world(), steps(click), false));
         } else if (field.textInput()) {
             prompt(player, page, text(field.label()), input -> changeText(player, page.world(), field, input));
         } else {
@@ -332,13 +379,33 @@ public final class RiftWorldPolicyMenu implements Listener {
         for (int i = 0; i < choices.size(); i++) {
             String choice = choices.get(i);
             List<String> lore = values(current, "INHERIT");
+            Field field = Field.valueOf(page.view().name());
+            if (field.description() != null) {
+                lore.addAll(descriptionLore(text(field.description())));
+            }
+            lore.add(text(RiftMessages.GUI_POLICY_RESET));
             if (choice.equals(current)) {
                 lore.add(text(RiftMessages.GUI_POLICY_SELECTED));
             }
             button(holder, slots[i], choice.equals(current) ? Material.LIME_DYE : Material.GRAY_DYE, "§d" + choice, lore,
-                    (target, click) -> save(target, page, () -> page.view() == View.PVP
-                            ? policies.setPvp(target, page.world(), choice) : policies.setDifficulty(target, page.world(), choice)));
+                    (target, click) -> save(target, page,
+                            () -> changeChoice(target, page.world(), field, reset(click) ? "INHERIT" : choice)));
         }
+    }
+
+    private CompletableFuture<Boolean> changeChoice(Player player, String world, Field field, String value) {
+        return switch (field) {
+            case DIFFICULTY -> policies.setDifficulty(player, world, value);
+            case PVP -> policies.setPvp(player, world, value);
+            case GAME_MODE -> policies.setGameMode(player, world, value);
+            case FLIGHT -> policies.setFlight(player, world, value);
+            case WEATHER -> policies.setWeather(player, world, value);
+            case NATURAL_ANIMALS -> policies.setNaturalAnimals(player, world, value);
+            case NATURAL_MONSTERS -> policies.setNaturalMonsters(player, world, value);
+            case TRAVEL_ENTRY -> policies.setTravelEntry(player, world, value);
+            case TRAVEL_EXIT -> policies.setTravelExit(player, world, value);
+            default -> throw new IllegalArgumentException("This policy does not accept a choice");
+        };
     }
 
     private void border(Holder holder, Page page, WorldProfile profile) {
@@ -496,11 +563,13 @@ public final class RiftWorldPolicyMenu implements Listener {
 
     private CompletableFuture<Boolean> resetField(Player player, String world, Field field) {
         return switch (field) {
-            case DIFFICULTY -> policies.setDifficulty(player, world, "INHERIT");
-            case PVP -> policies.setPvp(player, world, "INHERIT");
+            case DIFFICULTY, PVP, GAME_MODE, FLIGHT, WEATHER, NATURAL_ANIMALS, NATURAL_MONSTERS, TRAVEL_ENTRY, TRAVEL_EXIT -> changeChoice(player, world, field, "INHERIT");
+            case PLAYER_LIMIT -> policies.adjustPlayerLimit(player, world, 0, true);
             case SPAWN -> policies.clearSpawn(player, world);
             case BORDER -> policies.clearBorder(player, world);
             case RESPAWN -> policies.setRespawn(player, world, "default");
+            case FIRST_JOIN -> policies.setFirstJoin(player, world, "default");
+            case LOGIN -> policies.setLogin(player, world, "default");
             case ACCESS, DENIAL, TAGS -> changeText(player, world, field, "clear");
         };
     }
@@ -516,6 +585,10 @@ public final class RiftWorldPolicyMenu implements Listener {
 
     static long steps(ClickType click) {
         return (click.isRightClick() ? -1L : 1L) * (click.isShiftClick() ? 10L : 1L);
+    }
+
+    static List<String> descriptionLore(String description) {
+        return LegacyLoreLayout.wrap("§7" + description, 48);
     }
 
     static boolean reset(ClickType click) {
@@ -590,7 +663,8 @@ public final class RiftWorldPolicyMenu implements Listener {
     }
 
     private enum Field {
-        DIFFICULTY, PVP, SPAWN, BORDER, ACCESS, DENIAL, RESPAWN, TAGS;
+        DIFFICULTY, PVP, GAME_MODE, FLIGHT, WEATHER, NATURAL_ANIMALS, NATURAL_MONSTERS,
+        SPAWN, BORDER, ACCESS, DENIAL, RESPAWN, TAGS, PLAYER_LIMIT, TRAVEL_ENTRY, TRAVEL_EXIT, FIRST_JOIN, LOGIN;
 
         private boolean textInput() {
             return this == ACCESS || this == DENIAL || this == TAGS;
@@ -600,6 +674,16 @@ public final class RiftWorldPolicyMenu implements Listener {
             return switch (this) {
                 case DIFFICULTY -> RiftMessages.LABEL_POLICY_DIFFICULTY;
                 case PVP -> RiftMessages.LABEL_POLICY_PVP;
+                case GAME_MODE -> RiftMessages.LABEL_POLICY_GAME_MODE;
+                case FLIGHT -> RiftMessages.LABEL_POLICY_FLIGHT;
+                case WEATHER -> RiftMessages.LABEL_POLICY_WEATHER;
+                case NATURAL_ANIMALS -> RiftMessages.LABEL_POLICY_NATURAL_ANIMALS;
+                case NATURAL_MONSTERS -> RiftMessages.LABEL_POLICY_NATURAL_MONSTERS;
+                case PLAYER_LIMIT -> RiftMessages.LABEL_POLICY_PLAYER_LIMIT;
+                case TRAVEL_ENTRY -> RiftMessages.LABEL_POLICY_TRAVEL_ENTRY;
+                case TRAVEL_EXIT -> RiftMessages.LABEL_POLICY_TRAVEL_EXIT;
+                case FIRST_JOIN -> RiftMessages.LABEL_POLICY_FIRST_JOIN_WORLD;
+                case LOGIN -> RiftMessages.LABEL_POLICY_LOGIN_WORLD;
                 case SPAWN -> RiftMessages.LABEL_POLICY_CUSTOM_SPAWN;
                 case BORDER -> RiftMessages.LABEL_POLICY_MANAGED_BORDER;
                 case ACCESS -> RiftMessages.LABEL_POLICY_ACCESS_PERMISSION;
@@ -609,10 +693,36 @@ public final class RiftWorldPolicyMenu implements Listener {
             };
         }
 
+        private TextKey description() {
+            return switch (this) {
+                case GAME_MODE -> RiftMessages.COMMAND_POLICY_GAME_MODE;
+                case FLIGHT -> RiftMessages.COMMAND_POLICY_FLIGHT;
+                case WEATHER -> RiftMessages.COMMAND_POLICY_WEATHER;
+                case NATURAL_ANIMALS -> RiftMessages.COMMAND_POLICY_NATURAL_ANIMALS;
+                case NATURAL_MONSTERS -> RiftMessages.COMMAND_POLICY_NATURAL_MONSTERS;
+                case PLAYER_LIMIT -> RiftMessages.COMMAND_POLICY_PLAYER_LIMIT;
+                case TRAVEL_ENTRY -> RiftMessages.COMMAND_POLICY_TRAVEL_ENTRY;
+                case TRAVEL_EXIT -> RiftMessages.COMMAND_POLICY_TRAVEL_EXIT;
+                case FIRST_JOIN -> RiftMessages.COMMAND_POLICY_FIRST_JOIN;
+                case LOGIN -> RiftMessages.COMMAND_POLICY_LOGIN;
+                default -> null;
+            };
+        }
+
         private Material material() {
             return switch (this) {
                 case DIFFICULTY -> Material.IRON_SWORD;
                 case PVP -> Material.SHIELD;
+                case GAME_MODE -> Material.DIAMOND_PICKAXE;
+                case FLIGHT -> Material.FEATHER;
+                case WEATHER -> Material.WATER_BUCKET;
+                case NATURAL_ANIMALS -> Material.WHEAT;
+                case NATURAL_MONSTERS -> Material.ZOMBIE_HEAD;
+                case PLAYER_LIMIT -> Material.PLAYER_HEAD;
+                case TRAVEL_ENTRY -> Material.OAK_DOOR;
+                case TRAVEL_EXIT -> Material.IRON_DOOR;
+                case FIRST_JOIN -> Material.RECOVERY_COMPASS;
+                case LOGIN -> Material.CLOCK;
                 case SPAWN -> Material.COMPASS;
                 case BORDER -> Material.IRON_BARS;
                 case ACCESS -> Material.TRIPWIRE_HOOK;
@@ -626,6 +736,16 @@ public final class RiftWorldPolicyMenu implements Listener {
             return switch (this) {
                 case DIFFICULTY -> profile.getDifficulty();
                 case PVP -> profile.getPvp();
+                case GAME_MODE -> profile.getGameMode();
+                case FLIGHT -> profile.getFlight();
+                case WEATHER -> profile.getWeather();
+                case NATURAL_ANIMALS -> profile.getNaturalAnimals();
+                case NATURAL_MONSTERS -> profile.getNaturalMonsters();
+                case PLAYER_LIMIT -> Integer.toString(profile.getPlayerLimit());
+                case TRAVEL_ENTRY -> profile.getTravelEntry();
+                case TRAVEL_EXIT -> profile.getTravelExit();
+                case FIRST_JOIN -> menu.emptyDefault(profile.getFirstJoinWorld());
+                case LOGIN -> menu.emptyDefault(profile.getLoginWorld());
                 case SPAWN -> Boolean.toString(profile.isCustomSpawn());
                 case BORDER -> Boolean.toString(profile.isManagedBorder());
                 case ACCESS -> profile.getAccessPermission().isEmpty() ? menu.text(RiftMessages.LABEL_NONE) : profile.getAccessPermission();
@@ -640,7 +760,7 @@ public final class RiftWorldPolicyMenu implements Listener {
         }
     }
 
-    private enum View { ROOT, RULES, DIFFICULTY, PVP, RESPAWN, BORDER, SPAWN }
+    private enum View { ROOT, RULES, DIFFICULTY, PVP, RESPAWN, BORDER, SPAWN, GAME_MODE, FLIGHT, WEATHER, NATURAL_ANIMALS, NATURAL_MONSTERS, TRAVEL_ENTRY, TRAVEL_EXIT, FIRST_JOIN, LOGIN }
     private enum SpawnAxis {
         X, Y, Z, YAW;
 

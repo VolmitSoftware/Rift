@@ -50,6 +50,36 @@ public final class WorldProfile {
     @ConfigDoc("PvP policy enforced while this world is loaded. Use INHERIT, ALLOW, or DENY.")
     private String pvp = "INHERIT";
 
+    @ConfigDoc("Game mode applied on entry, respawn, or policy changes. INHERIT leaves the player's mode unchanged.")
+    private String gameMode = "INHERIT";
+
+    @ConfigDoc("Survival and adventure flight permission: INHERIT, ALLOW, or DENY. Creative and spectator keep native flight.")
+    private String flight = "INHERIT";
+
+    @ConfigDoc("Weather held while managed: INHERIT, CLEAR, RAIN, or THUNDER. INHERIT releases control without restoring old weather.")
+    private String weather = "INHERIT";
+
+    @ConfigDoc("Natural animal spawning: INHERIT, ALLOW, or DENY. Existing entities and other spawn reasons are unchanged.")
+    private String naturalAnimals = "INHERIT";
+
+    @ConfigDoc("Natural monster spawning: INHERIT, ALLOW, or DENY. Existing entities and other spawn reasons are unchanged.")
+    private String naturalMonsters = "INHERIT";
+
+    @ConfigDoc("Maximum admitted players. Zero is unlimited; lowering the limit does not remove current occupants.")
+    private int playerLimit = 0;
+
+    @ConfigDoc("Cross-world entry: INHERIT, ALLOW, or DENY. ALLOW does not override other restrictions.")
+    private String travelEntry = "INHERIT";
+
+    @ConfigDoc("Cross-world departures: INHERIT, ALLOW, or DENY. Does not block respawn or login recovery.")
+    private String travelExit = "INHERIT";
+
+    @ConfigDoc("Managed destination for first-ever joins assigned to this world. Empty uses the login destination or server placement.")
+    private String firstJoinWorld = "";
+
+    @ConfigDoc("Managed destination for logins assigned to this world. Empty keeps server placement. Only loaded destinations are used.")
+    private String loginWorld = "";
+
     @ConfigDoc("Game-rule names and values enforced while this world is loaded.")
     private Map<String, String> gameRules = new LinkedHashMap<>();
 
@@ -129,6 +159,16 @@ public final class WorldProfile {
         directory = normalizeDirectory(directory, name);
         difficulty = normalizeEnumPolicy(difficulty, "difficulty", "PEACEFUL", "EASY", "NORMAL", "HARD");
         pvp = normalizeEnumPolicy(pvp, "PvP policy", "ALLOW", "DENY");
+        gameMode = normalizeEnumPolicy(gameMode, "game mode", "SURVIVAL", "CREATIVE", "ADVENTURE", "SPECTATOR");
+        flight = normalizeEnumPolicy(flight, "flight", "ALLOW", "DENY");
+        weather = normalizeEnumPolicy(weather, "weather", "CLEAR", "RAIN", "THUNDER");
+        naturalAnimals = normalizeEnumPolicy(naturalAnimals, "natural animal spawning", "ALLOW", "DENY");
+        naturalMonsters = normalizeEnumPolicy(naturalMonsters, "natural monster spawning", "ALLOW", "DENY");
+        requireNonNegative(playerLimit, "player limit");
+        travelEntry = normalizeEnumPolicy(travelEntry, "cross-world entry", "ALLOW", "DENY");
+        travelExit = normalizeEnumPolicy(travelExit, "cross-world exit", "ALLOW", "DENY");
+        firstJoinWorld = firstJoinWorld == null || firstJoinWorld.isBlank() ? "" : names.requireValid(firstJoinWorld);
+        loginWorld = loginWorld == null || loginWorld.isBlank() ? "" : names.requireValid(loginWorld);
         gameRules = normalizeMap(gameRules, "game rule");
         requireFinite(spawnX, "spawn X");
         requireFinite(spawnY, "spawn Y");
@@ -240,8 +280,88 @@ public final class WorldProfile {
         return new LinkedHashMap<>(gameRules);
     }
 
+    public String getGameMode() {
+        return gameMode;
+    }
+
+    public void setGameMode(String gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    public String getFlight() {
+        return flight;
+    }
+
+    public void setFlight(String flight) {
+        this.flight = flight;
+    }
+
+    public String getWeather() {
+        return weather;
+    }
+
+    public void setWeather(String weather) {
+        this.weather = weather;
+    }
+
+    public String getNaturalAnimals() {
+        return naturalAnimals;
+    }
+
+    public void setNaturalAnimals(String naturalAnimals) {
+        this.naturalAnimals = naturalAnimals;
+    }
+
+    public String getNaturalMonsters() {
+        return naturalMonsters;
+    }
+
+    public void setNaturalMonsters(String naturalMonsters) {
+        this.naturalMonsters = naturalMonsters;
+    }
+
     public void setGameRules(Map<String, String> gameRules) {
         this.gameRules = new LinkedHashMap<>(gameRules);
+    }
+
+    public int getPlayerLimit() {
+        return playerLimit;
+    }
+
+    public void setPlayerLimit(int playerLimit) {
+        this.playerLimit = playerLimit;
+    }
+
+    public String getTravelEntry() {
+        return travelEntry;
+    }
+
+    public void setTravelEntry(String travelEntry) {
+        this.travelEntry = travelEntry;
+    }
+
+    public String getTravelExit() {
+        return travelExit;
+    }
+
+    public void setTravelExit(String travelExit) {
+        this.travelExit = travelExit;
+    }
+
+    public String getFirstJoinWorld() {
+        return firstJoinWorld;
+    }
+
+    public void setFirstJoinWorld(String firstJoinWorld) {
+        this.firstJoinWorld = firstJoinWorld;
+    }
+
+    public String getLoginWorld() {
+        return loginWorld;
+    }
+
+    public void setLoginWorld(String loginWorld) {
+        this.loginWorld = loginWorld;
     }
 
     public boolean isCustomSpawn() {

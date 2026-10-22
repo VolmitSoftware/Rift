@@ -43,6 +43,11 @@ public final class RiftMessages {
     public static final TextKey COMMAND_POLICY_SHOW = key("rift.command.policy_show", "Show the active policies for a managed world");
     public static final TextKey COMMAND_POLICY_DIFFICULTY = key("rift.command.policy_difficulty", "Set the world difficulty or inherit the server value");
     public static final TextKey COMMAND_POLICY_PVP = key("rift.command.policy_pvp", "Allow or deny PvP, or inherit the server value");
+    public static final TextKey COMMAND_POLICY_GAME_MODE = key("rift.command.policy_game_mode", "Set the game mode on entry, join, and respawn; INHERIT stops enforcement");
+    public static final TextKey COMMAND_POLICY_FLIGHT = key("rift.command.policy_flight", "Control survival/adventure flight; INHERIT releases {prefix}'s flight setting");
+    public static final TextKey COMMAND_POLICY_WEATHER = key("rift.command.policy_weather", "Lock clear, rain, or thunder; INHERIT lets weather change again");
+    public static final TextKey COMMAND_POLICY_NATURAL_ANIMALS = key("rift.command.policy_natural_animals", "Block natural animal spawns with DENY; ALLOW respects other spawn restrictions");
+    public static final TextKey COMMAND_POLICY_NATURAL_MONSTERS = key("rift.command.policy_natural_monsters", "Block natural monster spawns with DENY; ALLOW respects other spawn restrictions");
     public static final TextKey COMMAND_POLICY_GAMERULE = key("rift.command.policy_gamerule", "Set a game rule or stop managing it");
     public static final TextKey COMMAND_POLICY_SPAWN = key("rift.command.policy_spawn", "Set this world's spawn to your current safe location");
     public static final TextKey COMMAND_POLICY_SPAWN_CLEAR = key("rift.command.policy_spawn_clear", "Stop managing this world's spawn");
@@ -67,6 +72,8 @@ public final class RiftMessages {
     public static final TextKey PARAM_MANAGED_WORLD = key("rift.parameter.managed_world", "Managed world name");
     public static final TextKey PARAM_POLICY_DIFFICULTY = key("rift.parameter.policy_difficulty", "PEACEFUL, EASY, NORMAL, HARD, or INHERIT");
     public static final TextKey PARAM_POLICY_PVP = key("rift.parameter.policy_pvp", "ALLOW, DENY, or INHERIT");
+    public static final TextKey PARAM_POLICY_GAME_MODE = key("rift.parameter.policy_game_mode", "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR, or INHERIT");
+    public static final TextKey PARAM_POLICY_WEATHER = key("rift.parameter.policy_weather", "CLEAR, RAIN, THUNDER, or INHERIT");
     public static final TextKey PARAM_GAME_RULE = key("rift.parameter.game_rule", "Minecraft game rule name");
     public static final TextKey PARAM_GAME_RULE_VALUE = key("rift.parameter.game_rule_value", "Game rule value or INHERIT");
     public static final TextKey PARAM_BORDER_SIZE = key("rift.parameter.border_size", "Border diameter in blocks");
@@ -152,6 +159,11 @@ public final class RiftMessages {
     public static final TextKey LABEL_REVIEW_REQUIRED = key("rift.label.review_required", "review required");
     public static final TextKey LABEL_POLICY_DIFFICULTY = key("rift.label.policy_difficulty", "Difficulty");
     public static final TextKey LABEL_POLICY_PVP = key("rift.label.policy_pvp", "PvP");
+    public static final TextKey LABEL_POLICY_GAME_MODE = key("rift.label.policy_game_mode", "Game mode");
+    public static final TextKey LABEL_POLICY_FLIGHT = key("rift.label.policy_flight", "Flight");
+    public static final TextKey LABEL_POLICY_WEATHER = key("rift.label.policy_weather", "Weather");
+    public static final TextKey LABEL_POLICY_NATURAL_ANIMALS = key("rift.label.policy_natural_animals", "Natural animal spawns");
+    public static final TextKey LABEL_POLICY_NATURAL_MONSTERS = key("rift.label.policy_natural_monsters", "Natural monster spawns");
     public static final TextKey LABEL_POLICY_GAME_RULES = key("rift.label.policy_game_rules", "Game rules");
     public static final TextKey LABEL_POLICY_CUSTOM_SPAWN = key("rift.label.policy_custom_spawn", "Custom spawn");
     public static final TextKey LABEL_POLICY_MANAGED_BORDER = key("rift.label.policy_managed_border", "Managed border");
@@ -171,7 +183,7 @@ public final class RiftMessages {
     public static final TextKey EXPLAIN_PROTECTED = key("rift.explain.protected", "Protected managed worlds cannot be moved into {prefix} quarantine.");
     public static final TextKey EXPLAIN_OPERATION_ACTIVE = key("rift.explain.operation_active", "Whether a lifecycle operation currently holds {prefix}'s per-world lock.");
     public static final TextKey EXPLAIN_SERVER = key("rift.explain.server", "The active server implementation and version reported by Bukkit.");
-    public static final TextKey EXPLAIN_JAVA_RUNTIME = key("rift.explain.java_runtime", "The Java runtime currently hosting the server. {prefix} requires Java 25.");
+    public static final TextKey EXPLAIN_JAVA_RUNTIME = key("rift.explain.java_runtime", "The Java runtime currently hosting the server. {prefix} requires Java 25 or newer.");
     public static final TextKey EXPLAIN_PLUGIN_BYTECODE = key("rift.explain.plugin_bytecode", "The oldest Java runtime capable of loading {prefix}'s compiled classes.");
     public static final TextKey EXPLAIN_PLATFORM = key("rift.explain.platform", "The scheduler and server API family {prefix} detected at runtime.");
     public static final TextKey EXPLAIN_DYNAMIC_LIFECYCLE = key("rift.explain.dynamic_lifecycle", "Whether this platform safely exposes runtime world create, load, unload, quarantine, and restore operations.");
@@ -199,6 +211,7 @@ public final class RiftMessages {
     public static final TextKey FEEDBACK_ACTION_FAILURE = key("rift.feedback.action_failure", "{prefix}&r &7› &7&c{operation} failed for &f{world}");
 
     public static final TextKey GUI_CURRENT = key("rift.gui.current", "&7Current: &f{value}");
+    public static final TextKey GUI_UPDATES = key("rift.gui.updates", "&dUpdate notifications");
     public static final TextKey GUI_AUTOLOAD = key("rift.gui.autoload", "&dAuto-load managed worlds");
     public static final TextKey GUI_DELETE = key("rift.gui.delete", "&dAllow world quarantine");
     public static final TextKey GUI_VERBOSE = key("rift.gui.verbose", "&dVerbose logging");
@@ -281,7 +294,27 @@ public final class RiftMessages {
 
     public static final TextKey WORLD_ALREADY_EXISTS = key("rift.world.already_exists", CHAT_PREFIX + "&e{world} already exists. Use &f/rift info {world}&e to inspect it, or choose another name.");
 
+    public static final TextKey COMMAND_POLICY_PLAYER_LIMIT = key("rift.command.policy_player_limit", "Limit players entering this world; 0 means unlimited");
+    public static final TextKey COMMAND_POLICY_TRAVEL_ENTRY = key("rift.command.policy_travel_entry", "Control cross-world entry; DENY blocks entry, INHERIT leaves it unchanged");
+    public static final TextKey COMMAND_POLICY_TRAVEL_EXIT = key("rift.command.policy_travel_exit", "Control cross-world departures; DENY blocks travel, not respawn or login recovery");
+    public static final TextKey COMMAND_POLICY_FIRST_JOIN = key("rift.command.policy_first_join", "Choose a loaded managed spawn for first-ever joins assigned to this world; default uses login placement");
+    public static final TextKey COMMAND_POLICY_LOGIN = key("rift.command.policy_login", "Choose a loaded managed spawn for logins assigned to this world; default keeps server placement");
+    public static final TextKey PARAMETER_PLAYER_LIMIT = key("rift.parameter.player_limit", "Maximum players, or 0 for unlimited");
+    public static final TextKey LABEL_POLICY_PLAYER_LIMIT = key("rift.label.policy_player_limit", "Player limit");
+    public static final TextKey LABEL_POLICY_TRAVEL_ENTRY = key("rift.label.policy_travel_entry", "Cross-world entry");
+    public static final TextKey LABEL_POLICY_TRAVEL_EXIT = key("rift.label.policy_travel_exit", "Cross-world exit");
+    public static final TextKey LABEL_POLICY_FIRST_JOIN_WORLD = key("rift.label.policy_first_join_world", "First-join destination");
+    public static final TextKey LABEL_POLICY_LOGIN_WORLD = key("rift.label.policy_login_world", "Login destination");
+    public static final TextKey POLICY_WORLD_FULL = prefixed("rift.message.policy_world_full", "&c{world} is full (limit: {limit}).");
+    public static final TextKey POLICY_TRAVEL_DENIED = prefixed("rift.message.policy_travel_denied", "&cCross-world travel is blocked by the policy for {world}.");
+    public static final TextKey POLICY_PLACEMENT_FAILED = key("rift.message.policy_placement_failed", "No accessible world has room for you. Please contact a server administrator.");
+
     private static final List<TextKey> KEYS = List.of(
+            COMMAND_POLICY_PLAYER_LIMIT, COMMAND_POLICY_TRAVEL_ENTRY, COMMAND_POLICY_TRAVEL_EXIT,
+            COMMAND_POLICY_FIRST_JOIN, COMMAND_POLICY_LOGIN, PARAMETER_PLAYER_LIMIT,
+            LABEL_POLICY_PLAYER_LIMIT, LABEL_POLICY_TRAVEL_ENTRY, LABEL_POLICY_TRAVEL_EXIT,
+            LABEL_POLICY_FIRST_JOIN_WORLD, LABEL_POLICY_LOGIN_WORLD,
+            POLICY_WORLD_FULL, POLICY_TRAVEL_DENIED, POLICY_PLACEMENT_FAILED,
             WORLD_ALREADY_EXISTS,
             COMMAND_POLICY_EDIT, GUI_POLICY_TITLE, GUI_POLICY_RESET, GUI_POLICY_SPAWN,
             GUI_POLICY_CENTER, GUI_POLICY_WARNING, GUI_POLICY_DAMAGE, GUI_POLICY_DENIAL,
@@ -296,11 +329,13 @@ public final class RiftMessages {
             COMMAND_CONFIG, COMMAND_LANGUAGE, COMMAND_STATUS, COMMAND_DEBUG, COMMAND_DEBUG_DUMP, COMMAND_VERSION,
             COMMAND_AUTOLOAD, COMMAND_PROTECT, COMMAND_CHECK, COMMAND_CHECK_ALL, COMMAND_UNMANAGE,
             COMMAND_POLICY, COMMAND_POLICY_SHOW, COMMAND_POLICY_DIFFICULTY, COMMAND_POLICY_PVP,
+            COMMAND_POLICY_GAME_MODE, COMMAND_POLICY_FLIGHT, COMMAND_POLICY_WEATHER, COMMAND_POLICY_NATURAL_ANIMALS, COMMAND_POLICY_NATURAL_MONSTERS,
             COMMAND_POLICY_GAMERULE, COMMAND_POLICY_SPAWN, COMMAND_POLICY_SPAWN_CLEAR, COMMAND_POLICY_BORDER,
             COMMAND_POLICY_BORDER_CLEAR, COMMAND_POLICY_ACCESS, COMMAND_POLICY_RESPAWN, COMMAND_POLICY_TAG,
             PARAM_NAME, PARAM_ENVIRONMENT, PARAM_GENERATOR, PARAM_SEED, PARAM_TYPE, PARAM_SAVE, PARAM_ID,
             PARAM_PLAYER, PARAM_ENABLED, PARAM_PAGE, PARAM_UPLOAD, PARAM_SENDER, PARAM_MANAGED_WORLD,
             PARAM_POLICY_DIFFICULTY, PARAM_POLICY_PVP, PARAM_GAME_RULE, PARAM_GAME_RULE_VALUE,
+            PARAM_POLICY_GAME_MODE, PARAM_POLICY_WEATHER,
             PARAM_BORDER_SIZE, PARAM_BORDER_CENTER_X, PARAM_BORDER_CENTER_Z, PARAM_BORDER_WARNING_DISTANCE,
             PARAM_BORDER_WARNING_TIME, PARAM_BORDER_DAMAGE, PARAM_BORDER_BUFFER, PARAM_ACCESS_PERMISSION,
             PARAM_ACCESS_DENIED_MESSAGE, PARAM_RESPAWN_DESTINATION, PARAM_POLICY_TAG, PARAM_TAG_ENABLED, PARAM_TAG_FILTER, PARAM_TAG_GROUP,
@@ -318,6 +353,7 @@ public final class RiftMessages {
             LABEL_WORLD_KEY, LABEL_STORAGE_PATH, LABEL_STORAGE_LAYOUT, LABEL_PLAYERS, LABEL_GENERATOR_STATUS,
             LABEL_PRIMARY_WORLD, LABEL_CHECK_RESULT, LABEL_READY, LABEL_REVIEW_REQUIRED,
             LABEL_POLICY_DIFFICULTY, LABEL_POLICY_PVP, LABEL_POLICY_GAME_RULES, LABEL_POLICY_CUSTOM_SPAWN,
+            LABEL_POLICY_GAME_MODE, LABEL_POLICY_FLIGHT, LABEL_POLICY_WEATHER, LABEL_POLICY_NATURAL_ANIMALS, LABEL_POLICY_NATURAL_MONSTERS,
             LABEL_POLICY_MANAGED_BORDER, LABEL_POLICY_ACCESS_PERMISSION, LABEL_POLICY_RESPAWN_WORLD,
             LABEL_POLICY_TAGS, LABEL_NONE, LABEL_SERVER_DEFAULT,
             EXPLAIN_LOADED, EXPLAIN_MANAGED, EXPLAIN_ON_DISK, EXPLAIN_ENVIRONMENT, EXPLAIN_GENERATOR,
@@ -330,7 +366,7 @@ public final class RiftMessages {
             FEEDBACK_TELEPORT_SUBTITLE, FEEDBACK_FAILURE_TITLE, FEEDBACK_FAILURE_SUBTITLE,
             FEEDBACK_ACTION_WORLD, FEEDBACK_ACTION_TELEPORT, FEEDBACK_ACTION_FAILURE,
             GUI_CURRENT,
-            GUI_AUTOLOAD, GUI_DELETE, GUI_VERBOSE, GUI_DEBUG_UPLOAD, GUI_BSTATS, GUI_CONFIRM_SECONDS, GUI_POLL, GUI_COOLDOWN,
+            GUI_UPDATES, GUI_AUTOLOAD, GUI_DELETE, GUI_VERBOSE, GUI_DEBUG_UPLOAD, GUI_BSTATS, GUI_CONFIRM_SECONDS, GUI_POLL, GUI_COOLDOWN,
             GUI_EVACUATION, GUI_CLOSE, GUI_SPLASH,
             GUI_LIFECYCLE_FEEDBACK, GUI_TELEPORT_FEEDBACK, GUI_FAILURE_FEEDBACK, GUI_TITLE_POPUPS,
             GUI_ACTION_BAR_POPUPS, GUI_SOUNDS,

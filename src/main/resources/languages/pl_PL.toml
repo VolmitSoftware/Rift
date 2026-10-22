@@ -51,10 +51,22 @@
 
 #   {step}  krok zmiany wartości liczbowej
 
+#   {limit}  maksymalna liczba graczy
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_player_limit = "Ogranicz liczbę wchodzących graczy; 0 oznacza brak limitu"
+policy_travel_entry = "Kontroluj wejście między światami; DENY blokuje, INHERIT pozostawia bez zmian"
+policy_travel_exit = "Kontroluj wyjście między światami; DENY blokuje podróże, nie odrodzenie ani ratowanie przy logowaniu"
+policy_first_join = "Wybierz spawn załadowanego zarządzanego świata dla pierwszych dołączeń z tego świata; default używa celu logowania"
+policy_login = "Wybierz spawn załadowanego zarządzanego świata dla logowań z tego świata; default zachowuje pozycję serwera"
+policy_game_mode = "Ustaw tryb gry przy wejściu, logowaniu i odrodzeniu; INHERIT wyłącza wymuszanie"
+policy_flight = "Kontroluj latanie w trybie przetrwania i przygodowym; INHERIT zwalnia ustawienie lotu {prefix}"
+policy_weather = "Zablokuj pogodę słoneczną, deszcz lub burzę; INHERIT ponownie pozwala na zmiany pogody"
+policy_natural_animals = "DENY blokuje naturalne pojawianie się zwierząt; ALLOW respektuje inne ograniczenia"
+policy_natural_monsters = "DENY blokuje naturalne pojawianie się potworów; ALLOW respektuje inne ograniczenia"
 policy_edit = "Otwórz edytor zasad świata"
 check_all = "Sprawdź wszystkie pasujące światy bez ich zmieniania"
 version = "Pokaż wersję {prefix}"
@@ -95,6 +107,9 @@ policy_respawn = "Kieruj odrodzenia po śmierci w tym świecie do innego zarząd
 policy_tag = "Dodaj lub usuń znacznik operatora"
 
 [rift.parameter]
+player_limit = "Maksymalna liczba graczy lub 0 bez limitu"
+policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR lub INHERIT"
+policy_weather = "CLEAR, RAIN, THUNDER lub INHERIT"
 tag_filter = "Filtruj według tagu operatora albo użyj all"
 tag_group = "Grupuj pasujące światy według tagu operatora"
 name = "Nazwa świata"
@@ -129,6 +144,9 @@ policy_tag = "Nazwa znacznika operatora"
 tag_enabled = "true dodaje znacznik; false go usuwa"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&cŚwiat {world} jest pełny (limit: {limit})."
+policy_travel_denied = "{prefix}&r &7› &7&cZasada świata {world} blokuje podróże między światami."
+policy_placement_failed = "W żadnym dostępnym świecie nie ma miejsca. Skontaktuj się z administratorem."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&cPotrzebujesz &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&cNieznane polecenie. Użyj &f/rift help&7."
@@ -165,6 +183,16 @@ unmanaged_unloaded = "{prefix}&r &7› &7Zakończono zarządzanie światem &a{wo
 policy_access_denied = "{prefix}&r &7› &7&cNie możesz wejść do świata &f{world}&7. Potrzebujesz uprawnienia &f{permission}&7."
 
 [rift.label]
+policy_player_limit = "Limit graczy"
+policy_travel_entry = "Wejście między światami"
+policy_travel_exit = "Wyjście między światami"
+policy_first_join_world = "Cel pierwszego dołączenia"
+policy_login_world = "Cel logowania"
+policy_game_mode = "Tryb gry"
+policy_flight = "Latanie"
+policy_weather = "Pogoda"
+policy_natural_animals = "Naturalne pojawianie się zwierząt"
+policy_natural_monsters = "Naturalne pojawianie się potworów"
 worlds = "Światy"
 quarantine = "Krantyna"
 loaded = "Załadowane"
@@ -224,7 +252,7 @@ autoload = "Określa, czy {prefix} automatycznie ładuje ten zarządzany świat 
 protected = "Chronionych zarządzanych światów nie można przenosić do kwarantanny {prefix}."
 operation_active = "Określa, czy operacja cyklu życia zajmuje obecnie blokadę {prefix} przypisaną do tego świata."
 server = "Aktywna implementacja i wersja serwera zgłaszane przez Bukkit."
-java_runtime = "Środowisko uruchomieniowe Java, które obecnie obsługuje serwer. {prefix} wymaga Java 25."
+java_runtime = "Środowisko uruchomieniowe Java, które obecnie obsługuje serwer. {prefix} wymaga Java 25 lub nowszej."
 plugin_bytecode = "Najstarsze środowisko uruchomieniowe Java zdolne załadować skompilowane klasy {prefix}."
 platform = "Rodzina harmonogramu i API serwera wykryta przez {prefix} podczas działania."
 dynamic_lifecycle = "Określa, czy platforma bezpiecznie udostępnia podczas działania operacje tworzenia, ładowania, wyładowywania, kwarantanny i przywracania światów."
@@ -257,6 +285,7 @@ action_failure = "{prefix}&r &7› &7&c{operation} nie udało się dla &f{world}
 already_exists = "{prefix}&r &7› &7&e{world} już istnieje. Użyj &f/rift info {world}&e, aby go sprawdzić, lub wybierz inną nazwę."
 
 [rift.gui]
+updates = "&dPowiadomienia o aktualizacjach"
 policy_native_default = "&7Natywna wartość domyślna: &f{value}"
 policy_inherited = "&7Reguła: INHERIT"
 policy_unloaded = "&7Świat niezaładowany: dziedziczone wartości pokazują natywne ustawienia domyślne"

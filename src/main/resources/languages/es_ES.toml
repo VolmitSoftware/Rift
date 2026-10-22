@@ -51,10 +51,22 @@
 
 #   {step}  incremento de los cambios numéricos
 
+#   {limit}  máximo de jugadores
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_player_limit = "Limitar jugadores que entran; 0 significa sin límite"
+policy_travel_entry = "Controlar entradas entre mundos; DENY las bloquea, INHERIT no las modifica"
+policy_travel_exit = "Controlar salidas entre mundos; DENY bloquea viajes, no reapariciones ni recuperación al conectar"
+policy_first_join = "Elegir un punto de aparición gestionado y cargado para primeros ingresos desde este mundo; default usa el destino de conexión"
+policy_login = "Elegir un punto de aparición gestionado y cargado al conectar desde este mundo; default conserva la posición del servidor"
+policy_game_mode = "Fijar el modo de juego al entrar, conectarse y reaparecer; INHERIT deja de imponerlo"
+policy_flight = "Controlar el vuelo en supervivencia y aventura; INHERIT libera el ajuste de vuelo de {prefix}"
+policy_weather = "Mantener tiempo despejado, lluvia o tormenta; INHERIT permite de nuevo los cambios de tiempo"
+policy_natural_animals = "DENY bloquea la aparición natural de animales; ALLOW respeta otras restricciones"
+policy_natural_monsters = "DENY bloquea la aparición natural de monstruos; ALLOW respeta otras restricciones"
 policy_edit = "Abrir el editor de políticas del mundo"
 check_all = "Comprobar todos los mundos coincidentes sin modificarlos"
 version = "Mostrar la versión de {prefix}"
@@ -94,6 +106,9 @@ policy_respawn = "Redirigir las muertes de este mundo a otro mundo gestionado o 
 policy_tag = "Añadir o eliminar una etiqueta de operador"
 
 [rift.parameter]
+player_limit = "Máximo de jugadores, o 0 sin límite"
+policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR o INHERIT"
+policy_weather = "CLEAR, RAIN, THUNDER o INHERIT"
 tag_filter = "Filtrar por una etiqueta de operador o usar all"
 tag_group = "Agrupar los mundos coincidentes por etiqueta de operador"
 name = "Nombre del mundo"
@@ -127,6 +142,9 @@ policy_tag = "Nombre de la etiqueta de operador"
 tag_enabled = "true añade la etiqueta; false la elimina"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&c{world} está lleno (límite: {limit})."
+policy_travel_denied = "{prefix}&r &7› &7&cLa política de {world} bloquea los viajes entre mundos."
+policy_placement_failed = "No hay espacio en ningún mundo accesible. Contacta con la administración."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&cNecesitas &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&cComando desconocido. &f/rift help&7."
@@ -162,6 +180,16 @@ unmanaged_loaded = "{prefix}&r &7› &7Se dejó de gestionar &a{world}&7 sin mod
 unmanaged_unloaded = "{prefix}&r &7› &7Se dejó de gestionar &a{world}&7 sin modificar sus archivos. {prefix} ya no lo cargará durante el inicio."
 
 [rift.label]
+policy_player_limit = "Límite de jugadores"
+policy_travel_entry = "Entrada entre mundos"
+policy_travel_exit = "Salida entre mundos"
+policy_first_join_world = "Destino del primer ingreso"
+policy_login_world = "Destino al conectar"
+policy_game_mode = "Modo de juego"
+policy_flight = "Vuelo"
+policy_weather = "Tiempo"
+policy_natural_animals = "Aparición natural de animales"
+policy_natural_monsters = "Aparición natural de monstruos"
 worlds = "Mundos"
 quarantine = "Cuarentena"
 loaded = "Cargado"
@@ -220,7 +248,7 @@ autoload = "Indica si {prefix} carga automáticamente este mundo gestionado al i
 protected = "Los mundos gestionados protegidos no pueden trasladarse a la cuarentena de {prefix}."
 operation_active = "Indica si una operación del ciclo de vida mantiene actualmente el bloqueo de {prefix} específico de este mundo."
 server = "La implementación del servidor activo y su versión, según informa Bukkit."
-java_runtime = "El entorno de ejecución de Java que aloja actualmente el servidor. {prefix} requiere Java 25."
+java_runtime = "El entorno de ejecución de Java que aloja actualmente el servidor. {prefix} requiere Java 25 o posterior."
 plugin_bytecode = "El entorno de ejecución de Java más antiguo capaz de cargar las clases compiladas de {prefix}."
 platform = "El planificador y la familia de API del servidor que {prefix} detectó durante la ejecución."
 dynamic_lifecycle = "Indica si esta plataforma permite crear, cargar, descargar, poner en cuarentena y restaurar mundos de forma segura durante la ejecución."
@@ -253,6 +281,7 @@ action_failure = "{prefix}&r &7› &7&c{operation} fallado &f{world}"
 already_exists = "{prefix}&r &7› &7&e{world} ya existe. Usa &f/rift info {world}&e para inspeccionarlo o elige otro nombre."
 
 [rift.gui]
+updates = "&dAvisos de actualizaciones"
 policy_native_default = "&7Valor nativo predeterminado: &f{value}"
 policy_inherited = "&7Política: INHERIT"
 policy_unloaded = "&7Mundo descargado: los valores heredados muestran los predeterminados nativos"

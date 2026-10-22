@@ -20,7 +20,7 @@ final class RiftConfigMenuCoverageTest {
                 .collect(Collectors.toUnmodifiableSet());
 
         assertThat(RiftConfigMenu.editablePaths()).containsExactlyInAnyOrderElementsOf(persistedFields);
-        assertThat(persistedFields).hasSize(25);
+        assertThat(persistedFields).hasSize(26);
         assertThat(RiftConfigMenu.languageUsesPicker()).isTrue();
         assertThat(RiftConfigMenu.rootCategorySlots()).containsValue("LANGUAGES");
     }

@@ -6,6 +6,7 @@ import art.arcane.volmlib.util.localization.BukkitLanguageSwitcher;
 import art.arcane.volmlib.util.localization.LocalizationSnapshot;
 import art.arcane.volmlib.util.localization.MessageArgs;
 import art.arcane.volmlib.util.scheduling.FoliaScheduler;
+import art.arcane.volmlib.util.update.BukkitUpdateService;
 import com.volmit.rift.command.RiftCommandService;
 import com.volmit.rift.config.RiftConfig;
 import com.volmit.rift.config.RiftConfigManager;
@@ -17,6 +18,7 @@ import com.volmit.rift.hotload.RiftHotloadService;
 import com.volmit.rift.localization.RiftLocalization;
 import com.volmit.rift.localization.RiftMessages;
 import com.volmit.rift.metrics.RiftMetricsService;
+import com.volmit.rift.placeholder.RiftPlaceholderService;
 import com.volmit.rift.storage.RiftPaths;
 import com.volmit.rift.storage.TrashStore;
 import com.volmit.rift.storage.WorldDirectoryResolver;
@@ -32,6 +34,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 
@@ -39,6 +43,7 @@ public final class Rift extends JavaPlugin implements ReloadAware {
     private static Rift instance;
 
     private final AtomicBoolean stopped = new AtomicBoolean();
+    private boolean bootstrapReady;
     private RiftPaths paths;
     private RiftConfigManager config;
     private RiftLocalization language;
@@ -53,16 +58,26 @@ public final class Rift extends JavaPlugin implements ReloadAware {
     private RiftFeedbackService feedback;
     private BukkitDebugDump debugDump;
     private BukkitLanguageSwitcher languageSwitcher;
+    private volatile BukkitUpdateService updates;
     private RiftMetricsService metrics;
+    private RiftPlaceholderService placeholders;
     private RiftHotloadService hotload;
     private RiftConfigMenu configMenu;
     private RiftWorldPolicyMenu policyMenu;
     private RiftCommandService commands;
 
-    public Rift() {
+    @Override
+    public void onLoad() {
+        String minecraftVersion = getServer().getMinecraftVersion();
+        int javaVersion = Runtime.version().feature();
+        if (!RiftCompatibility.supports(minecraftVersion, javaVersion)) {
+            getLogger().severe(RiftCompatibility.rejectionMessage(minecraftVersion, javaVersion));
+            return;
+        }
         getLogger().info("Loading libraries...");
         new SpigotApplicationBuilder(this).build();
         getLogger().info("Libraries loaded.");
+        bootstrapReady = true;
     }
 
     public static Rift get() {
@@ -71,6 +86,10 @@ public final class Rift extends JavaPlugin implements ReloadAware {
 
     @Override
     public void onEnable() {
+        if (!bootstrapReady) {
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         long startedNanos = System.nanoTime();
         instance = this;
         stopped.set(false);
@@ -109,6 +128,7 @@ public final class Rift extends JavaPlugin implements ReloadAware {
             worldInventory.refreshDiskSnapshot();
             feedback = new RiftFeedbackService(this, config, language);
             getServer().getPluginManager().registerEvents(worldPolicies, this);
+            worldPolicies.start();
             lifecycle = new WorldLifecycleService(
                     this,
                     config,
@@ -153,6 +173,8 @@ public final class Rift extends JavaPlugin implements ReloadAware {
                                             .build())
                     )
             );
+            updates = BukkitUpdateService.register(this, new BukkitUpdateService.Options(
+                    "VolmitSoftware", "Rift", "rift.update", () -> config.get().isUpdateNotifications()));
             debugDump = BukkitDebugDump.create(this, new BukkitDebugDump.Options(
                     () -> config.get().isDebugUploadEnabled(),
                     new RiftDebugContributor(this),
@@ -167,6 +189,8 @@ public final class Rift extends JavaPlugin implements ReloadAware {
             commands.register();
             lifecycle.loadManagedAtStartup();
             worldPolicies.applyAll();
+            placeholders = new RiftPlaceholderService(this);
+            placeholders.start();
             hotload.start();
             long startupMillis = (System.nanoTime() - startedNanos) / 1_000_000L;
             if (config.get().isSplashScreen()) {
@@ -185,8 +209,9 @@ public final class Rift extends JavaPlugin implements ReloadAware {
     }
 
     @Override
-    public void onPreUnload(PreUnloadReason reason) {
+    public CompletionStage<Void> commitReload(PreUnloadReason reason) {
         stop();
+        return CompletableFuture.completedFuture(null);
     }
 
     public RiftPaths paths() {
@@ -249,7 +274,14 @@ public final class Rift extends JavaPlugin implements ReloadAware {
         return metrics;
     }
 
+    public RiftPlaceholderService placeholders() {
+        return placeholders;
+    }
+
     public void configurationInstalled(RiftConfig installed) {
+        if (updates != null) {
+            updates.reconfigure();
+        }
         if (metrics != null) {
             metrics.install(installed.isBstatsEnabled());
         }
@@ -262,17 +294,26 @@ public final class Rift extends JavaPlugin implements ReloadAware {
     }
 
     private void stop() {
-        if (!stopped.compareAndSet(false, true)) {
+        if (!bootstrapReady || !stopped.compareAndSet(false, true)) {
             return;
+        }
+        if (worldPolicies != null) {
+            worldPolicies.close();
         }
         if (configMenu != null) {
             configMenu.shutdown();
+        }
+        if (placeholders != null) {
+            placeholders.close();
         }
         if (policyMenu != null) {
             policyMenu.shutdown();
         }
         if (debugDump != null) {
             debugDump.close();
+        }
+        if (updates != null) {
+            updates.close();
         }
         if (languageSwitcher != null) {
             languageSwitcher.close();

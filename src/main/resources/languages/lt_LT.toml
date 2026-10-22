@@ -51,6 +51,8 @@
 
 #   {step}  Pakeitimo dydis vienu spustelėjimu
 
+#   {limit}  didžiausias žaidėjų skaičius
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
@@ -58,6 +60,16 @@ prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 already_exists = "{prefix}&r &7› &7&e{world} jau yra. Patikrinkite su &f/rift info {world}&e arba pasirinkite kitą vardą."
 
 [rift.command]
+policy_player_limit = "Riboti atvykstančius žaidėjus; 0 reiškia be limito"
+policy_travel_entry = "Valdyti įėjimą tarp pasaulių; DENY draudžia, INHERIT nekeičia"
+policy_travel_exit = "Valdyti išėjimą tarp pasaulių; DENY draudžia keliones, ne atgimimą ar prisijungimo atkūrimą"
+policy_first_join = "Pirmam prisijungimui iš šio pasaulio rinktis įkelto valdomo pasaulio pradžios vietą; default naudoja prisijungimo vietą"
+policy_login = "Prisijungimams iš šio pasaulio rinktis įkelto valdomo pasaulio pradžios vietą; default palieka serverio vietą"
+policy_game_mode = "Nustatyti žaidimo režimą įėjus, prisijungus ir atgimus; INHERIT išjungia priverstinį režimą"
+policy_flight = "Valdyti skrydį išgyvenimo ir nuotykių režimuose; INHERIT panaikina {prefix} skrydžio nustatymą"
+policy_weather = "Užfiksuoti giedrą, lietų ar perkūniją; INHERIT vėl leidžia orams keistis"
+policy_natural_animals = "DENY blokuoja natūralų gyvūnų atsiradimą; ALLOW laikosi kitų apribojimų"
+policy_natural_monsters = "DENY blokuoja natūralų monstrų atsiradimą; ALLOW laikosi kitų apribojimų"
 policy_edit = "Atverti pasaulio taisyklių redaktorių"
 check_all = "Patikrinti visus atitinkančius pasaulius jų nekeičiant"
 version = "Rodyti {prefix} versiją"
@@ -97,6 +109,9 @@ policy_respawn = "Nukreipti šiame pasaulyje mirusius žaidėjus į kitą valdom
 policy_tag = "Pridėti arba pašalinti operatoriaus žymą"
 
 [rift.parameter]
+player_limit = "Didžiausias žaidėjų skaičius arba 0 be limito"
+policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR arba INHERIT"
+policy_weather = "CLEAR, RAIN, THUNDER arba INHERIT"
 tag_filter = "Filtruoti pagal administratoriaus žymą arba naudoti all"
 tag_group = "Grupuoti atitinkančius pasaulius pagal administratoriaus žymą"
 name = "Pasaulinis pavadinimas"
@@ -130,6 +145,9 @@ policy_tag = "Operatoriaus žymos pavadinimas"
 tag_enabled = "true prideda žymą; false ją pašalina"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&c{world} pilnas (limitas: {limit})."
+policy_travel_denied = "{prefix}&r &7› &7&cPasaulio {world} taisyklė draudžia keliones tarp pasaulių."
+policy_placement_failed = "Nė viename prieinamame pasaulyje nėra vietos. Kreipkitės į administratorių."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&cTau reikia &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&cNežinoma komanda. Naudojimas &f/rift help&7."
@@ -165,6 +183,16 @@ unmanaged_loaded = "{prefix}&r &7› &7Pasaulis &a{world}&7 nebevaldomas, jo fai
 unmanaged_unloaded = "{prefix}&r &7› &7Pasaulis &a{world}&7 nebevaldomas, jo failai nepakeisti. {prefix} jo nebeįkels paleidimo metu."
 
 [rift.label]
+policy_player_limit = "Žaidėjų limitas"
+policy_travel_entry = "Įėjimas tarp pasaulių"
+policy_travel_exit = "Išėjimas tarp pasaulių"
+policy_first_join_world = "Pirmojo prisijungimo vieta"
+policy_login_world = "Prisijungimo vieta"
+policy_game_mode = "Žaidimo režimas"
+policy_flight = "Skrydis"
+policy_weather = "Orai"
+policy_natural_animals = "Natūralus gyvūnų atsiradimas"
+policy_natural_monsters = "Natūralus monstrų atsiradimas"
 worlds = "Pasauliai"
 quarantine = "Karantinas"
 loaded = "Įkelta"
@@ -223,7 +251,7 @@ autoload = "Nurodo, ar {prefix} automatiškai įkelia šį valdomą pasaulį pal
 protected = "Apsaugotų valdomų pasaulių negalima perkelti į {prefix} karantiną."
 operation_active = "Nurodo, ar gyvavimo ciklo operacija šiuo metu laiko {prefix} užraktą, skirtą šiam pasauliui."
 server = "Bukkit pateikiamas aktyvaus serverio įgyvendinimas ir versija."
-java_runtime = "Java vykdymo aplinka, kurioje dabar veikia serveris. {prefix} reikia Java 25."
+java_runtime = "Java vykdymo aplinka, kurioje dabar veikia serveris. {prefix} reikia Java 25 arba naujesnės."
 plugin_bytecode = "Seniausia Java vykdymo aplinka, galinti įkelti sukompiliuotas {prefix} klases."
 platform = "Planuoklio ir serverio API šeima, kurią {prefix} aptiko vykdymo metu."
 dynamic_lifecycle = "Nurodo, ar platforma saugiai leidžia vykdymo metu kurti, įkelti, iškelti pasaulius, perkelti juos į karantiną ir atkurti."
@@ -253,6 +281,7 @@ action_teleport = "{prefix}&r &7› &7&aTeleportuotas į &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} nepavyko &f{world}"
 
 [rift.gui]
+updates = "&dPranešimai apie atnaujinimus"
 policy_native_default = "&7Žaidimo numatytoji reikšmė: &f{value}"
 policy_inherited = "&7Taisyklė: INHERIT"
 policy_unloaded = "&7Pasaulis neįkeltas: paveldėtoms reikšmėms rodomos žaidimo numatytosios reikšmės"

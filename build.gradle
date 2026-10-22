@@ -1,5 +1,7 @@
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.WriteProperties
+import org.gradle.api.attributes.Usage
+import org.gradle.api.attributes.java.TargetJvmVersion
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 buildscript {
@@ -23,15 +25,16 @@ apply plugin: 'art.arcane.volmit-packaging'
 tasks.named('slimJar').get()
 
 group = 'com.volmit.rift'
-version = '2.0.1-26.x'
+version = '2.0.1-26.1-26.3'
 
 String apiVersion = '26.1'
 String mainClass = 'com.volmit.rift.Rift'
 String relocatedLibraryPackage = 'com.volmit.rift.libs'
+File buildsDirectory = file(providers.gradleProperty('buildsDirectory').getOrElse('../BUILDS'))
 String volmLibCoordinate = providers.gradleProperty('volmLibCoordinate')
         .orElse('com.github.VolmitSoftware:VolmLib:master-SNAPSHOT')
         .get()
-String languageSourceReference = 'main'
+String languageSourceReference = '368610464d97f1be33c802e8c7ac72db2997905a'
 List<File> languageSourceFiles = fileTree('src/main/resources/languages') {
     include('*.toml')
 }.files.toList().sort { File left, File right -> left.name <=> right.name }
@@ -55,6 +58,7 @@ java {
 
 repositories {
     mavenCentral()
+    maven { url = uri('https://repo.helpch.at/releases/') }
     maven { url = uri('https://repo.papermc.io/repository/maven-public/') }
     maven { url = uri('https://jitpack.io') }
 }
@@ -65,10 +69,29 @@ configurations {
         canBeResolved = true
         extendsFrom(configurations.slimApi)
     }
+    minimumPaperCompatibility {
+        canBeConsumed = false
+        canBeResolved = true
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_API))
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25)
+        }
+    }
+    maximumPaperCompatibility {
+        canBeConsumed = false
+        canBeResolved = true
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_API))
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25)
+        }
+    }
 }
 
 dependencies {
     compileOnly('io.papermc.paper:paper-api:26.2.build.121-stable')
+    compileOnly('me.clip:placeholderapi:2.12.3') { transitive = false }
+    minimumPaperCompatibility('io.papermc.paper:paper-api:26.1.2.build.74-stable')
+    maximumPaperCompatibility('io.papermc.paper:paper-api:26.3.build.178-stable')
 
     implementation(volmLibCoordinate) {
         changing = true
@@ -89,6 +112,7 @@ dependencies {
     testImplementation('org.assertj:assertj-core:3.26.3')
     testImplementation('org.mockito:mockito-core:5.14.2')
     testImplementation('io.papermc.paper:paper-api:26.2.build.121-stable')
+    testImplementation('me.clip:placeholderapi:2.12.3') { transitive = false }
 }
 
 tasks.withType(Test).configureEach {
@@ -101,10 +125,25 @@ tasks.withType(JavaCompile).configureEach {
     options.release.set(25)
 }
 
+Map<String, String> compatibilityTargets = [
+        compileMinimumPaperCompatibility: 'minimumPaperCompatibility',
+        compileMaximumPaperCompatibility: 'maximumPaperCompatibility'
+]
+compatibilityTargets.each { String taskName, String configurationName ->
+    tasks.register(taskName, JavaCompile) {
+        group = 'verification'
+        source = sourceSets.main.java
+        classpath = configurations.getByName(configurationName) + files(sourceSets.main.compileClasspath.filter { File dependency ->
+            !dependency.name.startsWith('paper-api-')
+        })
+        destinationDirectory.set(layout.buildDirectory.dir("classes/java/${configurationName}"))
+        options.annotationProcessorPath = configurations.annotationProcessor
+    }
+}
+
 tasks.named('processResources').configure {
     dependsOn(languageSourceManifestTask)
     exclude('languages/*.toml')
-    exclude('languages/*.yml')
     from(languageSourceManifestTask)
     Map<String, String> pluginProperties = [
             version   : project.version.toString(),
@@ -178,6 +217,7 @@ tasks.register('verifyJava25Artifact') {
         int pluginMetadataCount = 0
         int maximumClassMajor = 0
         int mainClassMajor = 0
+        String pluginMetadata = null
         boolean bStatsMetricsClassPresent = false
         Set<String> bundledLanguages = new TreeSet<>()
         Properties languageManifest = null
@@ -198,6 +238,9 @@ tasks.register('verifyJava25Artifact') {
                 }
                 if (path == 'plugin.yml') {
                     pluginMetadataCount++
+                    pluginMetadata = archive.getInputStream(entry).withCloseable { InputStream input ->
+                        input.getText('UTF-8')
+                    }
                 }
                 if (!entry.directory && path.startsWith('languages/')) {
                     bundledLanguages.add(path)
@@ -239,6 +282,9 @@ tasks.register('verifyJava25Artifact') {
         if (pluginMetadataCount != 1) {
             throw new GradleException("Expected one plugin.yml, found ${pluginMetadataCount}")
         }
+        if (!(pluginMetadata =~ /(?m)^api-version: ['"]?26\.1['"]?\s*$/).find()) {
+            throw new GradleException('Rift must declare its minimum Paper API as 26.1')
+        }
         if (maximumClassMajor > 69) {
             throw new GradleException("Shaded artifact contains class major ${maximumClassMajor}; Java 25 allows at most 69")
         }
@@ -259,28 +305,45 @@ tasks.register('verifyJava25Artifact') {
             throw new GradleException('Runtime language source manifest does not match the build source set')
         }
         if (languageManifest.stringPropertyNames().any { String key -> key.startsWith('sha256.') }) {
-            throw new GradleException('Runtime language source manifest must follow the latest main branch')
+            throw new GradleException('Runtime language source manifest must match the published repository revision')
         }
     }
 }
 
 tasks.named('check').configure {
     dependsOn(tasks.named('verifyJava25Artifact'))
+    dependsOn('verifyJava25RuntimeLibraries')
+    dependsOn(compatibilityTargets.keySet())
 }
 
-tasks.register('buildPsychoLT', Copy) {
-    group = 'development'
-    description = 'Builds, verifies, and deploys Rift to the managed Minecraft test-server dropins.'
-    outputs.upToDateWhen { false }
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    dependsOn(tasks.named('check'), tasks.named('shadowJar'))
-    from(tasks.named('shadowJar').flatMap { it.archiveFile })
-    into(layout.projectDirectory.dir('../../[Minecraft Server]/consumers/plugin-consumers/dropins/plugins'))
-    rename { String ignored -> 'Rift.jar' }
+tasks.register('verifyJava25RuntimeLibraries') {
+    inputs.files(configurations.runtimeLibraryTest)
     doLast {
-        project.copy {
-            from(tasks.named('shadowJar').flatMap { it.archiveFile })
-            into(layout.projectDirectory.dir('../PluginOuts'))
+        for (File library : configurations.runtimeLibraryTest.files) {
+            new java.util.zip.ZipFile(library).withCloseable { java.util.zip.ZipFile archive ->
+                Enumeration<? extends java.util.zip.ZipEntry> entries = archive.entries()
+                while (entries.hasMoreElements()) {
+                    java.util.zip.ZipEntry entry = entries.nextElement()
+                    if (entry.directory || !entry.name.endsWith('.class')) {
+                        continue
+                    }
+                    if (entry.name.startsWith('META-INF/versions/')) {
+                        String release = entry.name.substring('META-INF/versions/'.length()).split('/')[0]
+                        if (release.isInteger() && release.toInteger() > 25) {
+                            continue
+                        }
+                    }
+                    archive.getInputStream(entry).withCloseable { InputStream stream ->
+                        DataInputStream input = new DataInputStream(stream)
+                        int magic = input.readInt()
+                        int minor = input.readUnsignedShort()
+                        int major = input.readUnsignedShort()
+                        if (Integer.toUnsignedLong(magic) != 0xCAFEBABEL || major > 69 || minor == 65535) {
+                            throw new GradleException("Runtime library is not usable on Java 25: ${library.name}!/${entry.name}")
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -292,7 +355,7 @@ tasks.register('stageBuild', Copy) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     dependsOn(tasks.named('check'), tasks.named('shadowJar'))
     from(tasks.named('shadowJar').flatMap { it.archiveFile })
-    into(file('../BUILDS'))
+    into(buildsDirectory)
     rename { String ignored -> 'Rift.jar' }
 }
 
@@ -305,10 +368,31 @@ tasks.register('buildSwiftSwamp') {
 pluginPackaging {
     artifacts {
         create('distribution') {
+            stripDirectories = true
+            stripLocalVariables = true
             taskName = 'shadowJar'
             maximumBytes = 1500000
             prunePrefixes = ['com/volmit/rift/libs/volmlib/']
-            requiredEntries = ['plugin.yml', 'com/volmit/rift/Rift.class']
+            requiredEntries = [
+                    'plugin.yml',
+                    'com/volmit/rift/Rift.class',
+                    'com/volmit/rift/RiftCompatibility.class',
+                    'com/volmit/rift/placeholder/RiftPlaceholderExpansion.class',
+                    'com/volmit/rift/metrics/bstats/Metrics.class',
+                    'com/volmit/rift/libs/slimjar/app/builder/SpigotApplicationBuilder.class',
+                    'slimjar.dat',
+                    'slimjar-resolutions.dat',
+                    'rift-language-source.properties',
+                    'META-INF/LICENSE-bStats-Metrics.txt'
+            ]
+            forbiddenPrefixes = [
+                    'org/bukkit/', 'io/papermc/', 'net/minecraft/', 'org/spigotmc/',
+                    'org/gradle/', 'org/junit/', 'org/mockito/', 'org/assertj/', 'me/clip/placeholderapi/',
+                    'art/arcane/volmlib/', 'org/bstats/', 'io/github/slimjar/',
+                    'com/google/gson/', 'com/moandjiezana/toml/', 'net/kyori/',
+                    'com/volmit/rift/libs/gson/', 'com/volmit/rift/libs/toml/',
+                    'com/volmit/rift/libs/kyori/', 'languages/'
+            ]
             shrinkRules = [file('packaging/shrink.pro')]
             shrinkRelocations = [
                 'com.google.gson': "${relocatedLibraryPackage}.gson",

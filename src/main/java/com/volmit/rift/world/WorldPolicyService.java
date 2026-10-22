@@ -20,9 +20,16 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Animals;
+import org.bukkit.entity.SpawnCategory;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.weather.ThunderChangeEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -48,8 +55,9 @@ public final class WorldPolicyService implements Listener {
     private final RiftLocalization language;
     private final WorldNamePolicy names;
     private final WorldProfileStore profiles;
-    private final TeleportService teleports;
     private final Map<String, Boolean> appliedBorders = new ConcurrentHashMap<>();
+    private final WorldPlayerPolicies playerPolicies = new WorldPlayerPolicies();
+    private final WorldAdmissionPolicies admissions;
 
     public WorldPolicyService(
             Rift plugin,
@@ -61,7 +69,11 @@ public final class WorldPolicyService implements Listener {
         this.language = Objects.requireNonNull(language, "language");
         this.names = Objects.requireNonNull(names, "names");
         this.profiles = Objects.requireNonNull(profiles, "profiles");
-        this.teleports = new TeleportService(plugin);
+        this.admissions = new WorldAdmissionPolicies(plugin, language, profiles, new TeleportService(plugin));
+    }
+
+    public void start() {
+        admissions.start();
     }
 
     public void applyAll() {
@@ -86,6 +98,20 @@ public final class WorldPolicyService implements Listener {
         return true;
     }
 
+    public void close() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (FoliaScheduler.isOwnedByCurrentRegion(player)) {
+                playerPolicies.release(player);
+            } else if (playerPolicies.hasFlight(player)) {
+                plugin.getLogger().warning("Unable to release Rift flight permission during shutdown for "
+                        + player.getUniqueId() + ": player belongs to another region");
+            }
+        }
+        playerPolicies.clear();
+        appliedBorders.clear();
+        admissions.close();
+    }
+
     public boolean apply(World world) {
         if (world == null) {
             return true;
@@ -103,6 +129,18 @@ public final class WorldPolicyService implements Listener {
         }
         detail(sender, RiftMessages.LABEL_POLICY_DIFFICULTY, profile.getDifficulty());
         detail(sender, RiftMessages.LABEL_POLICY_PVP, profile.getPvp());
+        detail(sender, RiftMessages.LABEL_POLICY_GAME_MODE, profile.getGameMode());
+        detail(sender, RiftMessages.LABEL_POLICY_FLIGHT, profile.getFlight());
+        detail(sender, RiftMessages.LABEL_POLICY_WEATHER, profile.getWeather());
+        detail(sender, RiftMessages.LABEL_POLICY_NATURAL_ANIMALS, profile.getNaturalAnimals());
+        detail(sender, RiftMessages.LABEL_POLICY_NATURAL_MONSTERS, profile.getNaturalMonsters());
+        detail(sender, RiftMessages.LABEL_POLICY_PLAYER_LIMIT, profile.getPlayerLimit());
+        detail(sender, RiftMessages.LABEL_POLICY_TRAVEL_ENTRY, profile.getTravelEntry());
+        detail(sender, RiftMessages.LABEL_POLICY_TRAVEL_EXIT, profile.getTravelExit());
+        detail(sender, RiftMessages.LABEL_POLICY_FIRST_JOIN_WORLD,
+                profile.getFirstJoinWorld().isBlank() ? label(sender, RiftMessages.LABEL_SERVER_DEFAULT) : profile.getFirstJoinWorld());
+        detail(sender, RiftMessages.LABEL_POLICY_LOGIN_WORLD,
+                profile.getLoginWorld().isBlank() ? label(sender, RiftMessages.LABEL_SERVER_DEFAULT) : profile.getLoginWorld());
         detail(sender, RiftMessages.LABEL_POLICY_GAME_RULES,
                 profile.getGameRules().isEmpty() ? label(sender, RiftMessages.LABEL_NONE) : profile.getGameRules());
         detail(sender, RiftMessages.LABEL_POLICY_CUSTOM_SPAWN, profile.isCustomSpawn());
@@ -125,6 +163,36 @@ public final class WorldPolicyService implements Listener {
         String normalized = normalizeChoice(value, "PvP policy", "INHERIT", "ALLOW", "DENY");
         return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_PVP),
                 profile -> profile.setPvp(normalized), WorldProfile::getPvp, false);
+    }
+
+    public CompletableFuture<Boolean> setGameMode(CommandSender sender, String name, String value) {
+        String normalized = normalizeChoice(value, "game mode", "INHERIT", "SURVIVAL", "CREATIVE", "ADVENTURE", "SPECTATOR");
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_GAME_MODE),
+                profile -> profile.setGameMode(normalized), WorldProfile::getGameMode, false);
+    }
+
+    public CompletableFuture<Boolean> setFlight(CommandSender sender, String name, String value) {
+        String normalized = normalizeChoice(value, "flight", "INHERIT", "ALLOW", "DENY");
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_FLIGHT),
+                profile -> profile.setFlight(normalized), WorldProfile::getFlight, false);
+    }
+
+    public CompletableFuture<Boolean> setWeather(CommandSender sender, String name, String value) {
+        String normalized = normalizeChoice(value, "weather", "INHERIT", "CLEAR", "RAIN", "THUNDER");
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_WEATHER),
+                profile -> profile.setWeather(normalized), WorldProfile::getWeather, false);
+    }
+
+    public CompletableFuture<Boolean> setNaturalAnimals(CommandSender sender, String name, String value) {
+        String normalized = normalizeChoice(value, "natural animal spawning", "INHERIT", "ALLOW", "DENY");
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_NATURAL_ANIMALS),
+                profile -> profile.setNaturalAnimals(normalized), WorldProfile::getNaturalAnimals, false);
+    }
+
+    public CompletableFuture<Boolean> setNaturalMonsters(CommandSender sender, String name, String value) {
+        String normalized = normalizeChoice(value, "natural monster spawning", "INHERIT", "ALLOW", "DENY");
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_NATURAL_MONSTERS),
+                profile -> profile.setNaturalMonsters(normalized), WorldProfile::getNaturalMonsters, false);
     }
 
     public CompletableFuture<Boolean> setGameRule(CommandSender sender, String name, String ruleName, String value) {
@@ -150,6 +218,56 @@ public final class WorldPolicyService implements Listener {
             rules.put(key, normalizedValue);
             profile.setGameRules(rules);
         }, saved -> saved.getGameRules().get(key), false);
+    }
+
+    public CompletableFuture<Boolean> setPlayerLimit(CommandSender sender, String name, int value) {
+        if (value < 0) {
+            throw new IllegalArgumentException("Player limit must be zero or greater");
+        }
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_PLAYER_LIMIT),
+                profile -> profile.setPlayerLimit(value), saved -> Integer.toString(saved.getPlayerLimit()), false);
+    }
+
+    public CompletableFuture<Boolean> adjustPlayerLimit(CommandSender sender, String name, long steps, boolean reset) {
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_PLAYER_LIMIT),
+                profile -> profile.setPlayerLimit(reset ? 0 : (int) Math.clamp((long) profile.getPlayerLimit()
+                        + Math.clamp(steps, -Integer.MAX_VALUE, Integer.MAX_VALUE), 0, Integer.MAX_VALUE)),
+                saved -> Integer.toString(saved.getPlayerLimit()), false);
+    }
+
+    public CompletableFuture<Boolean> setTravelEntry(CommandSender sender, String name, String value) {
+        String normalized = normalizeChoice(value, "travel entry", "INHERIT", "ALLOW", "DENY");
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_TRAVEL_ENTRY),
+                profile -> profile.setTravelEntry(normalized), WorldProfile::getTravelEntry, false);
+    }
+
+    public CompletableFuture<Boolean> setTravelExit(CommandSender sender, String name, String value) {
+        String normalized = normalizeChoice(value, "travel exit", "INHERIT", "ALLOW", "DENY");
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_TRAVEL_EXIT),
+                profile -> profile.setTravelExit(normalized), WorldProfile::getTravelExit, false);
+    }
+
+    public CompletableFuture<Boolean> setFirstJoin(CommandSender sender, String name, String destination) {
+        String value = placementDestination(destination);
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_FIRST_JOIN_WORLD),
+                profile -> profile.setFirstJoinWorld(value),
+                saved -> saved.getFirstJoinWorld().isBlank() ? label(sender, RiftMessages.LABEL_SERVER_DEFAULT) : saved.getFirstJoinWorld(), false);
+    }
+
+    public CompletableFuture<Boolean> setLogin(CommandSender sender, String name, String destination) {
+        String value = placementDestination(destination);
+        return update(sender, name, label(sender, RiftMessages.LABEL_POLICY_LOGIN_WORLD),
+                profile -> profile.setLoginWorld(value),
+                saved -> saved.getLoginWorld().isBlank() ? label(sender, RiftMessages.LABEL_SERVER_DEFAULT) : saved.getLoginWorld(), false);
+    }
+
+    private String placementDestination(String destination) {
+        String value = destination.equalsIgnoreCase("clear") || destination.equalsIgnoreCase("default")
+                ? "" : names.requireValid(destination);
+        if (!value.isBlank() && profiles.find(value).isEmpty()) {
+            throw new IllegalArgumentException("Placement destination is not managed: " + value);
+        }
+        return value;
     }
 
     public CompletableFuture<Boolean> adjustGameRule(CommandSender sender, String name, GameRule<?> rule, long amount) {
@@ -384,16 +502,73 @@ public final class WorldPolicyService implements Listener {
         }
         String key = worldName.toLowerCase(Locale.ROOT);
         appliedBorders.remove(key);
+        if (!FoliaScheduler.runGlobal(plugin, () -> {
+            admissions.refresh();
+            World world = RiftWorldIdentity.findLoaded(worldName);
+            if (world != null) {
+                for (Player player : List.copyOf(world.getPlayers())) {
+                    FoliaScheduler.runEntity(plugin, player, () -> applyPlayer(player, false));
+                }
+            }
+        })) {
+            plugin.getLogger().warning("Unable to schedule player policy release for " + worldName);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onTeleport(PlayerTeleportEvent event) {
-        Location destination = event.getTo();
-        if (destination == null || destination.getWorld() == null || hasAccess(event.getPlayer(), destination.getWorld())) {
+    public void onNaturalSpawn(CreatureSpawnEvent event) {
+        if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.NATURAL) {
             return;
         }
-        event.setCancelled(true);
-        deny(event.getPlayer(), destination.getWorld());
+        WorldProfile profile = profile(event.getLocation().getWorld());
+        if (profile == null) {
+            return;
+        }
+        if ((event.getEntity() instanceof Animals && profile.getNaturalAnimals().equals("DENY"))
+                || (event.getEntity().getSpawnCategory() == SpawnCategory.MONSTER && profile.getNaturalMonsters().equals("DENY"))) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onWeather(WeatherChangeEvent event) {
+        WorldProfile profile = profile(event.getWorld());
+        if (profile != null && !profile.getWeather().equals("INHERIT")
+                && event.toWeatherState() != !profile.getWeather().equals("CLEAR")) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onThunder(ThunderChangeEvent event) {
+        WorldProfile profile = profile(event.getWorld());
+        if (profile != null && !profile.getWeather().equals("INHERIT")
+                && event.toThunderState() != profile.getWeather().equals("THUNDER")) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onQuit(PlayerQuitEvent event) {
+        playerPolicies.release(event.getPlayer());
+        admissions.quit(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onGameModeChanged(PlayerGameModeChangeEvent event) {
+        Player player = event.getPlayer();
+        FoliaScheduler.runEntity(plugin, player,
+                () -> playerPolicies.gameModeChanged(player, profile(player.getWorld())), 1L);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onTeleport(PlayerTeleportEvent event) {
+        admissions.teleport(event);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void afterTeleport(PlayerTeleportEvent event) {
+        admissions.afterTeleport(event);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -403,51 +578,48 @@ public final class WorldPolicyService implements Listener {
         Location selected = event.getRespawnLocation();
         if (source.isPresent() && !source.get().getRespawnWorld().isBlank()) {
             World configured = RiftWorldIdentity.findLoaded(source.get().getRespawnWorld());
-            if (configured != null && hasAccess(player, configured)) {
+            if (configured != null) {
                 selected = configured.getSpawnLocation();
             }
         }
-        World selectedWorld = selected.getWorld();
-        if (selectedWorld != null && hasAccess(player, selectedWorld)) {
-            event.setRespawnLocation(selected);
-            return;
-        }
-        World fallback = accessibleFallback(player, selectedWorld);
-        if (fallback != null) {
-            event.setRespawnLocation(fallback.getSpawnLocation());
-        }
+        event.setRespawnLocation(admissions.respawn(player, selected));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void afterRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        FoliaScheduler.runEntity(plugin, player, () -> evacuateRestrictedJoin(player), 1L);
+        FoliaScheduler.runEntity(plugin, player, () -> {
+            admissions.changed(player);
+            applyPlayer(player, true);
+        }, 1L);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (hasAccess(player, player.getWorld())) {
-            return;
+        if (admissions.join(player)) {
+            FoliaScheduler.runEntity(plugin, player, () -> applyPlayer(player, true), 1L);
         }
-        FoliaScheduler.runEntity(plugin, player, () -> evacuateRestrictedJoin(player), 1L);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onWorldChanged(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
-        if (!hasAccess(player, player.getWorld())) {
-            FoliaScheduler.runEntity(plugin, player, () -> evacuateRestrictedJoin(player));
-        }
+        admissions.changed(player);
+        FoliaScheduler.runEntity(plugin, player, () -> applyPlayer(player, true));
     }
 
     private void applyLoadedProfiles() {
+        admissions.refresh();
         appliedBorders.keySet().removeIf(key -> profiles.find(key).isEmpty());
         for (WorldProfile profile : profiles.all()) {
             World world = RiftWorldIdentity.findLoaded(profile.getName());
             if (world != null) {
                 apply(world, profile);
             }
+        }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            FoliaScheduler.runEntity(plugin, player, () -> applyPlayer(player, false));
         }
     }
 
@@ -473,6 +645,8 @@ public final class WorldPolicyService implements Listener {
                 }
             }
             applyBorder(world, profile);
+            applyWeather(world, profile);
+            admissions.capture(world);
             evacuateDeniedPlayers(world);
             return true;
         } catch (RuntimeException exception) {
@@ -483,7 +657,36 @@ public final class WorldPolicyService implements Listener {
 
     private void evacuateDeniedPlayers(World world) {
         for (Player player : List.copyOf(world.getPlayers())) {
-            FoliaScheduler.runEntity(plugin, player, () -> evacuateRestrictedJoin(player));
+            FoliaScheduler.runEntity(plugin, player, () -> applyPlayer(player, false));
+        }
+    }
+
+    private WorldProfile profile(World world) {
+        return world == null ? null : profiles.find(RiftWorldIdentity.logicalName(world, profiles)).orElse(null);
+    }
+
+    private void applyPlayer(Player player, boolean entering) {
+        if (!admissions.enforceAccess(player)) {
+            playerPolicies.release(player);
+            return;
+        }
+        playerPolicies.apply(player, profile(player.getWorld()), entering);
+    }
+
+    private void applyWeather(World world, WorldProfile profile) {
+        if (profile.getWeather().equals("INHERIT")) {
+            return;
+        }
+        boolean storm = !profile.getWeather().equals("CLEAR");
+        boolean thunder = profile.getWeather().equals("THUNDER");
+        if (world.hasStorm() != storm) {
+            world.setStorm(storm);
+        }
+        if (world.isThundering() != thunder) {
+            world.setThundering(thunder);
+        }
+        if (world.hasStorm() != storm || world.isThundering() != thunder) {
+            throw new IllegalArgumentException("World rejected the configured weather state " + profile.getWeather());
         }
     }
 
@@ -567,75 +770,6 @@ public final class WorldPolicyService implements Listener {
             result.complete(false);
         }
         return result;
-    }
-
-    private void evacuateRestrictedJoin(Player player) {
-        World restricted = player.getWorld();
-        if (hasAccess(player, restricted)) {
-            return;
-        }
-        World fallback = accessibleFallback(player, restricted);
-        deny(player, restricted);
-        if (fallback != null) {
-            teleports.teleport(player, fallback.getSpawnLocation(), success -> {
-                if (!success) {
-                    FoliaScheduler.runEntity(plugin, player, () -> disconnectIfRestricted(player));
-                }
-            });
-        } else {
-            disconnectIfRestricted(player);
-        }
-    }
-
-    private void disconnectIfRestricted(Player player) {
-        World world = player.getWorld();
-        if (hasAccess(player, world)) {
-            return;
-        }
-        profiles.find(RiftWorldIdentity.logicalName(world, profiles)).ifPresent(profile -> {
-            String message = profile.getAccessDeniedMessage().isBlank()
-                    ? language.text(player, RiftMessages.POLICY_ACCESS_DENIED, MessageArgs.builder()
-                            .untrusted("world", profile.getName())
-                            .untrusted("permission", profile.getAccessPermission()).build()).plain()
-                    : profile.getAccessDeniedMessage().replace("{world}", profile.getName())
-                            .replace("{permission}", profile.getAccessPermission());
-            player.kickPlayer(message);
-        });
-    }
-
-    private World accessibleFallback(Player player, World excluded) {
-        for (World world : Bukkit.getWorlds()) {
-            if (!world.equals(excluded) && hasAccess(player, world)) {
-                return world;
-            }
-        }
-        return null;
-    }
-
-    private boolean hasAccess(Player player, World world) {
-        Optional<WorldProfile> profile = profiles.find(RiftWorldIdentity.logicalName(world, profiles));
-        if (profile.isEmpty() || profile.get().getAccessPermission().isBlank()) {
-            return true;
-        }
-        return player.hasPermission(profile.get().getAccessPermission())
-                || player.hasPermission("rift.access.bypass")
-                || player.hasPermission("rift.admin");
-    }
-
-    private void deny(Player player, World world) {
-        profiles.find(RiftWorldIdentity.logicalName(world, profiles)).ifPresent(profile -> {
-            if (profile.getAccessDeniedMessage().isBlank()) {
-                language.send(player, RiftMessages.POLICY_ACCESS_DENIED, MessageArgs.builder()
-                        .untrusted("world", profile.getName())
-                        .untrusted("permission", profile.getAccessPermission())
-                        .build());
-                return;
-            }
-            String message = profile.getAccessDeniedMessage()
-                    .replace("{world}", profile.getName())
-                    .replace("{permission}", profile.getAccessPermission());
-            player.sendPlainMessage(message);
-        });
     }
 
     private void deliverUpdated(CommandSender sender, String setting, String world, String value) {

@@ -51,6 +51,8 @@
 
 #   {step}  クリックごとの増減量
 
+#   {limit}  プレイヤーの最大人数
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
@@ -58,6 +60,16 @@ prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 already_exists = "{prefix}&r &7› &7&e{world} は既に存在します。&f/rift info {world}&e で確認するか、別の名前を選んでください。"
 
 [rift.command]
+policy_player_limit = "入場人数を制限します。0 は無制限です"
+policy_travel_entry = "ワールド間の入場を制御します。DENY は拒否、INHERIT は変更しません"
+policy_travel_exit = "ワールド間の退出を制御します。DENY は移動を拒否しますが、リスポーンやログイン時の救済は妨げません"
+policy_first_join = "このワールドからの初参加に、読み込み済みの管理ワールドのスポーンを選びます。default はログイン先を使用します"
+policy_login = "このワールドからのログインに、読み込み済みの管理ワールドのスポーンを選びます。default はサーバーの配置を維持します"
+policy_game_mode = "ワールドへの移動・ログイン・リスポーン時のゲームモードを設定します。INHERITで強制を解除します"
+policy_flight = "サバイバル・アドベンチャーでの飛行を制御します。INHERITで{prefix}による飛行設定を解除します"
+policy_weather = "晴れ・雨・雷雨に固定します。INHERITで天候の変化を再び許可します"
+policy_natural_animals = "DENYで動物の自然スポーンを禁止します。ALLOWでも他の制限は維持されます"
+policy_natural_monsters = "DENYでモンスターの自然スポーンを禁止します。ALLOWでも他の制限は維持されます"
 policy_edit = "ワールド設定エディターを開く"
 check_all = "一致するすべてのワールドを変更せずに確認する"
 version = "{prefix} のバージョンを表示"
@@ -97,6 +109,9 @@ policy_respawn = "このワールドでの死亡後のリスポーン先を、�
 policy_tag = "運営用タグを追加または削除します"
 
 [rift.parameter]
+player_limit = "最大人数。0 は無制限"
+policy_game_mode = "SURVIVAL、CREATIVE、ADVENTURE、SPECTATOR、またはINHERIT"
+policy_weather = "CLEAR、RAIN、THUNDER、またはINHERIT"
 tag_filter = "管理者タグで絞り込むか、all を指定"
 tag_group = "一致するワールドを管理者タグでグループ化する"
 name = "ワールド名"
@@ -130,6 +145,9 @@ policy_tag = "運営用タグ名"
 tag_enabled = "trueでタグを追加し、falseで削除します"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&c{world} は満員です（上限: {limit}）。"
+policy_travel_denied = "{prefix}&r &7› &7&c{world} のポリシーによりワールド間の移動が禁止されています。"
+policy_placement_failed = "入場可能なワールドに空きがありません。管理者に連絡してください。"
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&c必要事項 &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&c未知のコマンド。 &f/rift help&7."
@@ -165,6 +183,16 @@ unmanaged_loaded = "{prefix}&r &7› &7ファイルを変更せずに &a{world}&
 unmanaged_unloaded = "{prefix}&r &7› &7ファイルを変更せずに &a{world}&7 の管理を停止しました。{prefix} は起動時にこのワールドをロードしなくなります。"
 
 [rift.label]
+policy_player_limit = "プレイヤー上限"
+policy_travel_entry = "ワールド間の入場"
+policy_travel_exit = "ワールド間の退出"
+policy_first_join_world = "初参加時の移動先"
+policy_login_world = "ログイン時の移動先"
+policy_game_mode = "ゲームモード"
+policy_flight = "飛行"
+policy_weather = "天候"
+policy_natural_animals = "動物の自然スポーン"
+policy_natural_monsters = "モンスターの自然スポーン"
 worlds = "ワールド"
 quarantine = "キアラニン"
 loaded = "ロード"
@@ -223,7 +251,7 @@ autoload = "サーバー起動時に {prefix} がこの管理対象ワールド�
 protected = "保護された管理対象ワールドは {prefix} の隔離領域へ移動できません。"
 operation_active = "ワールドの作成・読み込み・削除などの処理が、現在 {prefix} のワールド単位のロックを保持しているかを示します。"
 server = "Bukkit が報告する、稼働中のサーバー実装とバージョンです。"
-java_runtime = "現在サーバーを実行している Java ランタイムです。{prefix} には Java 25 が必要です。"
+java_runtime = "現在サーバーを実行している Java ランタイムです。{prefix} には Java 25 以降が必要です。"
 plugin_bytecode = "{prefix} のコンパイル済みクラスを読み込める、最も古い Java ランタイムのバージョンです。"
 platform = "{prefix} が実行時に検出したスケジューラーとサーバー API の系統です。"
 dynamic_lifecycle = "このプラットフォームが稼働中のワールド作成・読み込み・アンロード・隔離・復元を安全に実行できるかを示します。"
@@ -253,6 +281,7 @@ action_teleport = "{prefix}&r &7› &7&aテレポートへ &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} 失敗しました &f{world}"
 
 [rift.gui]
+updates = "&d更新通知"
 policy_native_default = "&7ゲームの既定値: &f{value}"
 policy_inherited = "&7ポリシー: INHERIT"
 policy_unloaded = "&7ワールド未読み込み: 継承値にはゲームの既定値を表示"

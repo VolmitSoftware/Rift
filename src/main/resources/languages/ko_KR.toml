@@ -51,6 +51,8 @@
 
 #   {step}  클릭당 변경량
 
+#   {limit}  최대 플레이어 수
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
@@ -58,6 +60,16 @@ prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 already_exists = "{prefix}&r &7› &7&e{world}은(는) 이미 존재합니다. &f/rift info {world}&e로 확인하거나 다른 이름을 선택하세요."
 
 [rift.command]
+policy_player_limit = "입장 인원을 제한합니다. 0은 무제한입니다"
+policy_travel_entry = "월드 간 입장을 제어합니다. DENY는 차단하고 INHERIT는 변경하지 않습니다"
+policy_travel_exit = "월드 간 퇴장을 제어합니다. DENY는 이동을 막지만 부활이나 로그인 복구는 막지 않습니다"
+policy_first_join = "이 월드에서 첫 접속 시 로드된 관리 월드의 스폰을 선택합니다. default는 로그인 목적지를 사용합니다"
+policy_login = "이 월드에서 로그인 시 로드된 관리 월드의 스폰을 선택합니다. default는 서버 위치를 유지합니다"
+policy_game_mode = "월드 진입, 접속, 리스폰 시 게임 모드를 설정합니다. INHERIT는 강제를 해제합니다"
+policy_flight = "서바이벌과 모험 모드의 비행을 제어합니다. INHERIT는 {prefix}의 비행 설정을 해제합니다"
+policy_weather = "맑음, 비 또는 천둥으로 고정합니다. INHERIT는 날씨 변화를 다시 허용합니다"
+policy_natural_animals = "DENY는 동물의 자연 생성을 막습니다. ALLOW도 다른 스폰 제한을 따릅니다"
+policy_natural_monsters = "DENY는 몬스터의 자연 생성을 막습니다. ALLOW도 다른 스폰 제한을 따릅니다"
 policy_edit = "월드 정책 편집기 열기"
 check_all = "일치하는 모든 월드를 변경 없이 검사"
 version = "{prefix} 버전 표시"
@@ -97,6 +109,9 @@ policy_respawn = "이 월드에서 사망한 플레이어의 리스폰 위치를
 policy_tag = "운영자 태그를 추가하거나 제거합니다"
 
 [rift.parameter]
+player_limit = "최대 플레이어 수. 0은 무제한"
+policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR 또는 INHERIT"
+policy_weather = "CLEAR, RAIN, THUNDER 또는 INHERIT"
 tag_filter = "운영자 태그로 필터링하거나 all 사용"
 tag_group = "일치하는 월드를 운영자 태그별로 그룹화"
 name = "세계 이름"
@@ -130,6 +145,9 @@ policy_tag = "운영자 태그 이름"
 tag_enabled = "true는 태그를 추가하고 false는 제거합니다"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&c{world} 월드가 가득 찼습니다 (제한: {limit})."
+policy_travel_denied = "{prefix}&r &7› &7&c{world} 정책이 월드 간 이동을 차단합니다."
+policy_placement_failed = "입장 가능한 월드에 자리가 없습니다. 관리자에게 문의하세요."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&c당신은 &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&c알려진 명령. 사용 &f/rift help&7."
@@ -165,6 +183,16 @@ unmanaged_loaded = "{prefix}&r &7› &7파일을 변경하지 않고 &a{world}&7
 unmanaged_unloaded = "{prefix}&r &7› &7파일을 변경하지 않고 &a{world}&7 관리를 중지했습니다. {prefix}은(는) 시작 시 이 월드를 더 이상 로드하지 않습니다."
 
 [rift.label]
+policy_player_limit = "플레이어 제한"
+policy_travel_entry = "월드 간 입장"
+policy_travel_exit = "월드 간 퇴장"
+policy_first_join_world = "첫 접속 목적지"
+policy_login_world = "로그인 목적지"
+policy_game_mode = "게임 모드"
+policy_flight = "비행"
+policy_weather = "날씨"
+policy_natural_animals = "동물 자연 생성"
+policy_natural_monsters = "몬스터 자연 생성"
 worlds = "한국어"
 quarantine = "퀄리티"
 loaded = "로드 중 ..."
@@ -223,7 +251,7 @@ autoload = "서버 시작 시 {prefix}가 이 관리 대상 월드를 자동으�
 protected = "보호된 관리 대상 월드는 {prefix} 격리 영역으로 이동할 수 없습니다."
 operation_active = "월드 생성·로드·삭제 등의 수명 주기 작업이 현재 {prefix}의 월드별 잠금을 보유하는지 나타냅니다."
 server = "Bukkit이 보고한 현재 서버 구현체와 버전입니다."
-java_runtime = "현재 서버를 실행 중인 Java 런타임입니다. {prefix}에는 Java 25가 필요합니다."
+java_runtime = "현재 서버를 실행 중인 Java 런타임입니다. {prefix}에는 Java 25 이상이 필요합니다."
 plugin_bytecode = "{prefix}의 컴파일된 클래스를 로드할 수 있는 가장 오래된 Java 런타임 버전입니다."
 platform = "{prefix}가 실행 중 감지한 스케줄러와 서버 API 계열입니다."
 dynamic_lifecycle = "이 플랫폼이 실행 중 월드 생성, 로드, 언로드, 격리 및 복원을 안전하게 지원하는지 나타냅니다."
@@ -253,6 +281,7 @@ action_teleport = "{prefix}&r &7› &7&a텔레포트 &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} 실패한 &f{world}"
 
 [rift.gui]
+updates = "&d업데이트 알림"
 policy_native_default = "&7게임 기본값: &f{value}"
 policy_inherited = "&7정책: INHERIT"
 policy_unloaded = "&7월드가 로드되지 않음: 상속된 값은 게임 기본값으로 표시"

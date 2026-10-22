@@ -51,6 +51,8 @@
 
 #   {step}  גודל השינוי בכל לחיצה
 
+#   {limit}  מספר שחקנים מרבי
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
@@ -58,6 +60,16 @@ prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 already_exists = "{prefix}&r &7› &7&e{world} כבר קיים. השתמשו ב־&f/rift info {world}&e לבדיקה, או בחרו שם אחר."
 
 [rift.command]
+policy_player_limit = "הגבלת שחקנים נכנסים; 0 ללא הגבלה"
+policy_travel_entry = "שליטה בכניסה בין עולמות; DENY חוסם, INHERIT אינו משנה"
+policy_travel_exit = "שליטה ביציאה בין עולמות; DENY חוסם מעבר, לא חזרה לחיים או חילוץ בהתחברות"
+policy_first_join = "בחירת נקודת הופעה בעולם מנוהל וטעון לכניסה ראשונה מעולם זה; default משתמש ביעד ההתחברות"
+policy_login = "בחירת נקודת הופעה בעולם מנוהל וטעון להתחברות מעולם זה; default משאיר את מיקום השרת"
+policy_game_mode = "הגדרת מצב המשחק בכניסה לעולם, בהתחברות ובהופעה מחדש; INHERIT מפסיק את האכיפה"
+policy_flight = "שליטה בתעופה במצבי הישרדות והרפתקה; INHERIT משחרר את הגדרת התעופה של {prefix}"
+policy_weather = "קיבוע מזג אוויר בהיר, גשם או סופה; INHERIT מאפשר שוב שינויים במזג האוויר"
+policy_natural_animals = "DENY חוסם הופעה טבעית של חיות; ALLOW מכבד מגבלות הופעה אחרות"
+policy_natural_monsters = "DENY חוסם הופעה טבעית של מפלצות; ALLOW מכבד מגבלות הופעה אחרות"
 policy_edit = "פתיחת עורך מדיניות העולם"
 check_all = "בדיקת כל העולמות התואמים בלי לשנות אותם"
 version = "הצגת הגרסה של {prefix}"
@@ -97,6 +109,9 @@ policy_respawn = "העברת שחקנים שמתו בעולם זה לעולם מ
 policy_tag = "הוספה או הסרה של תג מפעיל"
 
 [rift.parameter]
+player_limit = "מספר שחקנים מרבי, או 0 ללא הגבלה"
+policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR או INHERIT"
+policy_weather = "CLEAR, RAIN, THUNDER או INHERIT"
 tag_filter = "סינון לפי תג מנהל, או all"
 tag_group = "קיבוץ העולמות התואמים לפי תג מנהל"
 name = "שם עולמי"
@@ -130,6 +145,9 @@ policy_tag = "שם תג המפעיל"
 tag_enabled = "true מוסיף את התג; false מסיר אותו"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&cהעולם {world} מלא (מגבלה: {limit})."
+policy_travel_denied = "{prefix}&r &7› &7&cהמדיניות של {world} חוסמת מעבר בין עולמות."
+policy_placement_failed = "אין מקום בעולם נגיש. נא לפנות למנהל השרת."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&cאתה צריך &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&cפקודה לא ידועה &f/rift help&7."
@@ -165,6 +183,16 @@ unmanaged_loaded = "{prefix}&r &7› &7הניהול של &a{world}&7 הופסק 
 unmanaged_unloaded = "{prefix}&r &7› &7הניהול של &a{world}&7 הופסק בלי לשנות את הקבצים שלו. {prefix} לא יטען אותו עוד בעת ההפעלה."
 
 [rift.label]
+policy_player_limit = "מגבלת שחקנים"
+policy_travel_entry = "כניסה בין עולמות"
+policy_travel_exit = "יציאה בין עולמות"
+policy_first_join_world = "יעד כניסה ראשונה"
+policy_login_world = "יעד התחברות"
+policy_game_mode = "מצב משחק"
+policy_flight = "תעופה"
+policy_weather = "מזג אוויר"
+policy_natural_animals = "הופעה טבעית של חיות"
+policy_natural_monsters = "הופעה טבעית של מפלצות"
 worlds = "עולמות"
 quarantine = "Quarantine"
 loaded = "טעון"
@@ -223,7 +251,7 @@ autoload = "האם {prefix} טוען את העולם המנוהל הזה אוט�
 protected = "לא ניתן להעביר עולמות מנוהלים מוגנים להסגר של {prefix}."
 operation_active = "האם פעולת מחזור חיים של עולם מחזיקה כעת בנעילה של {prefix} עבור העולם הזה."
 server = "מימוש השרת הפעיל והגרסה שעליהם Bukkit מדווח."
-java_runtime = "סביבת הריצה של Java שמפעילה כעת את השרת. {prefix} דורש Java 25."
+java_runtime = "סביבת הריצה של Java שמפעילה כעת את השרת. {prefix} דורש Java 25 ומעלה."
 plugin_bytecode = "גרסת Java הישנה ביותר המסוגלת לטעון את המחלקות המהודרות של {prefix}."
 platform = "המתזמן ומשפחת API השרת ש־{prefix} זיהה בזמן הריצה."
 dynamic_lifecycle = "האם הפלטפורמה מאפשרת בבטחה ליצור, לטעון, לפרוק, לבודד ולשחזר עולמות בזמן הריצה."
@@ -253,6 +281,7 @@ action_teleport = "{prefix}&r &7› &7&aנשלחה ל &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} נכשלת &f{world}"
 
 [rift.gui]
+updates = "&dהתראות עדכון"
 policy_native_default = "&7ברירת המחדל המקורית: &f{value}"
 policy_inherited = "&7מדיניות: INHERIT"
 policy_unloaded = "&7העולם אינו טעון: ערכים בירושה מציגים את ברירות המחדל המקוריות"

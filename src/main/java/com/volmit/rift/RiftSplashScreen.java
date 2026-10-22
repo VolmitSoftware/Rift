@@ -28,13 +28,13 @@ public final class RiftSplashScreen {
     }
 
     private static void printSplash(Rift plugin) {
-        ChatColor fill = ChatColor.of("#35135f");
-        ChatColor edge = ChatColor.of("#6f35c5");
-        ChatColor meta = ChatColor.of("#bba8cf");
-        ChatColor accent = ChatColor.of("#c778ff");
+        ChatColor fill = ChatColor.of("#6f2dbd");
+        ChatColor edge = ChatColor.of("#d16ba5");
+        ChatColor meta = ChatColor.of("#d1ade8");
+        ChatColor accent = edge;
         String[] column = details(
                 plugin.getDescription().getVersion(),
-                SplashScreenSupport.serverVersionWithoutMcSuffix(),
+                SplashScreenSupport.serverVersionWithoutMcSuffix(plugin.getServer().getVersion()),
                 Integer.toString(SplashScreenSupport.javaMajorVersion()),
                 SplashScreenSupport.startupDate()
         );
@@ -58,27 +58,20 @@ public final class RiftSplashScreen {
                 "Rift, Extremely Simple & Reliable World Manager",
                 "Version: " + version,
                 "By: VolmitSoftware (Arcane Arts) | VolmitSoftware.com",
-                "Server: " + server + " | MC Support: 26.x+",
+                "Server: " + server + " | MC Support: " + RiftCompatibility.MINECRAFT_RANGE,
                 "Java: " + javaVersion + " | Date: " + date
         };
     }
 
     static String colorize(String row, ChatColor fill, ChatColor edge) {
         StringBuilder output = new StringBuilder(row.length() * 2);
-        boolean inFill = false;
-        boolean inEdge = false;
+        ChatColor activeColor = null;
         for (int index = 0; index < row.length(); index++) {
             char glyph = row.charAt(index);
-            if (glyph == '█') {
-                if (!inFill) {
-                    output.append(fill);
-                    inFill = true;
-                    inEdge = false;
-                }
-            } else if (glyph != ' ' && !inEdge) {
-                output.append(edge);
-                inEdge = true;
-                inFill = false;
+            ChatColor glyphColor = glyph == ' ' ? activeColor : glyph == '█' ? fill : edge;
+            if (glyphColor != null && !glyphColor.equals(activeColor)) {
+                output.append(glyphColor);
+                activeColor = glyphColor;
             }
             output.append(glyph);
         }

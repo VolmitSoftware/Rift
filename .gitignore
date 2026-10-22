@@ -8,3 +8,25 @@ build/
 .codegraph/
 
 .DS_Store
+Thumbs.db
+*.class
+*.iml
+local.properties
+*.log
+*.hprof
+.env
+.env.*
+!.env.example
+/qa/
+.qa/
+AGENTS.md
+agents.md
+/.vscode/
+/.codex/
+/.agents/
+/.cache/
+/.libs/
+/logs/
+/.run/
+/BUILDS/
+/C:/

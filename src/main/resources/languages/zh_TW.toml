@@ -51,6 +51,8 @@
 
 #   {step}  每次點擊的調整量
 
+#   {limit}  最大玩家人數
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
@@ -58,6 +60,16 @@ prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 already_exists = "{prefix}&r &7› &7&e{world} 已存在。使用 &f/rift info {world}&e 檢查，或選擇其他名稱。"
 
 [rift.command]
+policy_player_limit = "限制進入的玩家人數；0 表示無限制"
+policy_travel_entry = "控制跨世界進入；DENY 阻止，INHERIT 保持原有行為"
+policy_travel_exit = "控制跨世界離開；DENY 阻止傳送，但不阻止重生或登入恢復"
+policy_first_join = "為從此世界首次加入的玩家選擇已載入的受管世界出生點；default 使用登入目的地"
+policy_login = "為從此世界登入的玩家選擇已載入的受管世界出生點；default 保留伺服器位置"
+policy_game_mode = "設定進入世界、登入及重生時的遊戲模式；INHERIT 停止強制設定"
+policy_flight = "控制生存和冒險模式下的飛行；INHERIT 解除 {prefix} 的飛行設定"
+policy_weather = "鎖定晴天、雨天或雷暴；INHERIT 重新允許天氣變化"
+policy_natural_animals = "DENY 禁止動物自然生成；ALLOW 仍遵守其他生成限制"
+policy_natural_monsters = "DENY 禁止怪物自然生成；ALLOW 仍遵守其他生成限制"
 policy_edit = "開啟世界策略編輯器"
 check_all = "檢查所有符合條件的世界，不進行變更"
 version = "顯示 {prefix} 版本"
@@ -98,6 +110,9 @@ policy_respawn = "將在此世界死亡後的重生位置設為另一個受管�
 policy_tag = "新增或移除管理員標籤"
 
 [rift.parameter]
+player_limit = "最大玩家人數，0 表示無限制"
+policy_game_mode = "SURVIVAL、CREATIVE、ADVENTURE、SPECTATOR 或 INHERIT"
+policy_weather = "CLEAR、RAIN、THUNDER 或 INHERIT"
 tag_filter = "依管理員標籤篩選，或使用 all"
 tag_group = "依管理員標籤將符合條件的世界分組"
 name = "世界名稱"
@@ -132,6 +147,9 @@ policy_tag = "管理員標籤名稱"
 tag_enabled = "true 新增標籤；false 移除標籤"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&c{world} 已滿（上限：{limit}）。"
+policy_travel_denied = "{prefix}&r &7› &7&c{world} 的策略禁止跨世界移動。"
+policy_placement_failed = "沒有可進入的世界有空位。請聯絡伺服器管理員。"
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&c需要嗎? &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&c未知的命令。 使用 &f/rift help&7."
@@ -168,6 +186,16 @@ unmanaged_unloaded = "{prefix}&r &7› &7已停止管理 &a{world}&7，未變更
 policy_access_denied = "{prefix}&r &7› &7&c你無法進入 &f{world}&7。你需要權限 &f{permission}&7。"
 
 [rift.label]
+policy_player_limit = "玩家上限"
+policy_travel_entry = "跨世界進入"
+policy_travel_exit = "跨世界離開"
+policy_first_join_world = "首次加入目的地"
+policy_login_world = "登入目的地"
+policy_game_mode = "遊戲模式"
+policy_flight = "飛行"
+policy_weather = "天氣"
+policy_natural_animals = "動物自然生成"
+policy_natural_monsters = "怪物自然生成"
 worlds = "世間"
 quarantine = "檢疫"
 loaded = "已裝入"
@@ -227,7 +255,7 @@ autoload = "{prefix} 是否在伺服器啟動時自動載入此受管理世界�
 protected = "受保護的管理世界不能移入 {prefix} 隔離區。"
 operation_active = "世界生命週期操作目前是否持有 {prefix} 的對應世界鎖定。"
 server = "Bukkit 回報的目前伺服器實作及版本。"
-java_runtime = "目前執行伺服器的 Java 執行環境。{prefix} 需要 Java 25。"
+java_runtime = "目前執行伺服器的 Java 執行環境。{prefix} 需要 Java 25 或更新版本。"
 plugin_bytecode = "能夠載入 {prefix} 已編譯類別的最舊 Java 執行環境版本。"
 platform = "{prefix} 在執行時偵測到的排程器和伺服器 API 類型。"
 dynamic_lifecycle = "此平台是否安全支援在執行時建立、載入、卸載、隔離和還原世界。"
@@ -257,6 +285,7 @@ action_teleport = "{prefix}&r &7› &7&a傳送到 &a{world}"
 action_failure = "{prefix}&r &7› &7&c{operation} 失敗 &f{world}"
 
 [rift.gui]
+updates = "&d更新通知"
 policy_native_default = "&7遊戲預設值: &f{value}"
 policy_inherited = "&7策略: INHERIT"
 policy_unloaded = "&7世界未載入：繼承值顯示為遊戲預設值"

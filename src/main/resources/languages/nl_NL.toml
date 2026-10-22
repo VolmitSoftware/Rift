@@ -51,10 +51,22 @@
 
 #   {step}  stapgrootte van numerieke wijzigingen
 
+#   {limit}  maximumaantal spelers
+
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
+policy_player_limit = "Beperk binnenkomende spelers; 0 betekent onbeperkt"
+policy_travel_entry = "Beheer toegang tussen werelden; DENY blokkeert, INHERIT laat dit ongewijzigd"
+policy_travel_exit = "Beheer vertrek tussen werelden; DENY blokkeert reizen, niet respawn of herstel bij inloggen"
+policy_first_join = "Kies een geladen beheerd spawnpunt voor eerste deelname vanuit deze wereld; default gebruikt de inlogbestemming"
+policy_login = "Kies een geladen beheerd spawnpunt voor inloggen vanuit deze wereld; default behoudt de serverlocatie"
+policy_game_mode = "Stel de spelmodus in bij betreden, inloggen en respawnen; INHERIT stopt het afdwingen"
+policy_flight = "Beheer vliegen in survival en adventure; INHERIT geeft de vlieginstelling van {prefix} vrij"
+policy_weather = "Zet helder weer, regen of onweer vast; INHERIT staat weersveranderingen weer toe"
+policy_natural_animals = "DENY blokkeert natuurlijke dierenspawns; ALLOW respecteert andere spawnbeperkingen"
+policy_natural_monsters = "DENY blokkeert natuurlijke monsterspawns; ALLOW respecteert andere spawnbeperkingen"
 policy_edit = "Wereldbeleidseditor openen"
 check_all = "Alle overeenkomende werelden controleren zonder ze te wijzigen"
 version = "Toon de versie van {prefix}"
@@ -95,6 +107,9 @@ policy_respawn = "Sterfgevallen in deze wereld doorsturen naar een andere beheer
 policy_tag = "Een beheerderstag toevoegen of verwijderen"
 
 [rift.parameter]
+player_limit = "Maximumaantal spelers, of 0 voor onbeperkt"
+policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR of INHERIT"
+policy_weather = "CLEAR, RAIN, THUNDER of INHERIT"
 tag_filter = "Filter op een beheerderstag of gebruik all"
 tag_group = "Groepeer overeenkomende werelden op beheerderstag"
 name = "Wereldnaam"
@@ -129,6 +144,9 @@ policy_tag = "Naam van beheerderstag"
 tag_enabled = "true voegt de tag toe; false verwijdert deze"
 
 [rift.message]
+policy_world_full = "{prefix}&r &7› &7&c{world} is vol (limiet: {limit})."
+policy_travel_denied = "{prefix}&r &7› &7&cHet beleid voor {world} blokkeert reizen tussen werelden."
+policy_placement_failed = "Geen toegankelijke wereld heeft ruimte. Neem contact op met de beheerder."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
 permission_denied = "{prefix}&r &7› &7&cJe moet &f{permission}&7."
 unknown_command = "{prefix}&r &7› &7&cOnbekende opdracht. Gebruik &f/rift help&7."
@@ -165,6 +183,16 @@ unmanaged_unloaded = "{prefix}&r &7› &7Het beheer van &a{world}&7 is gestopt z
 policy_access_denied = "{prefix}&r &7› &7&cJe kunt &f{world}&7 niet betreden. Je hebt &f{permission}&7 nodig."
 
 [rift.label]
+policy_player_limit = "Spelerslimiet"
+policy_travel_entry = "Toegang tussen werelden"
+policy_travel_exit = "Vertrek tussen werelden"
+policy_first_join_world = "Bestemming eerste deelname"
+policy_login_world = "Inlogbestemming"
+policy_game_mode = "Spelmodus"
+policy_flight = "Vliegen"
+policy_weather = "Weer"
+policy_natural_animals = "Natuurlijke dierenspawns"
+policy_natural_monsters = "Natuurlijke monsterspawns"
 worlds = "Werelden"
 quarantine = "Quarantaine"
 loaded = "Geladen"
@@ -224,7 +252,7 @@ autoload = "Geeft aan of {prefix} deze beheerde wereld automatisch laadt wanneer
 protected = "Beschermde beheerde werelden kunnen niet naar de quarantaine van {prefix} worden verplaatst."
 operation_active = "Geeft aan of een levenscyclusbewerking momenteel de wereldspecifieke vergrendeling van {prefix} bezet houdt."
 server = "De actieve serverimplementatie en versie die Bukkit rapporteert."
-java_runtime = "De Java-runtime waarop de server momenteel draait. {prefix} vereist Java 25."
+java_runtime = "De Java-runtime waarop de server momenteel draait. {prefix} vereist Java 25 of nieuwer."
 plugin_bytecode = "De oudste Java-runtime die de gecompileerde klassen van {prefix} kan laden."
 platform = "De familie van de scheduler en server-API die {prefix} tijdens het uitvoeren heeft gedetecteerd."
 dynamic_lifecycle = "Geeft aan of dit platform tijdens het uitvoeren veilig het aanmaken, laden, ontladen, in quarantaine plaatsen en herstellen van werelden ondersteunt."
@@ -257,6 +285,7 @@ action_failure = "{prefix}&r &7› &7&c{operation} mislukt voor &f{world}"
 already_exists = "{prefix}&r &7› &7&e{world} bestaat al. Gebruik &f/rift info {world}&e om deze te bekijken of kies een andere naam."
 
 [rift.gui]
+updates = "&dUpdatemeldingen"
 policy_native_default = "&7Oorspronkelijke standaard: &f{value}"
 policy_inherited = "&7Beleid: INHERIT"
 policy_unloaded = "&7Wereld niet geladen: overgenomen waarden tonen oorspronkelijke standaarden"

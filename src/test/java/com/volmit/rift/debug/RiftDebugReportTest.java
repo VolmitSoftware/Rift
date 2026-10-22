@@ -41,6 +41,7 @@ final class RiftDebugReportTest {
                 new RiftDebugSnapshot.HotReloadState(true, 3, 10, 9, 1, 1_777_000_000_000L, 1_777_000_000_000L, "test failure"),
                 true,
                 true,
+                true,
                 "en_US",
                 Path.of("languages", "en_US.toml"),
                 List.of("en_US"),
@@ -58,7 +59,8 @@ final class RiftDebugReportTest {
                 List.of(new RiftDebugSnapshot.WorldState(
                         "world", true, true, true, true, false, "NORMAL", "NORMAL", "void\nInjected",
                         1234L, "world/dimensions/minecraft/overworld", "world/dimensions/minecraft/overworld",
-                        "Minecraft namespaced dimension", "HARD", "DENY", Map.of("minecraft:keep_inventory", "true"),
+                        "Minecraft namespaced dimension", "HARD", "DENY", "ADVENTURE", "ALLOW", "CLEAR", "DENY", "INHERIT",
+                        12, "DENY", "ALLOW", "welcome", "lobby", Map.of("minecraft:keep_inventory", "true"),
                         "1.5,80.0,1.5 yaw=0.0", "size=500.0", "rift.world.world", "No entry", "lobby",
                         List.of("private"), false
                 )),
@@ -80,6 +82,10 @@ final class RiftDebugReportTest {
                 .contains("generator=void Injected")
                 .contains("storageLayout=Minecraft namespaced dimension")
                 .contains("difficultyPolicy=HARD")
+                .contains("PlaceholderAPI expansion registered: true")
+                .contains("gameModePolicy=ADVENTURE", "flightPolicy=ALLOW", "weatherPolicy=CLEAR")
+                .contains("naturalAnimalsPolicy=DENY", "naturalMonstersPolicy=INHERIT")
+                .contains("playerLimit=12", "travelEntry=DENY", "travelExit=ALLOW", "firstJoinWorld=welcome", "loginWorld=lobby")
                 .contains("gameRules={minecraft:keep_inventory=true}")
                 .contains("level.dat=false")
                 .contains("main=com.volmit.rift.Rift")

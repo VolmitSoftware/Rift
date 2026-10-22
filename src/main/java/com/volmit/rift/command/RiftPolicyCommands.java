@@ -6,9 +6,14 @@ import art.arcane.volmlib.util.localization.MessageArgs;
 import art.arcane.volmlib.util.localization.TextKey;
 import com.volmit.rift.Rift;
 import com.volmit.rift.localization.RiftMessages;
+import com.volmit.rift.storage.WorldProfile;
 import com.volmit.rift.world.WorldPolicyService;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @Director(name = "policy", description = "Inspect and edit per-world policies", descriptionKey = "rift.command.policy")
 public final class RiftPolicyCommands {
@@ -71,6 +76,96 @@ public final class RiftPolicyCommands {
             @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
     ) {
         run(sender, name, RiftMessages.LABEL_POLICY_GAME_RULES, () -> policies.setGameRule(sender, name, rule, value));
+    }
+
+    @Director(name = "gamemode", description = "Set the game mode on entry, join, and respawn", descriptionKey = "rift.command.policy_game_mode")
+    public void gameMode(
+            @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.managed_world", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,
+            @Param(name = "value", description = "Game mode or INHERIT", descriptionKey = "rift.parameter.policy_game_mode", customHandler = GameModeChoice.class) String value,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        run(sender, name, RiftMessages.LABEL_POLICY_GAME_MODE, () -> policies.setGameMode(sender, name, value));
+    }
+
+    @Director(name = "flight", description = "Control flight in survival and adventure modes", descriptionKey = "rift.command.policy_flight")
+    public void flight(
+            @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.managed_world", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,
+            @Param(name = "value", description = "ALLOW, DENY, or INHERIT", descriptionKey = "rift.parameter.policy_pvp", customHandler = PermissionChoice.class) String value,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        run(sender, name, RiftMessages.LABEL_POLICY_FLIGHT, () -> policies.setFlight(sender, name, value));
+    }
+
+    @Director(name = "weather", description = "Lock clear, rain, or thunder, or stop managing weather", descriptionKey = "rift.command.policy_weather")
+    public void weather(
+            @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.managed_world", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,
+            @Param(name = "value", description = "CLEAR, RAIN, THUNDER, or INHERIT", descriptionKey = "rift.parameter.policy_weather", customHandler = WeatherChoice.class) String value,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        run(sender, name, RiftMessages.LABEL_POLICY_WEATHER, () -> policies.setWeather(sender, name, value));
+    }
+
+    @Director(name = "natural-animals", description = "Control natural animal spawns", descriptionKey = "rift.command.policy_natural_animals")
+    public void naturalAnimals(
+            @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.managed_world", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,
+            @Param(name = "value", description = "ALLOW, DENY, or INHERIT", descriptionKey = "rift.parameter.policy_pvp", customHandler = PermissionChoice.class) String value,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        run(sender, name, RiftMessages.LABEL_POLICY_NATURAL_ANIMALS, () -> policies.setNaturalAnimals(sender, name, value));
+    }
+
+    @Director(name = "natural-monsters", description = "Control natural monster spawns", descriptionKey = "rift.command.policy_natural_monsters")
+    public void naturalMonsters(
+            @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.managed_world", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,
+            @Param(name = "value", description = "ALLOW, DENY, or INHERIT", descriptionKey = "rift.parameter.policy_pvp", customHandler = PermissionChoice.class) String value,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        run(sender, name, RiftMessages.LABEL_POLICY_NATURAL_MONSTERS, () -> policies.setNaturalMonsters(sender, name, value));
+    }
+
+    @Director(name = "player-limit", description = "Limit players entering this world; 0 means unlimited", descriptionKey = "rift.command.policy_player_limit")
+    public void playerLimit(
+            @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.managed_world", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,
+            @Param(name = "value", description = "Maximum players, or 0 for unlimited", descriptionKey = "rift.parameter.player_limit") int value,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        run(sender, name, RiftMessages.LABEL_POLICY_PLAYER_LIMIT, () -> policies.setPlayerLimit(sender, name, value));
+    }
+
+    @Director(name = "travel-entry", description = "Control travel into this world from other worlds", descriptionKey = "rift.command.policy_travel_entry")
+    public void travelEntry(
+            @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.managed_world", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,
+            @Param(name = "value", description = "ALLOW, DENY, or INHERIT", descriptionKey = "rift.parameter.policy_pvp", customHandler = PermissionChoice.class) String value,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        run(sender, name, RiftMessages.LABEL_POLICY_TRAVEL_ENTRY, () -> policies.setTravelEntry(sender, name, value));
+    }
+
+    @Director(name = "travel-exit", description = "Control travel from this world to other worlds", descriptionKey = "rift.command.policy_travel_exit")
+    public void travelExit(
+            @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.managed_world", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,
+            @Param(name = "value", description = "ALLOW, DENY, or INHERIT", descriptionKey = "rift.parameter.policy_pvp", customHandler = PermissionChoice.class) String value,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        run(sender, name, RiftMessages.LABEL_POLICY_TRAVEL_EXIT, () -> policies.setTravelExit(sender, name, value));
+    }
+
+    @Director(name = "first-join", description = "Choose a managed destination for first-ever joins from this world", descriptionKey = "rift.command.policy_first_join")
+    public void firstJoin(
+            @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.managed_world", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,
+            @Param(name = "destination", description = "Managed world or default", descriptionKey = "rift.parameter.respawn_destination", customHandler = DestinationChoice.class) String destination,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        run(sender, name, RiftMessages.LABEL_POLICY_FIRST_JOIN_WORLD, () -> policies.setFirstJoin(sender, name, destination));
+    }
+
+    @Director(name = "login", description = "Choose a managed destination for logins from this world", descriptionKey = "rift.command.policy_login")
+    public void login(
+            @Param(name = "name", description = "Managed world", descriptionKey = "rift.parameter.managed_world", customHandler = RiftCommandHandlers.ManagedWorld.class) String name,
+            @Param(name = "destination", description = "Managed world or default", descriptionKey = "rift.parameter.respawn_destination", customHandler = DestinationChoice.class) String destination,
+            @Param(name = "sender", description = "Command sender", descriptionKey = "rift.parameter.sender", contextual = true) CommandSender sender
+    ) {
+        run(sender, name, RiftMessages.LABEL_POLICY_LOGIN_WORLD, () -> policies.setLogin(sender, name, destination));
     }
 
     @Director(name = "spawn", description = "Use your current safe location as this world's spawn", descriptionKey = "rift.command.policy_spawn")
@@ -198,5 +293,38 @@ public final class RiftPolicyCommands {
                 .untrusted("permission", "rift.policy")
                 .build());
         return false;
+    }
+
+    public static final class GameModeChoice extends RiftCommandHandlers.StringHandler {
+        @Override
+        protected Set<String> values() {
+            return new LinkedHashSet<>(List.of("INHERIT", "SURVIVAL", "CREATIVE", "ADVENTURE", "SPECTATOR"));
+        }
+    }
+
+    public static final class PermissionChoice extends RiftCommandHandlers.StringHandler {
+        @Override
+        protected Set<String> values() {
+            return new LinkedHashSet<>(List.of("INHERIT", "ALLOW", "DENY"));
+        }
+    }
+
+    public static final class WeatherChoice extends RiftCommandHandlers.StringHandler {
+        @Override
+        protected Set<String> values() {
+            return new LinkedHashSet<>(List.of("INHERIT", "CLEAR", "RAIN", "THUNDER"));
+        }
+    }
+
+    public static final class DestinationChoice extends RiftCommandHandlers.StringHandler {
+        @Override
+        protected Set<String> values() {
+            Set<String> values = new LinkedHashSet<>();
+            values.add("default");
+            for (WorldProfile profile : Rift.get().profiles().all()) {
+                values.add(profile.getName());
+            }
+            return values;
+        }
     }
 }

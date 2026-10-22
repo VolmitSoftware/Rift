@@ -82,6 +82,16 @@ public final class RiftDebugContributor implements DebugDumpContributor {
                     storageLayout(detectedRelative),
                     profile.map(WorldProfile::getDifficulty).orElse("unmanaged"),
                     profile.map(WorldProfile::getPvp).orElse("unmanaged"),
+                    profile.map(WorldProfile::getGameMode).orElse("unmanaged"),
+                    profile.map(WorldProfile::getFlight).orElse("unmanaged"),
+                    profile.map(WorldProfile::getWeather).orElse("unmanaged"),
+                    profile.map(WorldProfile::getNaturalAnimals).orElse("unmanaged"),
+                    profile.map(WorldProfile::getNaturalMonsters).orElse("unmanaged"),
+                    profile.map(WorldProfile::getPlayerLimit).orElse(0),
+                    profile.map(WorldProfile::getTravelEntry).orElse("unmanaged"),
+                    profile.map(WorldProfile::getTravelExit).orElse("unmanaged"),
+                    profile.map(WorldProfile::getFirstJoinWorld).orElse(""),
+                    profile.map(WorldProfile::getLoginWorld).orElse(""),
                     profile.map(WorldProfile::getGameRules).orElse(Map.of()),
                     profile.map(RiftDebugContributor::spawnPolicy).orElse("unmanaged"),
                     profile.map(RiftDebugContributor::borderPolicy).orElse("unmanaged"),
@@ -110,7 +120,7 @@ public final class RiftDebugContributor implements DebugDumpContributor {
                 Bukkit.getName(),
                 Bukkit.getVersion(),
                 Bukkit.getBukkitVersion(),
-                minecraftVersion(),
+                Bukkit.getMinecraftVersion(),
                 Bukkit.getOnlineMode(),
                 Bukkit.getOnlinePlayers().size(),
                 Bukkit.getMaxPlayers(),
@@ -140,6 +150,7 @@ public final class RiftDebugContributor implements DebugDumpContributor {
                         hotReload.lastFailure()
                 ),
                 plugin.metrics().isRunning(),
+                plugin.placeholders().isRegistered(),
                 Files.isWritable(plugin.paths().worldContainer()),
                 plugin.language().activeLocale(),
                 plugin.language().file().toPath().toAbsolutePath().normalize(),
@@ -236,12 +247,6 @@ public final class RiftDebugContributor implements DebugDumpContributor {
         } catch (RuntimeException exception) {
             return "unavailable";
         }
-    }
-
-    private static String minecraftVersion() {
-        String version = Bukkit.getBukkitVersion();
-        int separator = version.indexOf('-');
-        return separator < 0 ? version : version.substring(0, separator);
     }
 
     private static String averageTickMillis() {
