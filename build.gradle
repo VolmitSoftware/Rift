@@ -371,7 +371,7 @@ pluginPackaging {
             stripDirectories = true
             stripLocalVariables = true
             taskName = 'shadowJar'
-            maximumBytes = 7500000
+            maximumBytes = 2000000
             prunePrefixes = ['com/volmit/rift/libs/volmlib/']
             requiredEntries = [
                     'plugin.yml',
