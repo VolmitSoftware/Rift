@@ -1,5 +1,6 @@
 package com.volmit.rift.command;
 
+import art.arcane.volmlib.util.director.DirectorTextResolver;
 import art.arcane.volmlib.util.director.annotations.Director;
 import art.arcane.volmlib.util.director.annotations.Param;
 import art.arcane.volmlib.util.director.help.DirectorMiniMenu;
@@ -150,10 +151,13 @@ final class RiftCommandContractTest {
         assertThat(root.entries()).noneMatch(node -> node.getDescriptor().getName().equals("version"));
         assertThat(debug.entries()).anyMatch(node -> node.getDescriptor().getName().equals("version"));
         List<String> policyCommands = new ArrayList<>();
-        for (int page = 1; page <= policy.totalPages(); page++) {
+        int policyPages = DirectorMiniMenu.helpWindow(policy, DirectorMiniMenu.Theme.reactBlue(), DirectorTextResolver.ENGLISH).pages();
+        for (int page = 1; page <= policyPages; page++) {
             DirectorMiniMenu.DirectorHelpPage help = DirectorMiniMenu.resolveHelp(service.director(),
                     List.of("policy", "help=" + page)).orElseThrow();
-            policyCommands.addAll(help.entries().stream().map(node -> node.getDescriptor().getName()).toList());
+            DirectorMiniMenu.ContentPage shown = DirectorMiniMenu.helpWindow(help, DirectorMiniMenu.Theme.reactBlue(), DirectorTextResolver.ENGLISH);
+            policyCommands.addAll(help.entries().subList(shown.startIndex(), shown.endIndex()).stream()
+                    .map(node -> node.getDescriptor().getName()).toList());
         }
         assertThat(policyCommands)
                 .contains("show", "difficulty", "pvp", "gamerule", "spawn", "border", "border-center", "border-warning",
