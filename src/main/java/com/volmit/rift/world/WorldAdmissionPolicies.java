@@ -42,6 +42,7 @@ final class WorldAdmissionPolicies implements Listener {
     private final Map<PlayerTeleportEvent, WorldAdmissionLedger.Reservation> teleportReservations = new ConcurrentHashMap<>();
     private final Map<UUID, Evacuation> evacuating = new ConcurrentHashMap<>();
     private volatile Map<UUID, Spawn> spawns = Map.of();
+    private final Map<UUID, Landing> landings = new ConcurrentHashMap<>();
 
     WorldAdmissionPolicies(Rift plugin, RiftLocalization language, WorldProfileStore profiles, TeleportService teleports) {
         this.plugin = plugin;
@@ -64,9 +65,11 @@ final class WorldAdmissionPolicies implements Listener {
             Spawn spawn = snapshot(world);
             if (spawn != null) {
                 next.put(spawn.id(), spawn);
+                settle(spawn);
             }
         }
         spawns = Collections.unmodifiableMap(next);
+        landings.keySet().retainAll(next.keySet());
     }
 
     void capture(World world) {
@@ -75,6 +78,7 @@ final class WorldAdmissionPolicies implements Listener {
             Map<UUID, Spawn> next = new LinkedHashMap<>(spawns);
             next.put(spawn.id(), spawn);
             spawns = Collections.unmodifiableMap(next);
+            settle(spawn);
         }
     }
 
@@ -84,6 +88,7 @@ final class WorldAdmissionPolicies implements Listener {
         evacuating.clear();
         ledger.clear();
         spawns = Map.of();
+        landings.clear();
     }
 
     boolean join(Player player) {
@@ -239,7 +244,7 @@ final class WorldAdmissionPolicies implements Listener {
         if (target == null) {
             return;
         }
-        Location selected = target.location().clone();
+        Location selected = landing(target);
         joining.put(player, new JoinPlacement(original.clone(), target.id(), source.login()));
         event.setSpawnLocation(selected);
     }
@@ -259,6 +264,7 @@ final class WorldAdmissionPolicies implements Listener {
         Map<UUID, Spawn> next = new LinkedHashMap<>(spawns);
         next.remove(event.getWorld().getUID());
         spawns = Collections.unmodifiableMap(next);
+        landings.remove(event.getWorld().getUID());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -386,7 +392,7 @@ final class WorldAdmissionPolicies implements Listener {
     }
 
     private WorldProfile profile(World world) {
-        return world == null ? null : profiles.find(RiftWorldIdentity.logicalName(world, profiles)).orElse(null);
+        return world == null ? null : RiftWorldIdentity.profile(world, profiles).orElse(null);
     }
 
     private Spawn snapshot(World world) {
@@ -395,6 +401,21 @@ final class WorldAdmissionPolicies implements Listener {
         return location == null ? null : new Spawn(world.getUID(), RiftWorldIdentity.logicalName(world, profiles),
                 location.clone(), profile == null ? "" : profile.getFirstJoinWorld(),
                 profile == null ? "" : profile.getLoginWorld());
+    }
+
+    /** Joins are placed off the region thread, so each spawn's safe landing is worked out ahead of time. */
+    private void settle(Spawn spawn) {
+        Landing known = landings.get(spawn.id());
+        if (known != null && known.spawn().equals(spawn.location())) {
+            return;
+        }
+        Location requested = spawn.location().clone();
+        SafeLanding.resolve(plugin, requested).thenAccept(safe -> landings.put(spawn.id(), new Landing(requested, safe)));
+    }
+
+    private Location landing(Spawn spawn) {
+        Landing known = landings.get(spawn.id());
+        return known != null && known.spawn().equals(spawn.location()) ? known.safe().clone() : spawn.location().clone();
     }
 
     private Spawn namedSpawn(String name) {
@@ -411,6 +432,9 @@ final class WorldAdmissionPolicies implements Listener {
     }
 
     private record Spawn(UUID id, String name, Location location, String firstJoin, String login) {
+    }
+
+    private record Landing(Location spawn, Location safe) {
     }
 
     private record JoinPlacement(Location original, UUID selectedWorld, String login) {

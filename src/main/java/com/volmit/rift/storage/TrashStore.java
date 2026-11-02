@@ -129,7 +129,7 @@ public final class TrashStore {
             return null;
         }
         try {
-            TrashEntry entry = TomlCodec.fromToml(Files.readString(file.toPath(), StandardCharsets.UTF_8), TrashEntry.class);
+            TrashEntry entry = TrashEntry.parse(Files.readString(file.toPath(), StandardCharsets.UTF_8));
             if (entry == null || !id.equals(entry.getId())) {
                 throw new IOException("Trash manifest id does not match its filename");
             }
@@ -146,7 +146,7 @@ public final class TrashStore {
             return null;
         }
         try {
-            TrashEntry entry = TomlCodec.fromToml(raw, TrashEntry.class);
+            TrashEntry entry = TrashEntry.parse(raw);
             if (entry == null || !id.equals(entry.getId())) {
                 throw new IOException("Trash manifest id does not match its filename");
             }

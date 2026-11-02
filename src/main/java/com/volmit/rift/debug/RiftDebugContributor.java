@@ -1,6 +1,7 @@
 package com.volmit.rift.debug;
 
 import art.arcane.volmlib.util.diagnostics.DebugDumpContributor;
+import art.arcane.volmlib.util.localization.LanguageUpstreamSync;
 import com.volmit.rift.Rift;
 import com.volmit.rift.hotload.RiftHotloadService;
 import com.volmit.rift.storage.TrashEntry;
@@ -61,7 +62,7 @@ public final class RiftDebugContributor implements DebugDumpContributor {
         List<RiftDebugSnapshot.WorldState> worlds = new ArrayList<>();
         for (WorldSnapshot world : plugin.worldInventory().snapshots()) {
             Optional<WorldProfile> profile = plugin.profiles().find(world.name());
-            World loadedWorld = RiftWorldIdentity.findLoaded(world.name());
+            World loadedWorld = RiftWorldIdentity.findLoaded(world.name(), plugin.profiles());
             Path detectedDirectory = loadedWorld == null
                     ? plugin.worldInventory().discoveredDirectory(world.name()).orElse(null)
                     : loadedWorld.getWorldPath().toAbsolutePath().normalize();
@@ -76,7 +77,6 @@ public final class RiftDebugContributor implements DebugDumpContributor {
                     profile.map(WorldProfile::getWorldType)
                             .orElseGet(() -> loadedWorld == null ? "unknown" : loadedWorld.getWorldType().name()),
                     world.generator(),
-                    world.seed(),
                     profile.map(WorldProfile::getDirectory).orElse(""),
                     detectedRelative,
                     storageLayout(detectedRelative),
@@ -113,6 +113,7 @@ public final class RiftDebugContributor implements DebugDumpContributor {
             worldsByEnvironment.merge(world.getEnvironment().name(), 1, Integer::sum);
         }
         RiftHotloadService.Status hotReload = plugin.hotload().status();
+        Optional<LanguageUpstreamSync.Status> languageStatus = plugin.language().upstreamStatus();
 
         return new RiftDebugSnapshot(
                 Instant.now(),
@@ -153,14 +154,12 @@ public final class RiftDebugContributor implements DebugDumpContributor {
                 plugin.placeholders().isRegistered(),
                 Files.isWritable(plugin.paths().worldContainer()),
                 plugin.language().activeLocale(),
-                plugin.language().file().toPath().toAbsolutePath().normalize(),
+                dataRelative(plugin.language().file().toPath()),
                 plugin.language().availableLocales(),
-                plugin.language().remoteCatalogReference().orElse("unavailable"),
-                plugin.language().remoteCatalogFailure()
-                        .map(failure -> failure.getClass().getSimpleName() + ": "
-                                + Objects.toString(failure.getMessage(), "no message"))
-                        .orElse("none"),
-                plugin.language().remoteDownloadFailure().orElse("none"),
+                plugin.language().sourceDescription(),
+                languageStatus.flatMap(LanguageUpstreamSync.Status::revision).orElse("not checked"),
+                languageStatus.map(LanguageUpstreamSync.Status::checkedMillis).orElse(0L),
+                languageLastError(languageStatus),
                 plugin.profiles().all().size(),
                 plugin.worldInventory().discoverWorldDirectories().size(),
                 "shared debug command",
@@ -172,6 +171,15 @@ public final class RiftDebugContributor implements DebugDumpContributor {
                 plugin.paths().worldContainer(),
                 codeSource()
         );
+    }
+
+    private String languageLastError(Optional<LanguageUpstreamSync.Status> status) {
+        Optional<Throwable> failure = plugin.language().sourceFailure();
+        if (failure.isPresent()) {
+            return failure.get().getClass().getSimpleName() + ": "
+                    + Objects.toString(failure.get().getMessage(), "no message");
+        }
+        return status.flatMap(LanguageUpstreamSync.Status::lastError).orElse("none");
     }
 
     private static String spawnPolicy(WorldProfile profile) {
@@ -194,6 +202,12 @@ public final class RiftDebugContributor implements DebugDumpContributor {
                 + " buffer=" + profile.getBorderDamageBuffer();
     }
 
+    private Path dataRelative(Path file) {
+        Path dataFolder = plugin.getDataFolder().toPath().toAbsolutePath().normalize();
+        Path normalized = file.toAbsolutePath().normalize();
+        return normalized.startsWith(dataFolder) ? dataFolder.relativize(normalized) : normalized.getFileName();
+    }
+
     private static String relativeWorldDirectory(Path directory, Path worldContainer) {
         if (directory == null) {
             return "";
@@ -201,7 +215,7 @@ public final class RiftDebugContributor implements DebugDumpContributor {
         Path normalizedContainer = worldContainer.toAbsolutePath().normalize();
         Path normalizedDirectory = directory.toAbsolutePath().normalize();
         if (!normalizedDirectory.startsWith(normalizedContainer)) {
-            return normalizedDirectory.toString().replace('\\', '/');
+            return RiftDebugSnapshot.OUTSIDE_WORLD_CONTAINER;
         }
         return normalizedContainer.relativize(normalizedDirectory).toString().replace('\\', '/');
     }

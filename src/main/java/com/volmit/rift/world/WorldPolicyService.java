@@ -278,7 +278,7 @@ public final class WorldPolicyService implements Listener {
         CompletableFuture<Boolean> result = new CompletableFuture<>();
         if (!FoliaScheduler.runGlobal(plugin, () -> {
             try {
-                World world = RiftWorldIdentity.findLoaded(name);
+                World world = RiftWorldIdentity.findLoaded(name, profiles);
                 if (!supportsGameRule(rule, world == null ? Set.of(FeatureFlag.VANILLA) : world.getFeatureFlags())) {
                     throw new IllegalArgumentException("Game rule is not enabled by this world's feature flags: " + key);
                 }
@@ -303,7 +303,7 @@ public final class WorldPolicyService implements Listener {
         CompletableFuture<GameRuleSnapshot> result = new CompletableFuture<>();
         if (!FoliaScheduler.runGlobal(plugin, () -> {
             try {
-                World world = RiftWorldIdentity.findLoaded(name);
+                World world = RiftWorldIdentity.findLoaded(name, profiles);
                 Set<FeatureFlag> features = world == null ? Set.of(FeatureFlag.VANILLA) : world.getFeatureFlags();
                 result.complete(new GameRuleSnapshot(world != null, collectGameRuleValues(Registry.GAME_RULE, features,
                         rule -> String.valueOf(world == null ? rule.getDefaultValue() : world.getGameRuleValue(rule)))));
@@ -335,7 +335,7 @@ public final class WorldPolicyService implements Listener {
         CompletableFuture<Location> result = new CompletableFuture<>();
         if (!FoliaScheduler.runGlobal(plugin, () -> {
             try {
-                World world = RiftWorldIdentity.findLoaded(name);
+                World world = RiftWorldIdentity.findLoaded(name, profiles);
                 result.complete(world == null ? null : world.getSpawnLocation());
             } catch (RuntimeException exception) {
                 result.completeExceptionally(exception);
@@ -367,7 +367,7 @@ public final class WorldPolicyService implements Listener {
 
     public CompletableFuture<Boolean> setSpawn(CommandSender sender, String name, Player player) {
         String validName = names.requireValid(name);
-        World world = RiftWorldIdentity.findLoaded(validName);
+        World world = RiftWorldIdentity.findLoaded(validName, profiles);
         if (world == null || !world.equals(player.getWorld())) {
             throw new IllegalArgumentException("Stand in the loaded target world to set its spawn");
         }
@@ -382,7 +382,7 @@ public final class WorldPolicyService implements Listener {
                 || Math.abs(x) > 29_999_984 || Math.abs(z) > 29_999_984) {
             throw new IllegalArgumentException("Spawn coordinates must be finite and within world limits");
         }
-        World world = RiftWorldIdentity.findLoaded(validName);
+        World world = RiftWorldIdentity.findLoaded(validName, profiles);
         if (world == null) {
             throw new IllegalArgumentException("Load the target world before setting its spawn");
         }
@@ -504,7 +504,7 @@ public final class WorldPolicyService implements Listener {
         appliedBorders.remove(key);
         if (!FoliaScheduler.runGlobal(plugin, () -> {
             admissions.refresh();
-            World world = RiftWorldIdentity.findLoaded(worldName);
+            World world = RiftWorldIdentity.findLoaded(worldName, profiles);
             if (world != null) {
                 for (Player player : List.copyOf(world.getPlayers())) {
                     FoliaScheduler.runEntity(plugin, player, () -> applyPlayer(player, false));
@@ -574,15 +574,19 @@ public final class WorldPolicyService implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        Optional<WorldProfile> source = profiles.find(RiftWorldIdentity.logicalName(player.getWorld(), profiles));
+        Optional<WorldProfile> source = RiftWorldIdentity.profile(player.getWorld(), profiles);
         Location selected = event.getRespawnLocation();
         if (source.isPresent() && !source.get().getRespawnWorld().isBlank()) {
-            World configured = RiftWorldIdentity.findLoaded(source.get().getRespawnWorld());
+            World configured = RiftWorldIdentity.findLoaded(source.get().getRespawnWorld(), profiles);
             if (configured != null) {
                 selected = configured.getSpawnLocation();
             }
         }
-        event.setRespawnLocation(admissions.respawn(player, selected));
+        Location routed = admissions.respawn(player, selected);
+        if (routed != event.getRespawnLocation() && FoliaScheduler.isOwnedByCurrentRegion(routed)) {
+            routed = SafeLanding.find(routed);
+        }
+        event.setRespawnLocation(routed);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -613,7 +617,7 @@ public final class WorldPolicyService implements Listener {
         admissions.refresh();
         appliedBorders.keySet().removeIf(key -> profiles.find(key).isEmpty());
         for (WorldProfile profile : profiles.all()) {
-            World world = RiftWorldIdentity.findLoaded(profile.getName());
+            World world = RiftWorldIdentity.findLoaded(profile);
             if (world != null) {
                 apply(world, profile);
             }
@@ -662,7 +666,7 @@ public final class WorldPolicyService implements Listener {
     }
 
     private WorldProfile profile(World world) {
-        return world == null ? null : profiles.find(RiftWorldIdentity.logicalName(world, profiles)).orElse(null);
+        return world == null ? null : RiftWorldIdentity.profile(world, profiles).orElse(null);
     }
 
     private void applyPlayer(Player player, boolean entering) {
@@ -745,7 +749,7 @@ public final class WorldPolicyService implements Listener {
                         result.complete(false);
                         return;
                     }
-                    World world = RiftWorldIdentity.findLoaded(candidate.getName());
+                    World world = RiftWorldIdentity.findLoaded(candidate);
                     if (world != null) {
                         if (resetBorder) {
                             appliedBorders.put(candidate.key(), Boolean.TRUE);

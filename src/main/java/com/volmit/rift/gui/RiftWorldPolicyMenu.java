@@ -82,6 +82,7 @@ public final class RiftWorldPolicyMenu implements Listener {
         sessions.clear();
         drafts.clear();
         spawnBaselines.clear();
+        OpenMenus.close(plugin, Holder.class);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

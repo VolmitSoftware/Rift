@@ -6,91 +6,98 @@
 # /rift language server edit fi_FI
 #
 # === Etuliite ===
-# runtime.prefix sisältää vain muotoillun nimen. {prefix} lisää nimen; › ja välilyönnit muokataan viestissä.
+# runtime.prefix sisältää muotoillun lisäosan nimen, jonka {prefix} lisää.
+# Erotin ja välilyönnit määritetään kussakin viestissä. Poista {prefix}&r &7› &7, jos haluat piilottaa koko chat-etuliitteen.
 #
 # === Muotoilu ===
-# Värit: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B ja [RRGGBB]. MiniMessage toimii myös omissa muotoiluissa.
+# Värit ja tyylit: &0-&f, &k-&r.
+# RGB-värit: &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B, [RRGGBB].
+# MiniMessage tukee omia muotoiluja. Kirjoita kenoviiva merkin & tai [ eteen, jos haluat näyttää sen sellaisenaan.
 #
 # === Muuttujat ===
 # Säilytä muuttujien nimet ja käytä vain kunkin viestin omia muuttujia.
+#   {added}  Kielipäivityksen lisäämät viestit
 #   {after}  uusi arvo
 #   {argument}  komennon argumentti
 #   {before}  edellinen arvo
-#   {category}  komentoluokka
-#   {command}  komennon teksti tai nimi
-#   {count}  kohteiden tai tulosten määrä
-#   {detail}  kuvaava lisätieto
-#   {group}  Lupa tai pelaajaryhmä
-#   {id}  tunniste
-#   {key}  asetuksen tai viestin avain
+#   {category}  luokka
+#   {command}  komennon polku
+#   {count}  merkintöjen määrä
+#   {detail}  merkinnän lisätieto
+#   {group}  viestiryhmä
+#   {id}  karanteenitunnus
+#   {kept}  Kielipäivityksessä säilytetyt paikalliset muokkaukset
+#   {key}  parametrin tai viestin avain
 #   {label}  näyttönimike
-#   {line}  Lähderivi tai viivanumero
-#   {locale}  kielen alueasetus
-#   {maximum}  Suurin sallittu arvo
-#   {name}  merkinnän tai näytön nimi
+#   {line}  rivinumero
+#   {locale}  kielikoodi
+#   {maximum}  syötteen enimmäispituus
+#   {name}  merkinnän nimi
 #   {operation}  toiminnon nimi
 #   {parameter}  parametrin nimi
 #   {permission}  käyttöoikeussolmu
-#   {personal}  henkilökohtainen kielitunnus
+#   {personal}  pelaajan oma kieli, kun se poikkeaa palvelimen oletuksesta
 #   {player}  pelaajan nimi
-#   {prefix}  runtime.prefix sisältää vain muotoillun nimen. {prefix} lisää nimen; › ja välilyönnit muokataan viestissä.
+#   {prefix}  muotoiltu nimi kohdasta runtime.prefix; erotin ja välilyönnit kuuluvat kuhunkin viestiin
 #   {reason}  syy tai virheen lisätieto
+#   {remaining}  Aika seuraavaan sallittuun kielitarkistukseen
 #   {seconds}  kesto sekunteina
 #   {setting}  asetuksen nimi
-#   {target}  Kohdepelaaja, yhteisö tai arvo
-#   {title}  otsikkoteksti
+#   {target}  valinnan kohde
+#   {title}  osion otsikko
 #   {type}  arvon tai tiedon tyyppi
+#   {updated}  Kielipäivityksen muuttamat viestit
 #   {value}  nykyinen tai uusi arvo
 #   {variables}  sallitut paikkamerkit
-#   {version}  versio
+#   {version}  lisäosan versio
 #   {world}  maailman nimi
 
 #   {section}  Editorin osio
 #   {path}  Paikallisen raportin polku
-#   {url}  Raportin URL-osoite
+#   {url}  Lähetetyn raportin URL-osoite
 
-#   {step}  numeroarvojen muutosaskel
+#   {step}  muutos napsautusta kohden
 
-#   {limit}  pelaajien enimmäismäärä
+#   {limit}  maailmaan päästettävien pelaajien enimmäismäärä
 
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
-policy_player_limit = "Rajoita saapuvien pelaajien määrää; 0 on rajaton"
-policy_travel_entry = "Hallitse maailmojen välisiä saapumisia; DENY estää, INHERIT ei muuta niitä"
-policy_travel_exit = "Hallitse maailmojen välisiä lähtöjä; DENY estää matkat, ei uudelleensyntymistä tai kirjautumisen palautusta"
-policy_first_join = "Valitse ladatun hallitun maailman syntymäpiste ensiliittymisille tästä maailmasta; default käyttää kirjautumiskohdetta"
-policy_login = "Valitse ladatun hallitun maailman syntymäpiste kirjautumisille tästä maailmasta; default säilyttää palvelimen sijainnin"
-policy_game_mode = "Aseta pelitila maailmaan tullessa, kirjautuessa ja uudelleensyntyessä; INHERIT poistaa pakotuksen"
-policy_flight = "Hallitse lentämistä selviytymis- ja seikkailutilassa; INHERIT vapauttaa {prefix}in lentoasetuksen"
+policy_player_limit = "Rajoita tähän maailmaan saapuvien pelaajien määrää; 0 tarkoittaa rajatonta"
+policy_travel_entry = "Hallitse saapumista muista maailmoista; DENY estää saapumisen, INHERIT jättää asetuksen ennalleen"
+policy_travel_exit = "Hallitse lähtöä muihin maailmoihin; DENY estää matkat, mutta ei uudelleensyntymistä tai kirjautumisen palautusta"
+policy_first_join = "Valitse ladattu hallittu syntymispiste ensimmäistä kertaa liittyville pelaajille, jotka on ohjattu tähän maailmaan; default käyttää kirjautumissijoittelua"
+policy_login = "Valitse ladattu hallittu syntymispiste tähän maailmaan ohjatuille kirjautumisille; default säilyttää palvelimen sijoittelun"
+policy_game_mode = "Aseta pelitila maailmaan tullessa, liittyessä ja uudelleensyntyessä; INHERIT lopettaa pakottamisen"
+policy_flight = "Hallitse lentämistä selviytymis- ja seikkailutilassa; INHERIT lopettaa {prefix}in lentoasetuksen käytön"
 policy_weather = "Lukitse selkeä sää, sade tai ukkonen; INHERIT sallii sään vaihtumisen jälleen"
-policy_natural_animals = "DENY estää eläinten luonnollisen syntymisen; ALLOW noudattaa muita rajoituksia"
-policy_natural_monsters = "DENY estää hirviöiden luonnollisen syntymisen; ALLOW noudattaa muita rajoituksia"
-policy_edit = "Avaa maailman sääntöeditori"
+policy_natural_animals = "DENY estää eläinten luonnollisen syntymisen; ALLOW noudattaa muita syntymisrajoituksia"
+policy_natural_monsters = "DENY estää hirviöiden luonnollisen syntymisen; ALLOW noudattaa muita syntymisrajoituksia"
+policy_edit = "Avaa maailmakohtaisten käytäntöjen editori"
 check_all = "Tarkista kaikki vastaavat maailmat muuttamatta niitä"
-version = "Näytä {prefix}-versio"
+version = "Näytä {prefix}in versio"
 root = "Hallitse palvelinmaailmoja turvallisesti"
 create = "Luo ja hallitse uutta maailmaa"
-import = "Tuo olemassa oleva maailmanhakemisto"
+import = "Tuo olemassa oleva maailmakansio"
 load = "Lataa hallittu tai löydetty maailma"
-unload = "Evakuoi pelaajat ja pura maailma"
+unload = "Evakuoi pelaajat ja poista maailma muistista"
 delete = "Siirrä hallittu maailma karanteeniin"
-restore = "Palauttaa karanteenin maailman"
-teleport = "Teleporttautuminen ladattuun maailmaan"
-send = "Teleportaa toinen pelaaja ladattuun maailmaan"
-list = "Luettelo ladatuista, hallituista, löydetyistä ja karanteenissa olevista maailmoista"
-info = "Näytä yksityiskohtainen tila yhden maailman"
-generators = "Näytä hallinnoitujen maailmojen jo käyttämät generaattoritunnisteet"
-config = "Avaa peli {prefix} konfiguraatiomuokkain"
+restore = "Palauta karanteenissa oleva maailma"
+teleport = "Teleporttaa ladattuun maailmaan"
+send = "Teleporttaa toinen pelaaja ladattuun maailmaan"
+list = "Listaa ladatut, hallitut, löydetyt ja karanteenissa olevat maailmat"
+info = "Näytä yhden maailman yksityiskohtainen tila"
+generators = "Näytä hallittujen maailmojen jo käyttämät generaattoritunnisteet"
+config = "Avaa {prefix}in pelinsisäinen asetuseditori"
 language = "Valitse käytettävissä oleva {prefix}-kieli"
-status = "Tarkastaa alustan ominaisuudet ja {prefix} tila"
-debug = "{prefix}in diagnostiikkatyökalut"
-debug_dump = "Luo kattava {prefix}-diagnostiikkaraportti"
-autoload = "Muuttaa, onko hallittu maailma kuormia käynnistettäessä"
-protect = "Suojella tai suojella hallittua maailmaa"
+status = "Tarkastele alustan ominaisuuksia ja {prefix}in tilaa"
+debug = "{prefix}in vianmääritystyökalut"
+debug_dump = "Luo kattava {prefix}in vianmääritysraportti"
+autoload = "Valitse, ladataanko hallittu maailma palvelimen käynnistyessä"
+protect = "Suojaa hallittu maailma tai poista sen suojaus"
 
-check = "Suorita maailman vain luku -esitarkistus"
+check = "Suorita maailman esitarkistus muuttamatta mitään"
 unmanage = "Lopeta maailman hallinta muuttamatta sen tiedostoja"
 policy = "Tarkastele ja muokkaa kunkin hallitun maailman käytäntöjä"
 policy_show = "Näytä hallitun maailman aktiiviset käytännöt"
@@ -100,42 +107,42 @@ policy_gamerule = "Aseta pelisääntö tai lopeta sen hallinta"
 policy_spawn = "Aseta nykyinen turvallinen sijaintisi tämän maailman syntymispisteeksi"
 policy_spawn_clear = "Lopeta tämän maailman syntymispisteen hallinta"
 policy_border = "Määritä tämän maailman hallittu maailmanraja"
-policy_border_clear = "Palauta tämän maailman raja ja lopeta sen hallinta"
-policy_access = "Vaadi lupa tähän maailmaan pääsemiseksi tai poista vaatimus"
-policy_respawn = "Ohjaa tässä maailmassa kuolleet toiseen hallittuun maailmaan tai palvelimen oletuskohteeseen"
+policy_border_clear = "Palauta tämän maailman maailmanraja ja lopeta sen hallinta"
+policy_access = "Vaadi käyttöoikeus tähän maailmaan siirtymiseen tai poista vaatimus"
+policy_respawn = "Ohjaa tässä maailmassa kuolleiden uudelleensyntyminen toiseen hallittuun maailmaan tai palvelimen oletukseen"
 policy_tag = "Lisää tai poista operaattoritunniste"
 
 [rift.parameter]
-player_limit = "Pelaajien enimmäismäärä, tai 0 ilman rajaa"
+player_limit = "Pelaajien enimmäismäärä tai 0, jos rajaa ei ole"
 policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR tai INHERIT"
 policy_weather = "CLEAR, RAIN, THUNDER tai INHERIT"
-tag_filter = "Suodata ylläpitäjän tunnisteella tai valitse all"
-tag_group = "Ryhmittele vastaavat maailmat ylläpitäjän tunnisteen mukaan"
-name = "Maailmannimi"
-environment = "NORMAL, NETHER, THE_ENDtai CUSTOM"
-generator = "vanilla, voidtai PluginName[:generaattori-id]"
-seed = "random tai allekirjoitettu 64-bittinen siemen"
-type = "Bukkit maailman tyyppi"
-save = "Tallenna ennen purkamista"
-id = "Karanteeni id"
-player = "Online-soittimen nimi"
+tag_filter = "Suodata operaattoritunnisteella tai käytä all"
+tag_group = "Ryhmittele vastaavat maailmat operaattoritunnisteen mukaan"
+name = "Maailman nimi"
+environment = "NORMAL, NETHER, THE_END tai CUSTOM"
+generator = "vanilla, void tai PluginName[:generator-id]"
+seed = "random tai etumerkillinen 64-bittinen siemen"
+type = "Bukkit-maailmatyyppi"
+save = "Tallenna ennen muistista poistamista"
+id = "Karanteenimerkinnän tunnus"
+player = "Verkossa olevan pelaajan nimi"
 enabled = "true tai false"
-page = "Portaaliluettelon sivu numerosta yksi alkaen"
+page = "Tulossivun numero"
 upload = "Lähetä raportti, kun julkiset lähetykset ovat käytössä"
-sender = "Komentojen lähettäjä"
+sender = "Komennon lähettäjä"
 managed_world = "Hallitun maailman nimi"
 policy_difficulty = "PEACEFUL, EASY, NORMAL, HARD tai INHERIT"
 policy_pvp = "ALLOW, DENY tai INHERIT"
 game_rule = "Minecraft-pelisäännön nimi"
 game_rule_value = "Pelisäännön arvo tai INHERIT"
-border_size = "Rajan halkaisija lohkoina"
-border_center_x = "Rajan keskipisteen X-koordinaatti"
-border_center_z = "Rajan keskipisteen Z-koordinaatti"
-border_warning_distance = "Varoitusetäisyys lohkoina"
+border_size = "Maailmanrajan halkaisija kuutioina"
+border_center_x = "Maailmanrajan keskipisteen X-koordinaatti"
+border_center_z = "Maailmanrajan keskipisteen Z-koordinaatti"
+border_warning_distance = "Varoitusetäisyys kuutioina"
 border_warning_time = "Varoitusaika sekunteina"
-border_damage = "Vahinko rajanylityksen jälkeistä lohkoa kohden"
-border_buffer = "Turvaetäisyys rajan ulkopuolella"
-access_permission = "Oikeussolmu tai clear"
+border_damage = "Vahinko maailmanrajan ulkopuolella kuutiota kohden"
+border_buffer = "Turvaetäisyys maailmanrajan ulkopuolella"
+access_permission = "Käyttöoikeussolmu tai clear"
 access_denied_message = "Valinnainen viesti, joka näytetään pääsyn estyessä"
 respawn_destination = "Hallitun maailman nimi tai default"
 policy_tag = "Operaattoritunnisteen nimi"
@@ -144,36 +151,35 @@ tag_enabled = "true lisää tunnisteen; false poistaa sen"
 [rift.message]
 policy_world_full = "{prefix}&r &7› &7&c{world} on täynnä (raja: {limit})."
 policy_travel_denied = "{prefix}&r &7› &7&cMaailman {world} käytäntö estää maailmojen välisen matkan."
-policy_placement_failed = "Missään sallitussa maailmassa ei ole tilaa. Ota yhteys ylläpitoon."
+policy_placement_failed = "Yhdessäkään sallitussa maailmassa ei ole sinulle tilaa. Ota yhteys palvelimen ylläpitoon."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
-permission_denied = "{prefix}&r &7› &7&cTarvitset &f{permission}&7."
-unknown_command = "{prefix}&r &7› &7&cTuntematon komento. &f/rift help&7."
+permission_denied = "{prefix}&r &7› &7&cTarvitset oikeuden &f{permission}&7."
+unknown_command = "{prefix}&r &7› &7&cTuntematon komento. Käytä komentoa &f/rift help&7."
 player_only = "{prefix}&r &7› &7&cTämä komento vaatii pelaajan."
-operation_queued = "{prefix}&r &7› &7Jonotettu &f{operation}&7 B. &d{world}&7."
-operation_failed = "{prefix}&r &7› &7&c{operation} epäonnistui &f{world}&7: {reason}"
-created = "{prefix}&r &7› &7Luotu ja hallinnoitu &a{world}&7."
-imported = "{prefix}&r &7› &7Tuodut ja hallinnoidut &a{world}&7."
-loaded = "{prefix}&r &7› &7Ladattu &a{world}&7."
-unloaded = "{prefix}&r &7› &7Ladattu &a{world}&7."
-teleported = "{prefix}&r &7› &7Telesiirretty &a{player}&7 - &a{world}&7."
-delete_confirm = "{prefix}&r &7› &7Juokse &e/rift delete {world}&7 uudelleen &e{seconds}tilu&7 Siirtää se karanteeniin."
-quarantined = "{prefix}&r &7› &7Siirretty &a{world}&7 karanteeniin &a{id}&7."
-restored = "{prefix}&r &7› &7Palautettu &a{world}&7 alkaen &a{id}&7."
-profile_updated = "{prefix}&r &7› &7Päivitetty &a{setting}&7 B. &a{world}&7 - &a{value}&7."
-folia_limit = "{prefix}&r &7› &7{operation} ei ole saatavilla Folia koska sen maailma kuormittaa/unload API ei ole käytössä."
-config_saved = "{prefix}&r &7› &7&aAsennus tallennettu."
-config_opened = "{prefix}&r &7› &7Kattava pelinsisäinen asetuseditori avattiin.&r"
-config_save_failed = "{prefix}&r &7› &7&cAsetusta ei voitu tallentaa. Tarkista konsoli."
-empty_list = "{prefix}&r &7› &7Yhteensopivia maailmoja ei löytynyt."
-player_offline = "{prefix}&r &7› &7&cPelaaja ei ole online: &f{player}"
+operation_queued = "{prefix}&r &7› &7&f{operation}&7 lisättiin jonoon maailmalle &d{world}&7."
+operation_failed = "{prefix}&r &7› &7&c{operation} epäonnistui maailmassa &f{world}&7: {reason}"
+created = "{prefix}&r &7› &7&a{world}&7 luotiin ja otettiin hallintaan."
+imported = "{prefix}&r &7› &7&a{world}&7 tuotiin ja otettiin hallintaan."
+loaded = "{prefix}&r &7› &7&a{world}&7 ladattiin."
+unloaded = "{prefix}&r &7› &7&a{world}&7 poistettiin muistista."
+teleported = "{prefix}&r &7› &7&a{player}&7 teleportattiin maailmaan &a{world}&7."
+delete_confirm = "{prefix}&r &7› &7Suorita &e/rift delete {world}&7 uudelleen &e{seconds}s&7 kuluessa siirtääksesi maailman karanteeniin."
+quarantined = "{prefix}&r &7› &7&a{world}&7 siirrettiin karanteeniin tunnuksella &a{id}&7."
+restored = "{prefix}&r &7› &7&a{world}&7 palautettiin karanteenimerkinnästä &a{id}&7."
+profile_updated = "{prefix}&r &7› &7&a{setting}&7 asetettiin maailmassa &a{world}&7 arvoon &a{value}&7."
+folia_limit = "{prefix}&r &7› &7{operation} ei ole käytettävissä Foliassa, koska sen rajapintaa maailmojen lataamiseen ja muistista poistamiseen ei ole toteutettu."
+config_opened = "{prefix}&r &7› &7Koko pelinsisäinen asetuseditori avattiin.&r"
+config_save_failed = "{prefix}&r &7› &7&cAsetuksia ei voitu tallentaa. Tarkista konsoli."
+empty_list = "{prefix}&r &7› &7Vastaavia maailmoja ei löytynyt."
+player_offline = "{prefix}&r &7› &7&cPelaaja ei ole verkossa: &f{player}"
 unknown_world = "{prefix}&r &7› &7&cTuntematon maailma: &f{world}"
 section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
 entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
 detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
 info_title = "{prefix}&r &7› &7&d{world}"
-status_title = "{prefix}&r &7› &7{prefix} {version} Tila"
-generator_format = "{prefix}&r &7› &7Custom muoto: &fPluginName[:generaattori-id]"
-folia_status_note = "{prefix}&r &7› &7Folia tuet {prefix}'s luku-, editori-, profiili- ja teleporttiominaisuudet; dynaaminen maailman elinkaari on aidattu alustan API."
+status_title = "{prefix}&r &7› &7Tila: {prefix} {version}"
+generator_format = "{prefix}&r &7› &7Mukautettu muoto: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&r &7› &7Folia tukee {prefix}in luku-, editori-, profiili- ja teleporttiominaisuuksia; maailmojen dynaamista elinkaarta rajoittaa alustan rajapinta."
 policy_access_denied = "{prefix}&r &7› &7&cEt voi siirtyä maailmaan &f{world}&7. Tarvitset oikeuden &f{permission}&7."
 
 unmanaged_loaded = "{prefix}&r &7› &7Maailman &a{world}&7 hallinta lopetettiin muuttamatta sen tiedostoja. Maailma pysyy ladattuna, kunnes toinen lisäosa tai palvelin poistaa sen muistista."
@@ -181,8 +187,8 @@ unmanaged_unloaded = "{prefix}&r &7› &7Maailman &a{world}&7 hallinta lopetetti
 
 [rift.label]
 policy_player_limit = "Pelaajaraja"
-policy_travel_entry = "Maailmaan siirtyminen"
-policy_travel_exit = "Maailmasta poistuminen"
+policy_travel_entry = "Saapuminen muista maailmoista"
+policy_travel_exit = "Lähtö muihin maailmoihin"
 policy_first_join_world = "Ensimmäisen liittymisen kohde"
 policy_login_world = "Kirjautumiskohde"
 policy_game_mode = "Pelitila"
@@ -193,9 +199,9 @@ policy_natural_monsters = "Hirviöiden luonnollinen syntyminen"
 worlds = "Maailmat"
 quarantine = "Karanteeni"
 loaded = "Ladattu"
-managed = "Hoidettu"
+managed = "Hallittu"
 on_disk = "Levyllä"
-missing = "puuttuvat hallinnoidut maailmat"
+missing = "puuttuvat hallitut maailmat"
 environment = "Ympäristö"
 generator = "Generaattori"
 seed = "Siemen"
@@ -203,21 +209,21 @@ autoload = "Automaattinen lataus"
 protected = "Suojattu"
 operation_active = "Toiminto aktiivinen"
 world_types = "Maailmatyypit"
-configured_generators = "Määritellyt generaattorit"
+configured_generators = "Määritetyt generaattorit"
 available = "saatavilla"
-unavailable = "Ei saatavilla"
+unavailable = "ei saatavilla"
 server = "Palvelin"
-java_runtime = "Java ajoaika"
-plugin_bytecode = "Liitännäisen tate-koodi"
+java_runtime = "Java-ajoympäristö"
+plugin_bytecode = "Lisäosan tavukoodi"
 platform = "Alusta"
 dynamic_lifecycle = "Dynaaminen maailman elinkaari"
-world_container = "World Container"
-writable = "Maailman kontti kirjoitettava"
-locale = "Paikallinen"
+world_container = "Maailmojen kansio"
+writable = "Maailmojen kansio kirjoitettavissa"
+locale = "Kieli"
 world_counts = "Maailmat"
 quarantine_entries = "Karanteenimerkinnät"
 
-world_key = "Maailma-avain"
+world_key = "Maailman avain"
 storage_path = "Tallennuspolku"
 storage_layout = "Tallennusrakenne"
 players = "Pelaajat"
@@ -234,16 +240,16 @@ policy_managed_border = "Hallittu maailmanraja"
 policy_access_permission = "Pääsyoikeus"
 policy_respawn_world = "Uudelleensyntymismaailma"
 policy_tags = "Tunnisteet"
-none = "Ei mitään"
-server_default = "Palvelimen oletus"
+none = "ei mitään"
+server_default = "palvelimen oletus"
 
 [rift.explain]
-loaded = "Onko Bukkit ladannut tämän maailman aktiiviseksi muistiin."
+loaded = "Onko tämä maailma tällä hetkellä aktiivisena Bukkitin muistissa."
 managed = "Onko {prefix}illä tälle maailmalle profiili, josta sen generaattori- ja käynnistysasetukset voidaan palauttaa."
 on_disk = "Onko maailma ladattu tai onko sillä kelvollinen maailmakansio, joka sisältää level.dat-tiedoston."
 environment = "Aktiiviseen maailmaan tai hallittuun profiiliin tallennettu Bukkit-maailmaympäristö."
-generator = "Generaattori, jonka {prefix} ottaa uudelleen käyttöön tämän hallitun maailman latautuessa. void on {prefix}in sisäinen tyhjän maailman generaattori."
-seed = "Maailmalle tallennettu siemenluku. Tämän näyttöarvon muuttaminen ei generoi olemassa olevaa maastoa uudelleen."
+generator = "Generaattori, jonka {prefix} ottaa uudelleen käyttöön tämän hallitun maailman latautuessa. void on {prefix}in sisäänrakennettu tyhjän maailman generaattori."
+seed = "Maailmalle tallennettu siemen. Tämän näyttöarvon muuttaminen ei generoi olemassa olevaa maastoa uudelleen."
 autoload = "Lataako {prefix} tämän hallitun maailman automaattisesti palvelimen käynnistyessä."
 protected = "Suojattuja hallittuja maailmoja ei voi siirtää {prefix}in karanteeniin."
 operation_active = "Pitääkö jokin elinkaaritoiminto parhaillaan hallussaan {prefix}in maailmakohtaista lukkoa."
@@ -251,31 +257,31 @@ server = "Bukkitin ilmoittama käytössä oleva palvelintoteutus ja versio."
 java_runtime = "Palvelinta tällä hetkellä suorittava Java-ajoympäristö. {prefix} vaatii Java 25:n tai uudemman."
 plugin_bytecode = "Vanhin Java-ajoympäristö, joka pystyy lataamaan {prefix}in käännetyt luokat."
 platform = "{prefix}in ajon aikana tunnistama ajoitin- ja palvelinrajapintaperhe."
-dynamic_lifecycle = "Tarjoaako alusta turvalliset ajonaikaiset toiminnot maailmojen luomiseen, lataamiseen, purkamiseen, karanteeniin siirtämiseen ja palauttamiseen."
+dynamic_lifecycle = "Tarjoaako alusta turvalliset ajonaikaiset toiminnot maailmojen luomiseen, lataamiseen, muistista poistamiseen, karanteeniin siirtämiseen ja palauttamiseen."
 world_container = "Palvelimen kansio, johon Bukkitin maailmakansiot tallennetaan."
-writable = "Salliiko käyttöjärjestelmä {prefix}in kirjoittaa maailmakansioiden sijaintikansioon."
+writable = "Salliiko käyttöjärjestelmä tällä hetkellä {prefix}in kirjoittaa maailmojen kansioon."
 locale = "Aktiivinen kielitiedosto kansiossa plugins/Rift/languages. Puuttuvat merkinnät käyttävät sisäänrakennettua englantia."
 world_counts = "Ladatut tarkoittaa aktiivisten Bukkit-maailmojen määrää, hallitut {prefix}-profiilien määrää ja puuttuvat niiden hallittujen profiilien määrää, joiden maailmaa ei ole ladattu eikä löydy levyltä."
 quarantine = "{prefix}in poistotoiminnon syrjään siirtämät maailmat, jotka voidaan palauttaa karanteenitunnuksella."
 world_entry = "Ladattu tarkoittaa parhaillaan aktiivista maailmaa; hallittu tarkoittaa, että {prefix}illä on sille profiili; levyllä tarkoittaa, että kelvollinen mutta lataamaton maailmakansio on olemassa."
 
 world_key = "Maailman kanoninen Paper-tunniste."
-storage_path = "Täsmällisesti ratkaistu hakemisto, johon tämän maailman tiedostot on tallennettu."
-storage_layout = "Nimiavaruus, joka omistaa tämän maailman tallennushakemiston."
+storage_path = "Täsmällisesti ratkaistu kansio, johon tämän maailman tiedostot on tallennettu."
+storage_layout = "Nimiavaruus, joka omistaa tämän maailman ulottuvuuskansion."
 players = "Tässä ladatussa maailmassa tällä hetkellä olevien pelaajien määrä."
 generator_status = "Onko määritetty generaattori sisäänrakennettu vai onko sen tarjoaja saatavilla."
 primary_world = "Onko tämä palvelimen ensisijainen maailma, jonka hallintaa ei voi lopettaa eikä sitä voi poistaa muistista."
-check_result = "Yhteenveto havaituista esteistä ja varoituksista."
+check_result = "Yhteenveto havaituista elinkaaren esteistä ja varoituksista."
 
 [rift.feedback]
 title = "{prefix}"
 world_subtitle = "&a{operation}&8: &f{world}"
-teleport_subtitle = "&aSaapui &f{world}"
-failure_title = "&cToiminta epäonnistui"
+teleport_subtitle = "&aSaavuit maailmaan &f{world}"
+failure_title = "&cToiminto epäonnistui"
 failure_subtitle = "&7{operation}&8: &f{world}"
 action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
-action_teleport = "{prefix}&r &7› &7&aTelesiirretty &a{world}"
-action_failure = "{prefix}&r &7› &7&c{operation} epäonnistui &f{world}"
+action_teleport = "{prefix}&r &7› &7&aTeleportattu maailmaan &a{world}"
+action_failure = "{prefix}&r &7› &7&c{operation} epäonnistui maailmassa &f{world}"
 
 [rift.world]
 already_exists = "{prefix}&r &7› &7&e{world} on jo olemassa. Tarkista se komennolla &f/rift info {world}&e tai valitse toinen nimi."
@@ -284,12 +290,12 @@ already_exists = "{prefix}&r &7› &7&e{world} on jo olemassa. Tarkista se komen
 updates = "&dPäivitysilmoitukset"
 policy_native_default = "&7Pelin oletusarvo: &f{value}"
 policy_inherited = "&7Käytäntö: INHERIT"
-policy_unloaded = "&7Maailma ei ole ladattu: perityt arvot näyttävät pelin oletukset"
+policy_unloaded = "&7Maailmaa ei ole ladattu: perityt arvot näyttävät pelin oletusarvot"
 policy_default = "&7Oletus: &f{value}"
-policy_number = "&7Vasen: +{step}; oikea: -{step}; vaihto: x10"
+policy_number = "&7Vasen napsautus: +{step}; oikea napsautus: -{step}; Shift+napsautus: x10"
 policy_select = "&7Valitse käytettävissä oleva arvo napsauttamalla"
 policy_selected = "&aValittu"
-policy_apply = "&aOta syntymiskoordinaatit käyttöön"
+policy_apply = "&aOta syntymispisteen koordinaatit käyttöön"
 policy_here = "&dKäytä nykyistä sijaintiani"
 policy_draft = "&7Luonnos: &f{value}"
 policy_enabled = "&dHallittu"
@@ -297,68 +303,65 @@ policy_x = "&dX-koordinaatti"
 policy_y = "&dY-koordinaatti"
 policy_z = "&dZ-koordinaatti"
 policy_yaw = "&dKatselusuunta"
-policy_border_size = "&dRajan halkaisija"
-policy_warning_distance = "&dVaroitusetäisyys (lohkoa)"
+policy_border_size = "&dMaailmanrajan halkaisija"
+policy_warning_distance = "&dVaroitusetäisyys (kuutiota)"
 policy_warning_time = "&dVaroitusaika (sekuntia)"
-policy_damage_amount = "&dVahinko lohkoa kohden"
-policy_damage_buffer = "&dVahinkopuskuri (lohkoa)"
-policy_title = "&dMaailman säännöt"
+policy_damage_amount = "&dVahinko kuutiota kohden"
+policy_damage_buffer = "&dVahinkopuskuri (kuutiota)"
+policy_title = "&dMaailman käytännöt"
 policy_reset = "&7Palauta oletuskäytäntö painamalla Q"
 policy_spawn = "&7Säädä koordinaatit ja ota turvallinen syntymispiste käyttöön"
-policy_center = "&dRajan keskipiste (x z)"
-policy_warning = "&dRajavaroitus (lohkot sekunnit)"
-policy_damage = "&dRajavahinko (määrä turvaetäisyys)"
 policy_denial = "&dPääsyn estoviesti"
 policy_tags = "&7Syötä pilkuin erotetut tunnisteet tai clear"
 policy_clear = "&7Palauta oletus syöttämällä clear"
 policy_previous = "&eEdellinen sivu"
 policy_next = "&eSeuraava sivu"
 current = "&7Nykyinen: &f{value}"
-autoload = "&dAutomaattisesti ohjatut maailmat"
-delete = "&dSalli maailmankaranteeni"
-verbose = "&dVerboosien hakkuu"
-debug_upload = "&dJulkiset vianetsintälataukset"
-bstats = "&dNimetön bStats mittarit"
-confirm_seconds = "&dPoista vahvistussekuntit"
-poll = "&dKuuma kierros millisekuntia"
-cooldown = "&dLämmin uudelleenjäähdytys millisekuntia"
-evacuation = "&dEvakuointi maailma"
+autoload = "&dLataa hallitut maailmat automaattisesti"
+delete = "&dSalli maailmojen karanteeni"
+verbose = "&dYksityiskohtainen lokitus"
+debug_upload = "&dJulkiset vianmäärityslähetykset"
+bstats = "&dNimettömät bStats-tilastot"
+confirm_seconds = "&dPoiston vahvistusaika (sekuntia)"
+poll = "&dPikalatauksen tarkistusväli (millisekuntia)"
+cooldown = "&dPikalatauksen odotusaika (millisekuntia)"
+evacuation = "&dEvakuointimaailma"
 close = "&cSulje"
-splash = "&dKäynnistyksen splash-näyttö"
+splash = "&dKäynnistysnäyttö"
 lifecycle_feedback = "&dMaailman elinkaaripalaute"
-teleport_feedback = "&dTeleport-palaute"
-failure_feedback = "&dEpäonnistuminen palaute"
-title_popups = "&dOtsikko ponnahdusikkunat"
-action_bar_popups = "&dToimintapalkin ponnahdusikkunat"
+teleport_feedback = "&dTeleporttauspalaute"
+failure_feedback = "&dVirhepalaute"
+title_popups = "&dOtsikkoilmoitukset"
+action_bar_popups = "&dToimintopalkin ilmoitukset"
 sounds = "&dPalauteäänet"
-root_title = "{prefix} Asetukset"
+root_title = "{prefix}-asetukset"
 category_title = "{prefix}: {category}"
-category_open = "&8Napsauta muokataksesi jokaista asetusta tässä osiossa"
+category_open = "&8Muokkaa tämän osion asetuksia napsauttamalla"
 back = "&eTakaisin"
-toggle = "&8Napsauta vaihtaaksesi"
-exact_number = "&8Vasen/right asetukset; paina Q antaaksesi tarkan arvon"
-text = "&8Napsauta syöttääksesi uuden arvon chatissa"
-prompt = "{prefix}&r &7› &7Kirjoita uusi arvo &f{setting}&7 Juttelemassa."
-prompt_cancel = "{prefix}&r &7› &7Tyyppi &fperuuta&7 Palata ilman muutoksia."
+toggle = "&8Vaihda päälle tai pois napsauttamalla"
+exact_number = "&8Vasen/oikea napsautus säätää; anna tarkka arvo painamalla Q"
+text = "&8Anna uusi arvo chatissa napsauttamalla"
+prompt = "{prefix}&r &7› &7Kirjoita asetuksen &f{setting}&7 uusi arvo chattiin."
+prompt_cancel = "{prefix}&r &7› &7Palaa muuttamatta kirjoittamalla &fcancel&7."
 prompt_cancelled = "{prefix}&r &7› &7Asetusten syöte peruutettiin."
-prompt_timeout = "{prefix}&r &7› &7Konfiguraatiosyöte aikakatkaistu."
+prompt_timeout = "{prefix}&r &7› &7Asetusten syötön aika päättyi."
 setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7Muutettu arvoon &a{after} &7arvosta &f{before}&7."
-setting_failed = "{prefix}&r &7› &7&cEi voitu päivittää &f{setting}&7: {reason}"
-language = "&dKielilocale"
-language_select = "&8Napsauta valitaksesi käytettävissä olevista kielistä"
+setting_failed = "{prefix}&r &7› &7&cAsetusta &f{setting}&7 ei voitu päivittää: {reason}"
+language = "&dKieli"
+language_select = "&8Valitse käytettävissä olevista kielistä napsauttamalla"
 lifecycle_sound = "&dMaailman elinkaariääni"
-teleport_sound = "&dTeleport-ääni"
-failure_sound = "&dEpäonnistuminen ääni"
-sound_volume = "&dÄänimäärä"
-sound_pitch = "&dÄänikenttä"
-title_fade_in = "&dOtsikko haalistuvat punkit"
-title_stay = "&dOtsikko pysyy rastina"
-title_fade_out = "&dTitle fade-out-punkit"
+teleport_sound = "&dTeleporttausääni"
+failure_sound = "&dVirheääni"
+sound_volume = "&dÄänenvoimakkuus"
+sound_pitch = "&dÄänenkorkeus"
+title_fade_in = "&dOtsikon häivytys sisään (tikkiä)"
+title_stay = "&dOtsikon näkymisaika (tikkiä)"
+title_fade_out = "&dOtsikon häivytys ulos (tikkiä)"
 
 [rift.gui.category]
-general = "&dYleinen & turvallisuus"
+general = "&dYleiset ja turvallisuus"
 feedback = "&dPalaute ja äänet"
-presentation = "&dEsittely"
+presentation = "&dUlkoasu"
 diagnostics = "&dDiagnostiikka&r"
 languages = "&dKielet ja viestit"
 
@@ -402,7 +405,7 @@ execution_failed = "{prefix}&r &7› &7&cKomennon {command} suoritus epäonnistu
 [language.menu]
 selected = "valittu"
 command = "Komento: {command}"
-all-volmit-plugins = "Kaikki Volmit-lisäosat"
+all-volmit-plugins = "kaikki Volmit-lisäosat"
 your_language = "Oma kielesi"
 reset_your_language = "Palauta oma kielesi"
 server_default = "Palvelimen oletuskieli"
@@ -410,11 +413,11 @@ edit_messages = "Muokkaa kieliviestejä"
 use_server_default = "Käytä palvelimen oletuskieltä"
 current = "Nykyinen: {locale}"
 current_with_personal = "Nykyinen: {locale} (Omasi: {personal})"
-your_description = "Vaihda vain näkemäsi viestit."
+your_description = "Vaihda vain sinulle näkyvien viestien kieli."
 reset_description = "Käytä palvelimen oletuskieltä."
-server_description = "Vaihda palvelimen oletuskieli."
+server_description = "Vaihda palvelimen oletuskieli"
 edit_description = "Avaa kielikohtainen viestieditori."
-select_description = "Napsauta valitaksesi tämän kielen."
+select_description = "Valitse tämä kieli napsauttamalla."
 remove_personal_description = "Poista henkilökohtainen kielivalintasi."
 no_controls = "Sinulla ei ole käytettävissä kieliasetuksia."
 
@@ -466,44 +469,53 @@ summary = "{prefix}&r &7› &7&7{locale} tallennettu. Kielivalinnat säilyvät e
 change = "{prefix}&r &7› &7&7{key}: ”{before}” muutettiin arvoon ”{after}”."
 
 [language.editor.search]
-messages-lore = "Napsauta hakeaksesi kaikista viesteistä."
+messages-lore = "Hae kaikista viesteistä napsauttamalla."
 messages = "Hae viestejä"
 clear = "Tyhjennä haku"
 
 [language.editor.section]
-search-title = "{locale} / Etsi"
-search = "Etsi"
+search-title = "{locale} / Haku"
+search = "Haku"
 languages = "Kielet"
 group-title = "{locale} / {group}"
 
 [language.editor.value]
-none = "Ei ole"
+none = "Ei mitään"
 empty = "(tyhjä)"
 
 [language.error]
 unavailable-for-all = "{prefix}&r &7› &7&cKieli {locale} ei ole saatavilla kaikille valituille lisäosille."
-stopping = "{prefix}&r &7› &7&cKielivalintaa ei ole saatavilla, kun plugin pysähtyy."
+stopping = "{prefix}&r &7› &7&cKielivalinta ei ole käytettävissä, kun lisäosaa sammutetaan."
 server-locale-required = "{prefix}&r &7› &7&cValitse palvelimen oletuskieleksi kielikoodi, kuten en_US."
 plugin-server-permission = "{prefix}&r &7› &7&cSinulla ei ole oikeutta muuttaa lisäosan {prefix} palvelinkieltä."
 plugin-personal-permission = "{prefix}&r &7› &7&cSinulla ei ole oikeutta valita kieltäsi lisäosalle {prefix}."
 personal-player-only = "{prefix}&r &7› &7&cPelaajan kieliasetukset on valittava pelissä."
-personal-permission = "{prefix}&r &7› &7&cSinulla ei ole lupaa valita kieltäsi."
+personal-permission = "{prefix}&r &7› &7&cSinulla ei ole oikeutta valita kieltäsi."
 numeric-page = "{prefix}&r &7› &7&cAnna sivunumero numerona."
-no-providers = "{prefix}&r &7› &7&cYhtään Volmit-kielipalvelua ei ole saatavilla."
+no-providers = "{prefix}&r &7› &7&cYhtään Volmit-kielitarjoajaa ei ole saatavilla."
 editor-player-only = "{prefix}&r &7› &7&cAvaa kielieditori pelissä."
 
 [language.selection]
-server-selected = "{prefix}&r &7› &7&7palvelinkieli on nyt {locale}."
-server-default-selected = "{prefix}&r &7› &7&7kielesi noudattaa nyt palvelimen oletuskieltä."
-save-failed = "{prefix}&r &7› &7&ckielivalintaa ei voitu tallentaa; tarkista palvelinkonsoli."
-preparing = "{prefix}&r &7› &7&7Valmistellaan kieltä {locale} kohteelle {target}..."
-personal-selected = "{prefix}&r &7› &7&7kieli on nyt {locale}."
+server-selected = "{prefix}&r &7› &7&7Palvelimen kieli on nyt {locale}."
+server-default-selected = "{prefix}&r &7› &7&7Kielesi noudattaa nyt palvelimen oletuskieltä."
+save-failed = "{prefix}&r &7› &7&cKielivalintaa ei voitu tallentaa; tarkista palvelimen konsoli."
+preparing = "{prefix}&r &7› &7&7Valmistellaan kieltä {locale}: {target}..."
+personal-selected = "{prefix}&r &7› &7&7Kielesi on nyt {locale}."
 english-fallback = "{prefix}&r &7› &7&7{locale} ei ole saatavilla; käytetään englantia (en_US)."
 
 [language.usage]
 volmit-selection = "{prefix}&r &7› &7&7Käyttö: /volmit plugins languages [locale]"
-selection = "{prefix}&r &7› &7&7Käyttö: /{command} language self [locale|reset] or server [locale]"
+selection = "{prefix}&r &7› &7&7Käyttö: /{command} language self [locale|reset] tai server [locale]"
 editor = "{prefix}&r &7› &7&7Käyttö: /{command} language server edit [locale]"
+update = "{prefix}&r &7› &7&7Käyttö: /{command} language update"
+
+[language.update]
+checking = "{prefix}&r &7› &7&7Tarkistetaan kielivaraston muutoksia..."
+unchanged = "{prefix}&r &7› &7&7Asennetut kielet vastaavat jo varastoa."
+applied = "{prefix}&r &7› &7&7{locale} päivitetty ({added} lisätty, {updated} muutettu, {kept} paikallista muokkausta säilytetty)."
+cooldown = "{prefix}&r &7› &7&7Kielivarasto tarkistettiin äskettäin; yritä uudelleen {remaining} kuluttua."
+locale-failed = "{prefix}&r &7› &7&c{locale} ei päivittynyt: {reason}"
+failed = "{prefix}&r &7› &7&cKielipäivitys epäonnistui: {reason}"
 
 
 [debug]

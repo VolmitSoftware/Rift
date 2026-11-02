@@ -170,7 +170,9 @@ public final class Rift extends JavaPlugin implements ReloadAware {
                                             .untrusted("setting", change.key())
                                             .untrusted("after", change.after())
                                             .untrusted("before", change.before())
-                                            .build())
+                                            .build()),
+                            language.updateAction(),
+                            language.displayNames()
                     )
             );
             updates = BukkitUpdateService.register(this, new BukkitUpdateService.Options(
@@ -192,6 +194,11 @@ public final class Rift extends JavaPlugin implements ReloadAware {
             placeholders = new RiftPlaceholderService(this);
             placeholders.start();
             hotload.start();
+            language.sourceFailure().ifPresent(failure -> getLogger().log(Level.WARNING,
+                    "Rift language source is unavailable; built-in English and installed language files remain active",
+                    failure));
+            language.startUpstreamCheck();
+            requestConfiguredLanguage();
             long startupMillis = (System.nanoTime() - startedNanos) / 1_000_000L;
             if (config.get().isSplashScreen()) {
                 RiftSplashScreen.print(this);
@@ -356,6 +363,14 @@ public final class Rift extends JavaPlugin implements ReloadAware {
         if (hotload != null) {
             hotload.noteConfigWrite();
         }
+    }
+
+    private void requestConfiguredLanguage() {
+        String locale = config.get().getLanguage();
+        if (language.file(locale).isFile() || !language.isRepositoryLocale(locale)) {
+            return;
+        }
+        hotload.requestConfiguredLanguage(locale);
     }
 
     private String schedulerName() {

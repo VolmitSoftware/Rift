@@ -39,9 +39,10 @@ record RiftDebugSnapshot(
         String activeLocale,
         Path activeLanguageFile,
         List<String> availableLocales,
-        String remoteLanguageCatalogReference,
-        String remoteLanguageCatalogFailure,
-        String remoteLanguageDownloadFailure,
+        String languageSource,
+        String languageRevision,
+        long languageLastCheckEpochMillis,
+        String languageLastError,
         int managedProfiles,
         int discoveredWorldStorage,
         String senderType,
@@ -78,6 +79,9 @@ record RiftDebugSnapshot(
     ) {
     }
 
+    /** Shown instead of a world folder that lives outside the server's world container. */
+    static final String OUTSIDE_WORLD_CONTAINER = "outside world container";
+
     record WorldState(
             String name,
             boolean loaded,
@@ -88,7 +92,6 @@ record RiftDebugSnapshot(
             String environment,
             String worldType,
             String generator,
-            long seed,
             String configuredDirectory,
             String detectedDirectory,
             String storageLayout,

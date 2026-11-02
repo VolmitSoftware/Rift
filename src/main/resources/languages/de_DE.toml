@@ -6,121 +6,128 @@
 # /rift language server edit de_DE
 #
 # === Präfix ===
-# runtime.prefix enthält nur den formatierten Namen. {prefix} fügt ihn ein; › und Abstände stehen im jeweiligen Text.
+# runtime.prefix enthält den formatierten Plugin-Namen, den {prefix} einfügt.
+# Trennzeichen und Abstände stehen in der jeweiligen Nachricht. Entferne {prefix}&r &7› &7, um das gesamte Chat-Präfix auszublenden.
 #
 # === Formatierung ===
-# Farben: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B und [RRGGBB]. MiniMessage bleibt für eigene Formatierungen verfügbar.
+# Farben und Stile: &0-&f, &k-&r.
+# RGB-Farben: &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B, [RRGGBB].
+# MiniMessage ermöglicht eigene Formatierungen. Setze einen Backslash vor & oder [, um das Zeichen wörtlich anzuzeigen.
 #
 # === Variablen ===
 # Variablennamen unverändert lassen und nur die Variablen der jeweiligen Nachricht verwenden.
+#   {added}  Durch eine Sprachaktualisierung hinzugefügte Nachrichten
 #   {after}  neuer Wert
 #   {argument}  Befehlsargument
 #   {before}  vorheriger Wert
-#   {category}  Befehlskategorie
-#   {command}  Befehlstext oder -name
-#   {count}  Anzahl der Einträge oder Ergebnisse
-#   {detail}  beschreibendes Detail
-#   {group}  Erlaubnis oder Spielergruppe
-#   {id}  Bezeichner
-#   {key}  Konfigurations- oder Nachrichtenschlüssel
+#   {category}  Kategorie
+#   {command}  Befehlspfad
+#   {count}  Anzahl der Einträge
+#   {detail}  Eintragsdetail
+#   {group}  Nachrichtengruppe
+#   {id}  Quarantäne-ID
+#   {kept}  Bei einer Sprachaktualisierung behaltene lokale Änderungen
+#   {key}  Parameter- oder Nachrichtenschlüssel
 #   {label}  Anzeigebezeichnung
-#   {line}  Quellleitung oder Zeilennummer
-#   {locale}  Sprachgebietsschema
-#   {maximum}  Zulässiger Höchstwert
-#   {name}  Eintrags- oder Anzeigename
+#   {line}  Zeilennummer
+#   {locale}  Sprachcode
+#   {maximum}  maximale Eingabelänge
+#   {name}  Eintragsname
 #   {operation}  Vorgangsname
 #   {parameter}  Parametername
 #   {permission}  Berechtigungsknoten
-#   {personal}  persönliche Sprachkennung
+#   {personal}  persönliche Sprache eines Spielers, wenn sie vom Serverstandard abweicht
 #   {player}  Spielername
-#   {prefix}  runtime.prefix enthält nur den formatierten Namen. {prefix} fügt ihn ein; › und Abstände stehen im jeweiligen Text.
+#   {prefix}  der formatierte Name aus runtime.prefix; Trennzeichen und Abstände stehen in der jeweiligen Nachricht
 #   {reason}  Grund oder Fehlerdetail
+#   {remaining}  Verbleibende Wartezeit bis zur nächsten Sprachprüfung
 #   {seconds}  Dauer in Sekunden
 #   {setting}  Einstellungsname
-#   {target}  Zielspieler, Entität oder Wert
-#   {title}  Titeltext
+#   {target}  Auswahlziel
+#   {title}  Abschnittstitel
 #   {type}  Wert- oder Datentyp
+#   {updated}  Durch eine Sprachaktualisierung geänderte Nachrichten
 #   {value}  aktueller oder neuer Wert
 #   {variables}  gültige Platzhalter
-#   {version}  Version
+#   {version}  Plugin-Version
 #   {world}  Weltname
 
 #   {section}  Editorbereich
 #   {path}  Lokaler Berichtspfad
-#   {url}  Berichts-URL
+#   {url}  URL des hochgeladenen Berichts
 
-#   {step}  Schrittweite numerischer Änderungen
+#   {step}  Änderung pro Klick
 
-#   {limit}  maximale Spielerzahl
+#   {limit}  maximale Spielerzahl einer Welt
 
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 
 [rift.command]
-policy_player_limit = "Spielerzahl beim Eintritt begrenzen; 0 bedeutet unbegrenzt"
-policy_travel_entry = "Weltenübergreifenden Eintritt steuern; DENY sperrt ihn, INHERIT lässt ihn unverändert"
-policy_travel_exit = "Weltenübergreifenden Austritt steuern; DENY sperrt Reisen, nicht Respawn oder Anmelderettung"
-policy_first_join = "Geladenen verwalteten Spawn für erste Beitritte aus dieser Welt wählen; default nutzt das Anmeldeziel"
-policy_login = "Geladenen verwalteten Spawn für Anmeldungen aus dieser Welt wählen; default behält die Serverposition"
-policy_game_mode = "Spielmodus beim Betreten, Anmelden und Wiedererscheinen setzen; INHERIT hebt die Vorgabe auf"
-policy_flight = "Fliegen im Überlebens- und Abenteuermodus steuern; INHERIT hebt die Flugeinstellung von {prefix} auf"
-policy_weather = "Klares Wetter, Regen oder Gewitter festhalten; INHERIT erlaubt wieder Wetterwechsel"
+policy_player_limit = "Spielerzahl beim Betreten dieser Welt begrenzen; 0 bedeutet unbegrenzt"
+policy_travel_entry = "Betreten per Weltwechsel steuern; DENY sperrt das Betreten, INHERIT lässt es unverändert"
+policy_travel_exit = "Verlassen per Weltwechsel steuern; DENY sperrt Weltwechsel, nicht aber Respawn oder Rettung beim Anmelden"
+policy_first_join = "Geladenen verwalteten Spawnpunkt für erstmalige Beitritte wählen, die dieser Welt zugeordnet sind; default nutzt die Anmeldeplatzierung"
+policy_login = "Geladenen verwalteten Spawnpunkt für Anmeldungen wählen, die dieser Welt zugeordnet sind; default behält die Serverplatzierung"
+policy_game_mode = "Spielmodus beim Betreten, Beitreten und Respawn setzen; INHERIT beendet die Durchsetzung"
+policy_flight = "Fliegen im Überlebens- und Abenteuermodus steuern; INHERIT beendet die Flugsteuerung durch {prefix}"
+policy_weather = "Klares Wetter, Regen oder Gewitter festlegen; INHERIT lässt das Wetter wieder wechseln"
 policy_natural_animals = "DENY blockiert natürliche Tier-Spawns; ALLOW beachtet andere Spawn-Beschränkungen"
 policy_natural_monsters = "DENY blockiert natürliche Monster-Spawns; ALLOW beachtet andere Spawn-Beschränkungen"
-policy_edit = "Weltregel-Editor öffnen"
+policy_edit = "Editor für Weltrichtlinien öffnen"
 check_all = "Alle passenden Welten prüfen, ohne sie zu verändern"
 version = "{prefix}-Version anzeigen"
 root = "Serverwelten sicher verwalten"
-create = "Erstellen und Verwalten einer neuen Welt"
-import = "Importieren eines bestehenden Weltverzeichnisses"
-load = "Laden Sie eine verwaltete oder entdeckte Welt"
+create = "Neue Welt erstellen und verwalten"
+import = "Vorhandenen Weltordner importieren"
+load = "Verwaltete oder gefundene Welt laden"
 unload = "Spieler evakuieren und eine Welt entladen"
-delete = "Bewegen Sie eine verwaltete Welt in Quarantäne"
+delete = "Verwaltete Welt in die Quarantäne verschieben"
 restore = "Eine unter Quarantäne gestellte Welt wiederherstellen"
-teleport = "Teleportieren in eine geladene Welt"
-send = "Teleportieren Sie einen anderen Spieler in eine geladene Welt"
-list = "Liste geladener, verwalteter, entdeckter und unter Quarantäne gestellter Welten"
-info = "Detaillierter Zustand für eine Welt anzeigen"
-generators = "Generator-Identifikatoren anzeigen, die bereits von Managed Worlds verwendet werden"
-config = "Öffnen Sie das In-Game {prefix} Configuration Editor"
+teleport = "Zu einer geladenen Welt teleportieren"
+send = "Anderen Spieler in eine geladene Welt teleportieren"
+list = "Geladene, verwaltete, gefundene und in Quarantäne befindliche Welten auflisten"
+info = "Detaillierten Zustand einer Welt anzeigen"
+generators = "Generator-IDs anzeigen, die verwaltete Welten bereits nutzen"
+config = "Konfigurationseditor von {prefix} im Spiel öffnen"
 language = "Eine verfügbare {prefix}-Sprache auswählen"
-status = "Plattform-Fähigkeiten prüfen und {prefix} Staat"
+status = "Plattformfunktionen und Zustand von {prefix} prüfen"
 debug = "{prefix}-Diagnosewerkzeuge"
 debug_dump = "Einen umfassenden {prefix}-Diagnosebericht erstellen"
-autoload = "Ändern Sie, ob eine verwaltete Welt während des Starts geladen wird"
-protect = "Eine verwaltete Welt schützen oder unschützen"
+autoload = "Festlegen, ob eine verwaltete Welt beim Serverstart geladen wird"
+protect = "Schutz einer verwalteten Welt ein- oder ausschalten"
 
-check = "Eine schreibgeschützte Welt-Vorabprüfung ausführen"
+check = "Vorabprüfung einer Welt ausführen, ohne etwas zu ändern"
 unmanage = "Verwaltung einer Welt beenden, ohne ihre Dateien zu verändern"
 policy = "Richtlinien für jede verwaltete Welt anzeigen und bearbeiten"
 policy_show = "Aktive Richtlinien einer verwalteten Welt anzeigen"
-policy_difficulty = "Weltschwierigkeit festlegen oder Serverwert übernehmen"
+policy_difficulty = "Schwierigkeitsgrad der Welt festlegen oder den Serverwert übernehmen"
 policy_pvp = "PvP erlauben, verbieten oder Serverwert übernehmen"
 policy_gamerule = "Eine Spielregel festlegen oder nicht mehr verwalten"
 policy_spawn = "Spawnpunkt dieser Welt auf deinen aktuellen sicheren Standort setzen"
 policy_spawn_clear = "Spawnpunkt dieser Welt nicht mehr verwalten"
-policy_border = "Verwaltete Grenze dieser Welt konfigurieren"
-policy_border_clear = "Grenze dieser Welt zurücksetzen und nicht mehr verwalten"
+policy_border = "Verwaltete Weltbarriere für diese Welt konfigurieren"
+policy_border_clear = "Weltbarriere dieser Welt zurücksetzen und nicht mehr verwalten"
 policy_access = "Zum Betreten dieser Welt eine Berechtigung verlangen oder die Anforderung aufheben"
-policy_respawn = "Respawns aus dieser Welt in eine andere verwaltete Welt oder zum Serverstandard umleiten"
+policy_respawn = "Respawn nach Toden in dieser Welt in eine andere verwaltete Welt oder zum Serverstandard umleiten"
 policy_tag = "Ein Operator-Tag hinzufügen oder entfernen"
 
 [rift.parameter]
 player_limit = "Maximale Spielerzahl oder 0 für unbegrenzt"
 policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR oder INHERIT"
 policy_weather = "CLEAR, RAIN, THUNDER oder INHERIT"
-tag_filter = "Nach einem Operator-Tag filtern oder all verwenden"
+tag_filter = "Nach Operator-Tag filtern oder all"
 tag_group = "Passende Welten nach Operator-Tag gruppieren"
 name = "Weltname"
-environment = "NORMAL, NETHER, THE_END, oder CUSTOM"
-generator = "vanilla, void, oder PluginName[:generator-id]"
-seed = "random oder ein signierter 64-Bit-Seed"
-type = "Bukkit Welttyp"
-save = "Speichern vor dem Entladen"
+environment = "NORMAL, NETHER, THE_END oder CUSTOM"
+generator = "vanilla, void oder PluginName[:generator-id]"
+seed = "random oder ein vorzeichenbehafteter 64-Bit-Startwert"
+type = "Bukkit-Welttyp"
+save = "Vor dem Entladen speichern"
 id = "Quarantäne-Eintrags-ID"
 player = "Online-Spielername"
 enabled = "true oder false"
-page = "Seitennummer der Portalliste, beginnend bei eins"
+page = "Seitennummer der Ergebnisse"
 upload = "Den Bericht hochladen, wenn öffentliche Uploads aktiviert sind"
 sender = "Befehlsabsender"
 managed_world = "Name der verwalteten Welt"
@@ -128,13 +135,13 @@ policy_difficulty = "PEACEFUL, EASY, NORMAL, HARD oder INHERIT"
 policy_pvp = "ALLOW, DENY oder INHERIT"
 game_rule = "Name der Minecraft-Spielregel"
 game_rule_value = "Wert der Spielregel oder INHERIT"
-border_size = "Grenzdurchmesser in Blöcken"
-border_center_x = "X-Koordinate des Grenzmittelpunkts"
-border_center_z = "Z-Koordinate des Grenzmittelpunkts"
+border_size = "Durchmesser der Weltbarriere in Blöcken"
+border_center_x = "X-Koordinate des Mittelpunkts der Weltbarriere"
+border_center_z = "Z-Koordinate des Mittelpunkts der Weltbarriere"
 border_warning_distance = "Warnabstand in Blöcken"
 border_warning_time = "Warnzeit in Sekunden"
-border_damage = "Schaden pro Block außerhalb der Grenze"
-border_buffer = "Sicherheitsabstand außerhalb der Grenze"
+border_damage = "Schaden pro Block außerhalb der Weltbarriere"
+border_buffer = "Sicherheitsabstand außerhalb der Weltbarriere"
 access_permission = "Berechtigungsknoten oder clear"
 access_denied_message = "Optionale Nachricht bei verweigertem Zugriff"
 respawn_destination = "Name der verwalteten Welt oder default"
@@ -143,37 +150,36 @@ tag_enabled = "true fügt das Tag hinzu; false entfernt es"
 
 [rift.message]
 policy_world_full = "{prefix}&r &7› &7&c{world} ist voll (Limit: {limit})."
-policy_travel_denied = "{prefix}&r &7› &7&cDie Richtlinie für {world} blockiert weltenübergreifende Reisen."
-policy_placement_failed = "Keine zugängliche Welt hat Platz. Bitte wende dich an die Serveradministration."
+policy_travel_denied = "{prefix}&r &7› &7&cDie Richtlinie für {world} blockiert Weltwechsel."
+policy_placement_failed = "Keine zugängliche Welt hat Platz für dich. Bitte wende dich an die Serveradministration."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
-permission_denied = "{prefix}&r &7› &7&cSie brauchen &f{permission}&7."
-unknown_command = "{prefix}&r &7› &7&cUnbekannter Befehl &f/rift help&7."
+permission_denied = "{prefix}&r &7› &7&cDu brauchst &f{permission}&7."
+unknown_command = "{prefix}&r &7› &7&cUnbekannter Befehl. Nutze &f/rift help&7."
 player_only = "{prefix}&r &7› &7&cDieser Befehl erfordert einen Spieler."
-operation_queued = "{prefix}&r &7› &7Schlange &f{operation}&7 für &d{world}&7."
-operation_failed = "{prefix}&r &7› &7&c{operation} gescheitert für &f{world}&7: {reason}"
-created = "{prefix}&r &7› &7Erstellt und verwaltet &a{world}&7."
-imported = "{prefix}&r &7› &7Importiert und verwaltet &a{world}&7."
-loaded = "{prefix}&r &7› &7Beladen &a{world}&7."
-unloaded = "{prefix}&r &7› &7Entladen &a{world}&7."
-teleported = "{prefix}&r &7› &7Teleportiert &a{player}&7 bis &a{world}&7."
-delete_confirm = "{prefix}&r &7› &7Lauf &e/rift delete {world}&7 wieder innerhalb &e{seconds}s&7 um es in Quarantäne zu bringen."
-quarantined = "{prefix}&r &7› &7Bewegt &a{world}&7 in Quarantäne wie &a{id}&7."
-restored = "{prefix}&r &7› &7Restauriert &a{world}&7 von &a{id}&7."
-profile_updated = "{prefix}&r &7› &7Aktualisiert &a{setting}&7 für &a{world}&7 bis &a{value}&7."
-folia_limit = "{prefix}&r &7› &7{operation} ist nicht verfügbar auf Folia weil seine Welt beladen/unload API ist nicht implementiert."
-config_saved = "{prefix}&r &7› &7&aKonfiguration gespeichert."
-config_opened = "{prefix}&r &7› &7Der vollständige Konfigurationseditor wurde geöffnet.&r"
-config_save_failed = "{prefix}&r &7› &7&cDie Konfiguration konnte nicht gespeichert werden."
+operation_queued = "{prefix}&r &7› &7&f{operation}&7 für &d{world}&7 in die Warteschlange gestellt."
+operation_failed = "{prefix}&r &7› &7&c{operation} für &f{world}&7 fehlgeschlagen: {reason}"
+created = "{prefix}&r &7› &7&a{world}&7 erstellt und in die Verwaltung übernommen."
+imported = "{prefix}&r &7› &7&a{world}&7 importiert und in die Verwaltung übernommen."
+loaded = "{prefix}&r &7› &7&a{world}&7 geladen."
+unloaded = "{prefix}&r &7› &7&a{world}&7 entladen."
+teleported = "{prefix}&r &7› &7&a{player}&7 nach &a{world}&7 teleportiert."
+delete_confirm = "{prefix}&r &7› &7Führe &e/rift delete {world}&7 innerhalb von &e{seconds}s&7 erneut aus, um die Welt in Quarantäne zu verschieben."
+quarantined = "{prefix}&r &7› &7&a{world}&7 als &a{id}&7 in Quarantäne verschoben."
+restored = "{prefix}&r &7› &7&a{world}&7 aus &a{id}&7 wiederhergestellt."
+profile_updated = "{prefix}&r &7› &7&a{setting}&7 für &a{world}&7 auf &a{value}&7 gesetzt."
+folia_limit = "{prefix}&r &7› &7{operation} ist auf Folia nicht verfügbar, weil die API zum Laden und Entladen von Welten dort fehlt."
+config_opened = "{prefix}&r &7› &7Der vollständige Konfigurationseditor im Spiel wurde geöffnet.&r"
+config_save_failed = "{prefix}&r &7› &7&cDie Konfiguration konnte nicht gespeichert werden. Prüfe die Konsole."
 empty_list = "{prefix}&r &7› &7Es wurden keine passenden Welten gefunden."
 player_offline = "{prefix}&r &7› &7&cDer Spieler ist nicht online: &f{player}"
-unknown_world = "{prefix}&r &7› &7&cunbekannte Welt: &f{world}"
+unknown_world = "{prefix}&r &7› &7&cUnbekannte Welt: &f{world}"
 section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
 entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
 detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
 info_title = "{prefix}&r &7› &7&d{world}"
 status_title = "{prefix}&r &7› &7Status von {prefix} {version}"
-generator_format = "{prefix}&r &7› &7Custom Format: &fPluginName[:generator-id]"
-folia_status_note = "{prefix}&r &7› &7Folia Stützen {prefix}Lese-, Editor-, Profil- und Teleport-Funktionen; Dynamic World Lifecycle wird von der Plattform-API gesteuert."
+generator_format = "{prefix}&r &7› &7Eigenes Format: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&r &7› &7Folia unterstützt die Lese-, Editor-, Profil- und Teleportfunktionen von {prefix}; der dynamische Weltlebenszyklus hängt von der Plattform-API ab."
 policy_access_denied = "{prefix}&r &7› &7&cDu kannst &f{world}&7 nicht betreten. Du benötigst &f{permission}&7."
 
 unmanaged_loaded = "{prefix}&r &7› &7Verwaltung von &a{world}&7 beendet, ohne die Dateien zu verändern. Die Welt bleibt geladen, bis ein anderes Plugin oder der Server sie entlädt."
@@ -181,8 +187,8 @@ unmanaged_unloaded = "{prefix}&r &7› &7Verwaltung von &a{world}&7 beendet, ohn
 
 [rift.label]
 policy_player_limit = "Spielerlimit"
-policy_travel_entry = "Weltenübergreifender Eintritt"
-policy_travel_exit = "Weltenübergreifender Austritt"
+policy_travel_entry = "Weltwechsel: Betreten"
+policy_travel_exit = "Weltwechsel: Verlassen"
 policy_first_join_world = "Ziel beim ersten Beitritt"
 policy_login_world = "Anmeldeziel"
 policy_game_mode = "Spielmodus"
@@ -192,27 +198,27 @@ policy_natural_animals = "Natürliche Tier-Spawns"
 policy_natural_monsters = "Natürliche Monster-Spawns"
 worlds = "Welten"
 quarantine = "Quarantäne"
-loaded = "Beladen"
+loaded = "Geladen"
 managed = "Verwaltet"
-on_disk = "Auf der Scheibe"
-missing = "Fehlende Managed Worlds"
-environment = "Umwelt"
+on_disk = "Auf Datenträger"
+missing = "fehlende verwaltete Welten"
+environment = "Umgebung"
 generator = "Generator"
-seed = "Samen"
-autoload = "Auto-Load"
+seed = "Startwert"
+autoload = "Automatisch laden"
 protected = "Geschützt"
-operation_active = "Betrieb aktiv"
+operation_active = "Vorgang aktiv"
 world_types = "Welttypen"
 configured_generators = "Konfigurierte Generatoren"
 available = "verfügbar"
 unavailable = "nicht verfügbar"
 server = "Server"
-java_runtime = "Java Laufzeit"
-plugin_bytecode = "Plugin Bytecode"
+java_runtime = "Java-Laufzeit"
+plugin_bytecode = "Plugin-Bytecode"
 platform = "Plattform"
 dynamic_lifecycle = "Dynamischer Weltlebenszyklus"
-world_container = "Weltbehälter"
-writable = "Welt Container beschreibbar"
+world_container = "Weltverzeichnis"
+writable = "Weltverzeichnis beschreibbar"
 locale = "Sprache"
 world_counts = "Welten"
 quarantine_entries = "Quarantäneeinträge"
@@ -226,15 +232,15 @@ primary_world = "Primäre Welt"
 check_result = "Prüfergebnis"
 ready = "bereit"
 review_required = "Überprüfung erforderlich"
-policy_difficulty = "Schwierigkeit"
+policy_difficulty = "Schwierigkeitsgrad"
 policy_pvp = "PvP"
 policy_game_rules = "Spielregeln"
 policy_custom_spawn = "Benutzerdefinierter Spawnpunkt"
-policy_managed_border = "Verwaltete Grenze"
+policy_managed_border = "Verwaltete Weltbarriere"
 policy_access_permission = "Zugriffsberechtigung"
 policy_respawn_world = "Respawn-Welt"
 policy_tags = "Tags"
-none = "Keine"
+none = "keine"
 server_default = "Serverstandard"
 
 [rift.explain]
@@ -242,51 +248,51 @@ loaded = "Gibt an, ob Bukkit diese Welt derzeit aktiv im Arbeitsspeicher hält."
 managed = "Gibt an, ob {prefix} ein Profil für diese Welt besitzt und deren Generator- und Starteinstellungen wiederherstellen kann."
 on_disk = "Gibt an, ob die Welt geladen ist oder ein gültiges Weltverzeichnis mit level.dat besitzt."
 environment = "Die Bukkit-Weltumgebung, die in der aktiven Welt oder im verwalteten Profil gespeichert ist."
-generator = "Der Generator, den {prefix} beim Laden dieser verwalteten Welt erneut anwendet. void ist {prefix}s integrierter Generator für leere Welten."
-seed = "Der für diese Welt gespeicherte Seed. Änderungen dieses Anzeigewerts erzeugen vorhandenes Gelände niemals neu."
+generator = "Der Generator, den {prefix} beim Laden dieser verwalteten Welt erneut anwendet. void ist der integrierte Generator von {prefix} für leere Welten."
+seed = "Der für diese Welt gespeicherte Startwert. Eine Änderung dieses Anzeigewerts generiert vorhandenes Gelände niemals neu."
 autoload = "Gibt an, ob {prefix} diese verwaltete Welt beim Serverstart automatisch lädt."
-protected = "Geschützte verwaltete Welten können nicht in {prefix}s Quarantäne verschoben werden."
-operation_active = "Gibt an, ob ein Lebenszyklusvorgang derzeit {prefix}s Sperre für diese einzelne Welt hält."
+protected = "Geschützte verwaltete Welten können nicht in die Quarantäne von {prefix} verschoben werden."
+operation_active = "Gibt an, ob ein Lebenszyklusvorgang derzeit die weltbezogene Sperre von {prefix} hält."
 server = "Die von Bukkit gemeldete aktive Serverimplementierung und deren Version."
 java_runtime = "Die Java-Laufzeitumgebung, die derzeit den Server ausführt. {prefix} erfordert Java 25 oder neuer."
-plugin_bytecode = "Die älteste Java-Laufzeitumgebung, die {prefix}s kompilierte Klassen laden kann."
+plugin_bytecode = "Die älteste Java-Laufzeitumgebung, die die kompilierten Klassen von {prefix} laden kann."
 platform = "Der Scheduler und die Server-API-Familie, die {prefix} zur Laufzeit erkannt hat."
 dynamic_lifecycle = "Gibt an, ob diese Plattform das sichere Erstellen, Laden, Entladen, Verschieben in Quarantäne und Wiederherstellen von Welten zur Laufzeit ermöglicht."
 world_container = "Das Serververzeichnis, in dem die Bukkit-Weltordner gespeichert werden."
 writable = "Gibt an, ob das Betriebssystem {prefix} derzeit Schreibzugriff auf das Weltverzeichnis erlaubt."
 locale = "Die aktive Sprachdatei unter plugins/Rift/languages. Fehlende Einträge verwenden das integrierte Englisch."
 world_counts = "Geladen zählt aktive Bukkit-Welten; verwaltet zählt {prefix}-Profile; fehlend zählt verwaltete Profile, deren Welten weder geladen noch auf dem Datenträger vorhanden sind."
-quarantine = "Durch {prefix}s Löschbefehl beiseitegeschobene Welten, die über ihre Quarantäne-ID wiederhergestellt werden können."
+quarantine = "Welten, die der Löschbefehl von {prefix} beiseitegelegt hat und die über ihre Quarantäne-ID wiederhergestellt werden können."
 world_entry = "Geladen bedeutet derzeit aktiv; verwaltet bedeutet, dass {prefix} ein Profil besitzt; auf Datenträger bedeutet, dass ein gültiger Ordner einer entladenen Welt vorhanden ist."
 
-world_key = "Die kanonische Paper-Kennung der Welt."
+world_key = "Die kanonische Paper-Kennung dieser Welt."
 storage_path = "Das exakt aufgelöste Verzeichnis, in dem die Dateien dieser Welt gespeichert sind."
-storage_layout = "Der Namespace, dem das Speicherverzeichnis dieser Welt gehört."
+storage_layout = "Der Namespace, dem das Dimensionsverzeichnis dieser Welt gehört."
 players = "Die aktuelle Spielerzahl in dieser geladenen Welt."
-generator_status = "Ob der konfigurierte Generator integriert oder sein Anbieter verfügbar ist."
-primary_world = "Ob dies eine primäre Serverwelt ist, die weder aus der Verwaltung entfernt noch entladen werden kann."
-check_result = "Eine Zusammenfassung der erkannten Blocker und Warnungen."
+generator_status = "Gibt an, ob der konfigurierte Generator integriert ist oder sein Anbieter verfügbar ist."
+primary_world = "Gibt an, ob dies eine primäre Serverwelt ist, die weder aus der Verwaltung entfernt noch entladen werden kann."
+check_result = "Eine Zusammenfassung der erkannten Lebenszyklus-Hindernisse und Warnungen."
 
 [rift.feedback]
 title = "{prefix}"
 world_subtitle = "&a{operation}&8: &f{world}"
 teleport_subtitle = "&aAngekommen in &f{world}"
-failure_title = "&cBetrieb fehlgeschlagen"
+failure_title = "&cVorgang fehlgeschlagen"
 failure_subtitle = "&7{operation}&8: &f{world}"
 action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
 action_teleport = "{prefix}&r &7› &7&aTeleportiert nach &a{world}"
-action_failure = "{prefix}&r &7› &7&c{operation} gescheitert für &f{world}"
+action_failure = "{prefix}&r &7› &7&c{operation} für &f{world} fehlgeschlagen"
 
 [rift.world]
 already_exists = "{prefix}&r &7› &7&e{world} existiert bereits. Mit &f/rift info {world}&e prüfen oder einen anderen Namen wählen."
 
 [rift.gui]
 updates = "&dUpdate-Benachrichtigungen"
-policy_native_default = "&7Nativer Standard: &f{value}"
-policy_inherited = "&7Regel: INHERIT"
-policy_unloaded = "&7Welt entladen: geerbte Werte zeigen native Standards"
+policy_native_default = "&7Nativer Standardwert: &f{value}"
+policy_inherited = "&7Richtlinie: INHERIT"
+policy_unloaded = "&7Welt entladen: geerbte Werte zeigen die nativen Standardwerte"
 policy_default = "&7Standard: &f{value}"
-policy_number = "&7Links: +{step}; rechts: -{step}; Umschalt: x10"
+policy_number = "&7Linksklick: +{step}; Rechtsklick: -{step}; Shift-Klick: x10"
 policy_select = "&7Klicken, um einen verfügbaren Wert auszuwählen"
 policy_selected = "&aAusgewählt"
 policy_apply = "&aSpawnkoordinaten anwenden"
@@ -297,68 +303,65 @@ policy_x = "&dX-Koordinate"
 policy_y = "&dY-Koordinate"
 policy_z = "&dZ-Koordinate"
 policy_yaw = "&dBlickrichtung"
-policy_border_size = "&dGrenzdurchmesser"
+policy_border_size = "&dDurchmesser der Weltbarriere"
 policy_warning_distance = "&dWarnabstand (Blöcke)"
 policy_warning_time = "&dWarnzeit (Sekunden)"
 policy_damage_amount = "&dSchaden pro Block"
 policy_damage_buffer = "&dSchadenspuffer (Blöcke)"
-policy_title = "&dWeltregeln"
-policy_reset = "&7Q drücken, um die Standardregel wiederherzustellen"
-policy_spawn = "&7Koordinaten anpassen und den sicheren Spawn anwenden"
-policy_center = "&dGrenzmittelpunkt (x z)"
-policy_warning = "&dGrenzwarnung (Blöcke Sekunden)"
-policy_damage = "&dGrenzschaden (Menge Puffer)"
-policy_denial = "&dNachricht bei verweigertem Zugang"
+policy_title = "&dWeltrichtlinien"
+policy_reset = "&7Q drücken, um die Standardrichtlinie wiederherzustellen"
+policy_spawn = "&7Koordinaten anpassen und den sicheren Spawnpunkt anwenden"
+policy_denial = "&dNachricht bei verweigertem Zugriff"
 policy_tags = "&7Kommagetrennte Tags oder clear eingeben"
 policy_clear = "&7clear eingeben, um den Standard wiederherzustellen"
 policy_previous = "&eVorherige Seite"
 policy_next = "&eNächste Seite"
 current = "&7Aktuell: &f{value}"
-autoload = "&dAuto-Load Managed Worlds"
+autoload = "&dVerwaltete Welten automatisch laden"
 delete = "&dWeltquarantäne zulassen"
-verbose = "&dVerbose-Protokollierung"
-debug_upload = "&dPublic Debug Uploads"
-bstats = "&dAnonym bStats Metriken"
-confirm_seconds = "&dBestätigungssekunden löschen"
-poll = "&dWarmbeladungsabfrage in Millisekunden"
-cooldown = "&dWarm-Reload-Abkühlung Millisekunden"
+verbose = "&dAusführliche Protokollierung"
+debug_upload = "&dÖffentliche Debug-Uploads"
+bstats = "&dAnonyme bStats-Statistiken"
+confirm_seconds = "&dBestätigungszeit beim Löschen (Sekunden)"
+poll = "&dHot-Reload-Abfrageintervall (Millisekunden)"
+cooldown = "&dHot-Reload-Abklingzeit (Millisekunden)"
 evacuation = "&dEvakuierungswelt"
 close = "&cSchließen"
-splash = "&dStart Splash Screen"
-lifecycle_feedback = "&dWeltlebenszyklus-Feedback"
-teleport_feedback = "&dTeleport-Feedback"
-failure_feedback = "&dFehlermeldung"
-title_popups = "&dTitel Popups"
-action_bar_popups = "&dAction-Bar Popups"
-sounds = "&dFeedback Sounds"
-root_title = "{prefix} Konfiguration"
+splash = "&dStartbildschirm"
+lifecycle_feedback = "&dRückmeldung zum Weltlebenszyklus"
+teleport_feedback = "&dRückmeldung beim Teleportieren"
+failure_feedback = "&dRückmeldung bei Fehlern"
+title_popups = "&dTitel-Einblendungen"
+action_bar_popups = "&dAktionsleisten-Einblendungen"
+sounds = "&dRückmeldungstöne"
+root_title = "{prefix}-Konfiguration"
 category_title = "{prefix}: {category}"
-category_open = "&8Klicken Sie, um jede Einstellung in diesem Abschnitt zu bearbeiten"
-back = "&eRücken"
-toggle = "&8Klicken Sie auf toggle"
-exact_number = "&8Links/right Anpassen; drücken Sie Q, um einen genauen Wert einzugeben"
-text = "&8Klicken Sie, um einen neuen Wert im Chat einzugeben"
-prompt = "{prefix}&r &7› &7Geben Sie einen neuen Wert für &f{setting}&7 im Chat."
-prompt_cancel = "{prefix}&r &7› &7Typ &fAbbruch&7 um zurückzukehren, ohne es zu ändern."
-prompt_cancelled = "{prefix}&r &7› &7Konfigurationseingabe gelöscht."
-prompt_timeout = "{prefix}&r &7› &7Konfigurationseingabe zeitversetzt."
-setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7Geändert zu &a{after} &7von &f{before}&7."
-setting_failed = "{prefix}&r &7› &7&ckonnte nicht aktualisiert werden &f{setting}&7: {reason}"
-language = "&dSprachgebietsschema"
+category_open = "&8Klicken, um alle Einstellungen dieses Abschnitts zu bearbeiten"
+back = "&eZurück"
+toggle = "&8Klicken zum Umschalten"
+exact_number = "&8Links- oder Rechtsklick ändert den Wert; Q drücken für einen genauen Wert"
+text = "&8Klicken, um im Chat einen neuen Wert einzugeben"
+prompt = "{prefix}&r &7› &7Gib im Chat einen neuen Wert für &f{setting}&7 ein."
+prompt_cancel = "{prefix}&r &7› &7Gib &fcancel&7 ein, um ohne Änderung zurückzukehren."
+prompt_cancelled = "{prefix}&r &7› &7Konfigurationseingabe abgebrochen."
+prompt_timeout = "{prefix}&r &7› &7Zeit für die Konfigurationseingabe abgelaufen."
+setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7Auf &a{after} &7geändert (vorher &f{before}&7)."
+setting_failed = "{prefix}&r &7› &7&c&f{setting}&7 konnte nicht aktualisiert werden: {reason}"
+language = "&dSprache"
 language_select = "&8Klicken, um aus den verfügbaren Sprachen auszuwählen"
-lifecycle_sound = "&dWorld Lifecycle Sound"
-teleport_sound = "&dTeleportgeräusche"
-failure_sound = "&dAusfallgeräusche"
-sound_volume = "&dSchallpegel"
-sound_pitch = "&dSchallpegel"
-title_fade_in = "&dTitel Fade-in-Zecken"
-title_stay = "&dTitelaufenthalt Zecken"
-title_fade_out = "&dTitel Fade-out-Zecken"
+lifecycle_sound = "&dTon für den Weltlebenszyklus"
+teleport_sound = "&dTeleport-Ton"
+failure_sound = "&dFehlerton"
+sound_volume = "&dLautstärke"
+sound_pitch = "&dTonhöhe"
+title_fade_in = "&dTitel-Einblenddauer (Ticks)"
+title_stay = "&dTitel-Anzeigedauer (Ticks)"
+title_fade_out = "&dTitel-Ausblenddauer (Ticks)"
 
 [rift.gui.category]
 general = "&dAllgemein & Sicherheit"
-feedback = "&dRückmeldungen und Klänge"
-presentation = "&dAufmachung"
+feedback = "&dRückmeldungen & Töne"
+presentation = "&dDarstellung"
 diagnostics = "&dDiagnose&r"
 languages = "&dSprachen & Nachrichten"
 
@@ -390,7 +393,7 @@ default = "Standardmäßig \"{value}\", wenn nicht angegeben."
 type = "Dieser Parameter hat den Typ {type}."
 
 [director.runtime.error]
-invalid_origin = "{prefix}&r &7› &7&cDieser Befehl kann von diesem Ursprung aus nicht ausgeführt werden."
+invalid_origin = "{prefix}&r &7› &7&cDieser Befehl kann von diesem Absender nicht ausgeführt werden."
 unknown_parameter = "{prefix}&r &7› &7&cUnbekannter Parameterschlüssel: {key}"
 unexpected_argument = "{prefix}&r &7› &7&cUnerwartetes Argument \"{argument}\". Optionale Parameter müssen als Schlüssel angegeben werden, z. B. seed=123"
 unclosed_group = "{prefix}&r &7› &7&cFehlende schließende Klammer \"]\" für Parameter {key}"
@@ -402,21 +405,21 @@ execution_failed = "{prefix}&r &7› &7&cBefehl {command} konnte nicht ausgefüh
 [language.menu]
 selected = "ausgewählt"
 command = "Befehl: {command}"
-all-volmit-plugins = "Alle Volmit-Plugins"
-your_language = "Ihre Sprache"
-reset_your_language = "Eigene Sprachauswahl zurücksetzen"
+all-volmit-plugins = "alle Volmit-Plugins"
+your_language = "Deine Sprache"
+reset_your_language = "Deine Sprache zurücksetzen"
 server_default = "Serverstandard"
 edit_messages = "Sprachnachrichten bearbeiten"
 use_server_default = "Serverstandard verwenden"
 current = "Aktuell: {locale}"
-current_with_personal = "Aktuell: {locale} (Ihre: {personal})"
-your_description = "Ändern Sie nur die Nachrichten, die Sie sehen."
-reset_description = "Verwenden Sie die Standardsprache des Servers."
-server_description = "Ändern Sie die Standardsprache des Servers."
-edit_description = "Öffnen Sie den Nachrichteneditor für jede Sprache."
-select_description = "Klicken Sie, um diese Sprache auszuwählen."
-remove_personal_description = "Entfernen Sie Ihre persönliche Sprachauswahl."
-no_controls = "Für Sie sind keine Spracheinstellungen verfügbar."
+current_with_personal = "Aktuell: {locale} (Deine: {personal})"
+your_description = "Ändere nur die Nachrichten, die du siehst."
+reset_description = "Standardsprache des Servers verwenden."
+server_description = "Standardsprache des Servers ändern"
+edit_description = "Nachrichteneditor für jede Sprache öffnen."
+select_description = "Klicken, um diese Sprache auszuwählen."
+remove_personal_description = "Deine persönliche Sprachauswahl entfernen."
+no_controls = "Für dich sind keine Spracheinstellungen verfügbar."
 
 [language.editor]
 title = "{prefix} › {section}"
@@ -457,7 +460,7 @@ line = "Zeile {line}"
 [language.editor.prompt]
 variables = "{prefix}&r &7› &7&7Variablen: {variables}"
 value = "{prefix}&r &7› &7&7Gib im Chat einen neuen Wert für {key} ein."
-search = "{prefix}&r &7› &7&7Suche nach Nachrichtenschlüssel oder Text. Gib cancel ein, um zurückzukehren."
+search = "{prefix}&r &7› &7&7Suche nach Nachrichtenschlüsseln oder Text. Gib cancel ein, um zurückzukehren."
 guidance = "{prefix}&r &7› &7&7Verwende \\n für Zeilenumbrüche und \\\\ für einen Backslash oder gib cancel ein, um zurückzukehren."
 current = "{prefix}&r &7› &7&7Aktueller Wert: {value}"
 
@@ -482,15 +485,15 @@ empty = "(leer)"
 
 [language.error]
 unavailable-for-all = "{prefix}&r &7› &7&cDie Sprache {locale} ist nicht für alle ausgewählten Plugins verfügbar."
-stopping = "{prefix}&r &7› &7&cSprachauswahl ist nicht verfügbar, während das Plugin stoppt."
+stopping = "{prefix}&r &7› &7&cDie Sprachauswahl ist nicht verfügbar, während das Plugin beendet wird."
 server-locale-required = "{prefix}&r &7› &7&cWähle einen Sprachcode wie en_US als Serverstandard."
 plugin-server-permission = "{prefix}&r &7› &7&cDu darfst die Serversprache für {prefix} nicht ändern."
 plugin-personal-permission = "{prefix}&r &7› &7&cDu darfst deine Sprache für {prefix} nicht ändern."
-personal-player-only = "{prefix}&r &7› &7&cDie Spracheinstellungen der Spieler müssen im Spiel ausgewählt werden."
-personal-permission = "{prefix}&r &7› &7&cSie haben keine Berechtigung, Ihre Sprache auszuwählen."
+personal-player-only = "{prefix}&r &7› &7&cPersönliche Spracheinstellungen müssen im Spiel ausgewählt werden."
+personal-permission = "{prefix}&r &7› &7&cDu darfst deine Sprache nicht auswählen."
 numeric-page = "{prefix}&r &7› &7&cGib die Seitennummer als Zahl ein."
 no-providers = "{prefix}&r &7› &7&cEs sind keine Volmit-Sprachanbieter verfügbar."
-editor-player-only = "{prefix}&r &7› &7&cÖffnen Sie den Spracheditor im Spiel."
+editor-player-only = "{prefix}&r &7› &7&cÖffne den Spracheditor im Spiel."
 
 [language.selection]
 server-selected = "{prefix}&r &7› &7&7Serversprache ist jetzt {locale}."
@@ -502,8 +505,17 @@ english-fallback = "{prefix}&r &7› &7&7{locale} ist nicht verfügbar; Englisch
 
 [language.usage]
 volmit-selection = "{prefix}&r &7› &7&7Syntax: /volmit plugins languages [locale]"
-selection = "{prefix}&r &7› &7&7Syntax: /{command} language self [locale|reset] or server [locale]"
+selection = "{prefix}&r &7› &7&7Syntax: /{command} language self [locale|reset] oder server [locale]"
 editor = "{prefix}&r &7› &7&7Syntax: /{command} language server edit [locale]"
+update = "{prefix}&r &7› &7&7Syntax: /{command} language update"
+
+[language.update]
+checking = "{prefix}&r &7› &7&7Das Sprach-Repository wird auf Änderungen geprüft..."
+unchanged = "{prefix}&r &7› &7&7Installierte Sprachen entsprechen bereits dem Repository."
+applied = "{prefix}&r &7› &7&7{locale} aktualisiert ({added} neu, {updated} geändert, {kept} lokale Änderungen behalten)."
+cooldown = "{prefix}&r &7› &7&7Das Sprach-Repository wurde kürzlich geprüft; versuche es in {remaining} erneut."
+locale-failed = "{prefix}&r &7› &7&c{locale} wurde nicht aktualisiert: {reason}"
+failed = "{prefix}&r &7› &7&cSprachaktualisierung fehlgeschlagen: {reason}"
 
 
 [debug]

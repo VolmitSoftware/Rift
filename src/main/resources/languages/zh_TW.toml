@@ -6,52 +6,56 @@
 # /rift language server edit zh_TW
 #
 # === 前綴 ===
-# runtime.prefix 僅包含帶格式的名稱。{prefix} 插入名稱；› 和空格在每則訊息中分別編輯。
+# runtime.prefix 儲存 {prefix} 使用的帶格式外掛程式名稱。分隔符號和空格由各則訊息提供。刪除 {prefix}&r &7› &7 即可隱藏完整的聊天前綴。
 #
 # === 格式 ===
-# 顏色：&0-&f、&k-&r、&#RRGGBB、&xRRGGBB、&x&R&R&G&G&B&B 和 [RRGGBB]。自訂格式仍可使用 MiniMessage。
+# 顏色和樣式：&0-&f、&k-&r。RGB 顏色：&#RRGGBB、&xRRGGBB、&x&R&R&G&G&B&B、[RRGGBB]。MiniMessage 支援自訂格式。在 & 或 [ 前加上反斜線即可照原樣顯示。
 #
 # === 變數 ===
 # 請勿變更變數名稱，僅使用各訊息中原有的變數。
-#   {after}  變更後的值
+#   {added}  語言更新中新增的訊息數
+#   {after}  新值
 #   {argument}  指令引數
-#   {before}  變更前的值
-#   {category}  指令類別
-#   {command}  指令文字或名稱
-#   {count}  項目或結果數量
-#   {detail}  描述詳情
-#   {group}  權限或玩家群組
-#   {id}  識別碼
-#   {key}  設定鍵或訊息鍵
+#   {before}  原值
+#   {category}  類別
+#   {command}  指令路徑
+#   {count}  項目數量
+#   {detail}  項目詳情
+#   {group}  訊息群組
+#   {id}  隔離 ID
+#   {kept}  語言更新中保留的本機修改數
+#   {key}  參數鍵或訊息鍵
 #   {label}  顯示標籤
-#   {line}  來源行或行號
-#   {locale}  語言地區
-#   {maximum}  最大允許值
-#   {name}  項目名稱或顯示名稱
-#   {operation}  操作名稱
-#   {parameter}  參數名稱
-#   {permission}  權限節點
-#   {personal}  個人地區設定
-#   {player}  玩家名稱
-#   {prefix}  runtime.prefix 僅包含帶格式的名稱。{prefix} 插入名稱；› 和空格在每則訊息中分別編輯。
-#   {reason}  原因或錯誤詳情
-#   {seconds}  持續秒數
-#   {setting}  設定名稱
-#   {target}  目標播放器、 實體或值
-#   {title}  標題文字
-#   {type}  值或資料類型
+#   {line}  行號
+#   {locale}  語言代碼
+#   {maximum}  最大輸入長度
+#   {name}  項目名稱
+#   {operation}  操作
+#   {parameter}  參數
+#   {permission}  權限
+#   {personal}  與伺服器預設語言不同時，玩家的個人語言
+#   {player}  玩家
+#   {prefix}  runtime.prefix 中的帶格式名稱；分隔符號和空格由各則訊息提供
+#   {reason}  失敗詳情
+#   {remaining}  距下次允許檢查語言的剩餘時間
+#   {seconds}  持續時間
+#   {setting}  設定
+#   {target}  選取目標
+#   {title}  區段標題
+#   {type}  值型別
+#   {updated}  語言更新中變更的訊息數
 #   {value}  目前值或新值
 #   {variables}  可用佔位符
-#   {version}  版本
-#   {world}  世界名稱
+#   {version}  外掛程式版本
+#   {world}  世界
 
 #   {section}  編輯器區段
 #   {path}  本機報告路徑
-#   {url}  報告網址
+#   {url}  已上傳報告的網址
 
 #   {step}  每次點擊的調整量
 
-#   {limit}  最大玩家人數
+#   {limit}  世界允許進入的最大玩家人數
 
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
@@ -60,44 +64,44 @@ prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 already_exists = "{prefix}&r &7› &7&e{world} 已存在。使用 &f/rift info {world}&e 檢查，或選擇其他名稱。"
 
 [rift.command]
-policy_player_limit = "限制進入的玩家人數；0 表示無限制"
-policy_travel_entry = "控制跨世界進入；DENY 阻止，INHERIT 保持原有行為"
-policy_travel_exit = "控制跨世界離開；DENY 阻止傳送，但不阻止重生或登入恢復"
-policy_first_join = "為從此世界首次加入的玩家選擇已載入的受管世界出生點；default 使用登入目的地"
-policy_login = "為從此世界登入的玩家選擇已載入的受管世界出生點；default 保留伺服器位置"
-policy_game_mode = "設定進入世界、登入及重生時的遊戲模式；INHERIT 停止強制設定"
+policy_player_limit = "限制進入此世界的玩家人數；0 表示無限制"
+policy_travel_entry = "控制跨世界進入；DENY 阻止進入，INHERIT 保持不變"
+policy_travel_exit = "控制跨世界離開；DENY 阻止離開，但不影響重生或登入復原"
+policy_first_join = "為分配到此世界的首次加入玩家選擇已載入的受管理出生點；default 使用登入時的位置"
+policy_login = "為分配到此世界的登入玩家選擇已載入的受管理出生點；default 保留伺服器位置"
+policy_game_mode = "設定進入世界、加入伺服器及重生時的遊戲模式；INHERIT 停止強制設定"
 policy_flight = "控制生存和冒險模式下的飛行；INHERIT 解除 {prefix} 的飛行設定"
-policy_weather = "鎖定晴天、雨天或雷暴；INHERIT 重新允許天氣變化"
+policy_weather = "鎖定晴天、雨天或雷雨；INHERIT 重新允許天氣變化"
 policy_natural_animals = "DENY 禁止動物自然生成；ALLOW 仍遵守其他生成限制"
 policy_natural_monsters = "DENY 禁止怪物自然生成；ALLOW 仍遵守其他生成限制"
-policy_edit = "開啟世界策略編輯器"
+policy_edit = "開啟世界原則編輯器"
 check_all = "檢查所有符合條件的世界，不進行變更"
 version = "顯示 {prefix} 版本"
 root = "安全管理伺服器世界"
-create = "建立和管理一個新世界"
+create = "建立並管理新世界"
 import = "匯入現有的世界目錄"
-load = "裝入已管理或發現的世界"
-unload = "疏散玩家並解除安裝一個世界"
-delete = "將一個管理的世界移到隔離區"
-restore = "恢復隔離世界"
-teleport = "傳送到一個裝滿的世界上"
-send = "將另一個玩家傳送到裝入器的世界"
-list = "已裝入、管理、發現和隔離世界的清單"
-info = "顯示一個世界的詳細狀態"
-generators = "顯示管理世界已經使用的生成器識別符號"
-config = "開啟遊戲 {prefix} 配置編輯器"
+load = "載入受管理或已發現的世界"
+unload = "疏散玩家並卸載世界"
+delete = "將受管理世界移入隔離區"
+restore = "還原已隔離的世界"
+teleport = "傳送到已載入的世界"
+send = "將其他玩家傳送到已載入的世界"
+list = "列出已載入、受管理、已發現和已隔離的世界"
+info = "顯示單一世界的詳細狀態"
+generators = "顯示受管理世界已使用的生成器識別碼"
+config = "開啟遊戲內 {prefix} 設定編輯器"
 language = "選擇可用的 {prefix} 語言"
-status = "檢查平臺的能力和 {prefix} 狀態"
-debug = "{prefix}診斷工具"
-debug_dump = "創建全面的{prefix}診斷報告"
-autoload = "啟動時是否改變管理的世界負載"
-protect = "保護或不保護受管理的世界"
+status = "檢視平台能力和 {prefix} 狀態"
+debug = "{prefix} 診斷工具"
+debug_dump = "產生完整的 {prefix} 診斷報告"
+autoload = "設定受管理世界是否在啟動時載入"
+protect = "保護或取消保護受管理世界"
 
-check = "執行唯讀的世界預先檢查"
+check = "對世界執行唯讀預先檢查"
 unmanage = "停止管理世界而不變更其檔案"
 
-policy = "查看及編輯每個受管理世界的政策"
-policy_show = "顯示受管理世界目前生效的政策"
+policy = "檢視及編輯每個受管理世界的原則"
+policy_show = "顯示受管理世界目前生效的原則"
 policy_difficulty = "設定世界難度，或繼承伺服器值"
 policy_pvp = "允許或禁止 PvP，或繼承伺服器值"
 policy_gamerule = "設定遊戲規則，或停止管理該規則"
@@ -106,7 +110,7 @@ policy_spawn_clear = "停止管理此世界的出生點"
 policy_border = "設定此世界的受管理邊界"
 policy_border_clear = "重設此世界的邊界並停止管理"
 policy_access = "要求擁有權限才能進入此世界，或清除該要求"
-policy_respawn = "將在此世界死亡後的重生位置設為另一個受管理世界或伺服器預設位置"
+policy_respawn = "將在此世界死亡的玩家送往另一個受管理世界或伺服器預設位置重生"
 policy_tag = "新增或移除管理員標籤"
 
 [rift.parameter]
@@ -116,17 +120,17 @@ policy_weather = "CLEAR、RAIN、THUNDER 或 INHERIT"
 tag_filter = "依管理員標籤篩選，或使用 all"
 tag_group = "依管理員標籤將符合條件的世界分組"
 name = "世界名稱"
-environment = "NORMAL, NETHER, THE_END,或 CUSTOM"
-generator = "vanilla, void,或 PluginName[:生成者-id]."
-seed = "random 或簽名的64位種子"
-type = "Bukkit 世界型別"
-save = "解除安裝前儲存"
-id = "檢疫條目編號"
+environment = "NORMAL、NETHER、THE_END 或 CUSTOM"
+generator = "vanilla、void 或 PluginName[:generator-id]"
+seed = "random 或 64 位元有號整數種子"
+type = "Bukkit 世界類型"
+save = "卸載前儲存"
+id = "隔離項目 ID"
 player = "線上玩家名稱"
 enabled = "true 或 false"
-page = "從一開始編號的傳送門列表頁"
+page = "結果頁碼"
 upload = "啟用公開上傳時上傳報告"
-sender = "命令傳送者"
+sender = "指令傳送者"
 
 managed_world = "受管理世界名稱"
 policy_difficulty = "PEACEFUL、EASY、NORMAL、HARD 或 INHERIT"
@@ -138,47 +142,46 @@ border_center_x = "邊界中心的 X 座標"
 border_center_z = "邊界中心的 Z 座標"
 border_warning_distance = "警告距離（方塊）"
 border_warning_time = "警告時間（秒）"
-border_damage = "越界後每個方塊的傷害"
+border_damage = "在邊界外每超出一個方塊造成的傷害"
 border_buffer = "邊界外的安全距離"
 access_permission = "權限節點或 clear"
-access_denied_message = "拒絕進入時顯示的選用訊息"
+access_denied_message = "拒絕存取時顯示的選用訊息"
 respawn_destination = "受管理世界名稱或 default"
 policy_tag = "管理員標籤名稱"
 tag_enabled = "true 新增標籤；false 移除標籤"
 
 [rift.message]
 policy_world_full = "{prefix}&r &7› &7&c{world} 已滿（上限：{limit}）。"
-policy_travel_denied = "{prefix}&r &7› &7&c{world} 的策略禁止跨世界移動。"
+policy_travel_denied = "{prefix}&r &7› &7&c{world} 的原則禁止跨世界移動。"
 policy_placement_failed = "沒有可進入的世界有空位。請聯絡伺服器管理員。"
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
-permission_denied = "{prefix}&r &7› &7&c需要嗎? &f{permission}&7."
-unknown_command = "{prefix}&r &7› &7&c未知的命令。 使用 &f/rift help&7."
-player_only = "{prefix}&r &7› &7&c此命令需要玩家 。"
-operation_queued = "{prefix}&r &7› &7佇列 &f{operation}&7 (單位:千美元) &d{world}&7."
-operation_failed = "{prefix}&r &7› &7&c{operation} 失敗 &f{world}&7: {reason}"
-created = "{prefix}&r &7› &7建立和管理 &a{world}&7."
-imported = "{prefix}&r &7› &7進口和管理 &a{world}&7."
-loaded = "{prefix}&r &7› &7已裝入 &a{world}&7."
-unloaded = "{prefix}&r &7› &7未裝入 &a{world}&7."
-teleported = "{prefix}&r &7› &7電傳 &a{player}&7 改為: &a{world}&7."
-delete_confirm = "{prefix}&r &7› &7執行 &e/rift delete {world}&7 又在內部 &e{seconds}s (韓語).&7 將其移入隔離區。"
-quarantined = "{prefix}&r &7› &7已移動 &a{world}&7 檢疫為: &a{id}&7."
-restored = "{prefix}&r &7› &7已恢復 &a{world}&7 發件人 &a{id}&7."
-profile_updated = "{prefix}&r &7› &7更新 &a{setting}&7 (單位:千美元) &a{world}&7 改為: &a{value}&7."
-folia_limit = "{prefix}&r &7› &7{operation} 無法使用 Folia 因為它的世界負荷/unload API沒有執行."
-config_saved = "{prefix}&r &7› &7&a配置已儲存 。"
+permission_denied = "{prefix}&r &7› &7&c你需要 &f{permission}&7。"
+unknown_command = "{prefix}&r &7› &7&c未知指令。請使用 &f/rift help&7。"
+player_only = "{prefix}&r &7› &7&c此指令只能由玩家執行。"
+operation_queued = "{prefix}&r &7› &7已將 &f{operation}&7 加入佇列，目標：&d{world}&7。"
+operation_failed = "{prefix}&r &7› &7&c{operation} 在 &f{world}&7 上失敗：{reason}"
+created = "{prefix}&r &7› &7已建立並管理 &a{world}&7。"
+imported = "{prefix}&r &7› &7已匯入並管理 &a{world}&7。"
+loaded = "{prefix}&r &7› &7已載入 &a{world}&7。"
+unloaded = "{prefix}&r &7› &7已卸載 &a{world}&7。"
+teleported = "{prefix}&r &7› &7已將 &a{player}&7 傳送到 &a{world}&7。"
+delete_confirm = "{prefix}&r &7› &7再次執行 &e/rift delete {world}&7（需在 &e{seconds} 秒&7內）即可將其移入隔離區。"
+quarantined = "{prefix}&r &7› &7已將 &a{world}&7 移入隔離區，項目 ID 為 &a{id}&7。"
+restored = "{prefix}&r &7› &7已還原 &a{world}&7（來自隔離項目 &a{id}&7）。"
+profile_updated = "{prefix}&r &7› &7已將 &a{world}&7 的 &a{setting}&7 更新為 &a{value}&7。"
+folia_limit = "{prefix}&r &7› &7{operation} 無法在 Folia 上使用，因為 Folia 尚未實作世界載入/卸載 API。"
 config_opened = "{prefix}&r &7› &7已開啟完整的遊戲內設定編輯器。&r"
-config_save_failed = "{prefix}&r &7› &7&c配置無法儲存。 請檢查控制檯 。"
-empty_list = "{prefix}&r &7› &7未找到匹配的世界 。"
-player_offline = "{prefix}&r &7› &7&c玩家不線上 : &f{player}"
-unknown_world = "{prefix}&r &7› &7&c未知的世界 : &f{world}"
+config_save_failed = "{prefix}&r &7› &7&c無法儲存設定。請檢查主控台。"
+empty_list = "{prefix}&r &7› &7找不到符合條件的世界。"
+player_offline = "{prefix}&r &7› &7&c玩家不在線上：&f{player}"
+unknown_world = "{prefix}&r &7› &7&c未知世界：&f{world}"
 section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
 entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
 detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
 info_title = "{prefix}&r &7› &7&d{world}"
 status_title = "{prefix}&r &7› &7{prefix} {version} 狀態"
-generator_format = "{prefix}&r &7› &7Custom 格式 : &fPluginName[:生成者-id]."
-folia_status_note = "{prefix}&r &7› &7Folia 支援 {prefix}'的讀取,編輯,剖面,和電傳傳送功能;動態世界生命週期由平臺API鎖定."
+generator_format = "{prefix}&r &7› &7自訂格式：&fPluginName[:generator-id]"
+folia_status_note = "{prefix}&r &7› &7Folia 支援 {prefix} 的讀取、編輯器、設定檔和傳送功能；動態世界生命週期受平台 API 限制。"
 
 unmanaged_loaded = "{prefix}&r &7› &7已停止管理 &a{world}&7，未變更其檔案。該世界會保持載入，直到其他外掛程式或伺服器將其卸載。"
 unmanaged_unloaded = "{prefix}&r &7› &7已停止管理 &a{world}&7，未變更其檔案。{prefix} 將不再於啟動時載入該世界。"
@@ -196,36 +199,36 @@ policy_flight = "飛行"
 policy_weather = "天氣"
 policy_natural_animals = "動物自然生成"
 policy_natural_monsters = "怪物自然生成"
-worlds = "世間"
-quarantine = "檢疫"
-loaded = "已裝入"
-managed = "管理"
+worlds = "世界"
+quarantine = "隔離區"
+loaded = "已載入"
+managed = "受管理"
 on_disk = "在磁碟上"
-missing = "缺少管理的世界"
+missing = "缺少的受管理世界"
 environment = "環境"
-generator = "發電機"
+generator = "生成器"
 seed = "種子"
-autoload = "自動裝入"
+autoload = "自動載入"
 protected = "受保護"
-operation_active = "正在執行"
-world_types = "世界型別"
-configured_generators = "配置的發電機"
-available = "備有"
-unavailable = "無"
+operation_active = "操作進行中"
+world_types = "世界類型"
+configured_generators = "已設定的生成器"
+available = "可用"
+unavailable = "無法使用"
 server = "伺服器"
-java_runtime = "Java 執行時間"
-plugin_bytecode = "外掛位元組程式碼"
-platform = "平臺"
+java_runtime = "Java 執行環境"
+plugin_bytecode = "外掛程式位元組碼"
+platform = "平台"
 dynamic_lifecycle = "動態世界生命週期"
-world_container = "世界集裝箱"
-writable = "世界集裝箱可寫"
+world_container = "世界存放目錄"
+writable = "世界存放目錄可寫入"
 locale = "語言"
-world_counts = "世間"
-quarantine_entries = "檢疫條目"
+world_counts = "世界"
+quarantine_entries = "隔離項目"
 
 world_key = "世界鍵"
 storage_path = "儲存路徑"
-storage_layout = "儲存配置"
+storage_layout = "儲存結構"
 players = "玩家"
 generator_status = "生成器狀態"
 primary_world = "主要世界"
@@ -246,14 +249,14 @@ server_default = "伺服器預設值"
 
 [rift.explain]
 loaded = "Bukkit 目前是否已在記憶體中啟用此世界。"
-managed = "{prefix} 是否管理此世界的設定檔，並能還原其生成器和啟動設定。"
+managed = "{prefix} 是否擁有此世界的設定檔，並能還原其生成器和啟動設定。"
 on_disk = "世界是否已載入，或存在包含 level.dat 的有效世界目錄。"
-environment = "執行中的世界或管理設定檔所記錄的 Bukkit 世界環境。"
-generator = "載入此受管理世界時，{prefix} 重新套用的生成器。void 是 {prefix} 內建的空世界生成器。"
-seed = "此世界記錄的種子。變更此顯示值不會重新生成既有地形。"
+environment = "執行中的世界或受管理設定檔所記錄的 Bukkit 世界環境。"
+generator = "載入此受管理世界時 {prefix} 重新套用的生成器。void 是 {prefix} 內建的空世界生成器。"
+seed = "此世界記錄的種子。變更此顯示值絕不會重新生成既有地形。"
 autoload = "{prefix} 是否在伺服器啟動時自動載入此受管理世界。"
-protected = "受保護的管理世界不能移入 {prefix} 隔離區。"
-operation_active = "世界生命週期操作目前是否持有 {prefix} 的對應世界鎖定。"
+protected = "受保護的受管理世界不能移入 {prefix} 隔離區。"
+operation_active = "目前是否有生命週期操作持有 {prefix} 的單一世界鎖定。"
 server = "Bukkit 回報的目前伺服器實作及版本。"
 java_runtime = "目前執行伺服器的 Java 執行環境。{prefix} 需要 Java 25 或更新版本。"
 plugin_bytecode = "能夠載入 {prefix} 已編譯類別的最舊 Java 執行環境版本。"
@@ -262,17 +265,17 @@ dynamic_lifecycle = "此平台是否安全支援在執行時建立、載入、�
 world_container = "存放 Bukkit 世界資料夾的伺服器目錄。"
 writable = "作業系統目前是否允許 {prefix} 寫入世界存放目錄。"
 locale = "plugins/Rift/languages 中目前使用的語言檔案。缺少的項目使用內建英文文字。"
-world_counts = "已載入數統計作用中的 Bukkit 世界；受管理數統計 {prefix} 設定檔；缺少數統計既未載入、磁碟上也不存在對應世界的管理設定檔。"
+world_counts = "已載入數統計作用中的 Bukkit 世界；受管理數統計 {prefix} 設定檔；缺少數統計既未載入、也不在磁碟上的受管理設定檔。"
 quarantine = "由 {prefix} delete 移至隔離區、可透過隔離 ID 還原的世界。"
 world_entry = "已載入表示目前作用中；受管理表示有 {prefix} 設定檔；在磁碟上表示存在有效但未載入的世界資料夾。"
 
 world_key = "該世界的標準 Paper 識別碼。"
-storage_path = "解析後的確切目錄，此世界的檔案儲存於其中。"
-storage_layout = "擁有此世界儲存目錄的命名空間。"
-players = "目前位於這個已載入世界中的玩家數量。"
-generator_status = "已設定的生成器是內建生成器，或其提供者是否可用。"
-primary_world = "此世界是否為伺服器主要世界，主要世界不能停止管理或卸載。"
-check_result = "偵測到的阻礙因素和警告摘要。"
+storage_path = "儲存此世界檔案的確切解析目錄。"
+storage_layout = "擁有此世界維度目錄的命名空間。"
+players = "目前位於此已載入世界中的玩家數量。"
+generator_status = "已設定的生成器是否為內建生成器，或其提供者是否可用。"
+primary_world = "此世界是否為伺服器主要世界；主要世界不能停止管理或卸載。"
+check_result = "偵測到的生命週期阻礙因素和警告摘要。"
 
 [rift.feedback]
 title = "{prefix}"
@@ -281,105 +284,102 @@ teleport_subtitle = "&a抵達 &f{world}"
 failure_title = "&c操作失敗"
 failure_subtitle = "&7{operation}&8: &f{world}"
 action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
-action_teleport = "{prefix}&r &7› &7&a傳送到 &a{world}"
-action_failure = "{prefix}&r &7› &7&c{operation} 失敗 &f{world}"
+action_teleport = "{prefix}&r &7› &7&a已傳送到 &a{world}"
+action_failure = "{prefix}&r &7› &7&c{operation} 在 &f{world} 上失敗"
 
 [rift.gui]
 updates = "&d更新通知"
-policy_native_default = "&7遊戲預設值: &f{value}"
-policy_inherited = "&7策略: INHERIT"
-policy_unloaded = "&7世界未載入：繼承值顯示為遊戲預設值"
-policy_default = "&7預設值: &f{value}"
-policy_number = "&7左鍵: +{step}; 右鍵: -{step}; Shift: x10"
+policy_native_default = "&7原版預設值：&f{value}"
+policy_inherited = "&7原則：INHERIT"
+policy_unloaded = "&7世界未載入：繼承值顯示為原版預設值"
+policy_default = "&7預設值：&f{value}"
+policy_number = "&7左鍵：+{step}；右鍵：-{step}；Shift：×10"
 policy_select = "&7點擊從可用值中選擇"
 policy_selected = "&a已選擇"
 policy_apply = "&a套用出生點座標"
 policy_here = "&d使用我的目前位置"
-policy_draft = "&7草稿: &f{value}"
-policy_enabled = "&d託管"
+policy_draft = "&7草稿：&f{value}"
+policy_enabled = "&d受管理"
 policy_x = "&dX 座標"
 policy_y = "&dY 座標"
 policy_z = "&dZ 座標"
 policy_yaw = "&d偏航角"
 policy_border_size = "&d邊界直徑"
-policy_warning_distance = "&d警告距離 (方塊)"
-policy_warning_time = "&d警告時間 (秒)"
+policy_warning_distance = "&d警告距離（方塊）"
+policy_warning_time = "&d警告時間（秒）"
 policy_damage_amount = "&d每方塊傷害"
-policy_damage_buffer = "&d傷害緩衝距離 (方塊)"
-policy_title = "&d世界策略"
-policy_reset = "&7按 Q 還原預設策略"
+policy_damage_buffer = "&d傷害緩衝距離（方塊）"
+policy_title = "&d世界原則"
+policy_reset = "&7按 Q 還原預設原則"
 policy_spawn = "&7調整座標後套用安全出生點"
-policy_center = "&d邊界中心 (x z)"
-policy_warning = "&d邊界警告 (方塊 秒)"
-policy_damage = "&d邊界傷害 (傷害量 緩衝距離)"
 policy_denial = "&d拒絕存取訊息"
 policy_tags = "&7輸入以逗號分隔的標籤，或輸入 clear"
 policy_clear = "&7輸入 clear 還原預設值"
 policy_previous = "&e上一頁"
 policy_next = "&e下一頁"
-current = "&7當前 : &f{value}"
-autoload = "&d自動裝入管理的世界"
+current = "&7目前：&f{value}"
+autoload = "&d自動載入受管理世界"
 delete = "&d允許世界隔離"
-verbose = "&dVerbose 記錄"
+verbose = "&d詳細記錄"
 debug_upload = "&d公開除錯上傳"
-bstats = "&d匿名組織 bStats 計量"
-confirm_seconds = "&d刪除確認秒"
-poll = "&d熱量重置民意調查( 毫秒)"
-cooldown = "&d熱重灌冷卻毫秒"
+bstats = "&d匿名 bStats 統計資料"
+confirm_seconds = "&d刪除確認時間（秒）"
+poll = "&d熱重新載入輪詢間隔（毫秒）"
+cooldown = "&d熱重新載入冷卻時間（毫秒）"
 evacuation = "&d疏散世界"
 close = "&c關閉"
-splash = "&d啟動飛濺螢幕"
-lifecycle_feedback = "&d世界生命週期反饋"
-teleport_feedback = "&d傳送反饋"
-failure_feedback = "&d反饋失敗"
-title_popups = "&d標題彈出"
-action_bar_popups = "&d動作欄彈出"
-sounds = "&d反饋聲音"
-root_title = "{prefix} 配置"
+splash = "&d啟動畫面"
+lifecycle_feedback = "&d世界生命週期回饋"
+teleport_feedback = "&d傳送回饋"
+failure_feedback = "&d失敗回饋"
+title_popups = "&d標題彈出提示"
+action_bar_popups = "&d動作列彈出提示"
+sounds = "&d回饋音效"
+root_title = "{prefix} 設定"
 category_title = "{prefix}: {category}"
-category_open = "&8單擊以編輯本節中的每個設定"
-back = "&e回來"
-toggle = "&8點選切換"
-exact_number = "&8左邊/right 調整; 按 Q 輸入精確值"
-text = "&8單擊在聊天中輸入新值"
-prompt = "{prefix}&r &7› &7鍵入新值 &f{setting}&7 在聊天時。"
-prompt_cancel = "{prefix}&r &7› &7型別 &f取消( E)&7 返回而不改變它。"
-prompt_cancelled = "{prefix}&r &7› &7配置輸入已取消 。"
-prompt_timeout = "{prefix}&r &7› &7配置輸入超時 。"
-setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7新值: &a{after} &7原值: &f{before}&7。"
-setting_failed = "{prefix}&r &7› &7&c無法更新 &f{setting}&7: {reason}"
-language = "&d語言語言語言"
-language_select = "&8點擊以從可用語言中選擇"
-lifecycle_sound = "&d世界生命週期音響"
-teleport_sound = "&d傳送聲音"
-failure_sound = "&d失敗聲音"
-sound_volume = "&d聲音音量"
-sound_pitch = "&d音響投注"
-title_fade_in = "&d標題已淡出"
-title_stay = "&d標題保留勾選"
-title_fade_out = "&d標題淡出勾選"
+category_open = "&8點擊編輯此類別中的所有設定"
+back = "&e返回"
+toggle = "&8點擊切換"
+exact_number = "&8左鍵/右鍵調整；按 Q 輸入精確值"
+text = "&8點擊在聊天中輸入新值"
+prompt = "{prefix}&r &7› &7請在聊天中輸入 &f{setting}&7 的新值。"
+prompt_cancel = "{prefix}&r &7› &7輸入 &fcancel&7 可不做變更並返回。"
+prompt_cancelled = "{prefix}&r &7› &7已取消設定輸入。"
+prompt_timeout = "{prefix}&r &7› &7設定輸入已逾時。"
+setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7已改為 &a{after} &7（原值 &f{before}&7）。"
+setting_failed = "{prefix}&r &7› &7&c無法更新 &f{setting}&7：{reason}"
+language = "&d語言"
+language_select = "&8點擊從可用語言中選擇"
+lifecycle_sound = "&d世界生命週期音效"
+teleport_sound = "&d傳送音效"
+failure_sound = "&d失敗音效"
+sound_volume = "&d音效音量"
+sound_pitch = "&d音效音調"
+title_fade_in = "&d標題淡入時長（刻）"
+title_stay = "&d標題停留時長（刻）"
+title_fade_out = "&d標題淡出時長（刻）"
 
 [rift.gui.category]
-general = "&d一般安全( S)"
-feedback = "&d反饋聲音( Sounds)"
-presentation = "&d列報"
+general = "&d一般與安全"
+feedback = "&d回饋與音效"
+presentation = "&d顯示效果"
 diagnostics = "&d診斷&r"
-languages = "&d語言和訊息"
+languages = "&d語言與訊息"
 
 [director.help]
-no_subcommands = "此頁面沒有子命令。"
+no_subcommands = "此頁面沒有子指令。"
 no_description = "未提供說明"
-command_group = "命令群組。點擊以開啟。"
+command_group = "指令群組。點擊以開啟。"
 category = "指令類別"
-no_parameters = "無參數。點擊以預先填入命令。"
-parameters_hover = "將滑鼠懸停在參數上以瞭解更多。"
+no_parameters = "無參數。點擊以預先填入指令。"
+parameters_hover = "將滑鼠游標停留在參數上以瞭解更多。"
 
 [director.help.navigation]
 back = "返回"
-page = "頁面"
+page = "頁"
 
 [director.help.navigation.parent]
-hover = "返回上層命令群組"
+hover = "返回上層指令群組"
 
 [director.help.navigation.previous]
 hover = "上一頁"
@@ -388,43 +388,43 @@ hover = "上一頁"
 hover = "下一頁"
 
 [director.help.parameter]
-required = "此參數為必填項。"
-optional = "此參數為可選項。"
-default = "未指定時預設為 \"{value}\"。"
-type = "此參數的類型為 {type}。"
+required = "此參數為必填。"
+optional = "此參數為選用。"
+default = "未指定時預設為「{value}」。"
+type = "此參數的型別為 {type}。"
 
 [director.runtime.error]
 invalid_origin = "{prefix}&r &7› &7&c無法從此來源執行該指令。"
-unknown_parameter = "{prefix}&r &7› &7&c未知參數鍵: {key}"
-unexpected_argument = "{prefix}&r &7› &7&c意外參數 \"{argument}\"。選用參數必須使用鍵指定，例如 seed=123"
-unclosed_group = "{prefix}&r &7› &7&c引數 {key} 缺少閉合的 \"]\""
-conversion_failed = "{prefix}&r &7› &7&c無法將 \"{value}\" 轉換為 {parameter} 所需的 {type}"
+unknown_parameter = "{prefix}&r &7› &7&c未知的參數鍵：{key}"
+unexpected_argument = "{prefix}&r &7› &7&c非預期的引數「{argument}」。選用參數必須指定鍵，例如 seed=123"
+unclosed_group = "{prefix}&r &7› &7&c參數 {key} 缺少結尾的「]」"
+conversion_failed = "{prefix}&r &7› &7&c無法將「{value}」轉換為 {parameter} 所需的 {type}"
 default_parse_failed = "{prefix}&r &7› &7&c無法解析參數 {parameter} 的預設值"
-missing_argument = "{prefix}&r &7› &7&c缺少參數 \"{parameter}\" ({type})"
-execution_failed = "{prefix}&r &7› &7&c執行指令 {command} 失敗: {reason}"
+missing_argument = "{prefix}&r &7› &7&c缺少引數「{parameter}」（{type}）"
+execution_failed = "{prefix}&r &7› &7&c執行指令 {command} 失敗：{reason}"
 
 [language.menu]
 selected = "已選擇"
-command = "命令: {command}"
-all-volmit-plugins = "所有 Volmit 外掛"
-your_language = "您的語言"
-reset_your_language = "重設您的語言"
+command = "指令：{command}"
+all-volmit-plugins = "所有 Volmit 外掛程式"
+your_language = "你的語言"
+reset_your_language = "重設你的語言"
 server_default = "伺服器預設語言"
 edit_messages = "編輯語言訊息"
 use_server_default = "使用伺服器預設語言"
 current = "目前：{locale}"
-current_with_personal = "目前：{locale}（您的：{personal}）"
-your_description = "只變更您看到的訊息。"
+current_with_personal = "目前：{locale}（你的：{personal}）"
+your_description = "只變更你看到的訊息。"
 reset_description = "使用伺服器預設語言。"
-server_description = "變更伺服器預設語言。"
+server_description = "變更伺服器預設語言"
 edit_description = "開啟各語言的訊息編輯器。"
 select_description = "點擊以選擇此語言。"
-remove_personal_description = "移除您的個人語言選擇。"
-no_controls = "您無權使用語言設定。"
+remove_personal_description = "移除你的個人語言選擇。"
+no_controls = "你沒有可用的語言選項。"
 
 [language.editor]
 title = "{prefix} › {section}"
-loading = "{prefix}&r &7› &7&7正在載入 {locale} 的訊息..."
+loading = "{prefix}&r &7› &7&7正在載入 {locale} 的訊息……"
 
 [language.editor.category]
 open = "&8點擊開啟此類別。&r"
@@ -436,8 +436,8 @@ no-permission = "{prefix}&r &7› &7&c你沒有權限編輯 {prefix} 的語言�
 
 [language.editor.input]
 unable-to-save = "{prefix}&r &7› &7&7無法儲存：{reason}"
-too-long = "{prefix}&r &7› &7&7輸入最多可包含 {maximum} 個字元。"
-expired = "{prefix}&r &7› &7&7語言編輯器的輸入時間已到期。"
+too-long = "{prefix}&r &7› &7&7編輯器輸入最多只能包含 {maximum} 個字元。"
+expired = "{prefix}&r &7› &7&7語言編輯器輸入已逾時。"
 
 [language.editor.locale]
 open = "&8點擊開啟此語言。&r"
@@ -447,10 +447,10 @@ variables = "&8{variables}&r"
 edit-plural = "&7點擊編輯複數形式。&r"
 edit-lines = "&7點擊逐行編輯。&r"
 edit-chat = "&7點擊在聊天中編輯。&r"
-current-value = "&7目前值:&r"
+current-value = "&7目前值：&r"
 
 [language.editor.navigation]
-previous-page = "&e前一頁&r"
+previous-page = "&e上一頁&r"
 next-page = "&e下一頁&r"
 close = "&c關閉&r"
 back = "&e返回&r"
@@ -459,11 +459,11 @@ back = "&e返回&r"
 line = "第 {line} 行"
 
 [language.editor.prompt]
-variables = "{prefix}&r &7› &7&7變數: {variables}"
+variables = "{prefix}&r &7› &7&7變數：{variables}"
 value = "{prefix}&r &7› &7&7請在聊天中輸入 {key} 的新值。"
 search = "{prefix}&r &7› &7&7搜尋訊息鍵或內容。輸入 cancel 返回。"
 guidance = "{prefix}&r &7› &7&7使用 \\n 表示換行，\\\\ 表示反斜線，或輸入 cancel 返回。"
-current = "{prefix}&r &7› &7&7目前值： {value}"
+current = "{prefix}&r &7› &7&7目前值：{value}"
 
 [language.editor.saved]
 summary = "{prefix}&r &7› &7&7已儲存 {locale}。語言選擇保持不變。"
@@ -482,37 +482,46 @@ group-title = "{locale} / {group}"
 
 [language.editor.value]
 none = "無"
-empty = "(空)"
+empty = "（空）"
 
 [language.error]
-unavailable-for-all = "{prefix}&r &7› &7&c語言 {locale} 並非適用於所有選取的外掛。"
-stopping = "{prefix}&r &7› &7&c外掛停止期間無法選擇語言。"
+unavailable-for-all = "{prefix}&r &7› &7&c並非所有選取的外掛程式都提供語言 {locale}。"
+stopping = "{prefix}&r &7› &7&c外掛程式停止期間無法選擇語言。"
 server-locale-required = "{prefix}&r &7› &7&c請選擇 en_US 等語言代碼作為伺服器預設語言。"
 plugin-server-permission = "{prefix}&r &7› &7&c你沒有權限變更 {prefix} 的伺服器語言。"
 plugin-personal-permission = "{prefix}&r &7› &7&c你沒有權限為 {prefix} 選擇個人語言。"
 personal-player-only = "{prefix}&r &7› &7&c玩家必須在遊戲中選擇個人語言。"
 personal-permission = "{prefix}&r &7› &7&c你沒有權限選擇個人語言。"
 numeric-page = "{prefix}&r &7› &7&c請輸入數字頁碼。"
-no-providers = "{prefix}&r &7› &7&c沒有可用的 Volmit 語言提供程式。"
+no-providers = "{prefix}&r &7› &7&c沒有可用的 Volmit 語言提供者。"
 editor-player-only = "{prefix}&r &7› &7&c請在遊戲中開啟語言編輯器。"
 
 [language.selection]
-server-selected = "{prefix}&r &7› &7&7{prefix}：伺服器語言現在是 {locale}。"
-server-default-selected = "{prefix}&r &7› &7&7{prefix}：你的語言現在跟隨伺服器預設語言。"
-save-failed = "{prefix}&r &7› &7&c{prefix}：無法儲存語言選擇；請檢查伺服器主控台。"
-preparing = "{prefix}&r &7› &7&7正在為 {target} 準備語言 {locale}..."
-personal-selected = "{prefix}&r &7› &7&7{prefix}：你的語言現在是 {locale}。"
-english-fallback = "{prefix}&r &7› &7&7{prefix}：{locale} 無法使用；將使用英語（en_US）。"
+server-selected = "{prefix}&r &7› &7&7伺服器語言現在是 {locale}。"
+server-default-selected = "{prefix}&r &7› &7&7你的語言現在跟隨伺服器預設語言。"
+save-failed = "{prefix}&r &7› &7&c無法儲存語言選擇；請檢查伺服器主控台。"
+preparing = "{prefix}&r &7› &7&7正在為 {target} 準備語言 {locale}……"
+personal-selected = "{prefix}&r &7› &7&7你的語言現在是 {locale}。"
+english-fallback = "{prefix}&r &7› &7&7{locale} 無法使用；將使用英文（en_US）。"
 
 [language.usage]
-volmit-selection = "{prefix}&r &7› &7&7用法: /volmit plugins languages [locale]"
-selection = "{prefix}&r &7› &7&7用法: /{command} language self [locale|reset] or server [locale]"
-editor = "{prefix}&r &7› &7&7用法: /{command} language server edit [locale]"
+volmit-selection = "{prefix}&r &7› &7&7用法：/volmit plugins languages [locale]"
+selection = "{prefix}&r &7› &7&7用法：/{command} language self [locale|reset] 或 server [locale]"
+editor = "{prefix}&r &7› &7&7用法：/{command} language server edit [locale]"
+update = "{prefix}&r &7› &7&7用法：/{command} language update"
+
+[language.update]
+checking = "{prefix}&r &7› &7&7正在檢查語言儲存庫的變更……"
+unchanged = "{prefix}&r &7› &7&7已安裝的語言與儲存庫一致。"
+applied = "{prefix}&r &7› &7&7已更新 {locale}（新增 {added}，變更 {updated}，保留本機修改 {kept}）。"
+cooldown = "{prefix}&r &7› &7&7最近已檢查過語言儲存庫，請在 {remaining} 後重試。"
+locale-failed = "{prefix}&r &7› &7&c{locale} 未更新：{reason}"
+failed = "{prefix}&r &7› &7&c語言更新失敗：{reason}"
 
 
 [debug.error]
 missing-permission = "{prefix}&r &7› &7&c缺少權限：{permission}"
-already-preparing = "{prefix}&r &7› &7&c正在為 {prefix} 產生診斷報告。"
+already-preparing = "{prefix}&r &7› &7&c已有 {prefix} 診斷報告正在產生。"
 already-preparing-short = "{prefix}&r &7› &7&c已有診斷報告正在產生。"
 schedule-failed = "{prefix}&r &7› &7&c無法排程診斷報告產生工作。"
 provider-closed = "{prefix}&r &7› &7&c診斷資料提供者已關閉。"
@@ -523,7 +532,7 @@ closed-before-write = "{prefix}&r &7› &7&c診斷資料提供者在寫入報告
 write-failed = "{prefix}&r &7› &7&c無法寫入診斷報告，請檢查伺服器主控台。"
 
 [debug]
-preparing = "{prefix}&r &7› &7&7正在準備 {prefix} 診斷報告..."
+preparing = "{prefix}&r &7› &7&7正在準備 {prefix} 診斷報告……"
 saved = "{prefix}&r &7› &7&7已將 {prefix} 診斷報告儲存至 {path}。"
 
 [debug.upload]

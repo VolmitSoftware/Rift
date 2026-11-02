@@ -6,50 +6,54 @@
 # /rift language server edit ru_RU
 #
 # === Префикс ===
-# runtime.prefix содержит только оформленное имя. {prefix} вставляет имя; › и пробелы редактируются в каждом сообщении.
+# runtime.prefix хранит оформленное имя плагина, которое подставляет {prefix}. Разделитель и пробелы задаются в самих сообщениях. Удалите {prefix}&r &7› &7, чтобы полностью скрыть префикс чата.
 #
 # === Форматирование ===
-# Цвета: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B и [RRGGBB]. Для своего оформления также доступен MiniMessage.
+# Цвета и стили: &0-&f, &k-&r. Цвета RGB: &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B и [RRGGBB]. Для своего оформления также доступен MiniMessage. Чтобы вывести & или [ буквально, поставьте перед ними обратную косую черту.
 #
 # === Переменные ===
 # Не меняйте имена переменных и используйте только переменные исходного сообщения.
+#   {added}  число сообщений, добавленных обновлением языка
 #   {after}  новое значение
 #   {argument}  аргумент команды
 #   {before}  предыдущее значение
-#   {category}  категория команд
+#   {category}  категория
 #   {command}  текст или имя команды
 #   {count}  количество элементов или результатов
 #   {detail}  описательная подробность
-#   {group}  Разрешение или группа игроков
-#   {id}  идентификатор
-#   {key}  ключ конфигурации или сообщения
+#   {group}  группа сообщений
+#   {id}  идентификатор карантина
+#   {kept}  локальные правки, сохранённые при обновлении языка
+#   {key}  ключ параметра или сообщения
 #   {label}  отображаемая метка
-#   {line}  Источник строки или номер строки
-#   {locale}  языковой стандарт
-#   {maximum}  Максимально допустимая стоимость
+#   {line}  номер строки
+#   {locale}  код языка
+#   {maximum}  максимальная длина ввода
 #   {name}  имя записи или отображаемое имя
 #   {operation}  имя операции
 #   {parameter}  имя параметра
 #   {permission}  узел разрешения
-#   {personal}  личная локаль
+#   {personal}  личный язык игрока, если он отличается от языка сервера по умолчанию
 #   {player}  имя игрока
-#   {prefix}  runtime.prefix содержит только оформленное имя. {prefix} вставляет имя; › и пробелы редактируются в каждом сообщении.
+#   {prefix}  оформленное имя из runtime.prefix; разделители и пробелы задаются в каждом сообщении
 #   {reason}  причина или подробность ошибки
+#   {remaining}  время до следующей разрешённой проверки языков
 #   {seconds}  длительность в секундах
 #   {setting}  имя настройки
-#   {target}  Целевой игрок, сущность или ценность
+#   {target}  цель выбора
 #   {title}  текст заголовка
 #   {type}  тип значения или данных
+#   {updated}  число сообщений, изменённых обновлением языка
 #   {value}  текущее или новое значение
 #   {variables}  допустимые заполнители
-#   {version}  версия
+#   {version}  версия плагина
 #   {world}  имя мира
 
-#   {section}  Раздел редактора
-#   {path}  Путь к локальному отчёту
-#   {url}  URL отчёта
+#   {section}  раздел редактора
+#   {path}  путь к локальному отчёту
+#   {url}  URL отправленного отчёта
 
-#   {step}  Шаг изменения при нажатии
+#   {step}  шаг изменения за одно нажатие
 
 #   {limit}  максимальное число игроков
 
@@ -60,73 +64,73 @@ prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 already_exists = "{prefix}&r &7› &7&e{world} уже существует. Используйте &f/rift info {world}&e для проверки или выберите другое имя."
 
 [rift.command]
-policy_player_limit = "Ограничить число входящих игроков; 0 означает без ограничений"
-policy_travel_entry = "Управлять входом между мирами; DENY запрещает, INHERIT не меняет поведение"
-policy_travel_exit = "Управлять выходом между мирами; DENY запрещает перемещения, но не возрождение или восстановление входа"
-policy_first_join = "Выбрать спавн загруженного управляемого мира для первых входов из этого мира; default использует место входа"
-policy_login = "Выбрать спавн загруженного управляемого мира для входов из этого мира; default сохраняет позицию сервера"
+policy_player_limit = "Ограничить число игроков, входящих в этот мир; 0 означает без ограничений"
+policy_travel_entry = "Управлять входом из других миров; DENY запрещает вход, INHERIT оставляет его без изменений"
+policy_travel_exit = "Управлять уходом в другие миры; DENY запрещает перемещение, но не возрождение и не восстановление позиции при входе"
+policy_first_join = "Выбрать управляемую точку появления в загруженном мире для самых первых входов, назначенных этому миру; default использует размещение при входе"
+policy_login = "Выбрать управляемую точку появления в загруженном мире для входов, назначенных этому миру; default сохраняет размещение сервера"
 policy_game_mode = "Задать режим игры при входе в мир, подключении и возрождении; INHERIT отключает принудительную установку"
 policy_flight = "Управлять полётом в выживании и приключении; INHERIT снимает настройку полёта {prefix}"
 policy_weather = "Закрепить ясную погоду, дождь или грозу; INHERIT снова разрешает смену погоды"
-policy_natural_animals = "DENY запрещает естественное появление животных; ALLOW учитывает другие ограничения"
-policy_natural_monsters = "DENY запрещает естественное появление монстров; ALLOW учитывает другие ограничения"
-policy_edit = "Открыть редактор правил мира"
+policy_natural_animals = "Запретить естественное появление животных значением DENY; ALLOW учитывает другие ограничения появления"
+policy_natural_monsters = "Запретить естественное появление монстров значением DENY; ALLOW учитывает другие ограничения появления"
+policy_edit = "Открыть редактор политик мира"
 check_all = "Проверить все подходящие миры, не изменяя их"
 version = "Показать версию {prefix}"
 root = "Безопасное управление серверными мирами"
-create = "Создавать и управлять новым миром"
-import = "Импорт существующего мирового каталога"
-load = "Загрузите управляемый или открытый мир"
-unload = "Эвакуировать игроков и разгружать мир"
+create = "Создать новый мир и управлять им"
+import = "Импортировать существующую папку мира"
+load = "Загрузить управляемый или обнаруженный мир"
+unload = "Эвакуировать игроков и выгрузить мир"
 delete = "Переместить управляемый мир в карантин"
-restore = "Восстановление карантинного мира"
-teleport = "Телепорт в загруженный мир"
-send = "Телепортируйте другого игрока в загруженный мир"
-list = "Список загруженных, управляемых, обнаруженных и карантинных миров"
-info = "Показать подробное состояние для одного мира"
-generators = "Идентификаторы генераторов, уже используемые управляемыми мирами"
-config = "Откройте игру {prefix} Конфигурационный редактор"
+restore = "Восстановить мир из карантина"
+teleport = "Телепортироваться в загруженный мир"
+send = "Телепортировать другого игрока в загруженный мир"
+list = "Показать загруженные, управляемые, обнаруженные миры и миры в карантине"
+info = "Показать подробное состояние мира"
+generators = "Показать идентификаторы генераторов, уже используемые управляемыми мирами"
+config = "Открыть внутриигровой редактор настроек {prefix}"
 language = "Выбрать доступный язык {prefix}"
-status = "Проверить возможности платформы и {prefix} государство"
+status = "Проверить возможности платформы и состояние {prefix}"
 debug = "Инструменты диагностики {prefix}"
 debug_dump = "Создать подробный диагностический отчёт {prefix}"
-autoload = "Изменить, загружается ли управляемый мир во время запуска"
-protect = "Защищать или не защищать управляемый мир"
+autoload = "Изменить, загружается ли управляемый мир при запуске сервера"
+protect = "Включить или снять защиту управляемого мира"
 
-check = "Выполнить предварительную проверку мира только для чтения"
+check = "Выполнить предварительную проверку мира без изменений"
 unmanage = "Прекратить управление миром, не изменяя его файлы"
 
 policy = "Просматривать и изменять политики каждого управляемого мира"
-policy_show = "Показать активные политики управляемого мира"
+policy_show = "Показать действующие политики управляемого мира"
 policy_difficulty = "Задать сложность мира или наследовать значение сервера"
 policy_pvp = "Разрешить или запретить PvP либо наследовать значение сервера"
 policy_gamerule = "Задать игровое правило или прекратить управлять им"
-policy_spawn = "Установить точку возрождения этого мира в текущем безопасном месте"
-policy_spawn_clear = "Прекратить управлять точкой возрождения этого мира"
+policy_spawn = "Установить точку появления этого мира в вашем текущем безопасном месте"
+policy_spawn_clear = "Прекратить управлять точкой появления этого мира"
 policy_border = "Настроить управляемую границу этого мира"
 policy_border_clear = "Сбросить границу этого мира и прекратить управлять ею"
 policy_access = "Требовать разрешение для входа в этот мир или убрать это требование"
-policy_respawn = "Перенаправлять возрождение после смерти в этом мире в другой управляемый мир или использовать настройку сервера по умолчанию"
+policy_respawn = "Направлять возрождение после смерти в этом мире в другой управляемый мир или в мир сервера по умолчанию"
 policy_tag = "Добавить или удалить операторский тег"
 
 [rift.parameter]
-player_limit = "Максимум игроков, либо 0 без ограничений"
+player_limit = "Максимум игроков или 0 без ограничений"
 policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR или INHERIT"
 policy_weather = "CLEAR, RAIN, THUNDER или INHERIT"
-tag_filter = "Фильтр по тегу оператора или all"
-tag_group = "Группировать подходящие миры по тегу оператора"
-name = "Всемирное имя"
-environment = "NORMAL, NETHER, THE_ENDили CUSTOM"
-generator = "vanilla, voidили PluginName[:generator-id]"
-seed = "random или подписанное 64-разрядное семя"
-type = "Bukkit мировой тип"
-save = "Сохранить перед разгрузкой"
-id = "Карантин входной id"
+tag_filter = "Фильтр по операторскому тегу или all"
+tag_group = "Группировать подходящие миры по операторскому тегу"
+name = "Название мира"
+environment = "NORMAL, NETHER, THE_END или CUSTOM"
+generator = "vanilla, void или PluginName[:generator-id]"
+seed = "random или 64-битный ключ генерации со знаком"
+type = "Тип мира Bukkit"
+save = "Сохранить перед выгрузкой"
+id = "Идентификатор записи карантина"
 player = "Имя игрока онлайн"
 enabled = "true или false"
-page = "Номер страницы списка порталов, начиная с единицы"
-upload = "Загрузить отчёт, если включена публичная загрузка"
-sender = "Командный отправитель"
+page = "Номер страницы результатов"
+upload = "Отправить отчёт, если включена публичная отправка"
+sender = "Отправитель команды"
 
 managed_world = "Название управляемого мира"
 policy_difficulty = "PEACEFUL, EASY, NORMAL, HARD или INHERIT"
@@ -148,47 +152,46 @@ tag_enabled = "true добавляет тег; false удаляет его"
 
 [rift.message]
 policy_world_full = "{prefix}&r &7› &7&cМир {world} заполнен (лимит: {limit})."
-policy_travel_denied = "{prefix}&r &7› &7&cПравило мира {world} запрещает перемещение между мирами."
-policy_placement_failed = "В доступных мирах нет места. Обратитесь к администратору."
+policy_travel_denied = "{prefix}&r &7› &7&cПолитика мира {world} запрещает перемещение между мирами."
+policy_placement_failed = "Ни в одном доступном мире нет места для вас. Обратитесь к администратору сервера."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
-permission_denied = "{prefix}&r &7› &7&cТебе нужно &f{permission}&7."
-unknown_command = "{prefix}&r &7› &7&cНеизвестная команда. &f/rift help&7."
-player_only = "{prefix}&r &7› &7&cЭта команда требует игрока."
-operation_queued = "{prefix}&r &7› &7Охваченный &f{operation}&7 для &d{world}&7."
-operation_failed = "{prefix}&r &7› &7&c{operation} Неудавшийся для &f{world}&7: {reason}"
-created = "{prefix}&r &7› &7Созданный и управляемый &a{world}&7."
-imported = "{prefix}&r &7› &7Импортируется и управляется &a{world}&7."
-loaded = "{prefix}&r &7› &7загруженный &a{world}&7."
-unloaded = "{prefix}&r &7› &7Незагруженный &a{world}&7."
-teleported = "{prefix}&r &7› &7Телепортированный &a{player}&7 то &a{world}&7."
-delete_confirm = "{prefix}&r &7› &7Беги. &e/rift delete {world}&7 снова внутри &e{seconds}s&7 Переместить его в карантин."
-quarantined = "{prefix}&r &7› &7перемещенный &a{world}&7 в карантин как &a{id}&7."
-restored = "{prefix}&r &7› &7Восстановленный &a{world}&7 из &a{id}&7."
-profile_updated = "{prefix}&r &7› &7Обновлено &a{setting}&7 для &a{world}&7 то &a{value}&7."
-folia_limit = "{prefix}&r &7› &7{operation} недоступен на Folia Потому что мир грузит/unload API не выполняется."
-config_saved = "{prefix}&r &7› &7&aКонфигурация сохранена."
+permission_denied = "{prefix}&r &7› &7&cВам нужно разрешение &f{permission}&7."
+unknown_command = "{prefix}&r &7› &7&cНеизвестная команда. Используйте &f/rift help&7."
+player_only = "{prefix}&r &7› &7&cЭту команду может выполнить только игрок."
+operation_queued = "{prefix}&r &7› &7Операция &f{operation}&7 для &d{world}&7 поставлена в очередь."
+operation_failed = "{prefix}&r &7› &7&cОшибка операции {operation} для &f{world}&7: {reason}"
+created = "{prefix}&r &7› &7Мир &a{world}&7 создан и взят под управление."
+imported = "{prefix}&r &7› &7Мир &a{world}&7 импортирован и взят под управление."
+loaded = "{prefix}&r &7› &7Мир &a{world}&7 загружен."
+unloaded = "{prefix}&r &7› &7Мир &a{world}&7 выгружен."
+teleported = "{prefix}&r &7› &7Игрок &a{player}&7 телепортирован в &a{world}&7."
+delete_confirm = "{prefix}&r &7› &7Повторите &e/rift delete {world}&7 в течение &e{seconds} с&7, чтобы переместить мир в карантин."
+quarantined = "{prefix}&r &7› &7Мир &a{world}&7 перемещён в карантин как &a{id}&7."
+restored = "{prefix}&r &7› &7Мир &a{world}&7 восстановлен из &a{id}&7."
+profile_updated = "{prefix}&r &7› &7Параметр &a{setting}&7 для &a{world}&7 изменён на &a{value}&7."
+folia_limit = "{prefix}&r &7› &7Операция {operation} недоступна на Folia, так как API загрузки и выгрузки миров там не реализован."
 config_opened = "{prefix}&r &7› &7Открыт полный внутриигровой редактор конфигурации.&r"
 config_save_failed = "{prefix}&r &7› &7&cКонфигурацию не удалось сохранить. Проверьте консоль."
-empty_list = "{prefix}&r &7› &7Никаких совпадающих миров найдено не было."
-player_offline = "{prefix}&r &7› &7&cИгрок не находится в сети: &f{player}"
+empty_list = "{prefix}&r &7› &7Подходящие миры не найдены."
+player_offline = "{prefix}&r &7› &7&cИгрок не в сети: &f{player}"
 unknown_world = "{prefix}&r &7› &7&cНеизвестный мир: &f{world}"
 section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
 entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
 detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
 info_title = "{prefix}&r &7› &7&d{world}"
-status_title = "{prefix}&r &7› &7{prefix} {version} Состояние"
-generator_format = "{prefix}&r &7› &7Custom Формат: &fPluginName[:generator-id]"
-folia_status_note = "{prefix}&r &7› &7Folia поддержка {prefix}Функции чтения, редактора, профиля и телепортации; динамический жизненный цикл мира защищен API платформы."
+status_title = "{prefix}&r &7› &7Состояние {prefix} {version}"
+generator_format = "{prefix}&r &7› &7Свой формат: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&r &7› &7На Folia работают функции {prefix} для чтения, редактора, профилей и телепортации; динамический жизненный цикл миров зависит от API платформы."
 
 unmanaged_loaded = "{prefix}&r &7› &7Управление миром &a{world}&7 прекращено без изменения его файлов. Мир останется загруженным, пока другой плагин или сервер не выгрузит его."
 unmanaged_unloaded = "{prefix}&r &7› &7Управление миром &a{world}&7 прекращено без изменения его файлов. {prefix} больше не будет загружать его при запуске."
 
-policy_access_denied = "{prefix}&r &7› &7&cВам нельзя входить в &f{world}&7. Требуется разрешение &f{permission}&7."
+policy_access_denied = "{prefix}&r &7› &7&cВы не можете войти в &f{world}&7. Требуется разрешение &f{permission}&7."
 
 [rift.label]
 policy_player_limit = "Лимит игроков"
-policy_travel_entry = "Вход между мирами"
-policy_travel_exit = "Выход между мирами"
+policy_travel_entry = "Вход из других миров"
+policy_travel_exit = "Уход в другие миры"
 policy_first_join_world = "Место первого входа"
 policy_login_world = "Место входа"
 policy_game_mode = "Режим игры"
@@ -197,31 +200,31 @@ policy_weather = "Погода"
 policy_natural_animals = "Естественное появление животных"
 policy_natural_monsters = "Естественное появление монстров"
 worlds = "Миры"
-quarantine = "карантин"
-loaded = "загруженный"
-managed = "управляемый"
+quarantine = "Карантин"
+loaded = "Загружен"
+managed = "Управляемый"
 on_disk = "На диске"
-missing = "Недостающие управляемые миры"
-environment = "окружающая среда"
-generator = "генератор"
-seed = "семя"
+missing = "отсутствующие управляемые миры"
+environment = "Окружение"
+generator = "Генератор"
+seed = "Ключ генерации"
 autoload = "Автозагрузка"
-protected = "защищенный"
-operation_active = "Операция активная"
-world_types = "Мировые типы"
+protected = "Защищён"
+operation_active = "Операция выполняется"
+world_types = "Типы миров"
 configured_generators = "Настроенные генераторы"
-available = "доступный"
-unavailable = "недоступный"
-server = "сервер"
-java_runtime = "Java время выполнения"
+available = "доступно"
+unavailable = "недоступно"
+server = "Сервер"
+java_runtime = "Среда выполнения Java"
 plugin_bytecode = "Байт-код плагина"
 platform = "Платформа"
 dynamic_lifecycle = "Динамический жизненный цикл мира"
-world_container = "Мировой контейнер"
-writable = "Контейнер World Container"
-locale = "местность"
+world_container = "Каталог миров"
+writable = "Каталог миров доступен для записи"
+locale = "Язык"
 world_counts = "Миры"
-quarantine_entries = "Карантинные записи"
+quarantine_entries = "Записи карантина"
 
 world_key = "Ключ мира"
 storage_path = "Путь хранения"
@@ -236,7 +239,7 @@ review_required = "требуется проверка"
 policy_difficulty = "Сложность"
 policy_pvp = "PvP"
 policy_game_rules = "Игровые правила"
-policy_custom_spawn = "Пользовательская точка возрождения"
+policy_custom_spawn = "Своя точка появления"
 policy_managed_border = "Управляемая граница"
 policy_access_permission = "Разрешение на вход"
 policy_respawn_world = "Мир возрождения"
@@ -249,8 +252,8 @@ loaded = "Показывает, активен ли сейчас этот мир
 managed = "Показывает, есть ли у {prefix} профиль мира для восстановления его генератора и настроек запуска."
 on_disk = "Показывает, загружен ли мир или существует ли допустимая папка мира с level.dat."
 environment = "Окружение мира Bukkit, записанное в активном мире или управляемом профиле."
-generator = "Генератор, повторно применяемый {prefix} при загрузке управляемого мира. void — встроенный генератор пустого мира {prefix}."
-seed = "Сид, записанный для мира. Изменение этого отображаемого значения не пересоздаёт существующий рельеф."
+generator = "Генератор, который {prefix} снова применяет при загрузке управляемого мира. void является встроенным генератором пустого мира {prefix}."
+seed = "Ключ генерации, записанный для этого мира. Изменение этого отображаемого значения никогда не пересоздаёт существующий рельеф."
 autoload = "Показывает, загружает ли {prefix} этот управляемый мир автоматически при запуске сервера."
 protected = "Защищённые управляемые миры нельзя переместить в карантин {prefix}."
 operation_active = "Показывает, удерживает ли сейчас операция жизненного цикла блокировку {prefix} для этого мира."
@@ -258,45 +261,45 @@ server = "Текущая реализация и версия сервера п�
 java_runtime = "Среда выполнения Java, в которой сейчас работает сервер. {prefix} требует Java 25 или новее."
 plugin_bytecode = "Самая старая версия среды Java, способная загрузить скомпилированные классы {prefix}."
 platform = "Планировщик и семейство серверного API, обнаруженные {prefix} во время работы."
-dynamic_lifecycle = "Показывает, позволяет ли платформа безопасно создавать, загружать, выгружать, изолировать и восстанавливать миры во время работы."
+dynamic_lifecycle = "Показывает, позволяет ли платформа безопасно создавать, загружать, выгружать, помещать в карантин и восстанавливать миры во время работы."
 world_container = "Каталог сервера, содержащий папки миров Bukkit."
 writable = "Показывает, разрешает ли операционная система {prefix} записывать данные в каталог миров сейчас."
 locale = "Активный языковой файл в plugins/Rift/languages. Для отсутствующих записей используется встроенный английский текст."
-world_counts = "Загруженные — активные миры Bukkit; управляемые — профили {prefix}; отсутствующие — управляемые профили, чьи миры не загружены и отсутствуют на диске."
+world_counts = "Загруженные: активные миры Bukkit; управляемые: профили {prefix}; отсутствующие: управляемые профили, чьи миры не загружены и отсутствуют на диске."
 quarantine = "Миры, отложенные командой {prefix} delete и доступные для восстановления по идентификатору карантина."
-world_entry = "Загружен — активен сейчас; управляемый — есть профиль {prefix}; на диске — существует допустимая папка незагруженного мира."
+world_entry = "Загружен: активен сейчас; управляемый: у {prefix} есть профиль; на диске: существует допустимая папка незагруженного мира."
 
 world_key = "Канонический идентификатор мира в Paper."
 storage_path = "Точный вычисленный каталог, в котором хранятся файлы этого мира."
-storage_layout = "Пространство имён, которому принадлежит каталог хранения этого мира."
+storage_layout = "Пространство имён, которому принадлежит каталог измерения этого мира."
 players = "Текущее количество игроков в этом загруженном мире."
-generator_status = "Является ли настроенный генератор встроенным или доступен ли его поставщик."
-primary_world = "Является ли этот мир основным миром сервера, управление которым нельзя прекратить и который нельзя выгрузить."
-check_result = "Сводка обнаруженных препятствий и предупреждений."
+generator_status = "Показывает, встроен ли настроенный генератор или доступен ли его поставщик."
+primary_world = "Показывает, является ли этот мир основным миром сервера, управление которым нельзя прекратить и который нельзя выгрузить."
+check_result = "Сводка обнаруженных препятствий и предупреждений жизненного цикла."
 
 [rift.feedback]
 title = "{prefix}"
 world_subtitle = "&a{operation}&8: &f{world}"
-teleport_subtitle = "&aПрибывший в &f{world}"
-failure_title = "&cОперация провалилась"
+teleport_subtitle = "&aВы прибыли в &f{world}"
+failure_title = "&cОперация не удалась"
 failure_subtitle = "&7{operation}&8: &f{world}"
 action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
-action_teleport = "{prefix}&r &7› &7&aТелепортирован в &a{world}"
-action_failure = "{prefix}&r &7› &7&c{operation} Неудавшийся для &f{world}"
+action_teleport = "{prefix}&r &7› &7&aТелепортация в &a{world}"
+action_failure = "{prefix}&r &7› &7&cОшибка операции {operation} для &f{world}"
 
 [rift.gui]
 updates = "&dУведомления об обновлениях"
 policy_native_default = "&7Стандартное значение игры: &f{value}"
-policy_inherited = "&7Правило: INHERIT"
+policy_inherited = "&7Политика: INHERIT"
 policy_unloaded = "&7Мир не загружен: для наследуемых значений показаны стандартные значения игры"
 policy_default = "&7По умолчанию: &f{value}"
-policy_number = "&7Левая: +{step}; правая: -{step}; Shift: x10"
+policy_number = "&7ЛКМ: +{step}; ПКМ: -{step}; Shift: x10"
 policy_select = "&7Нажмите для выбора доступного значения"
 policy_selected = "&aВыбрано"
-policy_apply = "&aПрименить координаты появления"
+policy_apply = "&aПрименить координаты точки появления"
 policy_here = "&dИспользовать мою текущую позицию"
 policy_draft = "&7Черновик: &f{value}"
-policy_enabled = "&dУправление"
+policy_enabled = "&dУправляется"
 policy_x = "&dКоордината X"
 policy_y = "&dКоордината Y"
 policy_z = "&dКоордината Z"
@@ -306,63 +309,60 @@ policy_warning_distance = "&dРасстояние предупреждения (
 policy_warning_time = "&dВремя предупреждения (секунды)"
 policy_damage_amount = "&dУрон за блок"
 policy_damage_buffer = "&dБуфер урона (блоки)"
-policy_title = "&dПравила мира"
-policy_reset = "&7Нажмите Q для восстановления правила по умолчанию"
+policy_title = "&dПолитики мира"
+policy_reset = "&7Нажмите Q, чтобы восстановить политику по умолчанию"
 policy_spawn = "&7Настройте координаты и примените безопасную точку появления"
-policy_center = "&dЦентр границы (x z)"
-policy_warning = "&dПредупреждение границы (блоки секунды)"
-policy_damage = "&dУрон границы (величина буфер)"
 policy_denial = "&dСообщение об отказе в доступе"
-policy_tags = "&7Введите метки через запятую или clear"
+policy_tags = "&7Введите теги через запятую или clear"
 policy_clear = "&7Введите clear для восстановления значения по умолчанию"
 policy_previous = "&eПредыдущая страница"
 policy_next = "&eСледующая страница"
 current = "&7Текущее: &f{value}"
 autoload = "&dАвтозагрузка управляемых миров"
-delete = "&dРазрешить мировой карантин"
-verbose = "&dЛесозаготовка вербозы"
-debug_upload = "&dПубличные отладочные загрузки"
-bstats = "&dАнонимный bStats метрики"
-confirm_seconds = "&dУдалить секунды подтверждения"
-poll = "&dМиллисекунды опроса на горячую нагрузку"
-cooldown = "&dОхлаждение с горячей загрузкой в миллисекундах"
-evacuation = "&dЭвакуационный мир"
+delete = "&dРазрешить карантин миров"
+verbose = "&dПодробный журнал"
+debug_upload = "&dПубличная отправка отладочных отчётов"
+bstats = "&dАнонимная статистика bStats"
+confirm_seconds = "&dВремя на подтверждение удаления (секунды)"
+poll = "&dИнтервал проверки горячей перезагрузки (мс)"
+cooldown = "&dЗадержка горячей перезагрузки (мс)"
+evacuation = "&dМир для эвакуации"
 close = "&cЗакрыть"
-splash = "&dЗапуск Splash Screen"
-lifecycle_feedback = "&dОтзывы о мировом жизненном цикле"
-teleport_feedback = "&dТелепортация обратной связи"
-failure_feedback = "&dНеудачная обратная связь"
-title_popups = "&dОригинальное название: Popups"
-action_bar_popups = "&dВсплывающие окна Action-bar"
-sounds = "&dЗвуки обратной связи"
-root_title = "{prefix} конфигурация"
+splash = "&dЗаставка при запуске"
+lifecycle_feedback = "&dУведомления о жизненном цикле миров"
+teleport_feedback = "&dУведомления о телепортации"
+failure_feedback = "&dУведомления об ошибках"
+title_popups = "&dВсплывающие заголовки"
+action_bar_popups = "&dУведомления над панелью быстрого доступа"
+sounds = "&dЗвуки уведомлений"
+root_title = "Настройки {prefix}"
 category_title = "{prefix}: {category}"
-category_open = "&8Нажмите, чтобы отредактировать каждую настройку в этом разделе"
+category_open = "&8Нажмите, чтобы изменить все настройки этого раздела"
 back = "&eНазад"
-toggle = "&8Кликните на Toggle"
-exact_number = "&8Левый/right регулировки; нажмите Q, чтобы ввести точное значение"
+toggle = "&8Нажмите, чтобы переключить"
+exact_number = "&8ЛКМ/ПКМ меняют значение; нажмите Q, чтобы ввести точное значение"
 text = "&8Нажмите, чтобы ввести новое значение в чате"
 prompt = "{prefix}&r &7› &7Введите новое значение для &f{setting}&7 в чате."
-prompt_cancel = "{prefix}&r &7› &7Тип &fотменять&7 Вернуться, не меняя его."
-prompt_cancelled = "{prefix}&r &7› &7Конфигурационный ввод отменен."
-prompt_timeout = "{prefix}&r &7› &7Конфигурационный ввод синхронизирован."
+prompt_cancel = "{prefix}&r &7› &7Введите &fcancel&7, чтобы вернуться без изменений."
+prompt_cancelled = "{prefix}&r &7› &7Ввод настройки отменён."
+prompt_timeout = "{prefix}&r &7› &7Время ввода настройки истекло."
 setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7Изменено на &a{after} &7с &f{before}&7."
-setting_failed = "{prefix}&r &7› &7&cНе могу обновить &f{setting}&7: {reason}"
-language = "&dЛокальный язык"
-language_select = "&8Нажмите, чтобы выбрать из доступных языков"
-lifecycle_sound = "&dЗвук жизненного цикла"
+setting_failed = "{prefix}&r &7› &7&cНе удалось обновить &f{setting}&7: {reason}"
+language = "&dЯзык"
+language_select = "&8Нажмите, чтобы выбрать один из доступных языков"
+lifecycle_sound = "&dЗвук жизненного цикла миров"
 teleport_sound = "&dЗвук телепортации"
-failure_sound = "&dНеудачный звук"
-sound_volume = "&dЗвуковой объем"
-sound_pitch = "&dЗвуковой звук"
-title_fade_in = "&dОригинальное название: Feldy-in Ticks"
-title_stay = "&dОригинальное название: Stay Ticks"
-title_fade_out = "&dОригинальное название: Blead-out Ticks"
+failure_sound = "&dЗвук ошибки"
+sound_volume = "&dГромкость звука"
+sound_pitch = "&dВысота звука"
+title_fade_in = "&dПоявление заголовка (тики)"
+title_stay = "&dПоказ заголовка (тики)"
+title_fade_out = "&dИсчезновение заголовка (тики)"
 
 [rift.gui.category]
 general = "&dОбщее и безопасность"
-feedback = "&dОбсуждение Feedback & Sounds"
-presentation = "&dПрезентация"
+feedback = "&dУведомления и звуки"
+presentation = "&dОформление"
 diagnostics = "&dДиагностика&r"
 languages = "&dЯзыки и сообщения"
 
@@ -404,9 +404,9 @@ missing_argument = "{prefix}&r &7› &7&cОтсутствует аргумент
 execution_failed = "{prefix}&r &7› &7&cНе удалось выполнить команду {command}: {reason}"
 
 [language.menu]
-selected = "выбранный"
+selected = "выбран"
 command = "Команда: {command}"
-all-volmit-plugins = "Все плагины Volmit"
+all-volmit-plugins = "всех плагинов Volmit"
 your_language = "Ваш язык"
 reset_your_language = "Сбросить выбор языка"
 server_default = "Язык сервера по умолчанию"
@@ -428,7 +428,7 @@ loading = "{prefix}&r &7› &7&7Загрузка сообщений для {loca
 
 [language.editor.category]
 open = "&8Нажмите, чтобы открыть эту категорию.&r"
-message-count = "&7{count} сообщения&r"
+message-count = "&7Сообщений: {count}&r"
 
 [language.editor.error]
 unable-to-edit = "{prefix}&r &7› &7&cНе удалось отредактировать: {reason}"
@@ -461,7 +461,7 @@ line = "Строка {line}"
 [language.editor.prompt]
 variables = "{prefix}&r &7› &7&7Переменные: {variables}"
 value = "{prefix}&r &7› &7&7Введите в чат новое значение для {key}."
-search = "{prefix}&r &7› &7&7Найдите ключ или текст сообщения. Введите cancel, чтобы вернуться."
+search = "{prefix}&r &7› &7&7Введите ключ или текст сообщения для поиска. Введите cancel, чтобы вернуться."
 guidance = "{prefix}&r &7› &7&7Используйте \\n для новой строки, \\\\ для обратной косой черты или введите cancel, чтобы вернуться."
 current = "{prefix}&r &7› &7&7Текущее значение: {value}"
 
@@ -498,16 +498,25 @@ editor-player-only = "{prefix}&r &7› &7&cОткройте редактор я�
 
 [language.selection]
 server-selected = "{prefix}&r &7› &7&7Язык сервера теперь {locale}."
-server-default-selected = "{prefix}&r &7› &7&7теперь ваш язык соответствует языку сервера по умолчанию."
-save-failed = "{prefix}&r &7› &7&cне удалось сохранить выбор языка; проверьте консоль сервера."
+server-default-selected = "{prefix}&r &7› &7&7Теперь ваш язык совпадает с языком сервера по умолчанию."
+save-failed = "{prefix}&r &7› &7&cНе удалось сохранить выбор языка; проверьте консоль сервера."
 preparing = "{prefix}&r &7› &7&7Подготовка языка {locale} для {target}..."
-personal-selected = "{prefix}&r &7› &7&7Ваш язык сейчас {locale}."
+personal-selected = "{prefix}&r &7› &7&7Ваш язык теперь {locale}."
 english-fallback = "{prefix}&r &7› &7&7{locale} недоступен; используется английский (en_US)."
 
 [language.usage]
 volmit-selection = "{prefix}&r &7› &7&7Использование: /volmit plugins languages [locale]"
-selection = "{prefix}&r &7› &7&7Использование: /{command} language self [locale|reset] or server [locale]"
+selection = "{prefix}&r &7› &7&7Использование: /{command} language self [locale|reset] или server [locale]"
 editor = "{prefix}&r &7› &7&7Использование: /{command} language server edit [locale]"
+update = "{prefix}&r &7› &7&7Использование: /{command} language update"
+
+[language.update]
+checking = "{prefix}&r &7› &7&7Проверка изменений в репозитории языков..."
+unchanged = "{prefix}&r &7› &7&7Установленные языки уже соответствуют репозиторию."
+applied = "{prefix}&r &7› &7&7Язык {locale} обновлён (добавлено: {added}, изменено: {updated}, сохранено локальных правок: {kept})."
+cooldown = "{prefix}&r &7› &7&7Репозиторий языков проверялся недавно; повторите попытку через {remaining}."
+locale-failed = "{prefix}&r &7› &7&cЯзык {locale} не обновлён: {reason}"
+failed = "{prefix}&r &7› &7&cНе удалось обновить языки: {reason}"
 
 
 [debug.error]
@@ -527,12 +536,12 @@ preparing = "{prefix}&r &7› &7&7Подготовка диагностичес�
 saved = "{prefix}&r &7› &7&7Диагностический отчёт {prefix} сохранён в {path}."
 
 [debug.upload]
-interrupted = "{prefix}&r &7› &7&7Загрузка диагностического отчёта прервана; локальный отчёт сохранён."
-failed = "{prefix}&r &7› &7&cНе удалось загрузить диагностический отчёт; локальный отчёт сохранён."
-completed = "{prefix}&r &7› &7&7Загружено под названием VolmitSoftware - {prefix} - v{version}."
+interrupted = "{prefix}&r &7› &7&7Отправка диагностического отчёта прервана; локальный отчёт сохранён."
+failed = "{prefix}&r &7› &7&cНе удалось отправить диагностический отчёт; локальный отчёт сохранён."
+completed = "{prefix}&r &7› &7&7Отправлено под названием VolmitSoftware - {prefix} - v{version}."
 
 [debug.action]
 open = "Открыть: {url}"
-open-description = "Открыть загруженный диагностический отчёт."
+open-description = "Открыть отправленный диагностический отчёт."
 copy-path = "Скопировать локальный путь"
 copy-path-description = "Скопировать путь к локальному отчёту."

@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 @ConfigDescription("Rift runtime configuration")
 public final class RiftConfig {
-    private static final Pattern LANGUAGE = Pattern.compile("[A-Za-z0-9][A-Za-z0-9_-]{1,31}");
+    private static final Pattern LANGUAGE = Pattern.compile("[A-Za-z0-9_-]{2,32}");
     private static final Pattern SOUND_KEY = Pattern.compile("(?:[a-z0-9_.-]+:)?[a-z0-9_./-]+");
     @ConfigDoc("Locale identifier selecting languages/<locale>.toml; missing repository translations download when selected.")
     private String language = "en_US";

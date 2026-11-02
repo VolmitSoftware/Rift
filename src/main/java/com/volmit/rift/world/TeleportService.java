@@ -21,7 +21,13 @@ public final class TeleportService {
         Objects.requireNonNull(player, "player");
         Objects.requireNonNull(destination, "destination");
         Consumer<Boolean> callback = completion == null ? ignored -> { } : completion;
-        invokeAsync(player, destination, callback);
+        SafeLanding.resolve(plugin, destination).whenComplete((landing, failure) -> {
+            Location target = landing == null ? destination : landing;
+            if (!FoliaScheduler.runEntity(plugin, player, () -> invokeAsync(player, target, callback), 0L,
+                    () -> callback.accept(false))) {
+                callback.accept(false);
+            }
+        });
     }
 
     private void invokeAsync(Player player, Location destination, Consumer<Boolean> completion) {

@@ -106,7 +106,7 @@ public final class WorldLifecycleService {
                         directories,
                         profiles,
                         inventory,
-                        name -> RiftWorldIdentity.findLoaded(name) != null
+                        name -> RiftWorldIdentity.findLoaded(name, profiles) != null
                 )
         );
         List<WorldProfile> availableProfiles = reconciler.reconcile();
@@ -118,7 +118,7 @@ public final class WorldLifecycleService {
             return;
         }
         for (WorldProfile profile : availableProfiles) {
-            if (!profile.isAutoLoad() || RiftWorldIdentity.findLoaded(profile.getName()) != null) {
+            if (!profile.isAutoLoad() || RiftWorldIdentity.findLoaded(profile) != null) {
                 continue;
             }
             try {
@@ -143,7 +143,7 @@ public final class WorldLifecycleService {
     ) {
         queueDynamic(sender, name, "create", () -> {
             String validName = names.requireValid(name);
-            if (RiftWorldIdentity.findLoaded(validName) != null
+            if (RiftWorldIdentity.findAnyLoaded(validName) != null
                     || directories.exists(validName)
                     || profiles.find(validName).isPresent()) {
                 language.send(sender, RiftMessages.WORLD_ALREADY_EXISTS, worldArg(validName));
@@ -182,7 +182,7 @@ public final class WorldLifecycleService {
                 throw new IOException("world is already managed");
             }
             requireGenerator(generator);
-            World world = RiftWorldIdentity.findLoaded(validName);
+            World world = RiftWorldIdentity.findLoaded(validName, profiles);
             boolean loadedHere = false;
             if (world == null) {
                 Path directory = directories.require(validName);
@@ -212,7 +212,7 @@ public final class WorldLifecycleService {
     public void load(CommandSender sender, String name, String generator) {
         queueDynamic(sender, name, "load", () -> {
             String validName = names.requireValid(name);
-            if (RiftWorldIdentity.findLoaded(validName) != null) {
+            if (RiftWorldIdentity.findLoaded(validName, profiles) != null) {
                 throw new IOException("world is already loaded");
             }
             WorldProfile profile = profiles.find(validName).orElse(null);
@@ -287,7 +287,7 @@ public final class WorldLifecycleService {
             fail(sender, "unmanage", profile.getName(), new IOException("world profile is protected from unmanage"));
             return;
         }
-        boolean loaded = RiftWorldIdentity.findLoaded(profile.getName()) != null;
+        boolean loaded = RiftWorldIdentity.findLoaded(profile) != null;
         queueIo(sender, profile.getName(), "unmanage", () -> {
             WorldProfile active = profiles.find(profile.getName())
                     .orElseThrow(() -> new IOException("world is no longer managed"));
@@ -329,7 +329,7 @@ public final class WorldLifecycleService {
     }
 
     public void setProtected(CommandSender sender, String name, boolean enabled) {
-        if (!enabled && isPrimaryFamily(name)) {
+        if (!enabled && isPrimary(name)) {
             fail(sender, "protect", name, new IOException("primary world protection cannot be disabled"));
             return;
         }
@@ -337,7 +337,7 @@ public final class WorldLifecycleService {
     }
 
     public void teleport(CommandSender sender, Player player, String worldName) {
-        World world = RiftWorldIdentity.findLoaded(worldName);
+        World world = RiftWorldIdentity.findLoaded(worldName, profiles);
         if (world == null) {
             fail(sender, "teleport", worldName, new IOException("world is not loaded"));
             return;
@@ -388,7 +388,7 @@ public final class WorldLifecycleService {
     }
 
     private WorldCheck inspect(WorldSnapshot snapshot) throws IOException {
-        World world = RiftWorldIdentity.findLoaded(snapshot.name());
+        World world = RiftWorldIdentity.findLoaded(snapshot.name(), profiles);
         WorldProfile profile = profiles.find(snapshot.name()).orElse(null);
         Path storagePath = resolveStoragePath(snapshot, world, profile);
         String worldKey = world == null
@@ -398,7 +398,7 @@ public final class WorldLifecycleService {
         boolean generatorAvailable = generatorAvailable(generator);
         boolean writable = Files.isDirectory(storagePath, LinkOption.NOFOLLOW_LINKS)
                 && Files.isWritable(storagePath);
-        boolean primaryWorld = isPrimaryFamily(snapshot.name());
+        boolean primaryWorld = world != null ? RiftWorldIdentity.isPrimary(world) : profile != null && isPrimary(profile);
         boolean operationActive = isBusy(snapshot.name());
         boolean ready = snapshot.presentOnDisk()
                 && generatorAvailable
@@ -440,7 +440,7 @@ public final class WorldLifecycleService {
     private void quarantine(CommandSender sender, String name) throws Exception {
         WorldProfile profile = profiles.find(name).orElseThrow(() -> new IOException("only managed worlds can be quarantined"));
         requireMutable(profile, "delete");
-        World loaded = RiftWorldIdentity.findLoaded(profile.getName());
+        World loaded = RiftWorldIdentity.findLoaded(profile);
         Path source = loaded == null
                 ? directories.require(profile)
                 : loaded.getWorldPath().toAbsolutePath().normalize();
@@ -501,7 +501,7 @@ public final class WorldLifecycleService {
         WorldProfile restoredProfile = entry.toProfile();
         Path destination = directories.restoreTarget(restoredProfile);
         if (Files.exists(destination) || directories.exists(name)
-                || profiles.find(name).isPresent() || RiftWorldIdentity.findLoaded(name) != null) {
+                || profiles.find(name).isPresent() || RiftWorldIdentity.findAnyLoaded(name) != null) {
             throw new IOException("restore target already exists");
         }
         Files.createDirectories(destination.getParent());
@@ -597,19 +597,18 @@ public final class WorldLifecycleService {
     }
 
     private void unloadWorld(World world, boolean save) throws IOException {
-        String logicalName = RiftWorldIdentity.logicalName(world, profiles);
-        WorldProfile profile = profiles.find(logicalName).orElse(null);
+        WorldProfile profile = RiftWorldIdentity.profile(world, profiles).orElse(null);
         if (profile != null) {
             requireMutable(profile, "unload");
         }
-        if (isPrimaryFamily(logicalName)) {
-            throw new IOException("primary world family cannot be unloaded");
+        if (RiftWorldIdentity.isPrimary(world)) {
+            throw new IOException("the server's overworld, nether, and end cannot be unloaded while it runs");
         }
         World evacuation = evacuationWorld();
         if (evacuation.equals(world)) {
             throw new IOException("configured evacuation world cannot be unloaded");
         }
-        Location destination = evacuation.getSpawnLocation();
+        Location destination = SafeLanding.find(evacuation.getSpawnLocation());
         for (Player player : List.copyOf(world.getPlayers())) {
             if (!player.teleport(destination)) {
                 throw new IOException("could not evacuate player " + player.getName());
@@ -626,7 +625,7 @@ public final class WorldLifecycleService {
     private World evacuationWorld() throws IOException {
         RiftConfig current = config.get();
         if (!current.getEvacuationWorld().isBlank()) {
-            World configured = RiftWorldIdentity.findLoaded(current.getEvacuationWorld());
+            World configured = RiftWorldIdentity.findLoaded(current.getEvacuationWorld(), profiles);
             if (configured == null) {
                 throw new IOException("configured evacuation world is not loaded: " + current.getEvacuationWorld());
             }
@@ -643,25 +642,30 @@ public final class WorldLifecycleService {
         if (profile.isProtectedWorld()) {
             throw new IOException("world profile is protected from " + operation);
         }
-        if (isPrimaryFamily(profile.getName())) {
-            throw new IOException("primary world family is protected from " + operation);
+        if (isPrimary(profile)) {
+            throw new IOException("the server's overworld, nether, and end are protected from " + operation);
         }
     }
 
-    private boolean isPrimaryFamily(String name) {
-        List<World> worlds = Bukkit.getWorlds();
-        if (worlds.isEmpty() || name == null) {
-            return false;
+    private boolean isPrimary(WorldProfile profile) {
+        World loaded = RiftWorldIdentity.findLoaded(profile);
+        if (loaded != null) {
+            return RiftWorldIdentity.isPrimary(loaded);
         }
-        String primary = worlds.get(0).getName();
-        return name.equalsIgnoreCase(primary)
-                || name.equalsIgnoreCase(primary + "_nether")
-                || name.equalsIgnoreCase(primary + "_the_end");
+        return RiftWorldIdentity.recordedKey(profile).map(RiftWorldIdentity::isPrimaryKey).orElse(false);
+    }
+
+    private boolean isPrimary(String name) {
+        Optional<WorldProfile> profile = profiles.find(name);
+        if (profile.isPresent()) {
+            return isPrimary(profile.get());
+        }
+        return RiftWorldIdentity.isPrimary(RiftWorldIdentity.findLoaded(name, profiles));
     }
 
     private World requireLoaded(String name) throws IOException {
         String validName = names.requireValid(name);
-        World world = RiftWorldIdentity.findLoaded(validName);
+        World world = RiftWorldIdentity.findLoaded(validName, profiles);
         if (world == null) {
             throw new IOException("world is not loaded");
         }

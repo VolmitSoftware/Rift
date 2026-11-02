@@ -6,52 +6,56 @@
 # /rift language server edit vi_VI
 #
 # === Tiền tố ===
-# runtime.prefix chỉ chứa tên đã định dạng. {prefix} chèn tên; chỉnh sửa › và khoảng trắng trong từng thông báo.
+# runtime.prefix chỉ lưu tên plugin đã định dạng mà {prefix} chèn vào. Dấu phân cách và khoảng trắng do từng thông báo tự cung cấp. Xóa {prefix}&r &7› &7 để ẩn toàn bộ tiền tố trò chuyện.
 #
 # === Định dạng ===
-# Màu: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B và [RRGGBB]. MiniMessage vẫn dùng được cho định dạng tùy chỉnh.
+# Màu: &0-&f, &k-&r, &#RRGGBB, &xRRGGBB, &x&R&R&G&G&B&B và [RRGGBB]. MiniMessage vẫn dùng được cho định dạng tùy chỉnh. Đặt dấu gạch chéo ngược trước & hoặc [ để hiển thị nguyên ký tự đó.
 #
 # === Biến ===
-# Giữ nguyên tên biến và chỉ dùng những biến có sẵn trong từng thông báo.
+# Giữ nguyên tên biến và chỉ dùng những biến thuộc về từng thông báo.
+#   {added}  số thông báo được thêm bởi bản cập nhật ngôn ngữ
 #   {after}  giá trị mới
-#   {argument}  đối số lệnh
+#   {argument}  đối số
 #   {before}  giá trị trước đó
-#   {category}  danh mục lệnh
-#   {command}  văn bản hoặc tên lệnh
-#   {count}  số lượng mục hoặc kết quả
-#   {detail}  chi tiết mô tả
-#   {group}  Cho phép hay nhóm người chơi
-#   {id}  mã định danh
-#   {key}  khóa cấu hình hoặc thông báo
+#   {category}  danh mục
+#   {command}  đường dẫn lệnh
+#   {count}  số mục
+#   {detail}  chi tiết mục
+#   {group}  nhóm thông báo
+#   {id}  ID cách ly
+#   {kept}  số chỉnh sửa cục bộ được giữ lại sau bản cập nhật ngôn ngữ
+#   {key}  khóa tham số
 #   {label}  nhãn hiển thị
-#   {line}  Số dòng hay dòng nguồn
-#   {locale}  thiết lập vùng ngôn ngữ
-#   {maximum}  Giá trị được chấp nhận tối đa
-#   {name}  tên mục hoặc tên hiển thị
-#   {operation}  tên thao tác
-#   {parameter}  tên tham số
-#   {permission}  nút quyền hạn
-#   {personal}  mã vùng cá nhân
-#   {player}  tên người chơi
-#   {prefix}  runtime.prefix chỉ chứa tên đã định dạng. {prefix} chèn tên; chỉnh sửa › và khoảng trắng trong từng thông báo.
-#   {reason}  lý do hoặc chi tiết lỗi
+#   {line}  số dòng
+#   {locale}  mã ngôn ngữ
+#   {maximum}  độ dài nhập tối đa
+#   {name}  tên mục
+#   {operation}  thao tác
+#   {parameter}  tham số
+#   {permission}  quyền
+#   {personal}  mã ngôn ngữ cá nhân của người chơi khi khác với mặc định của máy chủ
+#   {player}  người chơi
+#   {prefix}  tên đã định dạng từ runtime.prefix; dấu phân cách và khoảng trắng thuộc về từng thông báo
+#   {reason}  chi tiết lỗi
+#   {remaining}  thời gian còn lại đến lần kiểm tra ngôn ngữ tiếp theo
 #   {seconds}  thời lượng tính bằng giây
-#   {setting}  tên cài đặt
-#   {target}  Người chơi đích, thực thể hay giá trị
-#   {title}  văn bản tiêu đề
-#   {type}  kiểu giá trị hoặc dữ liệu
+#   {setting}  thiết lập
+#   {target}  đối tượng được chọn
+#   {title}  tiêu đề mục
+#   {type}  kiểu giá trị
+#   {updated}  số thông báo được thay đổi bởi bản cập nhật ngôn ngữ
 #   {value}  giá trị hiện tại hoặc mới
-#   {variables}  chỗ giữ chỗ hợp lệ
-#   {version}  phiên bản
-#   {world}  tên thế giới
+#   {variables}  các biến được phép dùng
+#   {version}  phiên bản plugin
+#   {world}  thế giới
 
-#   {section}  Mục trong trình chỉnh sửa
-#   {path}  Đường dẫn báo cáo cục bộ
-#   {url}  URL báo cáo
+#   {section}  mục trong trình chỉnh sửa
+#   {path}  đường dẫn báo cáo cục bộ
+#   {url}  URL báo cáo đã tải lên
 
-#   {step}  Mức thay đổi mỗi lần nhấp
+#   {step}  mức thay đổi mỗi lần nhấp
 
-#   {limit}  số người chơi tối đa
+#   {limit}  số người chơi tối đa được vào một thế giới
 
 [runtime]
 prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
@@ -60,40 +64,40 @@ prefix = "<bold><gradient:#6f2dbd:#d16ba5>Rift</gradient></bold>"
 already_exists = "{prefix}&r &7› &7&e{world} đã tồn tại. Dùng &f/rift info {world}&e để kiểm tra hoặc chọn tên khác."
 
 [rift.command]
-policy_player_limit = "Giới hạn người chơi đi vào; 0 là không giới hạn"
-policy_travel_entry = "Kiểm soát việc vào giữa các thế giới; DENY chặn, INHERIT giữ nguyên"
-policy_travel_exit = "Kiểm soát việc rời giữa các thế giới; DENY chặn di chuyển, không chặn hồi sinh hay khôi phục khi đăng nhập"
-policy_first_join = "Chọn điểm xuất hiện của thế giới được quản lý đã tải cho lần đầu vào từ thế giới này; default dùng đích đăng nhập"
-policy_login = "Chọn điểm xuất hiện của thế giới được quản lý đã tải khi đăng nhập từ thế giới này; default giữ vị trí máy chủ"
-policy_game_mode = "Đặt chế độ chơi khi vào thế giới, đăng nhập và hồi sinh; INHERIT ngừng ép chế độ"
-policy_flight = "Điều khiển khả năng bay trong chế độ sinh tồn và phiêu lưu; INHERIT bỏ thiết lập bay của {prefix}"
+policy_player_limit = "Giới hạn số người chơi vào thế giới này; 0 là không giới hạn"
+policy_travel_entry = "Kiểm soát việc vào thế giới này từ thế giới khác; DENY chặn việc vào, INHERIT giữ nguyên"
+policy_travel_exit = "Kiểm soát việc rời sang thế giới khác; DENY chặn di chuyển, nhưng không chặn hồi sinh hay khôi phục khi đăng nhập"
+policy_first_join = "Chọn một điểm xuất hiện được quản lý đã tải cho lần vào đầu tiên được gán cho thế giới này; default dùng vị trí đăng nhập"
+policy_login = "Chọn một điểm xuất hiện được quản lý đã tải cho các lần đăng nhập được gán cho thế giới này; default giữ vị trí do máy chủ đặt"
+policy_game_mode = "Đặt chế độ chơi khi vào thế giới, đăng nhập và hồi sinh; INHERIT ngừng áp đặt chế độ chơi"
+policy_flight = "Điều khiển khả năng bay trong chế độ Sinh tồn và Phiêu lưu; INHERIT bỏ thiết lập bay của {prefix}"
 policy_weather = "Cố định trời quang, mưa hoặc giông; INHERIT cho phép thời tiết thay đổi trở lại"
-policy_natural_animals = "DENY chặn động vật xuất hiện tự nhiên; ALLOW vẫn tuân theo các giới hạn khác"
-policy_natural_monsters = "DENY chặn quái vật xuất hiện tự nhiên; ALLOW vẫn tuân theo các giới hạn khác"
-policy_edit = "Mở trình sửa chính sách thế giới"
+policy_natural_animals = "DENY chặn động vật xuất hiện tự nhiên; ALLOW vẫn tuân theo các giới hạn xuất hiện khác"
+policy_natural_monsters = "DENY chặn quái vật xuất hiện tự nhiên; ALLOW vẫn tuân theo các giới hạn xuất hiện khác"
+policy_edit = "Mở trình chỉnh sửa chính sách thế giới"
 check_all = "Kiểm tra tất cả thế giới phù hợp mà không thay đổi chúng"
 version = "Hiển thị phiên bản {prefix}"
-root = "Quản lý thế giới máy phục vụ an toàn"
-create = "Tạo ra và quản lý một thế giới mới"
+root = "Quản lý an toàn các thế giới trên máy chủ"
+create = "Tạo và quản lý một thế giới mới"
 import = "Nhập thư mục thế giới đã có"
-load = "Tải một thế giới quản lý hoặc khám phá"
-unload = "Những người chơi sơ tán và dỡ dỡ xuống một thế giới"
-delete = "Chuyển cả thế giới vào trạm kiểm dịch."
-restore = "Phục hồi một thế giới bị cách ly"
-teleport = "Name"
-send = "Name"
-list = "Danh sách được nạp, quản lý, phát hiện và cách ly các thế giới"
-info = "Hiện trạng thái chi tiết cho một thế giới"
-generators = "Hiện bộ nhận diện trình tạo đã được sử dụng bởi các thế giới quản lý"
-config = "Mở trò chơi {prefix} Trình soạn thảo cấu hình"
+load = "Tải một thế giới được quản lý hoặc đã phát hiện"
+unload = "Sơ tán người chơi và dỡ tải một thế giới"
+delete = "Chuyển một thế giới được quản lý vào khu cách ly"
+restore = "Khôi phục một thế giới đang bị cách ly"
+teleport = "Dịch chuyển đến một thế giới đã tải"
+send = "Dịch chuyển người chơi khác đến một thế giới đã tải"
+list = "Liệt kê các thế giới đã tải, được quản lý, đã phát hiện và đang cách ly"
+info = "Hiển thị trạng thái chi tiết của một thế giới"
+generators = "Hiển thị mã trình tạo mà các thế giới được quản lý đang dùng"
+config = "Mở trình chỉnh sửa cấu hình {prefix} trong trò chơi"
 language = "Chọn một ngôn ngữ {prefix} có sẵn"
-status = "Kiểm tra khả năng nền tảng và {prefix} Tình trạng"
+status = "Kiểm tra khả năng của nền tảng và trạng thái {prefix}"
 debug = "Công cụ chẩn đoán {prefix}"
 debug_dump = "Tạo báo cáo chẩn đoán {prefix} toàn diện"
-autoload = "Thay đổi cho dù một tải thế giới quản lý trong khi khởi động"
-protect = "Bảo vệ hoặc không bảo vệ một thế giới quản lý"
+autoload = "Chọn có tải một thế giới được quản lý khi khởi động hay không"
+protect = "Bật hoặc tắt bảo vệ cho một thế giới được quản lý"
 
-check = "Chạy kiểm tra trước chỉ đọc cho thế giới"
+check = "Chạy kiểm tra sơ bộ chỉ đọc cho một thế giới"
 unmanage = "Dừng quản lý thế giới mà không thay đổi tệp của nó"
 
 policy = "Xem và chỉnh sửa chính sách của từng thế giới được quản lý"
@@ -103,8 +107,8 @@ policy_pvp = "Cho phép hoặc từ chối PvP, hoặc kế thừa giá trị c�
 policy_gamerule = "Đặt luật chơi hoặc ngừng quản lý luật đó"
 policy_spawn = "Đặt điểm xuất hiện của thế giới này tại vị trí an toàn hiện tại của bạn"
 policy_spawn_clear = "Ngừng quản lý điểm xuất hiện của thế giới này"
-policy_border = "Cấu hình biên giới được quản lý của thế giới này"
-policy_border_clear = "Đặt lại biên giới của thế giới này và ngừng quản lý"
+policy_border = "Cấu hình biên giới thế giới được quản lý cho thế giới này"
+policy_border_clear = "Đặt lại biên giới thế giới cho thế giới này và ngừng quản lý"
 policy_access = "Yêu cầu quyền để vào thế giới này hoặc xóa yêu cầu"
 policy_respawn = "Chuyển nơi hồi sinh sau khi chết trong thế giới này sang một thế giới được quản lý khác hoặc mặc định của máy chủ"
 policy_tag = "Thêm hoặc xóa thẻ quản trị"
@@ -113,35 +117,35 @@ policy_tag = "Thêm hoặc xóa thẻ quản trị"
 player_limit = "Số người chơi tối đa, hoặc 0 để không giới hạn"
 policy_game_mode = "SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR hoặc INHERIT"
 policy_weather = "CLEAR, RAIN, THUNDER hoặc INHERIT"
-tag_filter = "Lọc theo nhãn quản trị viên hoặc dùng all"
-tag_group = "Nhóm các thế giới phù hợp theo nhãn quản trị viên"
+tag_filter = "Lọc theo thẻ quản trị, hoặc all"
+tag_group = "Nhóm các thế giới phù hợp theo thẻ quản trị"
 name = "Tên thế giới"
-environment = "NORMAL, NETHER, THE_END, hoặc CUSTOM"
-generator = "vanilla, void, hoặc PluginName[:gentor-id]"
-seed = "random hoặc một hạt giống 64 bit đã được ký"
-type = "Bukkit Kiểu thế giới"
-save = "Lưu trước khi gỡ bỏ"
-id = "Số ID mục ra cách ly"
-player = "Tên người chơi trực tuyến"
-enabled = "true hay false"
-page = "Trang danh sách cổng được đánh số từ một"
+environment = "NORMAL, NETHER, THE_END hoặc CUSTOM"
+generator = "vanilla, void hoặc PluginName[:generator-id]"
+seed = "random hoặc một hạt giống 64 bit có dấu"
+type = "Kiểu thế giới Bukkit"
+save = "Lưu trước khi dỡ tải"
+id = "ID mục cách ly"
+player = "Tên người chơi đang trực tuyến"
+enabled = "true hoặc false"
+page = "Số trang kết quả"
 upload = "Tải báo cáo lên khi bật tải lên công khai"
-sender = "Bộ gửi lệnh"
+sender = "Người gửi lệnh"
 
 managed_world = "Tên thế giới được quản lý"
 policy_difficulty = "PEACEFUL, EASY, NORMAL, HARD hoặc INHERIT"
 policy_pvp = "ALLOW, DENY hoặc INHERIT"
 game_rule = "Tên luật chơi Minecraft"
 game_rule_value = "Giá trị luật chơi hoặc INHERIT"
-border_size = "Đường kính biên giới tính bằng khối"
-border_center_x = "Tọa độ X của tâm biên giới"
-border_center_z = "Tọa độ Z của tâm biên giới"
+border_size = "Đường kính biên giới thế giới tính bằng khối"
+border_center_x = "Tọa độ X của tâm biên giới thế giới"
+border_center_z = "Tọa độ Z của tâm biên giới thế giới"
 border_warning_distance = "Khoảng cách cảnh báo tính bằng khối"
 border_warning_time = "Thời gian cảnh báo tính bằng giây"
-border_damage = "Sát thương trên mỗi khối vượt ngoài biên giới"
-border_buffer = "Khoảng cách an toàn bên ngoài biên giới"
+border_damage = "Sát thương cho mỗi khối ở ngoài biên giới thế giới"
+border_buffer = "Khoảng cách an toàn bên ngoài biên giới thế giới"
 access_permission = "Nút quyền hoặc clear"
-access_denied_message = "Thông báo tùy chọn hiển thị khi bị từ chối truy cập"
+access_denied_message = "Thông báo tùy chọn hiển thị khi bị từ chối vào thế giới"
 respawn_destination = "Tên thế giới được quản lý hoặc default"
 policy_tag = "Tên thẻ quản trị"
 tag_enabled = "true thêm thẻ; false xóa thẻ"
@@ -149,47 +153,46 @@ tag_enabled = "true thêm thẻ; false xóa thẻ"
 [rift.message]
 policy_world_full = "{prefix}&r &7› &7&c{world} đã đầy (giới hạn: {limit})."
 policy_travel_denied = "{prefix}&r &7› &7&cChính sách của {world} chặn di chuyển giữa các thế giới."
-policy_placement_failed = "Không có chỗ trong thế giới nào được phép vào. Hãy liên hệ quản trị viên."
+policy_placement_failed = "Không có thế giới nào bạn vào được còn chỗ trống. Hãy liên hệ quản trị viên máy chủ."
 version = "<gradient:#6f2dbd:#d16ba5>{prefix} v{version}</gradient>"
-permission_denied = "{prefix}&r &7› &7&cAnh cần &f{permission}&7."
-unknown_command = "{prefix}&r &7› &7&cLệnh lạ. Dùng &f/rift help&7."
-player_only = "{prefix}&r &7› &7&cLệnh này yêu cầu một người chơi."
-operation_queued = "{prefix}&r &7› &7Hàng đợi &f{operation}&7 Vì &d{world}&7."
-operation_failed = "{prefix}&r &7› &7&c{operation} bị lỗi &f{world}&7: {reason}"
-created = "{prefix}&r &7› &7Tạo ra và quản lý &a{world}&7."
-imported = "{prefix}&r &7› &7Nhập và quản lý &a{world}&7."
-loaded = "{prefix}&r &7› &7Đã nạp &a{world}&7."
-unloaded = "{prefix}&r &7› &7Chưa tải &a{world}&7."
-teleported = "{prefix}&r &7› &7Chuyển tiếp &a{player}&7 phải &a{world}&7."
-delete_confirm = "{prefix}&r &7› &7Chạy &e/rift delete {world}&7 bên trong &e{seconds}s&7 để đưa nó vào trạm kiểm dịch."
-quarantined = "{prefix}&r &7› &7Chuyển &a{world}&7 vào khu cách ly như &a{id}&7."
-restored = "{prefix}&r &7› &7Đã phục hồi &a{world}&7 từ &a{id}&7."
-profile_updated = "{prefix}&r &7› &7Cập nhật &a{setting}&7 Vì &a{world}&7 phải &a{value}&7."
-folia_limit = "{prefix}&r &7› &7{operation} không sẵn sàng trên Folia bởi vì thế giới của nó gánh nặng/unload ARI chưa được thực hiện."
-config_saved = "{prefix}&r &7› &7&aĐã lưu cấu hình."
+permission_denied = "{prefix}&r &7› &7&cBạn cần quyền &f{permission}&7."
+unknown_command = "{prefix}&r &7› &7&cLệnh không xác định. Dùng &f/rift help&7."
+player_only = "{prefix}&r &7› &7&cLệnh này chỉ dành cho người chơi."
+operation_queued = "{prefix}&r &7› &7Đã đưa &f{operation}&7 cho &d{world}&7 vào hàng đợi."
+operation_failed = "{prefix}&r &7› &7&c{operation} thất bại cho &f{world}&7: {reason}"
+created = "{prefix}&r &7› &7Đã tạo và đưa &a{world}&7 vào quản lý."
+imported = "{prefix}&r &7› &7Đã nhập và đưa &a{world}&7 vào quản lý."
+loaded = "{prefix}&r &7› &7Đã tải &a{world}&7."
+unloaded = "{prefix}&r &7› &7Đã dỡ tải &a{world}&7."
+teleported = "{prefix}&r &7› &7Đã dịch chuyển &a{player}&7 đến &a{world}&7."
+delete_confirm = "{prefix}&r &7› &7Chạy lại &e/rift delete {world}&7 trong vòng &e{seconds} giây&7 để chuyển nó vào khu cách ly."
+quarantined = "{prefix}&r &7› &7Đã chuyển &a{world}&7 vào khu cách ly với ID &a{id}&7."
+restored = "{prefix}&r &7› &7Đã khôi phục &a{world}&7 từ &a{id}&7."
+profile_updated = "{prefix}&r &7› &7Đã cập nhật &a{setting}&7 của &a{world}&7 thành &a{value}&7."
+folia_limit = "{prefix}&r &7› &7{operation} không khả dụng trên Folia vì API tải/dỡ tải thế giới của nền tảng này chưa được triển khai."
 config_opened = "{prefix}&r &7› &7Đã mở trình chỉnh sửa cấu hình đầy đủ trong trò chơi.&r"
-config_save_failed = "{prefix}&r &7› &7&cKhông thể lưu cấu hình. Hãy kiểm tra lại bàn giao diện."
-empty_list = "{prefix}&r &7› &7Không tìm thấy thế giới nào giống nhau cả."
+config_save_failed = "{prefix}&r &7› &7&cKhông thể lưu cấu hình. Hãy kiểm tra bảng điều khiển."
+empty_list = "{prefix}&r &7› &7Không tìm thấy thế giới phù hợp."
 player_offline = "{prefix}&r &7› &7&cNgười chơi không trực tuyến: &f{player}"
-unknown_world = "{prefix}&r &7› &7&cThế giới không rõ: &f{world}"
+unknown_world = "{prefix}&r &7› &7&cThế giới không xác định: &f{world}"
 section = "{prefix}&r &7› &7&d{title} &8(&f{count}&8)"
 entry = "{prefix}&r &7› &7&8- &f{name} &8| &7{detail}"
 detail = "{prefix}&r &7› &7&8- &7{label}: &f{value}"
 info_title = "{prefix}&r &7› &7&d{world}"
-status_title = "{prefix}&r &7› &7{prefix} {version} Trạng thái"
-generator_format = "{prefix}&r &7› &7Custom Định dạng: &fPluginName[:gentor-id]"
-folia_status_note = "{prefix}&r &7› &7Folia Hỗ trợ {prefix}'đã đọc, biên tập, hồ sơ, và dịch chuyển tức thời; xe đạp thế giới sống động được đóng cửa bởi sân ga ARI."
+status_title = "{prefix}&r &7› &7Trạng thái {prefix} {version}"
+generator_format = "{prefix}&r &7› &7Định dạng tùy chỉnh: &fPluginName[:generator-id]"
+folia_status_note = "{prefix}&r &7› &7Folia hỗ trợ các tính năng đọc, trình chỉnh sửa, hồ sơ và dịch chuyển của {prefix}; vòng đời thế giới động phụ thuộc vào API của nền tảng."
 
-unmanaged_loaded = "{prefix}&r &7› &7Đã dừng quản lý &a{world}&7 mà không thay đổi tệp. Thế giới vẫn được tải cho đến khi một plugin khác hoặc máy chủ dỡ nó."
+unmanaged_loaded = "{prefix}&r &7› &7Đã dừng quản lý &a{world}&7 mà không thay đổi tệp. Thế giới vẫn được tải cho đến khi một plugin khác hoặc máy chủ dỡ tải nó."
 unmanaged_unloaded = "{prefix}&r &7› &7Đã dừng quản lý &a{world}&7 mà không thay đổi tệp. {prefix} sẽ không còn tải thế giới này khi khởi động."
 
 policy_access_denied = "{prefix}&r &7› &7&cBạn không thể vào &f{world}&7. Bạn cần quyền &f{permission}&7."
 
 [rift.label]
 policy_player_limit = "Giới hạn người chơi"
-policy_travel_entry = "Vào giữa các thế giới"
-policy_travel_exit = "Rời giữa các thế giới"
-policy_first_join_world = "Đích vào lần đầu"
+policy_travel_entry = "Vào từ thế giới khác"
+policy_travel_exit = "Rời sang thế giới khác"
+policy_first_join_world = "Đích khi vào lần đầu"
 policy_login_world = "Đích đăng nhập"
 policy_game_mode = "Chế độ chơi"
 policy_flight = "Bay"
@@ -198,28 +201,28 @@ policy_natural_animals = "Động vật xuất hiện tự nhiên"
 policy_natural_monsters = "Quái vật xuất hiện tự nhiên"
 worlds = "Thế giới"
 quarantine = "Cách ly"
-loaded = "Đã nạp"
-managed = "Đã quản lý"
+loaded = "Đã tải"
+managed = "Được quản lý"
 on_disk = "Trên đĩa"
-missing = "đã mất tích trong việc quản lý thế giới"
+missing = "thế giới được quản lý bị thiếu"
 environment = "Môi trường"
-generator = "Chung"
+generator = "Trình tạo"
 seed = "Hạt giống"
-autoload = "Nạp tự động"
-protected = "Đã bảo vệ"
-operation_active = "Hoạt động"
+autoload = "Tự động tải"
+protected = "Được bảo vệ"
+operation_active = "Thao tác đang chạy"
 world_types = "Kiểu thế giới"
-configured_generators = "Thiết lập máy phát điện"
-available = "có sẵn"
-unavailable = "không sẵn sàng"
-server = "Máy phục vụ"
-java_runtime = "Java giờ chạy"
-plugin_bytecode = "Bổ sung byte mã hoá"
+configured_generators = "Trình tạo đã cấu hình"
+available = "khả dụng"
+unavailable = "không khả dụng"
+server = "Máy chủ"
+java_runtime = "Môi trường chạy Java"
+plugin_bytecode = "Bytecode của plugin"
 platform = "Nền tảng"
-dynamic_lifecycle = "Xe đạp sống động thế giới"
-world_container = "Hộp thế giới"
-writable = "Name"
-locale = "Miền địa phương"
+dynamic_lifecycle = "Vòng đời thế giới động"
+world_container = "Thư mục chứa thế giới"
+writable = "Có thể ghi vào thư mục chứa thế giới"
+locale = "Mã ngôn ngữ"
 world_counts = "Thế giới"
 quarantine_entries = "Mục cách ly"
 
@@ -237,8 +240,8 @@ policy_difficulty = "Độ khó"
 policy_pvp = "PvP"
 policy_game_rules = "Luật chơi"
 policy_custom_spawn = "Điểm xuất hiện tùy chỉnh"
-policy_managed_border = "Biên giới được quản lý"
-policy_access_permission = "Quyền truy cập"
+policy_managed_border = "Biên giới thế giới được quản lý"
+policy_access_permission = "Quyền vào thế giới"
 policy_respawn_world = "Thế giới hồi sinh"
 policy_tags = "Thẻ"
 none = "không có"
@@ -248,41 +251,41 @@ server_default = "mặc định của máy chủ"
 loaded = "Cho biết Bukkit hiện có đang giữ thế giới này hoạt động trong bộ nhớ hay không."
 managed = "Cho biết {prefix} có hồ sơ của thế giới này để khôi phục trình tạo và thiết lập khởi động hay không."
 on_disk = "Cho biết thế giới đã được tải hoặc có thư mục thế giới hợp lệ chứa level.dat hay không."
-environment = "Môi trường thế giới Bukkit được ghi trong thế giới đang chạy hoặc hồ sơ quản lý."
-generator = "Trình tạo mà {prefix} áp dụng lại khi tải thế giới được quản lý. void là trình tạo thế giới trống tích hợp của {prefix}."
-seed = "Hạt giống được ghi cho thế giới này. Thay đổi giá trị hiển thị này không tạo lại địa hình hiện có."
+environment = "Môi trường thế giới Bukkit được ghi nhận từ thế giới đang chạy hoặc hồ sơ được quản lý."
+generator = "Trình tạo mà {prefix} áp dụng lại khi tải thế giới được quản lý này. void là trình tạo thế giới trống tích hợp của {prefix}."
+seed = "Hạt giống được ghi nhận cho thế giới này. Thay đổi giá trị hiển thị này không tạo lại địa hình hiện có."
 autoload = "Cho biết {prefix} có tự động tải thế giới được quản lý này khi máy chủ khởi động hay không."
-protected = "Không thể chuyển thế giới được quản lý có bảo vệ vào vùng cách ly {prefix}."
-operation_active = "Cho biết một thao tác vòng đời thế giới hiện có đang giữ khóa riêng cho thế giới của {prefix} hay không."
+protected = "Không thể chuyển thế giới được quản lý có bảo vệ vào khu cách ly của {prefix}."
+operation_active = "Cho biết một thao tác vòng đời hiện có đang giữ khóa theo thế giới của {prefix} hay không."
 server = "Bản triển khai và phiên bản máy chủ đang chạy do Bukkit báo cáo."
 java_runtime = "Môi trường chạy Java hiện đang vận hành máy chủ. {prefix} yêu cầu Java 25 trở lên."
-plugin_bytecode = "Phiên bản Java cũ nhất có thể tải các lớp đã biên dịch của {prefix}."
+plugin_bytecode = "Môi trường chạy Java cũ nhất có thể tải các lớp đã biên dịch của {prefix}."
 platform = "Bộ lập lịch và họ API máy chủ mà {prefix} phát hiện khi chạy."
 dynamic_lifecycle = "Cho biết nền tảng có hỗ trợ an toàn việc tạo, tải, dỡ tải, cách ly và khôi phục thế giới khi đang chạy hay không."
 world_container = "Thư mục máy chủ chứa các thư mục thế giới Bukkit."
 writable = "Cho biết hệ điều hành hiện có cho phép {prefix} ghi vào thư mục chứa thế giới hay không."
 locale = "Tệp ngôn ngữ đang dùng trong plugins/Rift/languages. Các mục còn thiếu sử dụng bản tiếng Anh tích hợp."
-world_counts = "Đã tải là số thế giới Bukkit đang hoạt động; được quản lý là số hồ sơ {prefix}; bị thiếu là số hồ sơ có thế giới chưa tải và không có trên đĩa."
+world_counts = "\"Đã tải\" là số thế giới Bukkit đang hoạt động; \"được quản lý\" là số hồ sơ {prefix}; \"bị thiếu\" là số hồ sơ được quản lý không được tải và cũng không có trên đĩa."
 quarantine = "Các thế giới được lệnh delete của {prefix} chuyển sang một bên và có thể khôi phục bằng ID cách ly."
-world_entry = "Đã tải nghĩa là đang hoạt động; được quản lý nghĩa là có hồ sơ {prefix}; trên đĩa nghĩa là tồn tại thư mục thế giới hợp lệ chưa được tải."
+world_entry = "\"Đã tải\" nghĩa là đang hoạt động; \"được quản lý\" nghĩa là có hồ sơ {prefix}; \"trên đĩa\" nghĩa là có thư mục thế giới hợp lệ chưa được tải."
 
 world_key = "Mã định danh Paper chính thức của thế giới."
 storage_path = "Thư mục chính xác đã được phân giải nơi lưu các tệp của thế giới này."
-storage_layout = "Không gian tên sở hữu thư mục lưu trữ của thế giới này."
+storage_layout = "Không gian tên sở hữu thư mục chiều không gian của thế giới này."
 players = "Số người chơi hiện có trong thế giới đã tải này."
-generator_status = "Trình tạo đã cấu hình là tích hợp sẵn hay nhà cung cấp của nó có sẵn."
-primary_world = "Đây có phải là thế giới chính của máy chủ, không thể ngừng quản lý hoặc dỡ tải."
-check_result = "Bản tóm tắt các yếu tố cản trở và cảnh báo đã phát hiện."
+generator_status = "Cho biết trình tạo đã cấu hình là loại tích hợp sẵn hay nhà cung cấp của nó đang khả dụng."
+primary_world = "Cho biết đây có phải là thế giới chính của máy chủ, vốn không thể ngừng quản lý hoặc dỡ tải, hay không."
+check_result = "Bản tóm tắt các yếu tố cản trở vòng đời và cảnh báo đã phát hiện."
 
 [rift.feedback]
 title = "{prefix}"
 world_subtitle = "&a{operation}&8: &f{world}"
-teleport_subtitle = "&aĐến &f{world}"
+teleport_subtitle = "&aĐã đến &f{world}"
 failure_title = "&cThao tác thất bại"
 failure_subtitle = "&7{operation}&8: &f{world}"
 action_world = "{prefix}&r &7› &7&a{operation} &a{world}"
-action_teleport = "{prefix}&r &7› &7&aChuyển tới &a{world}"
-action_failure = "{prefix}&r &7› &7&c{operation} bị lỗi &f{world}"
+action_teleport = "{prefix}&r &7› &7&aĐã dịch chuyển đến &a{world}"
+action_failure = "{prefix}&r &7› &7&c{operation} thất bại cho &f{world}"
 
 [rift.gui]
 updates = "&dThông báo cập nhật"
@@ -290,18 +293,18 @@ policy_native_default = "&7Mặc định của trò chơi: &f{value}"
 policy_inherited = "&7Chính sách: INHERIT"
 policy_unloaded = "&7Thế giới chưa tải: giá trị kế thừa hiển thị mặc định của trò chơi"
 policy_default = "&7Mặc định: &f{value}"
-policy_number = "&7Trái: +{step}; phải: -{step}; Shift: x10"
+policy_number = "&7Nhấp trái: +{step}; nhấp phải: -{step}; Shift: x10"
 policy_select = "&7Nhấp để chọn từ các giá trị có sẵn"
 policy_selected = "&aĐã chọn"
-policy_apply = "&aÁp dụng tọa độ xuất hiện"
+policy_apply = "&aÁp dụng tọa độ điểm xuất hiện"
 policy_here = "&dDùng vị trí hiện tại của tôi"
 policy_draft = "&7Bản nháp: &f{value}"
 policy_enabled = "&dĐược quản lý"
 policy_x = "&dTọa độ X"
 policy_y = "&dTọa độ Y"
 policy_z = "&dTọa độ Z"
-policy_yaw = "&dGóc xoay"
-policy_border_size = "&dĐường kính biên giới"
+policy_yaw = "&dGóc xoay ngang"
+policy_border_size = "&dĐường kính biên giới thế giới"
 policy_warning_distance = "&dKhoảng cách cảnh báo (khối)"
 policy_warning_time = "&dThời gian cảnh báo (giây)"
 policy_damage_amount = "&dSát thương mỗi khối"
@@ -309,60 +312,57 @@ policy_damage_buffer = "&dKhoảng đệm sát thương (khối)"
 policy_title = "&dChính sách thế giới"
 policy_reset = "&7Nhấn Q để khôi phục chính sách mặc định"
 policy_spawn = "&7Điều chỉnh tọa độ rồi áp dụng điểm xuất hiện an toàn"
-policy_center = "&dTâm biên giới (x z)"
-policy_warning = "&dCảnh báo biên giới (khối giây)"
-policy_damage = "&dSát thương biên giới (mức khoảng đệm)"
-policy_denial = "&dThông báo từ chối truy cập"
-policy_tags = "&7Nhập các nhãn phân cách bằng dấu phẩy, hoặc clear"
+policy_denial = "&dThông báo từ chối vào thế giới"
+policy_tags = "&7Nhập các thẻ phân cách bằng dấu phẩy, hoặc clear"
 policy_clear = "&7Nhập clear để khôi phục mặc định"
 policy_previous = "&eTrang trước"
 policy_next = "&eTrang sau"
-current = "&7& Hiện có: &f{value}"
-autoload = "&dTải tự động lên các thế giới"
-delete = "&dCho phép việc cách ly thế giới"
-verbose = "&dĐăng nhập linh tinh"
-debug_upload = "&dViệc gỡ lỗi công cộng tải lên"
-bstats = "&dVô danh bStats mét"
-confirm_seconds = "&dXoá giây xác nhận"
-poll = "&d% 1 phần nghìn giây"
-cooldown = "&dTốc độ làm mát theo mili giây"
+current = "&7Hiện tại: &f{value}"
+autoload = "&dTự động tải thế giới được quản lý"
+delete = "&dCho phép cách ly thế giới"
+verbose = "&dGhi nhật ký chi tiết"
+debug_upload = "&dTải lên công khai báo cáo chẩn đoán"
+bstats = "&dSố liệu bStats ẩn danh"
+confirm_seconds = "&dSố giây chờ xác nhận xóa"
+poll = "&dChu kỳ kiểm tra tải lại nóng (mili giây)"
+cooldown = "&dThời gian chờ tải lại nóng (mili giây)"
 evacuation = "&dThế giới sơ tán"
 close = "&cĐóng"
-splash = "&dKhởi động màn hình giật gân"
+splash = "&dMàn hình chào khi khởi động"
 lifecycle_feedback = "&dPhản hồi vòng đời thế giới"
-teleport_feedback = "&dPhản hồi cổng chuyển tiếp"
-failure_feedback = "&dPhản hồi sai"
-title_popups = "&dHiển thị tiêu đề"
-action_bar_popups = "&dComment"
-sounds = "&dÂm thanh trả lời"
-root_title = "{prefix} Cấu hình"
+teleport_feedback = "&dPhản hồi dịch chuyển"
+failure_feedback = "&dPhản hồi khi thất bại"
+title_popups = "&dThông báo tiêu đề"
+action_bar_popups = "&dThông báo trên thanh hành động"
+sounds = "&dÂm thanh phản hồi"
+root_title = "Cấu hình {prefix}"
 category_title = "{prefix}: {category}"
-category_open = "&8Nhấn vào để sửa đổi mọi thiết lập trong phần này"
-back = "&eLùi"
-toggle = "&8Nhấn vào để bật lên"
-exact_number = "&8Trái/right điều chỉnh; bấm Q để nhập một giá trị chính xác"
-text = "&8Nhấn vào để nhập một giá trị mới vào trò chuyện"
-prompt = "{prefix}&r &7› &7Gõ một giá trị mới cho &f{setting}&7 Nói chuyện."
-prompt_cancel = "{prefix}&r &7› &7Kiểu &fhủy bỏ&7 trở về mà không thay đổi nó."
-prompt_cancelled = "{prefix}&r &7› &7Việc nhập dữ liệu cấu hình bị thôi."
-prompt_timeout = "{prefix}&r &7› &7Cấu hình nhập đã quá giờ."
+category_open = "&8Nhấp để chỉnh sửa mọi thiết lập trong mục này"
+back = "&eQuay lại"
+toggle = "&8Nhấp để bật hoặc tắt"
+exact_number = "&8Nhấp trái/phải để điều chỉnh; nhấn Q để nhập giá trị chính xác"
+text = "&8Nhấp để nhập giá trị mới trong trò chuyện"
+prompt = "{prefix}&r &7› &7Nhập giá trị mới cho &f{setting}&7 trong trò chuyện."
+prompt_cancel = "{prefix}&r &7› &7Nhập &fcancel&7 để quay lại mà không thay đổi."
+prompt_cancelled = "{prefix}&r &7› &7Đã hủy nhập cấu hình."
+prompt_timeout = "{prefix}&r &7› &7Đã hết thời gian nhập cấu hình."
 setting_saved = "{prefix}&r &7› &7&f{setting} &7› &7Đã đổi thành &a{after} &7từ &f{before}&7."
 setting_failed = "{prefix}&r &7› &7&cKhông thể cập nhật &f{setting}&7: {reason}"
-language = "&dMiền ngôn ngữ"
-language_select = "&8Nhấn để chọn từ các ngôn ngữ có sẵn"
-lifecycle_sound = "&dTiếng xe đạp của thế giới"
-teleport_sound = "&dÂm thanh cổng đi"
-failure_sound = "&dÂm thanh Thất bại"
-sound_volume = "&dÂm thanh"
-sound_pitch = "&dNém âm thanh"
-title_fade_in = "&dĐộ mờ dần tiêu đề"
-title_stay = "&dĐánh dấu tiêu đề còn lại"
-title_fade_out = "&dCon bọ chét phai tiêu đề"
+language = "&dMã ngôn ngữ"
+language_select = "&8Nhấp để chọn từ các ngôn ngữ có sẵn"
+lifecycle_sound = "&dÂm thanh vòng đời thế giới"
+teleport_sound = "&dÂm thanh dịch chuyển"
+failure_sound = "&dÂm thanh khi thất bại"
+sound_volume = "&dÂm lượng"
+sound_pitch = "&dCao độ âm thanh"
+title_fade_in = "&dSố tick hiện dần tiêu đề"
+title_stay = "&dSố tick hiển thị tiêu đề"
+title_fade_out = "&dSố tick mờ dần tiêu đề"
 
 [rift.gui.category]
-general = "&dChung"
-feedback = "&dÂm & thanh trả lại"
-presentation = "&dTrình chiếu"
+general = "&dChung và an toàn"
+feedback = "&dPhản hồi và âm thanh"
+presentation = "&dHiển thị"
 diagnostics = "&dChẩn đoán&r"
 languages = "&dNgôn ngữ và thông báo"
 
@@ -397,16 +397,16 @@ type = "Tham số này có kiểu {type}."
 invalid_origin = "{prefix}&r &7› &7&cKhông thể chạy lệnh này từ nguồn này."
 unknown_parameter = "{prefix}&r &7› &7&cKhóa tham số không xác định: {key}"
 unexpected_argument = "{prefix}&r &7› &7&cĐối số không mong đợi \"{argument}\". Các tham số tùy chọn phải được chỉ định bằng khóa, ví dụ seed=123"
-unclosed_group = "{prefix}&r &7› &7&cThiếu dấu \"]\" đóng cho tham số {key}"
+unclosed_group = "{prefix}&r &7› &7&cThiếu dấu đóng \"]\" cho tham số {key}"
 conversion_failed = "{prefix}&r &7› &7&cKhông thể chuyển \"{value}\" thành {type} cho {parameter}"
 default_parse_failed = "{prefix}&r &7› &7&cKhông thể phân tích giá trị mặc định của tham số {parameter}"
 missing_argument = "{prefix}&r &7› &7&cThiếu đối số \"{parameter}\" ({type})"
 execution_failed = "{prefix}&r &7› &7&cKhông thể thực thi lệnh {command}: {reason}"
 
 [language.menu]
-selected = "Đã chọn"
-command = "Câu lệnh: {command}"
-all-volmit-plugins = "Tất cả plugin Volmit"
+selected = "đã chọn"
+command = "Lệnh: {command}"
+all-volmit-plugins = "tất cả plugin Volmit"
 your_language = "Ngôn ngữ của bạn"
 reset_your_language = "Đặt lại ngôn ngữ của bạn"
 server_default = "Ngôn ngữ mặc định của máy chủ"
@@ -420,15 +420,15 @@ server_description = "Thay đổi ngôn ngữ mặc định của máy chủ."
 edit_description = "Mở trình chỉnh sửa thông báo cho từng ngôn ngữ."
 select_description = "Nhấp để chọn ngôn ngữ này."
 remove_personal_description = "Xóa lựa chọn ngôn ngữ cá nhân của bạn."
-no_controls = "Bạn không có quyền dùng các tùy chọn ngôn ngữ."
+no_controls = "Không có tùy chọn ngôn ngữ nào dành cho bạn."
 
 [language.editor]
 title = "{prefix} › {section}"
-loading = "{prefix}&r &7› &7&7Đang tải tin nhắn cho {locale}..."
+loading = "{prefix}&r &7› &7&7Đang tải thông báo cho {locale}..."
 
 [language.editor.category]
-open = "&8Nhấn vào để mở phân loại này.&r"
-message-count = "&7{count} tin nhắn&r"
+open = "&8Nhấp để mở danh mục này.&r"
+message-count = "&7{count} thông báo&r"
 
 [language.editor.error]
 unable-to-edit = "{prefix}&r &7› &7&cKhông thể chỉnh sửa: {reason}"
@@ -436,22 +436,22 @@ no-permission = "{prefix}&r &7› &7&cBạn không có quyền chỉnh sửa ng�
 
 [language.editor.input]
 unable-to-save = "{prefix}&r &7› &7&7Không thể lưu: {reason}"
-too-long = "{prefix}&r &7› &7&7Nội dung nhập chỉ được có tối đa {maximum} ký tự."
+too-long = "{prefix}&r &7› &7&7Nội dung nhập không được vượt quá {maximum} ký tự."
 expired = "{prefix}&r &7› &7&7Đã hết thời gian nhập trong trình chỉnh sửa ngôn ngữ."
 
 [language.editor.locale]
-open = "&8Nhấn vào để mở ngôn ngữ này.&r"
+open = "&8Nhấp để mở ngôn ngữ này.&r"
 
 [language.editor.message]
 variables = "&8{variables}&r"
 edit-plural = "&7Nhấp để chỉnh sửa một dạng số nhiều.&r"
 edit-lines = "&7Nhấp để chỉnh sửa từng dòng.&r"
 edit-chat = "&7Nhấp để chỉnh sửa trong trò chuyện.&r"
-current-value = "&7Giá trị hiện có:&r"
+current-value = "&7Giá trị hiện tại:&r"
 
 [language.editor.navigation]
 previous-page = "&eTrang trước&r"
-next-page = "&eTrang kế&r"
+next-page = "&eTrang sau&r"
 close = "&cĐóng&r"
 back = "&eQuay lại&r"
 
@@ -461,7 +461,7 @@ line = "Dòng {line}"
 [language.editor.prompt]
 variables = "{prefix}&r &7› &7&7Biến: {variables}"
 value = "{prefix}&r &7› &7&7Nhập giá trị mới cho {key} trong trò chuyện."
-search = "{prefix}&r &7› &7&7Tìm khóa hoặc nội dung tin nhắn. Nhập cancel để quay lại."
+search = "{prefix}&r &7› &7&7Tìm khóa hoặc nội dung thông báo. Nhập cancel để quay lại."
 guidance = "{prefix}&r &7› &7&7Dùng \\n để xuống dòng, \\\\ để nhập dấu gạch chéo ngược, hoặc nhập cancel để quay lại."
 current = "{prefix}&r &7› &7&7Giá trị hiện tại: {value}"
 
@@ -470,8 +470,8 @@ summary = "{prefix}&r &7› &7&7Đã lưu {locale}. Các lựa chọn ngôn ng�
 change = "{prefix}&r &7› &7&7{key}: “{before}” đã đổi thành “{after}”."
 
 [language.editor.search]
-messages-lore = "Nhấn vào để tìm kiếm mọi tin nhắn."
-messages = "Tìm tin nhắn"
+messages-lore = "Nhấp để tìm trong mọi thông báo."
+messages = "Tìm thông báo"
 clear = "Xóa tìm kiếm"
 
 [language.editor.section]
@@ -486,7 +486,7 @@ empty = "(trống)"
 
 [language.error]
 unavailable-for-all = "{prefix}&r &7› &7&cNgôn ngữ {locale} không khả dụng cho tất cả plugin đã chọn."
-stopping = "{prefix}&r &7› &7&cKhông có khả năng chọn ngôn ngữ trong khi bổ sung đang dừng."
+stopping = "{prefix}&r &7› &7&cKhông thể chọn ngôn ngữ khi plugin đang dừng."
 server-locale-required = "{prefix}&r &7› &7&cChọn mã ngôn ngữ như en_US làm ngôn ngữ mặc định của máy chủ."
 plugin-server-permission = "{prefix}&r &7› &7&cBạn không có quyền thay đổi ngôn ngữ máy chủ cho {prefix}."
 plugin-personal-permission = "{prefix}&r &7› &7&cBạn không có quyền chọn ngôn ngữ cá nhân cho {prefix}."
@@ -494,20 +494,29 @@ personal-player-only = "{prefix}&r &7› &7&cBạn phải chọn ngôn ngữ cá
 personal-permission = "{prefix}&r &7› &7&cBạn không có quyền chọn ngôn ngữ của mình."
 numeric-page = "{prefix}&r &7› &7&cNhập số trang bằng chữ số."
 no-providers = "{prefix}&r &7› &7&cKhông có nhà cung cấp ngôn ngữ Volmit nào khả dụng."
-editor-player-only = "{prefix}&r &7› &7&cMở trình soạn thảo ngôn ngữ trong trò chơi."
+editor-player-only = "{prefix}&r &7› &7&cHãy mở trình chỉnh sửa ngôn ngữ trong trò chơi."
 
 [language.selection]
-server-selected = "{prefix}&r &7› &7&7ngôn ngữ máy chủ hiện là {locale}."
-server-default-selected = "{prefix}&r &7› &7&7ngôn ngữ của bạn hiện theo ngôn ngữ mặc định của máy chủ."
-save-failed = "{prefix}&r &7› &7&ckhông thể lưu lựa chọn ngôn ngữ; hãy kiểm tra bảng điều khiển máy chủ."
+server-selected = "{prefix}&r &7› &7&7Ngôn ngữ máy chủ hiện là {locale}."
+server-default-selected = "{prefix}&r &7› &7&7Ngôn ngữ của bạn hiện theo mặc định của máy chủ."
+save-failed = "{prefix}&r &7› &7&cKhông thể lưu lựa chọn ngôn ngữ; hãy kiểm tra bảng điều khiển máy chủ."
 preparing = "{prefix}&r &7› &7&7Đang chuẩn bị ngôn ngữ {locale} cho {target}..."
-personal-selected = "{prefix}&r &7› &7&7ngôn ngữ của bạn hiện là {locale}."
+personal-selected = "{prefix}&r &7› &7&7Ngôn ngữ của bạn hiện là {locale}."
 english-fallback = "{prefix}&r &7› &7&7{locale} không khả dụng; sẽ dùng tiếng Anh (en_US)."
 
 [language.usage]
 volmit-selection = "{prefix}&r &7› &7&7Cách dùng: /volmit plugins languages [locale]"
-selection = "{prefix}&r &7› &7&7Cách dùng: /{command} language self [locale|reset] or server [locale]"
+selection = "{prefix}&r &7› &7&7Cách dùng: /{command} language self [locale|reset] hoặc server [locale]"
 editor = "{prefix}&r &7› &7&7Cách dùng: /{command} language server edit [locale]"
+update = "{prefix}&r &7› &7&7Cách dùng: /{command} language update"
+
+[language.update]
+checking = "{prefix}&r &7› &7&7Đang kiểm tra thay đổi trong kho ngôn ngữ..."
+unchanged = "{prefix}&r &7› &7&7Các ngôn ngữ đã cài đặt đã khớp với kho."
+applied = "{prefix}&r &7› &7&7Đã cập nhật {locale} (thêm {added}, thay đổi {updated}, giữ lại {kept} chỉnh sửa cục bộ)."
+cooldown = "{prefix}&r &7› &7&7Kho ngôn ngữ vừa được kiểm tra; hãy thử lại sau {remaining}."
+locale-failed = "{prefix}&r &7› &7&c{locale} chưa được cập nhật: {reason}"
+failed = "{prefix}&r &7› &7&cCập nhật ngôn ngữ thất bại: {reason}"
 
 
 [debug.error]

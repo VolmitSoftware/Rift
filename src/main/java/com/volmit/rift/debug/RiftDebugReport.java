@@ -67,9 +67,10 @@ final class RiftDebugReport {
         value(report, "Active language file", snapshot.activeLanguageFile());
         value(report, "Available locales", String.join(", ", snapshot.availableLocales()));
         value(report, "Available locale count", snapshot.availableLocales().size());
-        value(report, "Remote language catalog revision", snapshot.remoteLanguageCatalogReference());
-        value(report, "Remote language catalog failure", snapshot.remoteLanguageCatalogFailure());
-        value(report, "Latest remote language download failure", snapshot.remoteLanguageDownloadFailure());
+        value(report, "Language source", snapshot.languageSource());
+        value(report, "Language revision", snapshot.languageRevision());
+        value(report, "Language last check", instant(snapshot.languageLastCheckEpochMillis()));
+        value(report, "Language last error", snapshot.languageLastError());
         value(report, "Managed profiles", snapshot.managedProfiles());
         value(report, "Discovered world storage", snapshot.discoveredWorldStorage());
         value(report, "Active world operations", snapshot.worlds().stream().filter(RiftDebugSnapshot.WorldState::operationActive).count());
@@ -162,7 +163,6 @@ final class RiftDebugReport {
                     .append(" | environment=").append(sanitize(world.environment()))
                     .append(" | worldType=").append(sanitize(world.worldType()))
                     .append(" | generator=").append(sanitize(world.generator().isBlank() ? "vanilla" : world.generator()))
-                    .append(" | seed=").append(world.seed())
                     .append(" | configuredDirectory=").append(sanitize(world.configuredDirectory().isBlank() ? "automatic" : world.configuredDirectory()))
                     .append(" | detectedDirectory=").append(sanitize(world.detectedDirectory().isBlank() ? "not detected" : world.detectedDirectory()))
                     .append(" | storageLayout=").append(sanitize(world.storageLayout()))
@@ -193,6 +193,10 @@ final class RiftDebugReport {
 
     private static void appendWorldFiles(StringBuilder report, RiftDebugSnapshot.WorldState world, Path worldContainer) {
         if (world.detectedDirectory().isBlank()) {
+            return;
+        }
+        if (world.detectedDirectory().equals(RiftDebugSnapshot.OUTSIDE_WORLD_CONTAINER)) {
+            report.append("  storageState=outside world container\n");
             return;
         }
         Path directory;

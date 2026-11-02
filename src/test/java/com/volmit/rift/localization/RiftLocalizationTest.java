@@ -3,12 +3,18 @@ package com.volmit.rift.localization;
 import art.arcane.volmlib.util.director.help.DirectorMiniMenu;
 import art.arcane.volmlib.util.localization.MessageArgs;
 import art.arcane.volmlib.util.localization.BukkitLanguageMessages;
+import art.arcane.volmlib.util.localization.LanguageMeta;
+import art.arcane.volmlib.util.localization.LanguageUpstreamSync;
 import art.arcane.volmlib.util.localization.MessageKey;
 import art.arcane.volmlib.util.localization.TextKey;
+import art.arcane.volmlib.util.localization.TomlLanguageEditor;
+import art.arcane.volmlib.util.localization.TomlLanguageParser;
 import art.arcane.volmlib.util.localization.VolmitLocales;
 import art.arcane.volmlib.util.plugin.ComponentText;
 import com.volmit.rift.command.RiftCommandService;
 import com.volmit.rift.config.RiftConfig;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -22,12 +28,17 @@ import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -52,9 +63,12 @@ final class RiftLocalizationTest {
         assertThat(localization.loadInitial()).isTrue();
         assertThat(languages.resolve("en_US.toml")).isRegularFile();
         assertThat(localization.file().getName()).isEqualTo("en_US.toml");
-        assertThat(localization.remoteCatalogReference()).contains("368610464d97f1be33c802e8c7ac72db2997905a");
-        assertThat(localization.hasRemoteCatalogLocale("fr_FR")).isTrue();
-        assertThat(localization.hasRemoteCatalogLocale("en_US")).isFalse();
+        assertThat(localization.sourceFailure()).isEmpty();
+        assertThat(localization.sourceDescription()).startsWith("VolmitSoftware/Rift@");
+        assertThat(localization.isRepositoryLocale("fr_FR")).isTrue();
+        assertThat(localization.isRepositoryLocale("ja-JP")).isTrue();
+        assertThat(localization.isRepositoryLocale("en_US")).isFalse();
+        assertThat(languages.resolve(".upstream").resolve("en_US.toml")).isRegularFile();
         assertThat(localization.availableLocales()).containsExactlyElementsOf(
                 VolmitLocales.all().stream().sorted(String.CASE_INSENSITIVE_ORDER).toList());
         assertThat(languageFiles(languages)).containsExactly("en_US.toml");
@@ -173,9 +187,9 @@ final class RiftLocalizationTest {
     @Test
     void partialDownloadsAcceptMissingAndInvalidTranslations() throws Exception {
         RiftLocalization localization = localization(new RiftConfig().normalize());
-        localization.validateDownloadedContent("fr_FR", "");
-        localization.validateDownloadedContent("fr_FR", "[runtime]\nprefix = 42\n");
-        localization.validateDownloadedContent("fr_FR", "[rift.message]\ncreated = \"{wrong}\"\n");
+        localization.validateContent("fr_FR", "");
+        localization.validateContent("fr_FR", "[runtime]\nprefix = 42\n");
+        localization.validateContent("fr_FR", "[rift.message]\ncreated = \"{wrong}\"\n");
     }
 
     @Test
@@ -309,14 +323,14 @@ final class RiftLocalizationTest {
         RiftLocalization localization = localization(new RiftConfig().normalize());
         String latest = RiftLocalization.referenceToml() + "\n[future]\nmessage = \"new value\"\n";
 
-        localization.validateDownloadedContent("fr_FR", latest);
+        localization.validateContent("fr_FR", latest);
     }
 
     @Test
     void acceptsSparseRemoteContentAndCompletesItInMemory() throws Exception {
         RiftLocalization localization = localization(new RiftConfig().normalize());
 
-        localization.validateDownloadedContent("fr_FR", "[runtime]\nprefix = \"&6PORTAIL\"\n");
+        localization.validateContent("fr_FR", "[runtime]\nprefix = \"&6PORTAIL\"\n");
     }
 
     @Test
@@ -593,8 +607,8 @@ final class RiftLocalizationTest {
         RiftLocalization localization = localization(new RiftConfig().normalize());
         assertThat(localization.loadInitial()).isTrue();
         List<TextKey> controls = List.of(RiftMessages.COMMAND_POLICY_EDIT, RiftMessages.GUI_POLICY_TITLE,
-                RiftMessages.GUI_POLICY_RESET, RiftMessages.GUI_POLICY_SPAWN, RiftMessages.GUI_POLICY_CENTER,
-                RiftMessages.GUI_POLICY_WARNING, RiftMessages.GUI_POLICY_DAMAGE, RiftMessages.GUI_POLICY_DENIAL,
+                RiftMessages.GUI_POLICY_RESET, RiftMessages.GUI_POLICY_SPAWN,
+                RiftMessages.GUI_POLICY_DENIAL,
                 RiftMessages.GUI_POLICY_TAGS, RiftMessages.GUI_POLICY_CLEAR, RiftMessages.GUI_POLICY_PREVIOUS,
                 RiftMessages.GUI_POLICY_NEXT, RiftMessages.COMMAND_POLICY_GAME_MODE, RiftMessages.COMMAND_POLICY_FLIGHT,
                 RiftMessages.COMMAND_POLICY_WEATHER, RiftMessages.COMMAND_POLICY_NATURAL_ANIMALS,
@@ -615,6 +629,131 @@ final class RiftLocalizationTest {
                         .isNotBlank()
                         .isNotEqualTo(control.english().replaceAll("&[0-9a-fk-or]", ""));
             }
+        }
+    }
+
+    @Test
+    void upstreamSyncInstallsMergesAndKeepsEditsAndCustomFiles() throws Exception {
+        LoopbackRepository repository = new LoopbackRepository();
+        repository.files.put(LoopbackRepository.REVISION_ONE + "/fr_FR",
+                "# fr v1\n\n[runtime]\nprefix = \"&6Faille\"\n");
+        RiftConfig config = new RiftConfig().normalize();
+        RiftLocalization localization = repository.localization(config, temporaryDirectory.resolve("languages").toFile());
+        List<String> selfWrites = new ArrayList<>();
+        localization.setSelfWriteListener((written, content) -> selfWrites.add(written.getName()));
+        try {
+            assertThat(localization.loadInitial()).isTrue();
+            localization.initializeSelections(config::getLanguage, (locale, snapshot) -> localization.install(
+                    new RiftLocalization.PreparedLanguage(locale, localization.file(locale), snapshot, true)));
+            Path languages = temporaryDirectory.resolve("languages");
+            String pirate = "[meta]\nname = \"Pirate Speak\"\nbase = \"fr_FR\"\n\n[runtime]\nprefix = \"&6Arr\"\n";
+            Files.writeString(languages.resolve("pirate.toml"), pirate);
+
+            assertThat(localization.requestInstall("fr_FR").get(10L, TimeUnit.SECONDS)).contains("Faille");
+            assertThat(localization.file("fr_FR")).isFile();
+            assertThat(languages.resolve(".upstream").resolve("fr_FR.toml")).isRegularFile();
+            assertThat(languages.resolve(".upstream").resolve("upstream.properties")).isRegularFile();
+            assertThat(selfWrites).contains("fr_FR.toml");
+            UUID playerId = UUID.randomUUID();
+            Player player = mock(Player.class);
+            when(player.getUniqueId()).thenReturn(playerId);
+            localization.selections().selectPlayer(playerId, "fr_FR").get(5L, TimeUnit.SECONDS);
+            MessageArgs arguments = MessageArgs.builder().untrusted("world", "test").build();
+            assertThat(localization.text(player, RiftMessages.CREATED, arguments).plain())
+                    .isEqualTo("Faille › Created and managed test.");
+
+            localization.updateMessage("fr_FR", RiftMessages.PREFIX.id(), "&6Brèche");
+            repository.revision.set(LoopbackRepository.REVISION_TWO);
+            repository.files.put(LoopbackRepository.REVISION_TWO + "/fr_FR",
+                    "# fr v2\n\n[runtime]\nprefix = \"&6Faille v2\"\n\n[rift.message]\n"
+                            + "created = \"{prefix}&r &7› &7Monde &a{world}&7 créé.\"\n");
+
+            LanguageUpstreamSync.SyncReport report = localization.updateAction().update().get(10L, TimeUnit.SECONDS);
+
+            assertThat(report.failure()).isEmpty();
+            assertThat(report.changedLocales()).containsExactly("fr_FR");
+            assertThat(report.merged().get("fr_FR").kept()).containsExactly(RiftMessages.PREFIX.id());
+            assertThat(report.merged().get("fr_FR").added()).containsExactly(RiftMessages.CREATED.id());
+            String merged = Files.readString(localization.file("fr_FR").toPath());
+            assertThat(merged).startsWith("# fr v2\n").contains("Brèche", "Monde").doesNotContain("Faille v2");
+            assertThat(Files.readString(languages.resolve(".upstream").resolve("fr_FR.toml"))).contains("Faille v2");
+            assertThat(Files.readString(languages.resolve("pirate.toml"))).isEqualTo(pirate);
+            assertThat(localization.text(player, RiftMessages.CREATED, arguments).plain())
+                    .isEqualTo("Brèche › Monde test créé.");
+            assertThat(localization.upstreamStatus()).isPresent();
+            assertThat(localization.upstreamStatus().get().revision()).contains(LoopbackRepository.REVISION_TWO);
+
+            LanguageUpstreamSync.SyncReport unchanged = localization.updateAction().update().get(10L, TimeUnit.SECONDS);
+
+            assertThat(unchanged.unchanged()).isTrue();
+            assertThat(unchanged.changedLocales()).isEmpty();
+            assertThat(Files.readString(localization.file("fr_FR").toPath())).isEqualTo(merged);
+        } finally {
+            localization.close();
+            repository.close();
+        }
+    }
+
+    @Test
+    void customLocaleMetaProvidesDisplayNameAndBaseChainBeforeEnglish() throws Exception {
+        RiftConfig config = new RiftConfig().normalize();
+        try (RiftLocalization localization = localization(config)) {
+            assertThat(localization.loadInitial()).isTrue();
+            Path languages = temporaryDirectory.resolve("languages");
+            Files.writeString(languages.resolve("de_DE.toml"), "[runtime]\nprefix = \"Spalt\"\n\n[rift.message]\n"
+                    + "created = \"{prefix} Welt {world} erstellt\"\nloaded = \"{prefix} Welt {world} geladen\"\n");
+            Files.writeString(languages.resolve("de_AT.toml"), "[meta]\nname = \"Österreichisch\"\nbase = \"de_DE\"\n\n"
+                    + "[rift.message]\ncreated = \"{prefix} Welt {world} gebaut, Oida\"\n");
+            Files.writeString(languages.resolve("pirate.toml"), "[meta]\nname = \"Pirate Speak\"\nbase = \"de_AT\"\n\n"
+                    + "[runtime]\nprefix = \"Arr\"\n");
+
+            RiftLocalization.PreparedLanguage pirate = localization.prepare("pirate");
+
+            assertThat(pirate.selectionReady()).isTrue();
+            assertThat(localization.availableLocales()).contains("pirate", "de_AT", "de_DE");
+            assertThat(localization.localeDisplayName("pirate")).isEqualTo("Pirate Speak");
+            assertThat(localization.localeDisplayName("de_DE")).isEqualTo(VolmitLocales.displayName("de_DE").orElseThrow());
+            assertThat(localization.localeDisplayName("klingon")).isEqualTo("klingon");
+            assertThat(localization.displayNames().displayName("pirate")).isEqualTo("Pirate Speak");
+            assertThat(localization.displayNames().displayName("de_DE")).isNull();
+            assertThat(localization.meta("pirate").base()).contains("de_AT");
+
+            localization.install(pirate);
+            MessageArgs arguments = MessageArgs.builder().untrusted("world", "test").build();
+            assertThat(localization.text(RiftMessages.CREATED, arguments).plain()).isEqualTo("Arr Welt test gebaut, Oida");
+            assertThat(localization.text(RiftMessages.LOADED, arguments).plain()).isEqualTo("Arr Welt test geladen");
+            assertThat(localization.text(RiftMessages.UNLOADED, arguments).plain()).contains("test");
+
+            localization.prepare("klingon");
+            LanguageMeta generated = LanguageMeta.parse(Files.readString(languages.resolve("klingon.toml")));
+
+            assertThat(generated.name()).contains("klingon");
+            assertThat(generated.base()).contains("en_US");
+            assertThat(localization.availableLocales()).contains("klingon");
+        }
+    }
+
+    @Test
+    void englishReferenceGainsNewCatalogKeysWhileKeepingEdits() throws Exception {
+        RiftLocalization first = localization(new RiftConfig().normalize());
+        assertThat(first.loadInitial()).isTrue();
+        first.close();
+        Path english = temporaryDirectory.resolve("languages").resolve("en_US.toml");
+        Path sidecar = temporaryDirectory.resolve("languages").resolve(".upstream").resolve("en_US.toml");
+        String olderReference = TomlLanguageEditor.remove(Files.readString(sidecar), RiftMessages.LOADED.id()).content();
+        Files.writeString(sidecar, olderReference);
+        Files.writeString(english, TomlLanguageEditor.upsertText(olderReference, RiftMessages.PREFIX.id(), "&6PORTAL").content());
+
+        try (RiftLocalization localization = localization(new RiftConfig().normalize())) {
+            assertThat(localization.loadInitial()).isTrue();
+            Map<String, String> values = TomlLanguageParser.parseText(Files.readString(english));
+
+            assertThat(values).containsKey(RiftMessages.LOADED.id());
+            assertThat(values.get(RiftMessages.PREFIX.id())).isEqualTo("&6PORTAL");
+            assertThat(localization.text(RiftMessages.LOADED,
+                    MessageArgs.builder().untrusted("world", "test").build()).plain())
+                    .isEqualTo("PORTAL › Loaded test.");
+            assertThat(Files.readString(sidecar)).isEqualTo(RiftLocalization.referenceToml());
         }
     }
 
@@ -639,7 +778,8 @@ final class RiftLocalizationTest {
     private RiftLocalization localization(RiftConfig config) {
         Plugin plugin = mock(Plugin.class);
         when(plugin.getLogger()).thenReturn(Logger.getLogger(RiftLocalizationTest.class.getName()));
-        return new RiftLocalization(plugin, () -> config, temporaryDirectory.resolve("languages").toFile());
+        return new RiftLocalization(plugin, () -> config, temporaryDirectory.resolve("languages").toFile(),
+                URI.create("http://127.0.0.1:9/api/"), URI.create("http://127.0.0.1:9/raw/"), Duration.ZERO);
     }
 
     private static List<String> languageFiles(Path directory) throws Exception {
@@ -649,6 +789,63 @@ final class RiftLocalizationTest {
                     .filter(name -> name.endsWith(".toml"))
                     .sorted()
                     .toList();
+        }
+    }
+
+    private static final class LoopbackRepository {
+        private static final String REVISION_ONE = "1111111111111111111111111111111111111111";
+        private static final String REVISION_TWO = "2222222222222222222222222222222222222222";
+
+        private final HttpServer server;
+        private final AtomicReference<String> revision = new AtomicReference<>(REVISION_ONE);
+        private final Map<String, String> files = new ConcurrentHashMap<>();
+
+        private LoopbackRepository() throws IOException {
+            server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+            server.createContext("/api/", this::api);
+            server.createContext("/raw/", this::raw);
+            server.start();
+        }
+
+        private RiftLocalization localization(RiftConfig config, File directory) {
+            Plugin plugin = mock(Plugin.class);
+            when(plugin.getLogger()).thenReturn(Logger.getLogger(RiftLocalizationTest.class.getName()));
+            URI root = URI.create("http://127.0.0.1:" + server.getAddress().getPort() + "/");
+            return new RiftLocalization(plugin, () -> config, directory, root.resolve("api/"), root.resolve("raw/"),
+                    Duration.ZERO);
+        }
+
+        private void close() {
+            server.stop(0);
+        }
+
+        private void api(HttpExchange exchange) throws IOException {
+            String etag = "\"" + revision.get() + "\"";
+            if (etag.equals(exchange.getRequestHeaders().getFirst("If-None-Match"))) {
+                exchange.sendResponseHeaders(304, -1);
+                exchange.close();
+                return;
+            }
+            exchange.getResponseHeaders().set("ETag", etag);
+            byte[] response = ("[{\"sha\":\"" + revision.get() + "\"}]").getBytes(StandardCharsets.UTF_8);
+            exchange.sendResponseHeaders(200, response.length);
+            exchange.getResponseBody().write(response);
+            exchange.close();
+        }
+
+        private void raw(HttpExchange exchange) throws IOException {
+            String[] parts = exchange.getRequestURI().getPath().split("/");
+            String key = parts[4] + "/" + parts[parts.length - 1].replace(".toml", "");
+            String content = files.get(key);
+            if (content == null) {
+                exchange.sendResponseHeaders(404, -1);
+                exchange.close();
+                return;
+            }
+            byte[] response = content.getBytes(StandardCharsets.UTF_8);
+            exchange.sendResponseHeaders(200, response.length);
+            exchange.getResponseBody().write(response);
+            exchange.close();
         }
     }
 }

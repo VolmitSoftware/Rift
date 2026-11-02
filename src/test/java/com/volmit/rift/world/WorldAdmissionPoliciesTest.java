@@ -229,8 +229,9 @@ final class WorldAdmissionPoliciesTest {
             AsyncPlayerSpawnLocationEvent event = context.spawn(true);
             context.policies.onSpawn(event);
             when(context.player.getWorld()).thenReturn(context.lobby);
-            when(context.player.teleportAsync(any())).thenReturn(CompletableFuture.completedFuture(true));
+            when(context.player.teleportAsync(any())).thenReturn(new CompletableFuture<>());
             assertThat(context.policies.join(context.player)).isFalse();
+            context.drain();
             verify(context.player).teleportAsync(context.world.getSpawnLocation());
             PlayerTeleportEvent evacuation = new PlayerTeleportEvent(context.player, context.lobby.getSpawnLocation(),
                     context.world.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
@@ -324,11 +325,19 @@ final class WorldAdmissionPoliciesTest {
             policies.refresh();
         }
 
+        private void drain() {
+            int remaining = 10;
+            while (!tasks.isEmpty() && remaining-- > 0) {
+                tasks.removeFirst().run();
+            }
+        }
+
         private World world(String name) {
             World result = mock(World.class);
             when(result.getUID()).thenReturn(UUID.randomUUID());
             when(result.getKey()).thenReturn(RiftWorldIdentity.key(name));
             when(result.getSpawnLocation()).thenReturn(new Location(result, 0, 64, 0));
+            when(result.getChunkAtAsync(any(Location.class))).thenReturn(CompletableFuture.completedFuture(null));
             return result;
         }
 

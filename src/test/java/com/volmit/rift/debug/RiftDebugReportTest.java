@@ -45,8 +45,9 @@ final class RiftDebugReportTest {
                 "en_US",
                 Path.of("languages", "en_US.toml"),
                 List.of("en_US"),
-                "main",
-                "none",
+                "VolmitSoftware/Rift@main",
+                "2a342ed4f1c0",
+                1_777_000_000_000L,
                 "none",
                 1,
                 1,
@@ -58,7 +59,7 @@ final class RiftDebugReportTest {
                 )),
                 List.of(new RiftDebugSnapshot.WorldState(
                         "world", true, true, true, true, false, "NORMAL", "NORMAL", "void\nInjected",
-                        1234L, "world/dimensions/minecraft/overworld", "world/dimensions/minecraft/overworld",
+                        "world/dimensions/minecraft/overworld", "world/dimensions/minecraft/overworld",
                         "Minecraft namespaced dimension", "HARD", "DENY", "ADVENTURE", "ALLOW", "CLEAR", "DENY", "INHERIT",
                         12, "DENY", "ALLOW", "welcome", "lobby", Map.of("minecraft:keep_inventory", "true"),
                         "1.5,80.0,1.5 yaw=0.0", "size=500.0", "rift.world.world", "No entry", "lobby",
@@ -91,8 +92,10 @@ final class RiftDebugReportTest {
                 .contains("main=com.volmit.rift.Rift")
                 .contains("Hot reload failures: 1")
                 .contains("Active language file:", "en_US.toml")
-                .contains("Remote language catalog revision: main")
-                .contains("Latest remote language download failure: none")
+                .contains("Language source: VolmitSoftware/Rift@main")
+                .contains("Language revision: 2a342ed4f1c0")
+                .contains("Language last check: 2026-04-24T03:06:40Z")
+                .contains("Language last error: none")
                 .contains("== Rift managed files ==")
                 .contains("Classes currently loaded:")
                 .contains("debugUploadEnabled: true")
@@ -103,6 +106,8 @@ final class RiftDebugReportTest {
                 .doesNotContain("user.dir")
                 .doesNotContain("sun.java.command")
                 .doesNotContain("password")
-                .doesNotContain("token=");
+                .doesNotContain("token=")
+                .doesNotContain("seed")
+                .doesNotContain("1234");
     }
 }

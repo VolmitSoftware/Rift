@@ -66,7 +66,7 @@ final class PluginContractTest {
                     zip.getInputStream(zip.getEntry("plugin.yml")).readAllBytes(),
                     StandardCharsets.UTF_8
             );
-            assertThat(descriptor).contains("version: '2.0.1-26.1-26.3'", "api-version: '26.1'");
+            assertThat(descriptor).contains("version: '2.0.0-26.1-26.3'", "api-version: '26.1'");
         }
     }
 }

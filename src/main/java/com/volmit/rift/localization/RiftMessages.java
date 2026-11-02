@@ -108,7 +108,6 @@ public final class RiftMessages {
     public static final TextKey UNMANAGED_LOADED = key("rift.message.unmanaged_loaded", CHAT_PREFIX + "Stopped managing &a{world}&7 without changing its files. The world remains loaded until another plugin or the server unloads it.");
     public static final TextKey UNMANAGED_UNLOADED = key("rift.message.unmanaged_unloaded", CHAT_PREFIX + "Stopped managing &a{world}&7 without changing its files. {prefix} will no longer load it during startup.");
     public static final TextKey FOLIA_LIMIT = prefixed("rift.message.folia_limit", "{operation} is unavailable on Folia because its world load/unload API is not implemented.");
-    public static final TextKey CONFIG_SAVED = prefixed("rift.message.config_saved", "&aConfiguration saved.");
     public static final TextKey CONFIG_OPENED = prefixed("rift.message.config_opened", "Opened the complete in-game configuration editor.&r");
     public static final TextKey CONFIG_SAVE_FAILED = prefixed("rift.message.config_save_failed", "&cConfiguration could not be saved. Check the console.");
     public static final TextKey EMPTY_LIST = prefixed("rift.message.empty_list", "No matching worlds were found.");
@@ -263,9 +262,6 @@ public final class RiftMessages {
     public static final TextKey GUI_POLICY_TITLE = key("rift.gui.policy_title", "&dWorld policies");
     public static final TextKey GUI_POLICY_RESET = key("rift.gui.policy_reset", "&7Press Q to restore the default policy");
     public static final TextKey GUI_POLICY_SPAWN = key("rift.gui.policy_spawn", "&7Adjust the coordinates, then apply the safe spawn");
-    public static final TextKey GUI_POLICY_CENTER = key("rift.gui.policy_center", "&dBorder center (x z)");
-    public static final TextKey GUI_POLICY_WARNING = key("rift.gui.policy_warning", "&dBorder warning (blocks seconds)");
-    public static final TextKey GUI_POLICY_DAMAGE = key("rift.gui.policy_damage", "&dBorder damage (amount buffer)");
     public static final TextKey GUI_POLICY_DENIAL = key("rift.gui.policy_denial", "&dAccess denial message");
     public static final TextKey GUI_POLICY_TAGS = key("rift.gui.policy_tags", "&7Enter comma-separated tags, or clear");
     public static final TextKey GUI_POLICY_CLEAR = key("rift.gui.policy_clear", "&7Enter clear to restore the default");
@@ -317,7 +313,7 @@ public final class RiftMessages {
             POLICY_WORLD_FULL, POLICY_TRAVEL_DENIED, POLICY_PLACEMENT_FAILED,
             WORLD_ALREADY_EXISTS,
             COMMAND_POLICY_EDIT, GUI_POLICY_TITLE, GUI_POLICY_RESET, GUI_POLICY_SPAWN,
-            GUI_POLICY_CENTER, GUI_POLICY_WARNING, GUI_POLICY_DAMAGE, GUI_POLICY_DENIAL,
+            GUI_POLICY_DENIAL,
             GUI_POLICY_TAGS, GUI_POLICY_CLEAR, GUI_POLICY_PREVIOUS, GUI_POLICY_NEXT,
             GUI_POLICY_DEFAULT, GUI_POLICY_NUMBER, GUI_POLICY_SELECT, GUI_POLICY_SELECTED,
             GUI_POLICY_NATIVE_DEFAULT, GUI_POLICY_INHERITED, GUI_POLICY_UNLOADED,
@@ -342,7 +338,7 @@ public final class RiftMessages {
             PERMISSION_DENIED, UNKNOWN_COMMAND, PLAYER_ONLY,
             OPERATION_QUEUED, OPERATION_FAILED, CREATED, IMPORTED, LOADED, UNLOADED, TELEPORTED,
             DELETE_CONFIRM, QUARANTINED, RESTORED, PROFILE_UPDATED, UNMANAGED_LOADED, UNMANAGED_UNLOADED,
-            FOLIA_LIMIT, CONFIG_SAVED, CONFIG_OPENED, CONFIG_SAVE_FAILED, EMPTY_LIST, PLAYER_OFFLINE,
+            FOLIA_LIMIT, CONFIG_OPENED, CONFIG_SAVE_FAILED, EMPTY_LIST, PLAYER_OFFLINE,
             UNKNOWN_WORLD, SECTION,
             ENTRY, DETAIL, INFO_TITLE, STATUS_TITLE, GENERATOR_FORMAT, FOLIA_STATUS_NOTE, POLICY_ACCESS_DENIED, LABEL_WORLDS,
             LABEL_QUARANTINE, LABEL_LOADED, LABEL_MANAGED, LABEL_ON_DISK, LABEL_MISSING, LABEL_ENVIRONMENT,
@@ -394,6 +390,7 @@ public final class RiftMessages {
                 || id.startsWith("language.error.")
                 || id.startsWith("language.usage.")
                 || id.startsWith("language.selection.")
+                || id.startsWith("language.update.")
                 || id.startsWith("language.editor.prompt.")
                 || id.startsWith("language.editor.error.")
                 || id.startsWith("language.editor.input.")

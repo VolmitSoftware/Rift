@@ -87,6 +87,7 @@ public final class RiftConfigMenu implements Listener {
     public void shutdown() {
         prompts.clear();
         writer.shutdownNow();
+        OpenMenus.close(plugin, EditorHolder.class);
     }
 
     public void cancelPrompt(UUID playerId) {
@@ -353,7 +354,8 @@ public final class RiftConfigMenu implements Listener {
     }
 
     private ItemStack settingItem(Setting setting, RiftConfig current) {
-        String value = displayValue(setting.reader().apply(current));
+        String raw = setting.reader().apply(current);
+        String value = displayValue(setting.kind() == SettingKind.LOCALE ? language.localeDisplayName(raw) : raw);
         MessageArgs arguments = setting.kind() == SettingKind.BOOLEAN
                 ? MessageArgs.builder().trusted("value", Boolean.parseBoolean(value) ? "&aenabled" : "&cdisabled").build()
                 : MessageArgs.builder().untrusted("value", value).build();

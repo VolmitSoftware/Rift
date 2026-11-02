@@ -38,7 +38,7 @@ public final class WorldInventory {
     public List<WorldSnapshot> snapshots() {
         Map<String, WorldSnapshot> snapshots = new LinkedHashMap<>();
         for (WorldProfile profile : profiles.all()) {
-            World world = RiftWorldIdentity.findLoaded(profile.getName());
+            World world = RiftWorldIdentity.findLoaded(profile);
             boolean onDisk = world != null || isWorldDirectory(profile.getName());
             snapshots.put(profile.key(), from(profile, world, onDisk, profile.getName()));
         }

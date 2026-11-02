@@ -41,7 +41,7 @@ final class WorldLifecycleCreateTest {
     @Test
     void loadedWorldCollisionIsAnOrdinaryRejection() throws IOException {
         try (Context context = new Context()) {
-            context.identity.when(() -> RiftWorldIdentity.findLoaded("existing")).thenReturn(mock(World.class));
+            context.identity.when(() -> RiftWorldIdentity.findAnyLoaded("existing")).thenReturn(mock(World.class));
             context.create();
             context.assertRejected();
             verifyNoInteractions(context.directories);

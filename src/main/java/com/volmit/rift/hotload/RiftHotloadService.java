@@ -2,7 +2,6 @@ package com.volmit.rift.hotload;
 
 import art.arcane.volmlib.util.config.ConfigFileSupport;
 import art.arcane.volmlib.util.hotload.ConfigHotloadEngine;
-import art.arcane.volmlib.util.localization.RemoteLanguageCatalog;
 import art.arcane.volmlib.util.scheduling.FoliaScheduler;
 import com.volmit.rift.Rift;
 import com.volmit.rift.config.RiftConfig;
@@ -21,6 +20,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
@@ -34,6 +34,7 @@ public final class RiftHotloadService implements AutoCloseable {
     private final WorldInventory inventory;
     private final Runnable profileChanged;
     private final ConfigHotloadEngine engine;
+    private final Set<String> pendingLanguages = ConcurrentHashMap.newKeySet();
     private final AtomicBoolean running = new AtomicBoolean();
     private final AtomicLong generation = new AtomicLong();
     private final AtomicLong pollCount = new AtomicLong();
@@ -117,6 +118,7 @@ public final class RiftHotloadService implements AutoCloseable {
         running.set(false);
         generation.incrementAndGet();
         language.setSelfWriteListener(null);
+        pendingLanguages.clear();
         engine.clear();
     }
 
@@ -253,35 +255,26 @@ public final class RiftHotloadService implements AutoCloseable {
         }
     }
 
-    private void requestConfiguredLanguage(String locale) {
-        RemoteLanguageCatalog.RequestState state = language.requestRemote(
-                locale,
-                result -> configuredLanguageDownloadCompleted(locale, result)
-        );
-        if (state == RemoteLanguageCatalog.RequestState.SCHEDULED
-                || state == RemoteLanguageCatalog.RequestState.IN_FLIGHT) {
+    public void requestConfiguredLanguage(String locale) {
+        if (!language.isRepositoryLocale(locale)) {
+            plugin.getLogger().warning("Unable to hot-reload Rift language " + locale
+                    + ": the locale is not installed and is not in " + language.sourceDescription());
             return;
         }
-        if (state == RemoteLanguageCatalog.RequestState.CURRENT) {
-            activateConfiguredLanguage(locale);
+        if (!pendingLanguages.add(locale)) {
             return;
         }
-        plugin.getLogger().warning("Unable to hot-reload Rift language " + locale + ": "
-                + languageRequestFailure(state));
-    }
-
-    private void configuredLanguageDownloadCompleted(
-            String locale,
-            RemoteLanguageCatalog.DownloadResult result
-    ) {
-        if (!result.successful()) {
-            plugin.getLogger().log(Level.WARNING,
-                    "Unable to download Rift language " + locale
-                            + "; the previous configuration and language remain active",
-                    result.failure());
-            return;
-        }
-        activateConfiguredLanguage(locale);
+        language.requestInstall(locale).whenComplete((content, failure) -> {
+            pendingLanguages.remove(locale);
+            if (failure != null) {
+                plugin.getLogger().log(Level.WARNING, "Unable to install Rift language " + locale
+                        + "; the previous configuration and language remain active", failure);
+                return;
+            }
+            if (running.get() && plugin.isEnabled()) {
+                activateConfiguredLanguage(locale);
+            }
+        });
     }
 
     private void activateConfiguredLanguage(String locale) {
@@ -293,30 +286,21 @@ public final class RiftHotloadService implements AutoCloseable {
             }
             RiftLocalization.PreparedLanguage preparedLanguage = language.prepare(locale);
             if (!preparedLanguage.selectionReady()) {
-                throw new IOException("Downloaded language file is not available");
+                throw new IOException("Installed language file is not available");
             }
             if (!FoliaScheduler.runGlobal(plugin, () -> {
                 config.install(candidate);
                 language.install(preparedLanguage);
                 configChanged();
-                plugin.getLogger().info("Activated Rift language " + locale + " after download.");
+                plugin.getLogger().info("Activated Rift language " + locale + " after installation.");
             })) {
                 plugin.getLogger().warning("Unable to schedule Rift language activation for " + locale);
             }
         } catch (IOException | RuntimeException exception) {
             plugin.getLogger().log(Level.SEVERE,
-                    "Downloaded Rift language " + locale + " but could not activate its pending configuration",
+                    "Installed Rift language " + locale + " but could not activate its pending configuration",
                     exception);
         }
-    }
-
-    private String languageRequestFailure(RemoteLanguageCatalog.RequestState state) {
-        return switch (state) {
-            case COOLDOWN -> "the download is cooling down after a recent failure";
-            case UNSUPPORTED -> "the locale is not in the Rift language catalog";
-            case CLOSED -> "the language downloader is unavailable";
-            default -> "the language download could not be started";
-        };
     }
 
     public record Status(

@@ -341,6 +341,7 @@ final class WorldPolicyServiceTest {
         private final Deque<Runnable> async = new ArrayDeque<>();
         private final Deque<Runnable> global = new ArrayDeque<>();
         private final Deque<Runnable> entity = new ArrayDeque<>();
+        private final Deque<Runnable> region = new ArrayDeque<>();
         private final MockedStatic<Bukkit> bukkit = mockStatic(Bukkit.class);
         private final MockedStatic<FoliaScheduler> scheduler = mockStatic(FoliaScheduler.class, invocation -> {
             if (invocation.getMethod().getName().equals("isOwnedByCurrentRegion")) {
@@ -350,6 +351,7 @@ final class WorldPolicyServiceTest {
                 case "runAsync" -> async;
                 case "runGlobal" -> global;
                 case "runEntity" -> entity;
+                case "runRegion" -> region;
                 default -> throw new IllegalStateException("Unexpected scheduler call: " + invocation.getMethod());
             };
             for (Object argument : invocation.getArguments()) {
@@ -367,6 +369,7 @@ final class WorldPolicyServiceTest {
             when(world.getKey()).thenReturn(RiftWorldIdentity.key("private"));
             when(world.getUID()).thenReturn(UUID.randomUUID());
             when(world.getSpawnLocation()).thenReturn(new Location(world, 0, 64, 0));
+            when(world.getChunkAtAsync(any(Location.class))).thenReturn(CompletableFuture.completedFuture(null));
             when(world.getWorldBorder()).thenReturn(mock(WorldBorder.class));
             when(world.getPlayers()).thenReturn(List.of());
             when(player.getWorld()).thenReturn(world);
@@ -388,15 +391,16 @@ final class WorldPolicyServiceTest {
             when(fallback.getKey()).thenReturn(RiftWorldIdentity.key("lobby"));
             when(fallback.getUID()).thenReturn(UUID.randomUUID());
             when(fallback.getSpawnLocation()).thenReturn(new Location(fallback, 0.0D, 64.0D, 0.0D));
+            when(fallback.getChunkAtAsync(any(Location.class))).thenReturn(CompletableFuture.completedFuture(null));
             when(profiles.find("lobby")).thenReturn(Optional.empty());
             bukkit.when(Bukkit::getWorlds).thenReturn(List.of(world, fallback));
             service.start();
         }
 
         private void drainEntityTasks() {
-            int remaining = 10;
-            while (!entity.isEmpty() && remaining-- > 0) {
-                entity.removeFirst().run();
+            int remaining = 20;
+            while ((!entity.isEmpty() || !region.isEmpty()) && remaining-- > 0) {
+                (region.isEmpty() ? entity : region).removeFirst().run();
             }
             assertThat(entity).isEmpty();
         }
