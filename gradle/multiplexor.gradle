@@ -1,0 +1,26 @@
+afterEvaluate {
+    File archive = tasks.named('shadowJar').get().archiveFile.get().asFile
+    rootProject.ext.multiplexor = [
+        schema: 1,
+        id: 'rift',
+        name: 'Rift',
+        sandbox: 'per-target',
+        parallelTargets: true,
+        sourceDependencies: ['volmlib'],
+        targets: [[
+            id: 'bukkit',
+            tasks: ['check', 'shadowJar'],
+            arguments: [],
+            java: 25,
+            memoryMiB: 4096,
+            workers: 2,
+            dependsOn: [],
+            artifacts: [[
+                path: relativePath(archive),
+                role: 'runtime',
+                platforms: ['plugin'],
+                minecraftVersions: ['26.1-26.3']
+            ]]
+        ]]
+    ]
+}
