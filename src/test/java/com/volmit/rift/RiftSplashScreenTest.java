@@ -1,6 +1,5 @@
 package com.volmit.rift;
 
-import net.md_5.bungee.api.ChatColor;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -29,14 +28,5 @@ final class RiftSplashScreenTest {
                 "Server: Paper 26.2 | MC Support: 26.1 - 26.3",
                 "Java: 25 | Date: 2026-09-03"
         );
-    }
-
-    @Test
-    void rendersFilledAndEdgeGlyphsWithSeparateBrandColors() {
-        ChatColor fill = ChatColor.of("#6f2dbd");
-        ChatColor edge = ChatColor.of("#d16ba5");
-
-        assertThat(RiftSplashScreen.colorize(" ██╗ █", fill, edge))
-                .isEqualTo(" " + fill + "██" + edge + "╗ " + fill + "█");
     }
 }

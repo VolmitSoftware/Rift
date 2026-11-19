@@ -47,7 +47,7 @@ public final class RiftSplashScreen {
 
         StringBuilder output = new StringBuilder("\n");
         for (int row = 0; row < ART.length; row++) {
-            output.append(colorize(ART[row], fill, edge)).append(column[row]).append('\n');
+            output.append(SplashScreenSupport.colorizeArt(ART[row], fill.toString(), edge.toString())).append(column[row]).append('\n');
         }
         ComponentLog.logLegacy(plugin, plugin.getLogger(), "", Level.INFO, output.toString(), null);
     }
@@ -61,20 +61,5 @@ public final class RiftSplashScreen {
                 "Server: " + server + " | MC Support: " + RiftCompatibility.MINECRAFT_RANGE,
                 "Java: " + javaVersion + " | Date: " + date
         };
-    }
-
-    static String colorize(String row, ChatColor fill, ChatColor edge) {
-        StringBuilder output = new StringBuilder(row.length() * 2);
-        ChatColor activeColor = null;
-        for (int index = 0; index < row.length(); index++) {
-            char glyph = row.charAt(index);
-            ChatColor glyphColor = glyph == ' ' ? activeColor : glyph == '█' ? fill : edge;
-            if (glyphColor != null && !glyphColor.equals(activeColor)) {
-                output.append(glyphColor);
-                activeColor = glyphColor;
-            }
-            output.append(glyph);
-        }
-        return output.toString();
     }
 }
